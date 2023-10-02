@@ -8,7 +8,8 @@ public class SettingsMenu : MonoBehaviour
 
     public TMPro.TMP_Dropdown resolutionDropdown;
 
-    Resolution[] resolutions;
+    Resolution[] resolutions; 
+    //oprava gitu?
 
     void Start()
     {
