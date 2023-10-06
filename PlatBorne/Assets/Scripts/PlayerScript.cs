@@ -14,7 +14,6 @@ public class PlayerScript : MonoBehaviour
     public int movementSpeed;
     public int jumpSpeed;
 
-    public GameObject level;
     bool isPlayerInAir = false;
     // Start is called before the first frame update
     void Start()
@@ -25,7 +24,7 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Physics2D.IsTouching(collider, GetComponent<Collider2D>())) isPlayerInAir = false;
+        if (Physics2D.IsTouching(collider, this.GetComponent<Collider2D>())) isPlayerInAir = false;
         else isPlayerInAir = true;
         rigidBody.angularVelocity = 0;
         if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
@@ -38,7 +37,7 @@ public class PlayerScript : MonoBehaviour
             rigidBody.velocity = Vector2.right * movementSpeed + new Vector2(0, rigidBody.velocity.y);
             renderer.sprite = spritesWalk[1];
         }
-        if (Input.GetKeyDown(KeyCode.W) && !isPlayerInAir)
+        if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
             rigidBody.velocity = Vector2.up * jumpSpeed + new Vector2(rigidBody.velocity.x, 0);
         }
