@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour
     {
         InGame = true;
         yield return new WaitForSeconds(srcOne.length);
-        SceneManager.LoadScene("LevelLondon");
+        SceneManager.LoadScene("LevelLondon1");
     }
 
     public void Settings()
@@ -59,7 +59,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(srcOne.length);
         if (InGame)
         {
-            SceneManager.LoadScene("LevelLondon");
+            SceneManager.LoadScene("LevelLondon1");
         }
         else
         {
