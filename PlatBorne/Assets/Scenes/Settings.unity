@@ -207,7 +207,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1129677990}
   m_HandleRect: {fileID: 786846028}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -217,7 +217,7 @@ MonoBehaviour:
       - m_Target: {fileID: 414747177}
         m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
         m_MethodName: SetVolume
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -783,7 +783,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c8160739bb1f745b5243b47804634b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  masterVolSlider: {fileID: 6012619}
   resolutionDropdown: {fileID: 952157330}
+  src: {fileID: 2035026703}
 --- !u!1 &590587595
 GameObject:
   m_ObjectHideFlags: 0
@@ -3584,7 +3587,7 @@ AudioSource:
   m_GameObject: {fileID: 2035026702}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1

@@ -1,18 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
+    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private Slider masterVolSlider;
 
     public TMPro.TMP_Dropdown resolutionDropdown;
 
-    Resolution[] resolutions; 
-    //oprava gitu?
+    public AudioSource src;
+
+    Resolution[] resolutions;
 
     void Start()
     {
+        if (PlayerPrefs.HasKey("MasterVolume"))
+        {
+            LoadVolume();
+        }
+        else
+        {
+            SetVolume();
+        }
+
         resolutions = Screen.resolutions;
 
         resolutionDropdown.ClearOptions();
@@ -42,9 +55,19 @@ public class SettingsMenu : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    public void SetVolume(float volume)
+    public void SetVolume()
     {
-        //tohle bude neco delat az bude ve hre zvuk
+        float volume = masterVolSlider.value;
+        Debug.Log(volume);
+        audioMixer.SetFloat("Master", Mathf.Log10(volume)*20);
+        PlayerPrefs.SetFloat("MasterVolume", volume);
+    }
+
+    private void LoadVolume()
+    {
+        masterVolSlider.value = PlayerPrefs.GetFloat("MasterVolume");
+
+        SetVolume();
     }
 
     public void SetFullscreen (bool isFullscreen)

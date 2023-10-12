@@ -1008,7 +1008,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c8160739bb1f745b5243b47804634b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  masterVolSlider: {fileID: 1416485818}
   resolutionDropdown: {fileID: 932451253}
+  src: {fileID: 704855612}
 --- !u!1 &369855500
 GameObject:
   m_ObjectHideFlags: 0
@@ -1786,7 +1789,7 @@ AudioSource:
   m_GameObject: {fileID: 704855611}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6479473805308726035, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   m_audioClip: {fileID: 8300000, guid: 810243e0d31630e4b9ed13e59d27e0a4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -4001,7 +4004,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 2031737799}
   m_HandleRect: {fileID: 910103217}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 1
@@ -4011,7 +4014,7 @@ MonoBehaviour:
       - m_Target: {fileID: 341557188}
         m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
         m_MethodName: SetVolume
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5307,7 +5310,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c8160739bb1f745b5243b47804634b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  masterVolSlider: {fileID: 0}
   resolutionDropdown: {fileID: 0}
+  src: {fileID: 0}
 --- !u!1 &1728690962
 GameObject:
   m_ObjectHideFlags: 0
@@ -5664,7 +5670,7 @@ AudioSource:
   m_GameObject: {fileID: 1826944993}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
