@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private Slider masterVolSlider;
+    [SerializeField] private Slider musicVolSlider;
+    [SerializeField] private Slider SFXVolSlider;
 
     public TMPro.TMP_Dropdown resolutionDropdown;
 
@@ -17,13 +18,22 @@ public class SettingsMenu : MonoBehaviour
 
     void Start()
     {
-        if (PlayerPrefs.HasKey("MasterVolume"))
+        if (PlayerPrefs.HasKey("MusicVolume"))
         {
-            LoadVolume();
+            LoadMusicVolume();
         }
         else
         {
-            SetVolume();
+            SetMusicVolume();
+        }
+
+        if (PlayerPrefs.HasKey("SFXvolume"))
+        {
+            LoadSFXvolume();
+        }
+        else
+        {
+            SetSFXVolume();
         }
 
         resolutions = Screen.resolutions;
@@ -55,19 +65,34 @@ public class SettingsMenu : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    public void SetVolume()
+    public void SetMusicVolume()
     {
-        float volume = masterVolSlider.value;
-        Debug.Log(volume);
-        audioMixer.SetFloat("Master", Mathf.Log10(volume)*20);
-        PlayerPrefs.SetFloat("MasterVolume", volume);
+        float volume = musicVolSlider.value;
+        Debug.Log("Music: " + volume);
+        audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
-    private void LoadVolume()
+    private void LoadMusicVolume()
     {
-        masterVolSlider.value = PlayerPrefs.GetFloat("MasterVolume");
+        musicVolSlider.value = PlayerPrefs.GetFloat("MusicVolume");
 
-        SetVolume();
+        SetMusicVolume();
+    }
+
+    public void SetSFXVolume()
+    {
+        float volume = SFXVolSlider.value;
+        Debug.Log("SFX: " + volume);
+        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("SFXvolume", volume);
+    }
+
+    private void LoadSFXvolume()
+    {
+        SFXVolSlider.value = PlayerPrefs.GetFloat("SFXvolume");
+
+        SetSFXVolume();
     }
 
     public void SetFullscreen (bool isFullscreen)
