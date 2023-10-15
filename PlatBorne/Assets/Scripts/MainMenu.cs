@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public AudioClip srcOne;
 
     public bool InGame = false;
+    public bool PreGameCutscene = false;
     
     public void PlayGame()
     {
@@ -20,7 +21,17 @@ public class MainMenu : MonoBehaviour
     {
         InGame = true;
         yield return new WaitForSeconds(srcOne.length);
-        SceneManager.LoadScene("LevelLondon1");
+        if (PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
+        {
+            SceneManager.LoadScene("PreGame Cutscene");
+            PlayerPrefs.SetInt("PreGame", 1);
+            Debug.Log("Pre Game Cutscene activated");
+        }
+        else
+        {
+            SceneManager.LoadScene("LevelLondon1");
+            Debug.Log("Level London 1 Activated");
+        }
     }
 
     public void Settings()
