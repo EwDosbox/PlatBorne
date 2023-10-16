@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
     {
         InGame = true;
         yield return new WaitForSeconds(srcOne.length);
-        if (PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
+        if (!PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
         {
             SceneManager.LoadScene("PreGame Cutscene");
             PlayerPrefs.SetInt("PreGame", 1);

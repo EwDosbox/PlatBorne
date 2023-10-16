@@ -605,6 +605,7 @@ MonoBehaviour:
   src: {fileID: 2101661423}
   srcOne: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
   InGame: 0
+  PreGameCutscene: 0
 --- !u!1 &550722578
 GameObject:
   m_ObjectHideFlags: 0
