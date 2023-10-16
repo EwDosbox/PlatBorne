@@ -1,16 +1,32 @@
 using System.Collections;
 using System.Security.Authentication.ExtendedProtection;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private AudioMixer audioMixer;
+
     public AudioSource src;
     public AudioClip srcOne;
 
     public bool InGame = false;
     public bool PreGameCutscene = false;
-    
+
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey("MusicVolume"))
+        {
+            SetMusicVolume();
+        }
+
+        if (PlayerPrefs.HasKey("SFXvolume"))
+        {
+            SetSFXVolume();
+        }
+    }
+
     public void PlayGame()
     {
         src.PlayOneShot(srcOne);
@@ -90,6 +106,24 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(srcOne.length);
         SceneManager.LoadScene("MainMenu");
     }
+
+    public void SetMusicVolume()
+    {
+        float volume = PlayerPrefs.GetFloat("MusicVolume");
+        Debug.Log("Music: " + volume);
+        audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
+    }
+
+
+    public void SetSFXVolume()
+    {
+        float volume = PlayerPrefs.GetFloat("SFXvolume");
+        Debug.Log("SFX: " + volume);
+        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("SFXvolume", volume);
+    }
+
 
 
     //*****************************************stary, prvni kod*************************

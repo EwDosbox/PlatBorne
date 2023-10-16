@@ -17,7 +17,6 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public static bool IsInSettings = false;
 
-
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
