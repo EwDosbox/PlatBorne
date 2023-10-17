@@ -15,7 +15,38 @@ public class PlayerScript : MonoBehaviour
     public int jumpSpeed;
 
     bool isPlayerInAir = false;
+
+    double positionYWas;
+    double positionYIs;
+    bool playerWasInAir = false;
+    public int playerFell = 0;
+    int playerFellRNG = 1;
+    public bool playVoiceLine = false;
     // Start is called before the first frame update
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name == "Fall hitbox")
+        {
+            if (playerWasInAir && !isPlayerInAir)
+            {
+                if (positionYWas < positionYIs)
+                {
+                    playerFell++;
+                    Debug.Log(playerFell);
+                    if (playerFell % playerFellRNG == 0)
+                    {
+                        System.Random rng = new System.Random();
+                        playerFellRNG = rng.Next(3,6);
+                        Debug.Log(playerFellRNG);
+                        playVoiceLine = true;
+                    }
+                    playerWasInAir = false;
+                }
+                else playerWasInAir = false;
+            }
+        }
+    }
     void Start()
     {
         renderer.sprite = spritesWalk[1];
@@ -41,6 +72,16 @@ public class PlayerScript : MonoBehaviour
         {
             rigidBody.velocity = Vector2.up * jumpSpeed + new Vector2(rigidBody.velocity.x, 0);
         }
+        //Kamil
+        if (!isPlayerInAir)
+        {
+            positionYIs = transform.position.y;
+            positionYWas = positionYIs;
+        }
+        else
+        {
+            playerWasInAir = true;
+            positionYIs = transform.position.y;
+        }
     }
-
 }
