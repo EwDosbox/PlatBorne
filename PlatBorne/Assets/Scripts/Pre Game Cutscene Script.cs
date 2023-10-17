@@ -23,8 +23,8 @@ public class PreGameCutscene : MonoBehaviour
 
     private void OnVideoFinished(VideoPlayer vp)
     {
-        SceneManager.LoadScene("LevelLondon1");
-        Debug.Log("Level London 1 activated");
+        SceneManager.LoadScene("LevelLondon");
+        Debug.Log("Level London activated");
     }
 
     private void Update()
@@ -32,8 +32,8 @@ public class PreGameCutscene : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             Debug.Log("Cutscene skipped");
-            SceneManager.LoadScene("LevelLondon1");
-            Debug.Log("Level London 1 activated");
+            SceneManager.LoadScene("LevelLondon");
+            Debug.Log("Level London activated");
         }
     }
 }

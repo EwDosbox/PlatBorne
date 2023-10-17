@@ -11,6 +11,8 @@ public class MainMenu : MonoBehaviour
     public AudioSource src;
     public AudioClip srcOne;
 
+    public Animator transitionAnim;
+
     public bool InGame = false;
     public bool PreGameCutscene = false;
 
@@ -36,7 +38,8 @@ public class MainMenu : MonoBehaviour
     private IEnumerator _PlayGame()
     {
         InGame = true;
-        yield return new WaitForSeconds(srcOne.length);
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.99f);
         if (!PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
         {
             SceneManager.LoadScene("PreGame Cutscene");
@@ -45,8 +48,8 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("LevelLondon1");
-            Debug.Log("Level London 1 Activated");
+            SceneManager.LoadScene("LevelLondon");
+            Debug.Log("Level London Activated");
         }
     }
 
@@ -58,7 +61,8 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator _Settings()
     {
-        yield return new WaitForSeconds(srcOne.length);
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.99f);
         SceneManager.LoadScene("Settings");
     }
 
@@ -75,25 +79,6 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void ReturnFromSettings()
-    {
-        src.PlayOneShot(srcOne);
-        StartCoroutine(_Return());
-    }
-
-    private IEnumerator _Return()
-    {
-        yield return new WaitForSeconds(srcOne.length);
-        if (InGame)
-        {
-            SceneManager.LoadScene("LevelLondon1");
-        }
-        else
-        {
-            SceneManager.LoadScene("MainMenu");
-        }
-    }
-
     public void MMenu()
     {
         src.PlayOneShot(srcOne);
@@ -103,7 +88,8 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator _MMenu()
     {
-        yield return new WaitForSeconds(srcOne.length);
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.99f);
         SceneManager.LoadScene("MainMenu");
     }
 
@@ -123,8 +109,6 @@ public class MainMenu : MonoBehaviour
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
-
-
 
     //*****************************************stary, prvni kod*************************
     //public void GoToScene(string sceneName)
