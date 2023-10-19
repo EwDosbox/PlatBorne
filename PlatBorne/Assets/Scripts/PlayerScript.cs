@@ -44,8 +44,13 @@ public class PlayerScript : MonoBehaviour
     double positionYIs;
     bool playerWasInAir = false;
     public int playerFell = 0;
-    int playerFellRNG = 1;
     public bool playVoiceLine = false;
+    public bool bossHitboxRight = false;
+    public bool bossHitboxLeft = false;
+    public bool bossHitboxUp = false;
+    public bool bossHitboxDown = false;
+    public bool bossHitbox = false;
+    public bool arenaStart = false;
 
     void Randomize(int[] voiceLines)
     {
@@ -72,6 +77,11 @@ public class PlayerScript : MonoBehaviour
             }
         }
         else playerWasInAir = false;
+        if (collision.gameObject.name == "Arena Start") arenaStart = true;
+        if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxRight = true;
+        else if (collision.gameObject.name == "Boss Hitbox Left") bossHitboxLeft = true;
+        if (collision.gameObject.name == "Boss Hitbox Down") bossHitboxDown = true;
+        else if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxUp = true;
     }
     void Start()
     {
@@ -117,9 +127,9 @@ public class PlayerScript : MonoBehaviour
             {
                 case 1:
                     {
-                        Fell01.Play();
-                        break;
+                        Fell01.Play();                        
                         Debug.Log("Playing Audio - Fell01");
+                        break;
                     }
                 case 2:
                     {
