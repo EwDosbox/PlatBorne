@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -114,7 +113,7 @@ public class PlayerScript : MonoBehaviour
         //VoiceLines London
         if (playVoiceLine)
         {
-            switch (voiceLines[j])
+            switch (voiceLinesArray[j])
             {
                 case 1:
                     {
@@ -250,9 +249,9 @@ public class PlayerScript : MonoBehaviour
                     }
             }
             j++;
-            if (j == voiceLines.Length - 1)
+            if (j == voiceLinesArray.Length - 1)
             {
-                Randomize(voiceLines);
+                Randomize(voiceLinesArray);
                 j = 0;
             }
         }
