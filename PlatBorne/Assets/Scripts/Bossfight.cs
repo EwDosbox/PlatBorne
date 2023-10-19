@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnitySceneManager;
 
-[SerializeField] private AudioSource PreBossDialog;
-[SerializeField] private AudioSource BossDamage01;
-[SerializeField] private AudioSource BossDamage02;
-[SerializeField] private AudioSource BossDamage03;
-[SerializeField] private AudioSource BossDamage04;
-[SerializeField] private AudioSource BossDeath01;
-[SerializeField] private AudioSource HunterOOF;
+[SerializeField] AudioSource PreBossDialog;
+[SerializeField] AudioSource BossDamage01;
+[SerializeField] AudioSource BossDamage02;
+[SerializeField] AudioSource BossDamage03;
+[SerializeField] AudioSource BossDamage04;
+[SerializeField] AudioSource BossDeath01;
+[SerializeField] AudioSource HunterOOF;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -24,44 +24,44 @@ public class NewBehaviourScript : MonoBehaviour
     double phaseTimer = 0;
     double Timer = 0;
 
-    private void BossDeath()
+    public void BossDeath()
     {
         BossDeath01.Play();
         Debug.Log("Boss Has Died");
     }
-    private void BossAttackRushLeft()
+    public void BossAttackRushLeft()
     {
-
+        return;
     }
-    private void BossAttackRushRight()
+    public void BossAttackRushRight()
     {
-
+        return;
     }
-    private void BossAttackFloorIsLava()
+    public void BossAttackFloorIsLava()
     {
-
+        return;
     }
-    private void BossAttackDagger()
+    public void BossAttackDagger()
     {
-
+        return;
     }
-    private void BossAttackSword()
+    public void BossAttackSword()
     {
-
+        return;
     }
-    private void BossAttackLeechLeft()
+    public void BossAttackLeechLeft()
     {
-
+        return;
     }
-    private void BossAttackLeechRight()
+    public void BossAttackLeechRight()
     {
-
+        return;
     }
-    private void BossAttackLeechBoth()
+    public void BossAttackLeechBoth()
     {
-
+        return;
     }
-    private void PlayerDeath()
+    public void PlayerDeath()
     {
         SceneManager.LoadScene("PlayerDeath");
         Debug.Log("Player Death Scene");
@@ -93,7 +93,8 @@ public class NewBehaviourScript : MonoBehaviour
                         {
                             BossAttackRushRight;
                         }
-                        else if (collision.gameObject.name == "Boss Hitbox Down")) {
+                        else if (collision.gameObject.name == "Boss Hitbox Down")) 
+                        {
                             BossAttackFloorIsLava();
                         }
                         else
@@ -116,7 +117,8 @@ public class NewBehaviourScript : MonoBehaviour
                         {
                             BossAttackSword();
                         }                   
-                        else if (collision.gameObject.name == "Boss Hitbox Down")) {
+                        else if (collision.gameObject.name == "Boss Hitbox Down")                                
+                        {
                             BossAttackFloorIsLava();
                         }
                         else
@@ -127,11 +129,11 @@ public class NewBehaviourScript : MonoBehaviour
                 case 3:
                     {
                         WaitForSeconds(2.0f);
-                        if (collision.gameObject.name == "Boss Hitbox Left" && //je dál jak pùlka mapy//)
+                        if (collision.gameObject.name == "Boss Hitbox Left")
                         {
                             BossAttackRushLeft();
                         }
-                        else if (collision.gameObject.name == "Boss Hitbox Right" &&//je dál jak pùlka mapy//)
+                        else if (collision.gameObject.name == "Boss Hitbox Right")
                         {
                             BossAttackRushRight;
                         }
@@ -150,11 +152,11 @@ public class NewBehaviourScript : MonoBehaviour
                 case 4:
                     {
                         WaitForSeconds(1.0f);
-                        if (collision.gameObject.name == "Boss Hitbox Left" && //je dál jak pùlka mapy//)
+                        if (collision.gameObject.name == "Boss Hitbox Left")
                         {
                             BossAttackRushLeft();
                         }
-                        else if (collision.gameObject.name == "Boss Hitbox Right" &&//je dál jak pùlka mapy//)
+                        else if (collision.gameObject.name == "Boss Hitbox Right")
                         {
                             BossAttackRushRight;
                         }
