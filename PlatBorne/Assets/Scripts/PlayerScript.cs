@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -32,21 +33,21 @@ public class PlayerScript : MonoBehaviour
     int[] voiceLinesArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 };
     public SpriteRenderer renderer;
     public Rigidbody2D rigidBody;
-    public Collider2D collider;
+    public TilemapCollider2D levelWoods;
+    public TilemapCollider2D levelLondon;
 
     public Sprite[] spritesIdle;
     public Sprite[] spritesWalk;
 
+    bool isPlayerInAir;
     public int movementSpeed;
     public int jumpSpeed;
-    bool isPlayerInAir = false;
     double positionYWas;
     double positionYIs;
     bool playerWasInAir = false;
     public int playerFell = 0;
     int playerFellRNG = 1;
     public bool playVoiceLine = false;
-
     void Randomize(int[] voiceLines)
     {
         System.Random rng = new System.Random();
@@ -78,13 +79,10 @@ public class PlayerScript : MonoBehaviour
         renderer.sprite = spritesWalk[1];
         Randomize(voiceLinesArray);
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if (Physics2D.IsTouching(collider, this.GetComponent<Collider2D>())) isPlayerInAir = false;
-        else isPlayerInAir = true;
-        rigidBody.angularVelocity = 0;
+        isPlayerInAir = !DoesHunterTouchGround(this.GetComponent<Collider2D>(), levelWoods, levelLondon);
+        rigidBody.rotation = 0;
         if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
         {
             rigidBody.velocity = Vector2.left * movementSpeed + new Vector2(0, rigidBody.velocity.y);
@@ -118,8 +116,8 @@ public class PlayerScript : MonoBehaviour
                 case 1:
                     {
                         Fell01.Play();
-                        break;
                         Debug.Log("Playing Audio - Fell01");
+                        break;
                     }
                 case 2:
                     {
@@ -255,5 +253,12 @@ public class PlayerScript : MonoBehaviour
                 j = 0;
             }
         }
+    }
+    private bool DoesHunterTouchGround(Collider2D hunter, Collider2D level1, Collider2D level2)
+    {
+        bool doesHunterTouchLevel1 = hunter.IsTouching(level1.GetComponent<TilemapCollider2D>());
+        bool doesHunterTouchLevel2 = hunter.IsTouching(level2.GetComponent<TilemapCollider2D>());
+        bool doesHunterTouchGround = doesHunterTouchLevel1 || doesHunterTouchLevel2;
+        return doesHunterTouchGround;
     }
 }
