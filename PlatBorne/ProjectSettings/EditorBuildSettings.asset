@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PreGame Cutscene.unity
     guid: a86c83f5fd339984090721ac27cf58a0
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelLondon.unity
     guid: 87057cb5bb6a06f47a6ff0e581b31bf7
   - enabled: 1
