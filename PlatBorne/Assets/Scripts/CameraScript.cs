@@ -6,8 +6,6 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     public GameObject player;
-    public Vector2 offset = Vector2.zero;
-    public CompositeCollider2D mapCollider;
     void Update()
     {
         if (player.transform.position.y < -60)
