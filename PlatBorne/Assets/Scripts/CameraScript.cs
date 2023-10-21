@@ -17,6 +17,13 @@ public class CameraScript : MonoBehaviour
                 -60  
                 );         
         }
+        else if (player.transform.position.y > 0)
+        {
+            this.transform.position = new Vector3(
+                0,
+                0
+                );
+        }
         else 
         {
             this.transform.position = new Vector3(
