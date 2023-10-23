@@ -18,12 +18,17 @@ public class NewBehaviourScript : MonoBehaviour
 
     public int phase = 1;
     bool attackIsGoing = false;
-    public int timer = 0;
     int playerHP = 3;
     int bossHP = 60;
     bool bossInvincible = true;
-    double phaseTimer = 0;
-    double Timer = 0;
+    float timerSecondary = 0f;
+    bool timerSecondaryOn = false;
+    float timer = 0f;
+    bool timerOn = true;
+    float phaseTimer = 0f;
+    float invincibilityTimerBoss = 0f;
+    float invincibilityTimerPlayer = 0f;
+    float[] invincibilityPhaseTimerBoss = { 50, 60, 45 };
     bool playerInvincible = false;
 
     bool bossHitboxRight = false;
@@ -38,11 +43,7 @@ public class NewBehaviourScript : MonoBehaviour
         BossDeath01.Play();
         Debug.Log("Boss Has Died");
     }
-    private void BossAttackRushLeft()
-    {
-
-    }
-    private void BossAttackRushRight()
+    private void BossAttackRushPlayer()
     {
 
     }
@@ -76,32 +77,28 @@ public class NewBehaviourScript : MonoBehaviour
         Debug.Log("Player Death Scene");
     }
 
-    private void Start()
+    private void TimerSecondaryReset()
     {
-        PlayerScript playerScript = GetComponent<PlayerScript>();
-        bool bossHitboxRight = playerScript.bossHitboxRight;
-        bool bossHitboxLeft = playerScript.bossHitboxLeft;
-        bool bossHitboxUp = playerScript.bossHitboxUp;
-        bool bossHitboxDown = playerScript.bossHitboxDown;
-        bool bossHitbox = playerScript.bossHitbox;
-        bool arenaStart = playerScript.arenaStart;
+        timerSecondary = 0;
+        timerSecondaryOn = false;
     }
-    private void Update()
+    private void BossAttackChoose()
     {
-        if (!attackIsGoing)
+        switch (phase)
         {
-            switch (phase)
-            {
-                case 1:
+            case 1:
+                {
+                    timerSecondaryOn = true;
+                    if (timerSecondary >= 4) //wait 4s
                     {
-                        //wait 4s
+                        TimerSecondaryReset();
                         if (bossHitboxRight) // + boss na leve strane
                         {
-                            BossAttackRushRight();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft) // + boss na prave strane
                         {
-                            BossAttackRushLeft();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxDown)
                         {
@@ -111,18 +108,22 @@ public class NewBehaviourScript : MonoBehaviour
                         {
                             BossAttackDagger();
                         }
-                        break;
                     }
-                case 2:
+                    break;
+                }
+            case 2:
+                {
+                    timerSecondaryOn = true;
+                    if (timerSecondary >= 3) //wait 3s
                     {
-                        //wait 3s
+                        TimerSecondaryReset();
                         if (bossHitboxRight) // + boss na leve strane
                         {
-                            BossAttackRushRight();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft) // + boss na prave strane
                         {
-                            BossAttackRushLeft();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft)
                         {
@@ -132,18 +133,21 @@ public class NewBehaviourScript : MonoBehaviour
                         {
                             BossAttackDagger();
                         }
-                        break;
                     }
-                case 3:
+                    break;
+                }
+            case 3:
+                {
+                    if (timerSecondary >= 2) //wait 2s
                     {
-                        //wait 2s
+                        TimerSecondaryReset();
                         if (bossHitboxRight) // + boss na leve strane
                         {
-                            BossAttackRushRight();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft) // + boss na prave strane
                         {
-                            BossAttackRushLeft();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft)
                         {
@@ -157,18 +161,21 @@ public class NewBehaviourScript : MonoBehaviour
                         {
                             BossAttackDagger();
                         }
-                        break;
                     }
-                case 4:
+                    break;
+                }
+            case 4:
+                {
+                    if (timerSecondary >= 1) //wait 1s
                     {
-                        //wait 1s
+                        TimerSecondaryReset();
                         if (bossHitboxRight) // + boss na leve strane
                         {
-                            BossAttackRushRight();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft) // + boss na prave strane
                         {
-                            BossAttackRushLeft();
+                            BossAttackRushPlayer();
                         }
                         else if (bossHitboxLeft)
                         {
@@ -183,10 +190,45 @@ public class NewBehaviourScript : MonoBehaviour
                             BossAttackDagger();
                         }
                         // BossAttackLeech();
-                        break;
                     }
-            }
+                    break;
+                }
         }
+    }
+
+    private void Start()
+    {
+        PlayerScript playerScript = GetComponent<PlayerScript>();
+        bool bossHitboxRight = playerScript.bossHitboxRight;
+        bool bossHitboxLeft = playerScript.bossHitboxLeft;
+        bool bossHitboxUp = playerScript.bossHitboxUp;
+        bool bossHitboxDown = playerScript.bossHitboxDown;
+        bool bossHitbox = playerScript.bossHitbox;
+        bool arenaStart = playerScript.arenaStart;
+    }
+    private void Update()
+    {
+        //ÈASOVAÈ
+        if (timerOn)
+        {
+            timer += Time.fixedDeltaTime;
+            if (timerSecondaryOn) timerSecondary += Time.fixedDeltaTime;
+            if (bossInvincible) invincibilityTimerBoss += Time.fixedDeltaTime;
+            if (playerInvincible) invincibilityTimerPlayer += Time.fixedDeltaTime;
+            if (phase == 4) phaseTimer += Time.fixedDeltaTime;
+        }
+
+        if (invincibilityTimerBoss > invincibilityPhaseTimerBoss[phase - 1])
+        {
+            invincibilityTimerBoss = 0;
+            bossInvincible = false;
+        }
+        if (invincibilityTimerPlayer > 1)
+        {
+            playerInvincible = false;
+            invincibilityTimerPlayer = 0;
+        }
+
         if (!bossInvincible && phase <= 3) //Phase 1,2,3 Boss Damage
         {
             if (bossHitbox) 
@@ -220,10 +262,10 @@ public class NewBehaviourScript : MonoBehaviour
                 }
             }
         }
-        else if (phase == 4 && (phaseTimer % 1000 == 0)) //Boss Damage Counter Phase 4
+        else if (phase == 4 && ((phaseTimer * 1000) % 1000 == 0)) //Boss Damage Counter Phase 4
         {
             bossHP--;
-            if (bossHP < 0) BossDeath();
+            if (bossHP <= 0) BossDeath();
         }
         if (bossHitbox && bossInvincible)
         {

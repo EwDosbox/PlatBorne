@@ -4,29 +4,8 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    [SerializeField] private AudioSource Fell01;
-    [SerializeField] private AudioSource Fell02;
-    [SerializeField] private AudioSource Fell03;
-    [SerializeField] private AudioSource Fell04;
-    [SerializeField] private AudioSource Fell05;
-    [SerializeField] private AudioSource Fell06;
-    [SerializeField] private AudioSource Fell07;
-    [SerializeField] private AudioSource Fell08;
-    [SerializeField] private AudioSource Fell09;
-    [SerializeField] private AudioSource Fell10;
-    [SerializeField] private AudioSource Fell11;
-    [SerializeField] private AudioSource Fell12;
-    [SerializeField] private AudioSource Fell13;
-    [SerializeField] private AudioSource Fell14;
-    [SerializeField] private AudioSource Fell15;
-    [SerializeField] private AudioSource Fell16;
-    [SerializeField] private AudioSource Fell17;
-    [SerializeField] private AudioSource Fell18;
-    [SerializeField] private AudioSource Fell19;
-    [SerializeField] private AudioSource Fell20;
-    [SerializeField] private AudioSource Fell21;
-    [SerializeField] private AudioSource Fell22;
-    [SerializeField] int numberOfRandom;
+    [SerializeField] private AudioSource Fell01, Fell02, Fell03, Fell04, Fell05, Fell06, Fell07, Fell08, Fell09, Fell10, Fell11, Fell12, Fell13, Fell14, Fell15, Fell16, Fell17, Fell18, Fell19, Fell20, Fell21, Fell22;
+
 
     int j = 0;
     int[] voiceLinesArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 };
@@ -56,14 +35,11 @@ public class PlayerScript : MonoBehaviour
     {
         System.Random rng = new System.Random();
         int random1, random2;
-        for (int i = 0; i < numberOfRandom; i++)
-        {
-            random1 = rng.Next(1, voiceLines.Length - 1);
-            random2 = rng.Next(1, voiceLines.Length - 1);
-            int temp = voiceLines[random1];
-            voiceLines[random1] = voiceLines[random2];
-            voiceLines[random2] = voiceLines[random1];
-        }
+        random1 = rng.Next(1, voiceLines.Length - 1);
+        random2 = rng.Next(1, voiceLines.Length - 1);
+        int temp = voiceLines[random1];
+        voiceLines[random1] = voiceLines[random2];
+        voiceLines[random2] = voiceLines[random1];
         return;
     }
     private void OnCollisionEnter(Collision collision)

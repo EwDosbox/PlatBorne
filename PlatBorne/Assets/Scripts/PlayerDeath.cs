@@ -5,24 +5,7 @@ using UnityEngine;
 public class PlayerDeath : MonoBehaviour
 {
     public Animator transitionAnim;
-    [SerializeField] private AudioSource VLDeath01;
-    [SerializeField] private AudioSource VLDeath02;
-    [SerializeField] private AudioSource VLDeath03;
-    [SerializeField] private AudioSource VLDeath04;
-    [SerializeField] private AudioSource VLDeath05;
-    [SerializeField] private AudioSource VLDeath06;
-    [SerializeField] private AudioSource VLDeath07;
-    [SerializeField] private AudioSource VLDeath08;
-    [SerializeField] private AudioSource VLDeath09;
-    [SerializeField] private AudioSource VLDeath10;
-    [SerializeField] private AudioSource VLDeath11;
-    [SerializeField] private AudioSource VLDeath12;
-    [SerializeField] private AudioSource VLDeath13;
-    [SerializeField] private AudioSource VLDeath14;
-    [SerializeField] private AudioSource VLDeath15;
-    [SerializeField] private AudioSource VLDeath16;
-    [SerializeField] private AudioSource VLDeath17;
-    [SerializeField] private AudioSource VLDeathDefault;
+    [SerializeField] private AudioSource VLDeath01, VLDeath02, VLDeath03, VLDeath04, VLDeath05, VLDeath06, VLDeath07, VLDeath08, VLDeath09, VLDeath10, VLDeath11, VLDeath12, VLDeath13, VLDeath14, VLDeath15, VLDeath16, VLDeath17, VLDeath18;
 
     public int BossDeathCount = 0;
 
@@ -135,7 +118,7 @@ public class PlayerDeath : MonoBehaviour
                 }
             default:
                 {
-                    VLDeathDefault.Play();
+                    VLDeath18.Play();
                     Debug.Log("Play Voice Line Player Death Default");
                     break;
                 }
