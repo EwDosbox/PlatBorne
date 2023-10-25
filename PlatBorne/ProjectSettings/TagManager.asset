@@ -4,7 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Fall Hitbox
+  - Boss Hitbox Down
+  - Boss Hitbox Up
+  - Boss Hitbox Left
+  - Boss Hitbox Right
+  - Damage
   layers:
   - Default
   - TransparentFX

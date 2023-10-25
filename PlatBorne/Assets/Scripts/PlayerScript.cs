@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour
     public Rigidbody2D rigidBody;
     public TilemapCollider2D levelWoods;
     public TilemapCollider2D levelLondon;
+    public PlayerHealth health;
 
     public Sprite[] spritesIdle;
     public Sprite[] spritesWalk;
@@ -27,7 +28,8 @@ public class PlayerScript : MonoBehaviour
     public bool bossHitboxDown = false;
     public bool bossHitbox = false;
     public bool arenaStart = false;
-
+    public int playerHP = 3;
+    public bool playerInvincible = false;
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Fall hitbox" && playerWasInAir && !isPlayerInAir)
@@ -40,7 +42,12 @@ public class PlayerScript : MonoBehaviour
         }
         else playerWasInAir = false;
 
-        if (collision.gameObject.name == "Arena Start") arenaStart = true;
+        if (collision.gameObject.name == "Damage")
+        {
+            playerHP--;
+            health.ChangeHealth(playerHP);
+            playerInvincible = true;
+        }
         if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxRight = true;
         else if (collision.gameObject.name == "Boss Hitbox Left") bossHitboxLeft = true;
         if (collision.gameObject.name == "Boss Hitbox Down") bossHitboxDown = true;
