@@ -7,10 +7,9 @@ public class BossAttacks : MonoBehaviour
 {
     public Bossfight bossfight;
     public PlayerScript player;
-    public GameObject[] leech;
+    public GameObject leech;
     public GameObject lava;
     public GameObject dagger;
-    public Transform[] daggerStartingPoint;
     [SerializeField] private AudioSource BossScream;
 
     public int phase;
@@ -21,14 +20,19 @@ public class BossAttacks : MonoBehaviour
     public bool bossHitbox = false;
     public bool bossfightStarted = false;
     private float daggerTimer = 0;
+    private float leechTimer = 0;
+    private int leechAttackWhere = 0; //0 = LeftRight, 1 = RightLeft, 2 = Both
     private bool daggerAttack = false;
     private int daggerAttackHappened = 0;
+    private bool leechAttack = false;
+    private int leechAttackHappened = 0;
+    private float leechAttackBetween = 1;
 
-    private void BossAttackRushPlayer()
+    public void BossAttackRushPlayer()
     {
 
-    }
-    private void BossAttackFloorIsLava()
+    }//***needs Vorm***
+    public void BossAttackFloorIsLava()
     {
         Transform lava = GetComponent<Transform>();
         for (float i = -15; i != - 7; i += (float)0.2)
@@ -38,12 +42,31 @@ public class BossAttacks : MonoBehaviour
         }
         return;
     }
-    private void BossAttackDagger()
+    public void BossAttackDagger()
     {
         daggerAttack = true;
         if (daggerTimer > 1 && daggerAttackHappened < 6)
         {
-            Instantiate(dagger, daggerStartingPoint[daggerAttackHappened]);
+            Vector3 position = new Vector3(20, -3.76f, 0);
+            switch (daggerAttackHappened)
+            {
+                case 1: 
+                    position = new Vector3(20f, 0f, 0);
+                    break;
+                case 2:
+                    position = new Vector3(20f, -7.50f, 0);
+                    break;
+                case 3:
+                    position = new Vector3(-20f, -3.76f, 0);
+                    break;
+                case 4:
+                    position = new Vector3(-20f, 0f, 0);
+                    break;
+                case 5:
+                    position = new Vector3(-20f, -7.50f, 0);
+                    break;
+            }
+            Instantiate(dagger, position, Quaternion.identity);
             daggerAttackHappened++;
             daggerTimer = 0;
         }
@@ -52,59 +75,81 @@ public class BossAttacks : MonoBehaviour
             daggerTimer = 0;
             daggerAttackHappened = 0;
             daggerAttack = false;
+            Debug.Log("Daggers End");
         }
-    }
-    private void BossAttackSword()
+    } //done
+    public void BossAttackSword()
     {
 
     }
-    private void BossAttackLeechLeft()
+    public void BossAttackLeechLeft()
     {
-        for (int i = 0; i < leech.Length - 3; i++)
+        leechAttackWhere = 0;
+        leechAttack = true;
+        if (leechTimer > leechAttackBetween)
         {
-            Rigidbody rb = leech[i].GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = false;
-                rb.WakeUp();
-                new WaitForSeconds((float)0.05 + Mathf.Log(i));
-            }
+            Vector3 position = new Vector3(-16.88f + (leechAttackHappened * 1.7f), 11.5f, 0);
+            Instantiate(leech, position, Quaternion.identity);
+            leechAttackHappened++;
+            leechTimer = 0;
+            if (leechAttackBetween > 0.10f) leechAttackBetween -= 0.04f;
         }
-        LeechReset();
-    }
-    private void BossAttackLeechRight()
+        else if (leechAttackHappened > 17)//attackEnd
+        {
+            leechTimer = 0;
+            leechAttackBetween = 1;
+            leechAttackHappened = 0;
+            leechAttack = false;
+            Debug.Log("Leeches End");
+        }
+    }//done
+    public void BossAttackLeechRight()
     {
-        for (int i = leech.Length; i > 3; i--)
+        leechAttack = true;
+        leechAttackWhere = 1;
+        if (leechTimer > leechAttackBetween)
         {
-            Rigidbody rb = leech[i].GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.isKinematic = false;
-                rb.WakeUp();
-                new WaitForSeconds((float)0.05 + Mathf.Log(i));
-            }
+            Debug.Log("Right");
+            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 0);
+            Instantiate(leech, position, Quaternion.identity);
+            leechAttackHappened++;
+            leechTimer = 0;
+            if (leechAttackBetween > 0.10f) leechAttackBetween -= 0.04f;
         }
-        LeechReset();
-    }
-    private void BossAttackLeechBoth()
+        else if (leechAttackHappened > 17)//attackEnd
+        {
+            leechTimer = 0;
+            leechAttackBetween = 1;
+            leechAttackHappened = 0;
+            leechAttack = false;
+            Debug.Log("Leeches End");
+        }
+    }//done
+    public void BossAttackLeechBoth()
     {
-        for (int i = 0; i < (leech.Length / 2) - 2; i++)
+        leechAttack = true;
+        leechAttackWhere = 2;
+        if (leechTimer > leechAttackBetween)
         {
-            Rigidbody rb = leech[i].GetComponent<Rigidbody>();
-            Rigidbody rb2 = leech[leech.Length - i - 1].GetComponent<Rigidbody>();
-            if (rb != null && rb2 != null)
-            {
-                rb.isKinematic = false;
-                rb2.isKinematic = false;
-                rb.WakeUp();
-                rb2.WakeUp();
-                new WaitForSeconds((float)0.05 + Mathf.Log(i));
-            }
+            Debug.Log("Right");
+            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 0);
+            Instantiate(leech, position, Quaternion.identity);
+            Vector3 position2 = new Vector3(-16.78f + (leechAttackHappened * 1.7f), 11.5f, 0);
+            Instantiate(leech, position2, Quaternion.identity);
+            leechAttackHappened++;
+            leechTimer = 0;
+            if (leechAttackBetween > 0.10f) leechAttackBetween -= 0.08f;
         }
-        LeechReset();
-        return;
-    }
-    private void BossAttackChoose()
+        else if (leechAttackHappened > 8)//attackEnd
+        {
+            leechTimer = 0;
+            leechAttackBetween = 1;
+            leechAttackHappened = 0;
+            leechAttack = false;
+            Debug.Log("Leeches End");
+        }
+    }//done
+    public void BossAttackChoose()
     {
         switch (phase)
         {
@@ -204,7 +249,7 @@ public class BossAttacks : MonoBehaviour
         }
     }
 
-    private void PhaseAttack() //rushes the player, screams before
+    public void PhaseAttack() //rushes the player, screams before ***needs Vorm***
     {
         BossScream.Play();
         //animation for screaming
@@ -219,34 +264,20 @@ public class BossAttacks : MonoBehaviour
             yield return null;
         }
     }
-
-    private void LeechReset()
-    {
-        foreach (GameObject name in leech)
-        {
-            Rigidbody rb = name.GetComponent<Rigidbody>();
-            rb.Sleep();
-            name.transform.position = new Vector2(name.transform.position.x, (float)-559.36);
-        }
-        return;
-    }
-
-    private void Start()
-    {
-        daggerStartingPoint[0].position = new Vector2(14, 0.92f);
-        daggerStartingPoint[1].position = new Vector2(14, -3f);
-        daggerStartingPoint[2].position = new Vector2(14, -7f);
-        daggerStartingPoint[3].position = new Vector2(-25.7f, 0.92f);
-        daggerStartingPoint[4].position = new Vector2(-25.7f, -3f);
-        daggerStartingPoint[5].position = new Vector2(-25.7f, -7f);
-    }
-
     private void Update()
     {
         if (daggerAttack)
         {
             daggerTimer += Time.deltaTime;
             BossAttackDagger();
+        }
+
+        if (leechAttack)
+        {
+            leechTimer += Time.deltaTime;
+            if (leechAttackWhere == 0) BossAttackLeechLeft();
+            else if (leechAttackWhere == 1) BossAttackLeechRight();
+            else BossAttackLeechBoth();
         }
     }
 }

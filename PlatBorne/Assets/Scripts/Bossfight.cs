@@ -54,6 +54,8 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        bossAttacks.BossAttackLeechBoth();
+        Debug.Log("Bossfight");
     }
     private void Update()
     {

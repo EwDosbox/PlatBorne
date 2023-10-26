@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
@@ -10,6 +8,7 @@ using UnityEngine.Video;
 public class PreGameCutscene : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
+    [SerializeField] private AudioSource sfx;
 
     void Start()
     {
@@ -20,6 +19,7 @@ public class PreGameCutscene : MonoBehaviour
         videoPlayer.loopPointReached += OnVideoFinished;
 
         videoPlayer.Play();
+        sfx.Play();
     }
 
     private void OnVideoFinished(VideoPlayer vp)
