@@ -8,7 +8,9 @@ public class BossAttacks : MonoBehaviour
     public Bossfight bossfight;
     public PlayerScript player;
     public GameObject[] leech;
-    public GameObject[] lava;
+    public GameObject lava;
+    public GameObject dagger;
+    public Transform[] daggerStartingPoint;
     [SerializeField] private AudioSource BossScream;
 
     public int phase;
@@ -18,6 +20,10 @@ public class BossAttacks : MonoBehaviour
     public bool bossHitboxDown = false;
     public bool bossHitbox = false;
     public bool bossfightStarted = false;
+    private float daggerTimer = 0;
+    private bool daggerAttack = false;
+    private int daggerAttackHappened = 0;
+
     private void BossAttackRushPlayer()
     {
 
@@ -34,7 +40,19 @@ public class BossAttacks : MonoBehaviour
     }
     private void BossAttackDagger()
     {
-
+        daggerAttack = true;
+        if (daggerTimer > 1 && daggerAttackHappened < 6)
+        {
+            Instantiate(dagger, daggerStartingPoint[daggerAttackHappened]);
+            daggerAttackHappened++;
+            daggerTimer = 0;
+        }
+        else if (daggerAttackHappened > 6)//attackEnd
+        {
+            daggerTimer = 0;
+            daggerAttackHappened = 0;
+            daggerAttack = false;
+        }
     }
     private void BossAttackSword()
     {
@@ -211,5 +229,24 @@ public class BossAttacks : MonoBehaviour
             name.transform.position = new Vector2(name.transform.position.x, (float)-559.36);
         }
         return;
+    }
+
+    private void Start()
+    {
+        daggerStartingPoint[0].position = new Vector2(14, 0.92f);
+        daggerStartingPoint[1].position = new Vector2(14, -3f);
+        daggerStartingPoint[2].position = new Vector2(14, -7f);
+        daggerStartingPoint[3].position = new Vector2(-25.7f, 0.92f);
+        daggerStartingPoint[4].position = new Vector2(-25.7f, -3f);
+        daggerStartingPoint[5].position = new Vector2(-25.7f, -7f);
+    }
+
+    private void Update()
+    {
+        if (daggerAttack)
+        {
+            daggerTimer += Time.deltaTime;
+            BossAttackDagger();
+        }
     }
 }
