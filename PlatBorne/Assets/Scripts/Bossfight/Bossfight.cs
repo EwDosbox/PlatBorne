@@ -54,15 +54,14 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-        bossAttacks.BossAttackSwordBoth(true, false, 1);
-        Debug.Log("Bossfight");
+        playerHealth.PlayerStart();
     }
     private void Update()
     {
         if (bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {
             bossfightStarted = true;
-            bossHealthBar.BossStart(bossHP);
+            bossHealthBar.BossStart();
             playerHealth.PlayerStart();
         }
 

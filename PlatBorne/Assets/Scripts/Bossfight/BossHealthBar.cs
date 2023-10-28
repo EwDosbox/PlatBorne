@@ -7,27 +7,30 @@ public class BossHealthBar : MonoBehaviour
 {
 
     public Slider slider;
+    [SerializeField] private float speedToFill = 10; //60/5 = 12
+    private bool start = true;
+    private float timer = 0;
 
-    public void Max(int maxHealth)
+    public void Max(float maxHealth)
     {
         slider.maxValue = maxHealth;
-        slider.value = maxHealth;
         return;
     }
     
-    public void Set(int health)
+    public void Set(float health)
     {
         slider.value = health;
     }
 
-    public void BossStart(int maxHealth)
+    public void BossStart()
     {
-        slider.maxValue = maxHealth;
-        for (double i = 0; i < maxHealth; i += 0.05)
-        {
-            slider.value = (float)i;
-            new WaitForSeconds((float)i);    
-        }
-        return;
+        slider.value = timer * speedToFill;
+        if (slider.maxValue == slider.value) start = false;
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (start) BossStart();
     }
 }
