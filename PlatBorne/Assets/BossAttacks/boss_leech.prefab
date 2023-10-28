@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3123430756313914688}
   - component: {fileID: 6892227975168907366}
   m_Layer: 10
-  m_Name: Leech
+  m_Name: boss_leech
   m_TagString: Damage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

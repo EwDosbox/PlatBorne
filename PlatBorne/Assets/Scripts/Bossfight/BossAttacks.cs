@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class BossAttacks : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class BossAttacks : MonoBehaviour
     public GameObject leech;
     public GameObject lava;
     public GameObject dagger;
+    public GameObject sword;
     [SerializeField] private AudioSource BossScream;
 
     public int phase;
@@ -27,6 +30,8 @@ public class BossAttacks : MonoBehaviour
     private bool leechAttack = false;
     private int leechAttackHappened = 0;
     private float leechAttackBetween = 1;
+    private bool swordAttackTimer = false;
+    private float timerSwordAttack = 0;
 
     public void BossAttackRushPlayer()
     {
@@ -34,14 +39,10 @@ public class BossAttacks : MonoBehaviour
     }//***needs Vorm***
     public void BossAttackFloorIsLava()
     {
-        Transform lava = GetComponent<Transform>();
-        for (float i = -15; i != - 7; i += (float)0.2)
-        {
-            lava.transform.position = new Vector2(lava.transform.position.x,i);
-            new WaitForSeconds((float)0.2);
-        }
+        Vector3 position = new Vector3(0, -15f, 0);
+        Instantiate(lava, position, Quaternion.identity);
         return;
-    }
+    }//done
     public void BossAttackDagger()
     {
         daggerAttack = true;
@@ -78,10 +79,41 @@ public class BossAttacks : MonoBehaviour
             Debug.Log("Daggers End");
         }
     } //done
-    public void BossAttackSword()
+    public void BossAttackSwordLeft()
     {
+        Vector3 position = new Vector3(-21f, -1.3f , 0);
+        Instantiate(sword, position, quaternion.identity);
+    }//done
+    public void BossAttackSwordRight()
+    {
+        Vector3 position = new Vector3(21f, -1.3f, 0);
+        Instantiate(sword, position, quaternion.identity);
+    }//done
+    public void BossAttackSwordBoth(bool bothAtTheSameTime, bool leftFirst, float timeBetweenAttacks)
+    {
+        if (bothAtTheSameTime)
+        {
+            BossAttackSwordLeft();
+            BossAttackSwordRight();
+        }
+        else if (leftFirst)
+        {
+            swordAttackTimer = true;
+            BossAttackSwordLeft();
+            if (timerSwordAttack > timeBetweenAttacks) BossAttackSwordRight();
+            swordAttackTimer = false;
+            return;
+        }
+        else
+        {
+            swordAttackTimer = true;
+            BossAttackSwordRight();
+            if (timerSwordAttack > timeBetweenAttacks) BossAttackSwordLeft();
+            swordAttackTimer = false;
+            return;
+        }
 
-    }
+    }//done
     public void BossAttackLeechLeft()
     {
         leechAttackWhere = 0;
@@ -151,104 +183,8 @@ public class BossAttacks : MonoBehaviour
     }//done
     public void BossAttackChoose()
     {
-        switch (phase)
-        {
-            case 1:
-                {
-                    new WaitForSeconds(5 - phase);
-                    if (bossHitboxRight)
-                    {
-                        BossAttackRushPlayer(); // + boss na leve strane
-                    }
-                    else if (bossHitboxLeft) // + boss na prave strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxDown)
-                    {
-                        BossAttackFloorIsLava();
-                    }
-                    else
-                    {
-                        BossAttackDagger();
-                    }
-                    break;
-                }
-            case 2:
-                {
-                    new WaitForSeconds(5 - phase);
-                    if (bossHitboxRight) // + boss na leve strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft) // + boss na prave strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft)
-                    {
-                        BossAttackSword();
-                    }
-                    else
-                    {
-                        BossAttackDagger();
-                    }
-                    break;
-                }
-            case 3:
-                {
-                    new WaitForSeconds(5 - phase);
-                    if (bossHitboxRight) // + boss na leve strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft) // + boss na prave strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft)
-                    {
-                        BossAttackSword();
-                    }
-                    else if (bossHitboxDown)
-                    {
-                        BossAttackFloorIsLava();
-                    }
-                    else
-                    {
-                        BossAttackDagger();
-                    }
-                    break;
-                }
-            case 4:
-                {
-                    new WaitForSeconds(5 - phase);
-                    if (bossHitboxRight) // + boss na leve strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft) // + boss na prave strane
-                    {
-                        BossAttackRushPlayer();
-                    }
-                    else if (bossHitboxLeft)
-                    {
-                        BossAttackSword();
-                    }
-                    else if (bossHitboxDown)
-                    {
-                        BossAttackFloorIsLava();
-                    }
-                    else
-                    {
-                        BossAttackDagger();
-                    }
-                    // BossAttackLeech();
-                    break;
-                }
-        }
-    }
 
+    }
     public void PhaseAttack() //rushes the player, screams before ***needs Vorm***
     {
         BossScream.Play();
@@ -266,6 +202,7 @@ public class BossAttacks : MonoBehaviour
     }
     private void Update()
     {
+        if (swordAttackTimer) timerSwordAttack += Time.deltaTime;
         if (daggerAttack)
         {
             daggerTimer += Time.deltaTime;
