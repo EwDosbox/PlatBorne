@@ -20,6 +20,7 @@ public class Bossfight : MonoBehaviour
     public PlayerHealth playerHealth;
     public BossAttacks bossAttacks;
     public PlayerScript player;
+    public BossFightVoiceLines voiceLines;
 
     public int phase = 1;
     bool attackIsGoing = false;
@@ -54,7 +55,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-        playerHealth.PlayerStart();
+        //Debug
     }
     private void Update()
     {
@@ -63,6 +64,7 @@ public class Bossfight : MonoBehaviour
             bossfightStarted = true;
             bossHealthBar.BossStart();
             playerHealth.PlayerStart();
+            voiceLines.PlayPreBossDialog();
         }
 
         if (bossfightStarted)

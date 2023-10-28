@@ -8,7 +8,7 @@ public class BossHealthBar : MonoBehaviour
 
     public Slider slider;
     [SerializeField] private float speedToFill = 10; //60/5 = 12
-    private bool start = true;
+    private bool start = false;
     private float timer = 0;
 
     public void Max(float maxHealth)
