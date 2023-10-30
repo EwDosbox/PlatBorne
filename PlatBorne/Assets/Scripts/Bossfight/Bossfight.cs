@@ -18,7 +18,8 @@ public class Bossfight : MonoBehaviour
     public PlayerHealth playerHealth;
     public BossAttacks bossAttacks;
     public PlayerScript player;
-    public BossFightVoiceLines voiceLines;
+    public BossAttacks attack;
+    private Rigidbody2D rb;
 
     public int phase = 1;
     bool attackIsGoing = false;
@@ -31,6 +32,8 @@ public class Bossfight : MonoBehaviour
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
     bool playerInvincible = false;
+    private bool attackTimerBool = false;
+    private float attackTimer = 5f;
 
     public bool bossHitboxRight = false;
     public bool bossHitboxLeft = false;
@@ -38,7 +41,11 @@ public class Bossfight : MonoBehaviour
     public bool bossHitboxDown = false;
     public bool bossHitbox = false;
     public bool bossfightStarted = false;
-
+    //****************
+    int attackNumberRush = 0;
+    int attackNumberDagger = 0;
+    int attackNumberFloorIsLava = 0;
+    //****************
 
     private void BossDeath()
     {
@@ -62,7 +69,7 @@ public class Bossfight : MonoBehaviour
             bossfightStarted = true;
             bossHealthBar.BossStart();
             playerHealth.PlayerStart();
-            voiceLines.PlayPreBossDialog();
+            PreBossDialog.Play();
         }
 
         if (bossfightStarted)
@@ -71,10 +78,14 @@ public class Bossfight : MonoBehaviour
             if (timerOn)
             {
                 timer += Time.fixedDeltaTime;
-                Debug.Log(timer);
                 if (bossInvincible) invincibilityTimerBoss += Time.fixedDeltaTime;
+                else invincibilityTimerBoss = 0f;
                 if (playerInvincible) invincibilityTimerPlayer += Time.fixedDeltaTime;
+                else invincibilityTimerPlayer = 0f;
                 if (phase == 4) phaseTimer += Time.fixedDeltaTime;
+                else phaseTimer = 0f;
+                if (attackTimerBool) attackTimer = Time.fixedDeltaTime;
+                else attackTimer = 0f;
             }
 
             if (invincibilityTimerBoss >= 60 && !attackIsGoing)
@@ -123,8 +134,9 @@ public class Bossfight : MonoBehaviour
                     }
                 }
             }
-            else if (phase == 4 && (phaseTimer % 2 == 0 || phaseTimer % 2 != 0))
+            else if (phase == 4 && phaseTimer >= 1)
             {
+                phaseTimer = 0;
                 bossHP--;
                 bossHealthBar.Set(bossHP); //UI
                 if (bossHP <= 0) BossDeath();
@@ -141,6 +153,53 @@ public class Bossfight : MonoBehaviour
                 }
             }
 
+
+            switch(phase)
+            {
+                case 1:
+                    {
+                        if (attackTimer > 4)
+                        {
+                            if (!bossInvincible) attack.PhaseAttack();
+                            else
+                            {
+                                if ((bossHitboxDown && rb.position.x > 6.60)) //RushRight
+                                {
+                                    attack.BossAttackRushPlayer(true);
+                                    attackNumberRush++;
+                                }
+                                else if (bossHitboxDown && rb.position.x < -8) //RushLeft
+                                {
+                                    attack.BossAttackRushPlayer(false);
+                                    attackNumberRush++;
+                                }
+                                else if (bossHitboxDown)
+                                {
+                                    attack.BossAttackFloorIsLava();
+                                    attackNumberFloorIsLava++;
+                                }
+                                else
+                                {
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger++;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        break;
+                    }
+                case 3:
+                    {
+                        break;
+                    }
+                case 4:
+                    {
+                        break;
+                    }
+            }
         }
     }
 }

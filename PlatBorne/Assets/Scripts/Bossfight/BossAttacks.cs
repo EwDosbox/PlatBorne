@@ -13,7 +13,9 @@ public class BossAttacks : MonoBehaviour
     public GameObject lava;
     public GameObject dagger;
     public GameObject sword;
+    public Rigidbody2D rb;
     [SerializeField] private AudioSource BossScream;
+    [SerializeField] private float chargeSpeed;
 
     public int phase;
     public bool bossHitboxRight = false;
@@ -33,10 +35,19 @@ public class BossAttacks : MonoBehaviour
     private bool swordAttackTimer = false;
     private float timerSwordAttack = 0;
 
-    public void BossAttackRushPlayer()
+    public void BossAttackRushPlayer(bool rushLeft)
     {
-
-    }//***needs Vorm***
+        if (rushLeft)
+        {
+            rb.velocity = Vector2.left * chargeSpeed;
+            //pokud narazi do dzi konec
+        }
+        else
+        {
+            rb.velocity = Vector2.right * chargeSpeed;
+            //pokud narazi do dzi konec
+        }
+    }
     public void BossAttackFloorIsLava()
     {
         Vector3 position = new Vector3(0, -15f, 0);
@@ -181,10 +192,6 @@ public class BossAttacks : MonoBehaviour
             Debug.Log("Leeches End");
         }
     }//done
-    public void BossAttackChoose()
-    {
-
-    }
     public void PhaseAttack() //rushes the player, screams before ***needs Vorm***
     {
         BossScream.Play();

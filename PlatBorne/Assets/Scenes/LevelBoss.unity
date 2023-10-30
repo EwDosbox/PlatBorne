@@ -5360,14 +5360,12 @@ MonoBehaviour:
   BossDamage01: {fileID: 914732936}
   BossDamage02: {fileID: 914732935}
   BossDamage03: {fileID: 914732934}
-  BossDamage04: {fileID: 0}
   BossDeath01: {fileID: 914732933}
-  HunterOOF: {fileID: 0}
   bossHealthBar: {fileID: 1875910936}
   playerHealth: {fileID: 1921264130}
   bossAttacks: {fileID: 2072781360}
   player: {fileID: 0}
-  voiceLines: {fileID: 0}
+  attack: {fileID: 0}
   phase: 1
   playerHP: 3
   bossHP: 60
@@ -5386,7 +5384,7 @@ Transform:
   m_GameObject: {fileID: 914732926}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.83, y: -6.4, z: 0.2991007}
+  m_LocalPosition: {x: -8.06, y: -6.4, z: 0.2991007}
   m_LocalScale: {x: 0.3453054, y: 0.3453054, z: 0.3453054}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13522,7 +13520,9 @@ MonoBehaviour:
   lava: {fileID: 8450196196666446399, guid: 9af3a6be68c9a1f4a819588fe773703b, type: 3}
   dagger: {fileID: 3749002924494578520, guid: f885b57af30a22d458b9a52368d3aa7f, type: 3}
   sword: {fileID: 8576403116321838606, guid: 9a8c32ca5086e634289f09fea862fb0c, type: 3}
+  rb: {fileID: 914732930}
   BossScream: {fileID: 0}
+  chargeSpeed: 0
   phase: 0
   bossHitboxRight: 0
   bossHitboxLeft: 0
