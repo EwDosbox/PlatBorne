@@ -7,8 +7,8 @@ public class PlayerScript : MonoBehaviour
 {
     public SpriteRenderer renderer;
     public Rigidbody2D rigidBody;
-    public TilemapCollider2D levelWoods;
-    public TilemapCollider2D levelLondon;
+    public CompositeCollider2D levelWoods;
+    public CompositeCollider2D levelLondon;
     public PlayerHealth health;
 
     public Sprite[] spritesIdle;
@@ -63,17 +63,20 @@ public class PlayerScript : MonoBehaviour
         rigidBody.rotation = 0;
         if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.left * movementSpeed + new Vector2(0, rigidBody.velocity.y);
+            rigidBody.velocity = Vector2.left * movementSpeed +
+                                 new Vector2(0, rigidBody.velocity.y);
             renderer.sprite = spritesWalk[0];
         }
         if (Input.GetKey(KeyCode.D) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.right * movementSpeed + new Vector2(0, rigidBody.velocity.y);
+            rigidBody.velocity = Vector2.right * movementSpeed +
+                                 new Vector2(0, rigidBody.velocity.y);
             renderer.sprite = spritesWalk[1];
         }
         if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.up * jumpSpeed + new Vector2(rigidBody.velocity.x, 0);
+            rigidBody.velocity = Vector2.up * jumpSpeed +
+                                 new Vector2(rigidBody.velocity.x, 0);
         }
         
         if (!isPlayerInAir)
@@ -89,8 +92,8 @@ public class PlayerScript : MonoBehaviour
     }
     private bool DoesHunterTouchGround(Collider2D hunter, Collider2D level1, Collider2D level2)
     {
-        bool doesHunterTouchLevel1 = hunter.IsTouching(level1.GetComponent<TilemapCollider2D>());
-        bool doesHunterTouchLevel2 = hunter.IsTouching(level2.GetComponent<TilemapCollider2D>());
+        bool doesHunterTouchLevel1 = hunter.IsTouching(level1);
+        bool doesHunterTouchLevel2 = hunter.IsTouching(level2);
         bool doesHunterTouchGround = doesHunterTouchLevel1 || doesHunterTouchLevel2;
         return doesHunterTouchGround;
     }
