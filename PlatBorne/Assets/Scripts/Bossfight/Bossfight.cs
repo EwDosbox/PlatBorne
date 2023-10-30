@@ -12,9 +12,7 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource BossDamage01;
     [SerializeField] private AudioSource BossDamage02;
     [SerializeField] private AudioSource BossDamage03;
-    [SerializeField] private AudioSource BossDamage04;
     [SerializeField] private AudioSource BossDeath01;
-    [SerializeField] private AudioSource HunterOOF;
 
     public BossHealthBar bossHealthBar;
     public PlayerHealth playerHealth;
@@ -55,7 +53,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-        //Debug
+
     }
     private void Update()
     {
@@ -104,21 +102,21 @@ public class Bossfight : MonoBehaviour
                         case 40:
                             {
                                 phase = 2;
-                                BossDamage02.Play();
+                                BossDamage01.Play();
                                 Debug.Log("Phase 2 Start");
                                 break;
                             }
                         case 20:
                             {
                                 phase = 3;
-                                BossDamage03.Play();
+                                BossDamage02.Play();
                                 Debug.Log("Phase 3 Start");
                                 break;
                             }
                     }
                     if (bossHP == 0 && phase == 3)
                     {
-                        BossDamage04.Play();
+                        BossDamage03.Play();
                         Debug.Log("Phase 4 Start");
                         bossHP = 60;
                         phase = 4;
@@ -135,7 +133,6 @@ public class Bossfight : MonoBehaviour
             {
                 playerHP--;
                 playerHealth.ChangeHealth(playerHP); //UI
-                HunterOOF.Play();
                 Debug.Log("Hunter has taken Damage");
                 if (playerHP == 0)
                 {
