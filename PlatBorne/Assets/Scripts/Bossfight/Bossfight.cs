@@ -45,6 +45,8 @@ public class Bossfight : MonoBehaviour
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
+    int attackNumberLeech = 0;
+    int attackNumberSword = 0;
     //****************
 
     private void BossDeath()
@@ -92,7 +94,6 @@ public class Bossfight : MonoBehaviour
             {
                 invincibilityTimerBoss = 0;
                 bossInvincible = false;
-
             }
             if (invincibilityTimerPlayer > 1)
             {
@@ -154,49 +155,203 @@ public class Bossfight : MonoBehaviour
             }
 
 
-            switch(phase)
+            switch (phase)
             {
                 case 1:
                     {
-                        if (attackTimer > 4)
+                        if (attackTimer > 10)
                         {
-                            if (!bossInvincible) attack.PhaseAttack();
+                            if (!bossInvincible)
+                            {
+                                attack.PhaseAttack();
+                            }
                             else
                             {
-                                if ((bossHitboxDown && rb.position.x > 6.60)) //RushRight
+                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
                                     attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
                                 }
-                                else if (bossHitboxDown && rb.position.x < -8) //RushLeft
+                                else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
                                 {
                                     attack.BossAttackRushPlayer(false);
                                     attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
                                 }
-                                else if (bossHitboxDown)
+                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
                                     attackNumberFloorIsLava++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
                                 }
                                 else
                                 {
                                     attack.BossAttackDagger();
                                     attackNumberDagger++;
+                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = 0;
                                 }
                             }
+                            attackTimer = 0f;
                         }
                         break;
                     }
                 case 2:
                     {
+                        if (attackTimer > 8)
+                        {
+                            if (!bossInvincible) attack.PhaseAttack();
+                            else
+                            {
+                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                {
+                                    attack.BossAttackRushPlayer(true);
+                                    attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberLeech = 0;
+                                }
+                                else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
+                                {
+                                    attack.BossAttackRushPlayer(false);
+                                    attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberLeech = 0;
+                                }
+                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                                {
+                                    attack.BossAttackFloorIsLava();
+                                    attackNumberFloorIsLava++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
+                                    attackNumberLeech = 0;
+                                }
+                                else if (attackNumberLeech < 1)
+                                {
+                                    if (bossHitboxLeft) attack.BossAttackLeechLeft();
+                                    else attack.BossAttackLeechRight();
+                                    attackNumberLeech++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
+                                }
+                                else
+                                {
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger++;
+                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberLeech = 0;
+                                }
+                            }
+                            attackTimer = 0f;
+                        }
                         break;
                     }
                 case 3:
                     {
+                        if (attackTimer > 8)
+                        {
+                            if (!bossInvincible) attack.PhaseAttack();
+                            else
+                            {
+                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                {
+                                    attack.BossAttackRushPlayer(true);
+                                    attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberLeech = 0;
+                                    attackNumberSword = 0;
+                                }
+                                else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
+                                {
+                                    attack.BossAttackRushPlayer(false);
+                                    attackNumberRush++;
+                                    attackNumberDagger = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberSword = 0;
+                                }
+                                else if (attackNumberSword < 1 && bossHitboxLeft)
+                                {
+                                    attack.BossAttackSwordLeft();
+                                    attackNumberSword++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = 0;
+                                }
+                                else if (attackNumberSword < 1 && bossHitboxRight)
+                                {
+                                    attack.BossAttackSwordRight();
+                                    attackNumberSword++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = 0;
+                                }
+                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                                {
+                                    attack.BossAttackFloorIsLava();
+                                    attackNumberFloorIsLava++;
+                                    attackNumberDagger = 0;
+                                    attackNumberRush = 0;
+                                    attackNumberSword = 0;
+                                }
+                                else
+                                {
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger++;
+                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = 0;
+                                    attackNumberSword = 0;
+                                }
+                            }
+                            attackTimer = 0f;
+                        }
                         break;
                     }
                 case 4:
                     {
+                        if (attackTimer > 6)
+                        {
+                            if (attackNumberSword < 1 && (bossHitboxLeft || bossHitboxRight))
+                            {
+                                attack.BossAttackSwordBoth(true, false, 0);
+                                attackNumberSword++;
+                                attackNumberDagger = 0;
+                                attackNumberRush = 0;
+                                attackNumberFloorIsLava = 0;
+                            }
+                            else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                            {
+                                attack.BossAttackFloorIsLava();
+                                attackNumberFloorIsLava++;
+                                attackNumberDagger = 0;
+                                attackNumberRush = 0;
+                                attackNumberSword = 0;
+                            }
+                            else if (attackNumberDagger > 1)
+                            {
+                                attack.BossAttackDagger();
+                                attackNumberDagger++;
+                                attackNumberRush = 0;
+                                attackNumberFloorIsLava = 0;
+                                attackNumberSword = 0;
+                            }
+                            else
+                            {
+                                if (phaseTimer % 2 == 0) attack.BossAttackLeechLeft();
+                                else if (phaseTimer % 3 == 0) attack.BossAttackLeechRight();
+                                else attack.BossAttackLeechBoth();
+                                attackNumberRush = 0;
+                                attackNumberFloorIsLava = 0;
+                                attackNumberSword = 0;
+                            }
+                            attackTimer = 0f;
+                        }                        
                         break;
                     }
             }

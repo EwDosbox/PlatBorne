@@ -9,6 +9,7 @@ TagManager:
   - Boss Hitbox Left
   - Boss Hitbox Right
   - Damage
+  - BossWalls
   layers:
   - Default
   - TransparentFX

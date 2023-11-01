@@ -23,7 +23,6 @@ public class BossAttacks : MonoBehaviour
     public bool bossHitboxUp = false;
     public bool bossHitboxDown = false;
     public bool bossHitbox = false;
-    public bool bossfightStarted = false;
     private float daggerTimer = 0;
     private float leechTimer = 0;
     private int leechAttackWhere = 0; //0 = LeftRight, 1 = RightLeft, 2 = Both
@@ -41,11 +40,13 @@ public class BossAttacks : MonoBehaviour
         {
             rb.velocity = Vector2.left * chargeSpeed;
             //pokud narazi do dzi konec
+            rb.velocity = Vector2.left * 0;
         }
         else
         {
             rb.velocity = Vector2.right * chargeSpeed;
             //pokud narazi do dzi konec
+            rb.velocity = Vector2.right * 0;
         }
     }
     public void BossAttackFloorIsLava()

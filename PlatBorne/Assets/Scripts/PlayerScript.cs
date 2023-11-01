@@ -48,6 +48,12 @@ public class PlayerScript : MonoBehaviour
                 {
                     playerFell++;
                     playVoiceLine = true;
+                    //Stats
+                    int numberOfFall = PlayerPrefs.GetInt("NumberOfFalls", 0);
+                    numberOfFall++;
+                    PlayerPrefs.SetInt("NumberOfJumps", numberOfFall);
+                    PlayerPrefs.Save();
+                    //Stats
                 }
             }
             else playerWasInAir = false;
@@ -89,6 +95,12 @@ public class PlayerScript : MonoBehaviour
         {
             rigidBody.velocity = Vector2.up * jumpSpeed +
                                  new Vector2(rigidBody.velocity.x, 0);
+            //Stats
+            int numberOfJump = PlayerPrefs.GetInt("NumberOfJumps", 0);
+            numberOfJump++;
+            PlayerPrefs.SetInt("NumberOfJumps", numberOfJump);
+            PlayerPrefs.Save();
+            //Stats
             if (!isPlaying)
             {
                 hunterJump.Play();

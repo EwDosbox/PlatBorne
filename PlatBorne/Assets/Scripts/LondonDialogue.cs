@@ -45,9 +45,9 @@ public class LondonDialogue : MonoBehaviour
     void Start()
     {
         Randomize(voiceLinesArray);
+        string[] dialogue = new string[17];
+
     }
-
-
     // Update is called once per frame
     void Update()
     {
