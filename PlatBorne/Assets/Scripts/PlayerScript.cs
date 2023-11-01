@@ -15,13 +15,14 @@ public class PlayerScript : MonoBehaviour
     public CompositeCollider2D levelWoods;
     public CompositeCollider2D levelLondon;
     public PlayerHealth health;
+    public Collider2D hunterFeet;
 
     public Sprite[] spritesIdle;
     public Sprite[] spritesWalk;
 
     bool isPlayerInAir;
     public int movementSpeed;
-    public int jumpSpeed;
+    public float jumpSpeed;
     double positionYWas;
     double positionYIs;
     bool playerWasInAir = false;
@@ -37,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     public bool playerInvincible = false;
     private float timer = 0;
     private bool isPlaying = false;
+    private float stairJumpSpeed = 0.009f; 
     private void OnCollisionEnter(Collision collision)
     {
         if (playerWasInAir && !isPlayerInAir)
@@ -77,24 +79,33 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
-        isPlayerInAir = !DoesHunterTouchGround(this.GetComponent<Collider2D>(), levelWoods, levelLondon);
+        isPlayerInAir = !DoesHunterTouchGround(hunterFeet, levelWoods, levelLondon);
         rigidBody.rotation = 0;
-        if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
+        if (Input.GetKey(KeyCode.A) && !isPlayerInAir && !Input.GetKeyUp(KeyCode.W))
         {
             rigidBody.velocity = Vector2.left * movementSpeed +
                                  new Vector2(0, rigidBody.velocity.y);
             renderer.sprite = spritesWalk[0];
         }
-        if (Input.GetKey(KeyCode.D) && !isPlayerInAir)
+        if (Input.GetKey(KeyCode.D) && !isPlayerInAir && !Input.GetKeyUp(KeyCode.W))
         {
             rigidBody.velocity = Vector2.right * movementSpeed +
                                  new Vector2(0, rigidBody.velocity.y);
             renderer.sprite = spritesWalk[1];
         }
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isPlayerInAir)
+        {
+            rigidBody.velocity = new Vector2(0, 0);
+        }
         if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
+            if (jumpSpeed < 10f) jumpSpeed += stairJumpSpeed;
+        }
+        if(Input.GetKeyUp(KeyCode.W) &&  !isPlayerInAir)
+        {        
             rigidBody.velocity = Vector2.up * jumpSpeed +
                                  new Vector2(rigidBody.velocity.x, 0);
+            jumpSpeed = 5;
             //Stats
             int numberOfJump = PlayerPrefs.GetInt("NumberOfJumps", 0);
             numberOfJump++;
