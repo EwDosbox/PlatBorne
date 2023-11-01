@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Security.Authentication.ExtendedProtection;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
