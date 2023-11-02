@@ -10,15 +10,12 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioSource hunterJump;
     [SerializeField] private AudioSource hunterWalk;
 
-    public SpriteRenderer renderer;
+    public Animator animator;
     public Rigidbody2D rigidBody;
     public CompositeCollider2D levelWoods;
     public CompositeCollider2D levelLondon;
     public PlayerHealth health;
     public Collider2D hunterFeet;
-
-    public Sprite[] spritesIdle;
-    public Sprite[] spritesWalk;
 
     bool isPlayerInAir;
     public int movementSpeed;
@@ -83,25 +80,23 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.name == "Boss Hitbox Down") bossHitboxDown = false;
         else if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxUp = false;
     }
-    void Start()
-    {
-        renderer.sprite = spritesWalk[1];
-    }
     void Update()
     {
         isPlayerInAir = !DoesHunterTouchGround(hunterFeet, levelWoods, levelLondon);
         rigidBody.rotation = 0;
-        if (Input.GetKey(KeyCode.A) && !isPlayerInAir && !Input.GetKeyUp(KeyCode.W))
+        //animator
+        animator.SetFloat("Speed",Mathf.Abs(rigidBody.velocity.x));
+        animator.SetBool("IsJumping", isPlayerInAir);
+        //inputs
+        if (Input.GetKey(KeyCode.A) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
         {
             rigidBody.velocity = Vector2.left * movementSpeed +
                                  new Vector2(0, rigidBody.velocity.y);
-            renderer.sprite = spritesWalk[0];
         }
-        if (Input.GetKey(KeyCode.D) && !isPlayerInAir && !Input.GetKeyUp(KeyCode.W))
+        if (Input.GetKey(KeyCode.D) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
         {
             rigidBody.velocity = Vector2.right * movementSpeed +
                                  new Vector2(0, rigidBody.velocity.y);
-            renderer.sprite = spritesWalk[1];
         }
         if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isPlayerInAir)
         {
@@ -109,10 +104,21 @@ public class PlayerScript : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
+            rigidBody.velocity = Vector2.zero;
             if (jumpSpeed < 10f) jumpSpeed += stairJumpSpeed;
         }
+        //flipovani spritu
+        if (((Input.GetKeyDown(KeyCode.A) && transform.localScale.x > 0) ||
+            (Input.GetKeyDown(KeyCode.D) && transform.localScale.x < 0)) &&
+            !isPlayerInAir) 
+        {
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            rigidBody.transform.localScale = scale;
+        }
+
         if(Input.GetKeyUp(KeyCode.W) &&  !isPlayerInAir)
-        {        
+        {
             rigidBody.velocity = Vector2.up * jumpSpeed +
                                  new Vector2(rigidBody.velocity.x, 0);
             jumpSpeed = 5;
@@ -134,7 +140,6 @@ public class PlayerScript : MonoBehaviour
             hunterWalk.enabled = true;
         }
         else hunterWalk.enabled = false;
-
         if (!isPlayerInAir)
         {
             positionYIs = transform.position.y;
