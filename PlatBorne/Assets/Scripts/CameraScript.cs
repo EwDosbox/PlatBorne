@@ -9,8 +9,8 @@ public class CameraScript : MonoBehaviour
         {
             this.transform.position = new Vector3(
                 0,
-                -60  
-                );         
+                -60
+                );
         }
         else if (player.transform.position.y > 0)
         {
@@ -19,10 +19,10 @@ public class CameraScript : MonoBehaviour
                 0
                 );
         }
-        else 
+        else
         {
             this.transform.position = new Vector3(
-                this.transform.position.x, 
+                this.transform.position.x,
                 player.transform.position.y
            );
         }
