@@ -49,8 +49,7 @@ public class VoiceLineLondon : MonoBehaviour
     }
     void Update()
     {
-        PlayerScript playerScript = GetComponent<PlayerScript>();
-        bool playVoiceLine = playerScript.playVoiceLine;
+        bool playVoiceLine = PlayerScript.playVoiceLine;
         if (playVoiceLine)
         {
             switch (voiceLines[j])

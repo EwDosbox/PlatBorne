@@ -5,7 +5,6 @@ using UnityEngine.Video;
 public class PreGameCutscene : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    [SerializeField] private AudioSource sfx;
 
     void Start()
     {
@@ -14,9 +13,6 @@ public class PreGameCutscene : MonoBehaviour
             videoPlayer = GetComponent<VideoPlayer>();
         }
         videoPlayer.loopPointReached += OnVideoFinished;
-
-        videoPlayer.Play();
-        sfx.Play();
     }
 
     private void OnVideoFinished(VideoPlayer vp)

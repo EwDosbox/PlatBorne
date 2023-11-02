@@ -48,11 +48,8 @@ public class LondonDialogue : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerScript playerScript = GetComponent<PlayerScript>();
-        if (playerScript != null)
-        {
-            bool playVoiceLine = playerScript.playVoiceLine;
 
+            bool playVoiceLine = PlayerScript.playVoiceLine;
             if (playVoiceLine)
             {
                 DialoguePanel.SetActive(true);
@@ -201,6 +198,5 @@ public class LondonDialogue : MonoBehaviour
                     j = 0;
                 }
             }
-        }
     }
 }

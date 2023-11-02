@@ -9,12 +9,13 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource BossDamage02;
     [SerializeField] private AudioSource BossDamage03;
     [SerializeField] private AudioSource BossDeath01;
+    [SerializeField] private AudioSource OSTLoop;
+    [SerializeField] private AudioSource OSTPhase4;
 
     public BossHealthBar bossHealthBar;
     public PlayerHealth playerHealth;
-    public BossAttacks bossAttacks;
-    public PlayerScript player;
     public BossAttacks attack;
+    public GameObject player;
     private Rigidbody2D rb;
 
     public int phase = 1;
@@ -31,12 +32,12 @@ public class Bossfight : MonoBehaviour
     private bool attackTimerBool = false;
     private float attackTimer = 5f;
 
-    public bool bossHitboxRight = false;
-    public bool bossHitboxLeft = false;
-    public bool bossHitboxUp = false;
-    public bool bossHitboxDown = false;
-    public bool bossHitbox = false;
-    public bool bossfightStarted = false;
+    static public bool bossHitboxRight = false;
+    static public bool bossHitboxLeft = false;
+    static public bool bossHitboxUp = false;
+    static public bool bossHitboxDown = false;
+    static public bool bossHitbox = false;
+    static public bool bossfightStarted = false;
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -45,9 +46,19 @@ public class Bossfight : MonoBehaviour
     int attackNumberSword = 0;
     //****************
 
+    private int resetPromenych()
+    {
+        attackNumberRush = 0;
+        attackNumberDagger = 0;
+        attackNumberFloorIsLava = 0;
+        attackNumberLeech = 0;
+        attackNumberSword = 0;
+        return 1;
+    }    
     private void BossDeath()
     {
         BossDeath01.Play();
+        
         Debug.Log("Boss Has Died");
     }
     private void PlayerDeath()
@@ -58,7 +69,6 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-
     }
     private void Update()
     {
@@ -68,6 +78,7 @@ public class Bossfight : MonoBehaviour
             bossHealthBar.BossStart();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
+            OSTLoop.enabled = true;
         }
 
         if (bossfightStarted)
@@ -128,6 +139,8 @@ public class Bossfight : MonoBehaviour
                         Debug.Log("Phase 4 Start");
                         bossHP = 60;
                         phase = 4;
+                        OSTLoop.enabled = false;
+                        OSTPhase4.enabled = true;
                     }
                 }
             }
@@ -166,30 +179,22 @@ public class Bossfight : MonoBehaviour
                                 if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
+                                    attackNumberRush = resetPromenych();
                                 }
                                 else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
                                 {
                                     attack.BossAttackRushPlayer(false);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
+                                    attackNumberRush = attackNumberRush = resetPromenych();
                                 }
                                 else if (bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
+                                    attackNumberFloorIsLava = resetPromenych();
                                 }
                                 else
                                 {
                                     attack.BossAttackDagger();
-                                    attackNumberDagger++;
-                                    attackNumberRush = 0;
-                                    attackNumberFloorIsLava = 0;
+                                    attackNumberDagger = resetPromenych();
                                 }
                             }
                             attackTimer = 0f;
@@ -206,42 +211,31 @@ public class Bossfight : MonoBehaviour
                                 if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberLeech = 0;
+                                    attackNumberRush = resetPromenych();
                                 }
                                 else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
                                 {
                                     attack.BossAttackRushPlayer(false);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberLeech = 0;
+                                    attackNumberRush = resetPromenych();
                                 }
                                 else if (bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
-                                    attackNumberLeech = 0;
-                                }
+                                            attackNumberFloorIsLava = resetPromenych();
+                                        }
                                 else if (attackNumberLeech < 1)
                                 {
-                                    if (bossHitboxLeft) attack.BossAttackLeechLeft();
-                                    else attack.BossAttackLeechRight();
-                                    attackNumberLeech++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
+                                if (bossHitboxLeft) attack.BossAttackLeechLeft();
+                                else
+                                {
+                                    attack.BossAttackLeechRight();
+                                    attackNumberLeech = resetPromenych();
+                                }
                                 }
                                 else
                                 {
                                     attack.BossAttackDagger();
-                                    attackNumberDagger++;
-                                    attackNumberRush = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberLeech = 0;
+                                    attackNumberDagger = resetPromenych();
                                 }
                             }
                             attackTimer = 0f;
@@ -258,51 +252,32 @@ public class Bossfight : MonoBehaviour
                                 if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberLeech = 0;
-                                    attackNumberSword = 0;
+                                    attackNumberRush = resetPromenych();
                                 }
                                 else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
                                 {
                                     attack.BossAttackRushPlayer(false);
-                                    attackNumberRush++;
-                                    attackNumberDagger = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberSword = 0;
+                                    attackNumberRush = resetPromenych();
                                 }
                                 else if (attackNumberSword < 1 && bossHitboxLeft)
                                 {
                                     attack.BossAttackSwordLeft();
-                                    attackNumberSword++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
-                                    attackNumberFloorIsLava = 0;
+                                    attackNumberSword = resetPromenych();
                                 }
                                 else if (attackNumberSword < 1 && bossHitboxRight)
                                 {
                                     attack.BossAttackSwordRight();
-                                    attackNumberSword++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
-                                    attackNumberFloorIsLava = 0;
+                                    attackNumberSword = resetPromenych();
                                 }
                                 else if (bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava++;
-                                    attackNumberDagger = 0;
-                                    attackNumberRush = 0;
-                                    attackNumberSword = 0;
+                                    attackNumberFloorIsLava = resetPromenych();
                                 }
                                 else
                                 {
                                     attack.BossAttackDagger();
-                                    attackNumberDagger++;
-                                    attackNumberRush = 0;
-                                    attackNumberFloorIsLava = 0;
-                                    attackNumberSword = 0;
+                                    attackNumberDagger = resetPromenych();
                                 }
                             }
                             attackTimer = 0f;
@@ -316,35 +291,24 @@ public class Bossfight : MonoBehaviour
                             if (attackNumberSword < 1 && (bossHitboxLeft || bossHitboxRight))
                             {
                                 attack.BossAttackSwordBoth(true, false, 0);
-                                attackNumberSword++;
-                                attackNumberDagger = 0;
-                                attackNumberRush = 0;
-                                attackNumberFloorIsLava = 0;
+                                attackNumberSword = resetPromenych();
                             }
                             else if (bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava++;
-                                attackNumberDagger = 0;
-                                attackNumberRush = 0;
-                                attackNumberSword = 0;
+                                attackNumberFloorIsLava = resetPromenych();
                             }
                             else if (attackNumberDagger > 1)
                             {
                                 attack.BossAttackDagger();
-                                attackNumberDagger++;
-                                attackNumberRush = 0;
-                                attackNumberFloorIsLava = 0;
-                                attackNumberSword = 0;
+                                attackNumberDagger = resetPromenych();
                             }
                             else
                             {
                                 if (phaseTimer % 2 == 0) attack.BossAttackLeechLeft();
                                 else if (phaseTimer % 3 == 0) attack.BossAttackLeechRight();
                                 else attack.BossAttackLeechBoth();
-                                attackNumberRush = 0;
-                                attackNumberFloorIsLava = 0;
-                                attackNumberSword = 0;
+                                attackNumberSword = resetPromenych();
                             }
                             attackTimer = 0f;
                         }                        

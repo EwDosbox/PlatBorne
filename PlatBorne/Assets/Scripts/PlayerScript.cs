@@ -27,27 +27,28 @@ public class PlayerScript : MonoBehaviour
     double positionYIs;
     bool playerWasInAir = false;
     public int playerFell = 0;
-    public bool playVoiceLine = false;
-    public bool bossHitboxRight = false;
-    public bool bossHitboxLeft = false;
-    public bool bossHitboxUp = false;
-    public bool bossHitboxDown = false;
-    public bool bossHitbox = false;
-    public bool arenaStart = false;
+    //*****
+    static public bool playVoiceLine = false;
+    static public bool bossHitboxRight = false;
+    static public bool bossHitboxLeft = false;
+    static public bool bossHitboxUp = false;
+    static public bool bossHitboxDown = false;
+    static public bool bossHitbox = false;
+    //******
     public int playerHP = 3;
     public bool playerInvincible = false;
     private float timer = 0;
     private bool isPlaying = false;
     private float stairJumpSpeed = 0.009f; 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (playerWasInAir && !isPlayerInAir)
         {
-            hunterDrop.Play();
             if (collision.gameObject.name == "Fall hitbox")
             {
                 if (positionYWas < positionYIs)
                 {
+                    hunterDrop.Play();
                     playerFell++;
                     playVoiceLine = true;
                     //Stats
@@ -72,6 +73,15 @@ public class PlayerScript : MonoBehaviour
         else if (collision.gameObject.name == "Boss Hitbox Left") bossHitboxLeft = true;
         if (collision.gameObject.name == "Boss Hitbox Down") bossHitboxDown = true;
         else if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxUp = true;
+        Debug.Log(bossHitboxLeft);
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxRight = false;
+        else if (collision.gameObject.name == "Boss Hitbox Left") bossHitboxLeft = false;
+        if (collision.gameObject.name == "Boss Hitbox Down") bossHitboxDown = false;
+        else if (collision.gameObject.name == "Boss Hitbox Right") bossHitboxUp = false;
     }
     void Start()
     {
