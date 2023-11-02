@@ -22,13 +22,14 @@ public class BossHealthBar : MonoBehaviour
 
     public void BossStart()
     {
+        start = true;
         slider.value = timer * speedToFill;
         if (slider.maxValue == slider.value) start = false;
     }
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        if (start) timer += Time.deltaTime;
         if (start) BossStart();
     }
 }

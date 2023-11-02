@@ -5,62 +5,40 @@ using UnityEngine.UI;
 public class LondonDialogue : MonoBehaviour
 {
     [SerializeField] private AudioSource Fell01, Fell02, Fell03, Fell04, Fell05, Fell06, Fell07, Fell08, Fell09, Fell10, Fell11, Fell12, Fell13, Fell14, Fell15, Fell16, Fell17, Fell18, Fell19, Fell20, Fell21, Fell22;
-    [SerializeField] float speed, waiting;
     int j = 0;
-    int[] voiceLinesArray = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 };
-    public string[] dialogue;
-    public GameObject DialoguePanel;
-    public Text DialogueText;
+    int[] voiceLinesArray;
 
     void Randomize(int[] voiceLines)
     {
         System.Random rng = new System.Random();
-        int random1, random2;
-        random1 = rng.Next(1, voiceLines.Length - 1);
-        random2 = rng.Next(1, voiceLines.Length - 1);
-        int temp = voiceLines[random1];
-        voiceLines[random1] = voiceLines[random2];
-        voiceLines[random2] = voiceLines[random1];
-        return;
-    }
-
-    private void TextReset()
-    {
-        DialoguePanel.SetActive(false);
-        DialogueText = null;
-    }
-
-    IEnumerable Typing()
-    {
-
-        foreach(char letter in dialogue[voiceLinesArray[j] - 1].ToCharArray())
+        for (int i = 0; i < 250; i++)
         {
-            DialogueText.text += letter;
-            yield return new WaitForSeconds(speed);
+            int random1 = rng.Next(0, voiceLines.Length - 1);
+            int random2 = rng.Next(0, voiceLines.Length - 1);
+            int temp = voiceLines[random1];
+            voiceLines[random1] = voiceLines[random2];
+            voiceLines[random2] = temp;
         }
+        return;
     }
     void Start()
     {
+        voiceLinesArray = new int[21];
+        for (int i = 0; i < voiceLinesArray.Length; i++)
+        {
+            voiceLinesArray[i] = i;
+        }
         Randomize(voiceLinesArray);
-        string[] dialogue = new string[17];
-
     }
-    // Update is called once per frame
     void Update()
     {
-
-            bool playVoiceLine = PlayerScript.playVoiceLine;
-            if (playVoiceLine)
+            if (PlayerScript.playVoiceLine)
             {
-                DialoguePanel.SetActive(true);
                 switch (voiceLinesArray[j])
                 {
                     case 1:
                         {
                             Fell01.Play();
-                            StartCoroutine(Typing().ToString());
-                            new WaitForSeconds(waiting);
-                            TextReset();
                             Debug.Log("Playing Audio - Fell01");
                             break;
                         }
@@ -192,6 +170,7 @@ public class LondonDialogue : MonoBehaviour
                         }
                 }
                 j++;
+                PlayerScript.playVoiceLine = false;
                 if (j == voiceLinesArray.Length - 1)
                 {
                     Randomize(voiceLinesArray);

@@ -9,7 +9,6 @@ public class BossFightVoiceLines : MonoBehaviour
     public GameObject DialoguePanel;
     public Text DialogueText;
     private int j = 0;
-    [SerializeField] float speed = 2, waiting = 0.06f;
     public void PlayBossDamage01()
     {
         DialoguePanel.SetActive(true);
@@ -46,14 +45,9 @@ public class BossFightVoiceLines : MonoBehaviour
         DialogueText = null;
     }
 
-    IEnumerable Typing(string dialog)
+    private void Typing(string s)
     {
-
-        foreach (char letter in dialogue.ToCharArray())
-        {
-            DialogueText.text += letter;
-            yield return new WaitForSeconds(speed);
-        }
-        TextReset();
+        DialogueText.text = s; //uplne k hovnu
     }
-}
+    }
+

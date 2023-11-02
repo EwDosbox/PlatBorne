@@ -31,21 +31,6 @@ public class BossAttacks : MonoBehaviour
     private bool swordAttackTimer = false;
     private float timerSwordAttack = 0;
 
-    public void BossAttackRushPlayer(bool rushLeft)
-    {
-        if (rushLeft)
-        {
-            rb.velocity = Vector2.left * chargeSpeed;
-            //pokud narazi do dzi konec
-            rb.velocity = Vector2.left * 0;
-        }
-        else
-        {
-            rb.velocity = Vector2.right * chargeSpeed;
-            //pokud narazi do dzi konec
-            rb.velocity = Vector2.right * 0;
-        }
-    }
     public void BossAttackFloorIsLava()
     {
         Vector3 position = new Vector3(0, -15f, 0);

@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class Bossfight : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class Bossfight : MonoBehaviour
     public BossAttacks attack;
     public GameObject player;
     private Rigidbody2D rb;
+    public Text text;
 
     public int phase = 1;
     bool attackIsGoing = false;
@@ -32,11 +33,11 @@ public class Bossfight : MonoBehaviour
     private bool attackTimerBool = false;
     private float attackTimer = 5f;
 
-    static public bool bossHitboxRight = false;
-    static public bool bossHitboxLeft = false;
-    static public bool bossHitboxUp = false;
-    static public bool bossHitboxDown = false;
-    static public bool bossHitbox = false;
+    bool bossHitboxRight;
+    bool bossHitboxLeft;
+    bool bossHitboxUp;
+    bool bossHitboxDown;
+    bool bossHitbox;
     static public bool bossfightStarted = false;
     //****************
     int attackNumberRush = 0;
@@ -58,7 +59,9 @@ public class Bossfight : MonoBehaviour
     private void BossDeath()
     {
         BossDeath01.Play();
-        
+        PlayerPrefs.SetFloat("Boss Time", timer);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("EndgameCutscene");
         Debug.Log("Boss Has Died");
     }
     private void PlayerDeath()
@@ -69,12 +72,17 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+
     }
     private void Update()
     {
-        if (bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
+        if (bossInvincible) text.text = "Boss Invincible";
+        else text.text = "Boss Vunerable";
+        if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {
+            timerOn = true;
             bossfightStarted = true;
+            attackTimerBool = true;
             bossHealthBar.BossStart();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
@@ -86,7 +94,8 @@ public class Bossfight : MonoBehaviour
             //ÈASOVAÈ
             if (timerOn)
             {
-                timer += Time.fixedDeltaTime;
+                timer += Time.deltaTime;
+                Debug.Log(timer);
                 if (bossInvincible) invincibilityTimerBoss += Time.fixedDeltaTime;
                 else invincibilityTimerBoss = 0f;
                 if (playerInvincible) invincibilityTimerPlayer += Time.fixedDeltaTime;
@@ -97,7 +106,7 @@ public class Bossfight : MonoBehaviour
                 else attackTimer = 0f;
             }
 
-            if (invincibilityTimerBoss >= 60 && !attackIsGoing)
+            if (invincibilityTimerBoss >= 60)
             {
                 invincibilityTimerBoss = 0;
                 bossInvincible = false;
@@ -110,7 +119,7 @@ public class Bossfight : MonoBehaviour
 
             if (!bossInvincible && phase <= 3) //Phase 1,2,3 Boss Damage
             {
-                if (bossHitbox)
+                if (PlayerScript.bossHitbox)
                 {
                     bossInvincible = true;
                     playerInvincible = true;
@@ -151,7 +160,7 @@ public class Bossfight : MonoBehaviour
                 bossHealthBar.Set(bossHP); //UI
                 if (bossHP <= 0) BossDeath();
             }
-            if (bossHitbox && bossInvincible)
+            if (PlayerScript.bossHitbox && bossInvincible)
             {
                 playerHP--;
                 playerHealth.ChangeHealth(playerHP); //UI
@@ -176,7 +185,7 @@ public class Bossfight : MonoBehaviour
                             }
                             else
                             {
-                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
                                     attackNumberRush = resetPromenych();
@@ -185,8 +194,8 @@ public class Bossfight : MonoBehaviour
                                 {
                                     attack.BossAttackRushPlayer(false);
                                     attackNumberRush = attackNumberRush = resetPromenych();
-                                }
-                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                                }*/
+                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
                                     attackNumberFloorIsLava = resetPromenych();
@@ -208,7 +217,7 @@ public class Bossfight : MonoBehaviour
                             if (!bossInvincible) attack.PhaseAttack();
                             else
                             {
-                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
                                     attackNumberRush = resetPromenych();
@@ -217,15 +226,15 @@ public class Bossfight : MonoBehaviour
                                 {
                                     attack.BossAttackRushPlayer(false);
                                     attackNumberRush = resetPromenych();
-                                }
-                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                                }*/
+                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
                                             attackNumberFloorIsLava = resetPromenych();
                                         }
                                 else if (attackNumberLeech < 1)
                                 {
-                                if (bossHitboxLeft) attack.BossAttackLeechLeft();
+                                if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
                                 else
                                 {
                                     attack.BossAttackLeechRight();
@@ -249,7 +258,7 @@ public class Bossfight : MonoBehaviour
                             if (!bossInvincible) attack.PhaseAttack();
                             else
                             {
-                                if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
                                     attack.BossAttackRushPlayer(true);
                                     attackNumberRush = resetPromenych();
@@ -258,18 +267,18 @@ public class Bossfight : MonoBehaviour
                                 {
                                     attack.BossAttackRushPlayer(false);
                                     attackNumberRush = resetPromenych();
-                                }
-                                else if (attackNumberSword < 1 && bossHitboxLeft)
+                                }*/
+                                if (attackNumberSword < 1 && PlayerScript.bossHitboxLeft)
                                 {
                                     attack.BossAttackSwordLeft();
                                     attackNumberSword = resetPromenych();
                                 }
-                                else if (attackNumberSword < 1 && bossHitboxRight)
+                                else if (attackNumberSword < 1 && PlayerScript.bossHitboxRight)
                                 {
                                     attack.BossAttackSwordRight();
                                     attackNumberSword = resetPromenych();
                                 }
-                                else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                                else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
                                     attackNumberFloorIsLava = resetPromenych();
@@ -288,12 +297,12 @@ public class Bossfight : MonoBehaviour
                     {
                         if (attackTimer > 6)
                         {
-                            if (attackNumberSword < 1 && (bossHitboxLeft || bossHitboxRight))
+                            if (attackNumberSword < 1 && (PlayerScript.bossHitboxLeft || PlayerScript.bossHitboxRight))
                             {
                                 attack.BossAttackSwordBoth(true, false, 0);
                                 attackNumberSword = resetPromenych();
                             }
-                            else if (bossHitboxDown && attackNumberFloorIsLava < 1)
+                            else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
                                 attackNumberFloorIsLava = resetPromenych();
