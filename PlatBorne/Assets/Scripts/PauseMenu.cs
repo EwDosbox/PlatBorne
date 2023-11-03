@@ -87,4 +87,17 @@ public class PauseMenu : MonoBehaviour
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(true);
     }
+
+    public void Quit()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_Quit());
+    }
+
+    private IEnumerator _Quit()
+    {
+        yield return new WaitForSeconds(srcOne.length);
+        Debug.Log("Application has quit");
+        Application.Quit();
+    }
 }

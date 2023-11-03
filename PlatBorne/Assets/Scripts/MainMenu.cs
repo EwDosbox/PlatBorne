@@ -1,7 +1,10 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,13 +12,19 @@ public class MainMenu : MonoBehaviour
 
     public AudioSource src;
     public AudioClip srcOne;
+    public AudioClip srcTwo;
 
     public Animator transitionAnim;
+    public Animator sign;
 
+    public GameObject panel;
+
+    public TMP_Text text;
+    
     public bool InGame = false;
     public bool PreGameCutscene = false;
 
-    private void Start()
+    private IEnumerator Start()
     {
         if (PlayerPrefs.HasKey("MusicVolume"))
         {
@@ -26,6 +35,14 @@ public class MainMenu : MonoBehaviour
         {
             SetSFXVolume();
         }
+
+        yield return new WaitForSeconds(1.1f);
+        panel.SetActive(true);
+        src.PlayOneShot(srcTwo);
+        sign.SetTrigger("SignDown");
+        text.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        text.gameObject.SetActive(true);
     }
 
     public void PlayGame()

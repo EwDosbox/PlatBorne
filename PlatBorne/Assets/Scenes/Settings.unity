@@ -915,7 +915,6 @@ GameObject:
   - component: {fileID: 414747174}
   - component: {fileID: 414747173}
   - component: {fileID: 414747172}
-  - component: {fileID: 414747176}
   - component: {fileID: 414747177}
   m_Layer: 5
   m_Name: Main Canvas
@@ -1008,24 +1007,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &414747176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 414747171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9486f24a21f135e4f90f90d6597ea80b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
-  src: {fileID: 2035026703}
-  srcOne: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
-  transitionAnim: {fileID: 751909479}
-  InGame: 0
-  PreGameCutscene: 0
 --- !u!114 &414747177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1043,6 +1024,8 @@ MonoBehaviour:
   SFXVolSlider: {fileID: 1042917349}
   resolutionDropdown: {fileID: 952157330}
   src: {fileID: 2035026703}
+  srcOne: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
+  transitionAnim: {fileID: 751909479}
 --- !u!1 &590587595
 GameObject:
   m_ObjectHideFlags: 0
@@ -4455,8 +4438,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 414747176}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+      - m_Target: {fileID: 414747177}
+        m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
         m_MethodName: MMenu
         m_Mode: 1
         m_Arguments:
@@ -4464,7 +4447,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MainMenu
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1992669824

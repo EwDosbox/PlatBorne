@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
@@ -12,8 +14,11 @@ public class SettingsMenu : MonoBehaviour
     public TMPro.TMP_Dropdown resolutionDropdown;
 
     public AudioSource src;
+    public AudioClip srcOne;
 
     Resolution[] resolutions;
+
+    public Animator transitionAnim;
 
     void Start()
     {
@@ -97,5 +102,19 @@ public class SettingsMenu : MonoBehaviour
     public void SetFullscreen (bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+    }
+
+    public void MMenu()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_MMenu());
+    }
+
+
+    private IEnumerator _MMenu()
+    {
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.99f);
+        SceneManager.LoadScene("MainMenu");
     }
 }
