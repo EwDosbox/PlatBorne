@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EndgameCutscene.unity
     guid: 546ca490e0a8d5c4d806e4dd884cf561
+  - enabled: 1
+    path: Assets/Scenes/PlayerDeath.unity
+    guid: bf47be3a5ef777b40a78a2d09307e8dc
   m_configObjects: {}

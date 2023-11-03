@@ -96,13 +96,13 @@ public class Bossfight : MonoBehaviour
             {
                 timer += Time.deltaTime;
                 Debug.Log(timer);
-                if (bossInvincible) invincibilityTimerBoss += Time.fixedDeltaTime;
+                if (bossInvincible) invincibilityTimerBoss += Time.deltaTime;
                 else invincibilityTimerBoss = 0f;
-                if (playerInvincible) invincibilityTimerPlayer += Time.fixedDeltaTime;
+                if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;
                 else invincibilityTimerPlayer = 0f;
-                if (phase == 4) phaseTimer += Time.fixedDeltaTime;
+                if (phase == 4) phaseTimer += Time.deltaTime;
                 else phaseTimer = 0f;
-                if (attackTimerBool) attackTimer = Time.fixedDeltaTime;
+                if (attackTimerBool) attackTimer = Time.deltaTime;
                 else attackTimer = 0f;
             }
 
@@ -162,11 +162,17 @@ public class Bossfight : MonoBehaviour
             }
             if (PlayerScript.bossHitbox && bossInvincible)
             {
+                playerInvincible = true;
+                PlayerScript.bossHitbox = false;
                 playerHP--;
                 playerHealth.ChangeHealth(playerHP); //UI
                 Debug.Log("Hunter has taken Damage");
                 if (playerHP == 0)
                 {
+                    int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
+                    ded++;
+                    PlayerPrefs.SetInt("NumberOfDeath", ded);
+                    PlayerPrefs.Save();
                     Debug.Log("Hunter has Died");
                     PlayerDeath();
                 }
