@@ -33,32 +33,32 @@ public class BossAttacks : MonoBehaviour
 
     public void BossAttackFloorIsLava()
     {
-        Vector3 position = new Vector3(0, -15f, 0);
+        Vector3 position = new Vector3(0, -15f, 3);
         Instantiate(lava, position, Quaternion.identity);
         return;
     }//done
     public void BossAttackDagger()
     {
         daggerAttack = true;
-        if (daggerTimer > 1 && daggerAttackHappened < 6)
+        if (daggerTimer > 1 && daggerAttackHappened <= 6)
         {
-            Vector3 position = new Vector3(20, -3.76f, 0);
+            Vector3 position = new Vector3(20, -3.76f, 3);
             switch (daggerAttackHappened)
             {
                 case 1: 
-                    position = new Vector3(20f, 0f, 0);
+                    position = new Vector3(20f, 0f, 3);
                     break;
                 case 2:
-                    position = new Vector3(20f, -7.50f, 0);
+                    position = new Vector3(20f, -7.50f, 3);
                     break;
                 case 3:
-                    position = new Vector3(-20f, -3.76f, 0);
+                    position = new Vector3(-20f, -3.76f, 3);
                     break;
                 case 4:
-                    position = new Vector3(-20f, 0f, 0);
+                    position = new Vector3(-20f, 0f, 3);
                     break;
                 case 5:
-                    position = new Vector3(-20f, -7.50f, 0);
+                    position = new Vector3(-20f, -7.50f, 3);
                     break;
             }
             Instantiate(dagger, position, Quaternion.identity);
@@ -75,12 +75,12 @@ public class BossAttacks : MonoBehaviour
     } //done
     public void BossAttackSwordLeft()
     {
-        Vector3 position = new Vector3(-21f, -1.3f , 0);
+        Vector3 position = new Vector3(-21f, -1.3f , 3);
         Instantiate(sword, position, quaternion.identity);
     }//done
     public void BossAttackSwordRight()
     {
-        Vector3 position = new Vector3(21f, -1.3f, 0);
+        Vector3 position = new Vector3(21f, -1.3f, 3);
         Instantiate(sword, position, quaternion.identity);
     }//done
     public void BossAttackSwordBoth(bool bothAtTheSameTime, bool leftFirst, float timeBetweenAttacks)
@@ -114,7 +114,7 @@ public class BossAttacks : MonoBehaviour
         leechAttack = true;
         if (leechTimer > leechAttackBetween)
         {
-            Vector3 position = new Vector3(-16.88f + (leechAttackHappened * 1.7f), 11.5f, 0);
+            Vector3 position = new Vector3(-16.88f + (leechAttackHappened * 1.7f), 11.5f, 3);
             Instantiate(leech, position, Quaternion.identity);
             leechAttackHappened++;
             leechTimer = 0;
@@ -135,8 +135,7 @@ public class BossAttacks : MonoBehaviour
         leechAttackWhere = 1;
         if (leechTimer > leechAttackBetween)
         {
-            Debug.Log("Right");
-            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 0);
+            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 3);
             Instantiate(leech, position, Quaternion.identity);
             leechAttackHappened++;
             leechTimer = 0;
@@ -158,9 +157,9 @@ public class BossAttacks : MonoBehaviour
         if (leechTimer > leechAttackBetween)
         {
             Debug.Log("Right");
-            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 0);
+            Vector3 position = new Vector3(16.78f - (leechAttackHappened * 1.7f), 11.5f, 3);
             Instantiate(leech, position, Quaternion.identity);
-            Vector3 position2 = new Vector3(-16.78f + (leechAttackHappened * 1.7f), 11.5f, 0);
+            Vector3 position2 = new Vector3(-16.78f + (leechAttackHappened * 1.7f), 11.5f, 3);
             Instantiate(leech, position2, Quaternion.identity);
             leechAttackHappened++;
             leechTimer = 0;

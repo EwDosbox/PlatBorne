@@ -46,13 +46,6 @@ public class PlayerScript : MonoBehaviour
         {
             bossHitbox = true;
         }
-        if (collision.gameObject.CompareTag("Damage"))
-        {
-            playerHP--;
-            hunterDamage.Play();
-            health.ChangeHealth(playerHP);
-            playerInvincible = true;
-        }
     }
     private void OnCollisionExit(Collision collision)
     {
@@ -70,6 +63,13 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
+        if (collision.gameObject.CompareTag("Damage"))
+        {
+            Bossfight.playerHP--;
+            hunterDamage.Play();
+            health.ChangeHealth();
+            playerInvincible = true;
+        }
         if (collision.gameObject.name == "Level Finish") SceneManager.LoadScene("LevelBoss");
     }
 

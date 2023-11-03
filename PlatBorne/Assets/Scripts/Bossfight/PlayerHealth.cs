@@ -7,10 +7,12 @@ public class PlayerHealth : MonoBehaviour
     public Image hp2;
     public Image hp3;
     private float timer = 0f;
+    static public bool playerDeath = false;
     private bool kemoMilujuANenavidimTimery = false;
-    public void ChangeHealth(int health)
+    public Bossfight bossfight;
+    public void ChangeHealth()
     {
-        switch(health)
+        switch(Bossfight.playerHP)
         {
             default:
                 {
@@ -38,6 +40,7 @@ public class PlayerHealth : MonoBehaviour
                     hp1.enabled = false;
                     hp2.enabled = false;
                     hp3.enabled = false;
+                    playerDeath = true;
                     break;
                 }
         }
