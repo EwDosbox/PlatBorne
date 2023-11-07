@@ -12,6 +12,7 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource OSTLoop;
     [SerializeField] private AudioSource OSTPhase4;
 
+    public BossFightVoiceLines voiceLines;
     public BossHealthBar bossHealthBar;
     public PlayerHealth playerHealth;
     public BossAttacks attack;
@@ -77,7 +78,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-
+        voiceLines.PlayBossDamage01();
     }
     private void Update()
     {

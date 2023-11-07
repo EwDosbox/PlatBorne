@@ -9,6 +9,15 @@ public class BossFightVoiceLines : MonoBehaviour
     public GameObject DialoguePanel;
     public Text DialogueText;
     private int j = 0;
+    //***
+    public float textSpeed;
+    public float waitingTime;
+    private float timerTextSpeed = 0;
+    private bool textType = false;
+    private bool textReset = false;
+    private float timerTextReset = 0;
+    //***
+
     public void PlayBossDamage01()
     {
         DialoguePanel.SetActive(true);
@@ -41,13 +50,49 @@ public class BossFightVoiceLines : MonoBehaviour
     }
     private void TextReset()
     {
-        DialoguePanel.SetActive(false);
-        DialogueText = null;
+        textType = false;
+        textReset = true;
+        if (timerTextReset > waitingTime)
+        {
+            timerTextReset = 0;
+            Debug.Log("Text Reset");
+            DialoguePanel.SetActive(false);
+            DialogueText.text = null;
+            j = 0;
+        }
     }
 
     private void Typing(string s)
     {
-        DialogueText.text = s; //uplne k hovnu
+        textType = true;
+        DialoguePanel.SetActive(true);
+        Debug.Log(dialogue.Length);
+        if (j == s.Length)
+        {
+            TextReset();
+        }
+        else DialogueText.text += s[j];
     }
+
+    private void Update()
+    {
+        if (textType)
+        {
+            timerTextSpeed += Time.deltaTime;
+            Debug.Log(timerTextSpeed);
+            if (timerTextSpeed > textSpeed)
+            {
+                timerTextSpeed = 0;
+                j++;
+                Typing(dialogue);
+            }
+        }
+
+        if (textReset)
+        {
+            timerTextReset += Time.deltaTime;
+            TextReset();
+        }
     }
+}
 
