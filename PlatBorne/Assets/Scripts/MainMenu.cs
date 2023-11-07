@@ -58,14 +58,14 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.99f);
         if (!PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
         {
-            SceneManager.LoadScene("PreGame Cutscene");
+            SceneManager.LoadScene("PreGameCutscene");
             PlayerPrefs.SetInt("PreGame", 1);
-            Debug.Log("Pre Game Cutscene activated");
+            Debug.Log("Scene: PreGameCutscene");
         }
         else
         {
             SceneManager.LoadScene("LevelLondon");
-            Debug.Log("Level London Activated");
+            Debug.Log("Scene: LevelLondon");
         }
     }
 

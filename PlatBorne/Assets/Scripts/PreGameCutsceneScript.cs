@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Video;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
-public class EndgameCutscene : MonoBehaviour
+public class PreGameCutscene : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
 
@@ -17,14 +15,14 @@ public class EndgameCutscene : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             Debug.Log("Cutscene skipped");
-            SceneManager.LoadScene("MainMenu");
-            Debug.Log("Scene: MainMenu");
+            SceneManager.LoadScene("LevelLondon");
+            Debug.Log("Scene: LevelLondon");
         }
     }
 
     private void videoDone(VideoPlayer videoPlayer)
     {
-        SceneManager.LoadScene("MainMenu");
-        Debug.Log("Scene: MainMenu");
+        SceneManager.LoadScene("LevelLondon");
+        Debug.Log("Scene: LevelLondon");
     }
 }

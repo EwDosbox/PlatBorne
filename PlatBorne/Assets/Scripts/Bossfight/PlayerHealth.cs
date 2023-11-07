@@ -50,8 +50,8 @@ public class PlayerHealth : MonoBehaviour
     {
         kemoMilujuANenavidimTimery = true;
         if (timer > 1) hp1.enabled = true;
-        if (timer > 5) hp2.enabled = true;
-        if (timer > 9) 
+        if (timer > 3) hp2.enabled = true;
+        if (timer > 5) 
         {
             hp3.enabled = true;
             kemoMilujuANenavidimTimery = false;
