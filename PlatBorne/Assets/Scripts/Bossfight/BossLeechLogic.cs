@@ -19,7 +19,7 @@ public class BossLeechLogic : MonoBehaviour
     void Update()
     {
         rb.velocity += Vector2.down * acceleration * Time.deltaTime;
-        timer = Time.deltaTime;
+        timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
             Destroy(gameObject);

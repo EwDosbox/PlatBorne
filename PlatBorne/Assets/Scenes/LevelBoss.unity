@@ -905,8 +905,8 @@ Transform:
   m_GameObject: {fileID: 222979210}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.014060259, y: -1.5205625, z: -3.158344}
-  m_LocalScale: {x: 7.3171105, y: 1.6749603, z: 1}
+  m_LocalPosition: {x: 0.014060259, y: 0.08, z: -3.158344}
+  m_LocalScale: {x: 35.54, y: 5.66, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 275584823}
@@ -13271,8 +13271,8 @@ Transform:
   m_GameObject: {fileID: 1869061627}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.927139, y: -6.63, z: -3.158344}
-  m_LocalScale: {x: 9.389886, y: 10.835429, z: 1}
+  m_LocalPosition: {x: -8.99, y: -5.6, z: -3.158344}
+  m_LocalScale: {x: 17.4, y: 10.835429, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 275584823}
@@ -14337,9 +14337,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034532772}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.014059, y: -5.6205626, z: -3.158344}
-  m_LocalScale: {x: 9.389886, y: 10.835429, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.8, y: -5.6205626, z: -3.158344}
+  m_LocalScale: {x: 17.73, y: 11.11, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 275584823}
@@ -14479,7 +14479,9 @@ MonoBehaviour:
   sword: {fileID: 8576403116321838606, guid: 9a8c32ca5086e634289f09fea862fb0c, type: 3}
   rb: {fileID: 914732930}
   BossScream: {fileID: 2072781362}
-  chargeSpeed: 0
+  leechAttackBetween: 1
+  leechAttackDifference: 0.06
+  leechAttackMaxSpawnRate: 0.2
   phase: 0
   bossHitboxRight: 0
   bossHitboxLeft: 0

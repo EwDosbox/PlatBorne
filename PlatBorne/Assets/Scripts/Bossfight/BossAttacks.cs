@@ -12,7 +12,11 @@ public class BossAttacks : MonoBehaviour
     public GameObject sword;
     public Rigidbody2D rb;
     [SerializeField] private AudioSource BossScream;
-    [SerializeField] private float chargeSpeed;
+    //IN UNITY
+    public float leechAttackBetween;
+    public float leechAttackDifference;
+    public float leechAttackMaxSpawnRate;
+    //
 
     public int phase;
     public bool bossHitboxRight = false;
@@ -26,19 +30,20 @@ public class BossAttacks : MonoBehaviour
     private bool daggerAttack = false;
     private int daggerAttackHappened = 0;
     private bool leechAttack = false;
-    private int leechAttackHappened = 0;
-    private float leechAttackBetween = 1;
+    private int leechAttackHappened = 0;    
     private bool swordAttackTimer = false;
     private float timerSwordAttack = 0;
 
     public void BossAttackFloorIsLava()
     {
+        Bossfight.attackIsGoingOn = true;
         Vector3 position = new Vector3(0, -15f, 0.8f); //z = BUDE V POPØEDÍ
         Instantiate(lava, position, Quaternion.identity);
         return;
     }//done
     public void BossAttackDagger()
     {
+        Bossfight.attackIsGoingOn = true;
         daggerAttack = true;
         if (daggerTimer > 1 && daggerAttackHappened <= 6)
         {
@@ -70,16 +75,19 @@ public class BossAttacks : MonoBehaviour
             daggerTimer = 0;
             daggerAttackHappened = 0;
             daggerAttack = false;
+            Bossfight.attackIsGoingOn = false;
             Debug.Log("Daggers End");
         }
     } //done
     public void BossAttackSwordLeft()
     {
+        Bossfight.attackIsGoingOn = true;
         Vector3 position = new Vector3(-21f, -1.3f , 3);
         Instantiate(sword, position, quaternion.identity);
     }//done
     public void BossAttackSwordRight()
     {
+        Bossfight.attackIsGoingOn = true;
         Vector3 position = new Vector3(21f, -1.3f, 3);
         Instantiate(sword, position, quaternion.identity);
     }//done
@@ -110,6 +118,7 @@ public class BossAttacks : MonoBehaviour
     }//done
     public void BossAttackLeechLeft()
     {
+        Bossfight.attackIsGoingOn = true;
         leechAttackWhere = 0;
         leechAttack = true;
         if (leechTimer > leechAttackBetween)
@@ -118,7 +127,8 @@ public class BossAttacks : MonoBehaviour
             Instantiate(leech, position, Quaternion.identity);
             leechAttackHappened++;
             leechTimer = 0;
-            if (leechAttackBetween > 0.10f) leechAttackBetween -= 0.04f;
+            if (leechAttackBetween > leechAttackMaxSpawnRate) leechAttackBetween -= leechAttackDifference;
+            else leechAttackBetween = leechAttackMaxSpawnRate;
         }
         else if (leechAttackHappened > 17)//attackEnd
         {
@@ -126,11 +136,13 @@ public class BossAttacks : MonoBehaviour
             leechAttackBetween = 1;
             leechAttackHappened = 0;
             leechAttack = false;
+            Bossfight.attackIsGoingOn = false;
             Debug.Log("Leeches End");
         }
     }//done
     public void BossAttackLeechRight()
     {
+        Bossfight.attackIsGoingOn = true;
         leechAttack = true;
         leechAttackWhere = 1;
         if (leechTimer > leechAttackBetween)
@@ -147,11 +159,13 @@ public class BossAttacks : MonoBehaviour
             leechAttackBetween = 1;
             leechAttackHappened = 0;
             leechAttack = false;
+            Bossfight.attackIsGoingOn = false;
             Debug.Log("Leeches End");
         }
     }//done
     public void BossAttackLeechBoth()
     {
+        Bossfight.attackIsGoingOn = true;
         leechAttack = true;
         leechAttackWhere = 2;
         if (leechTimer > leechAttackBetween)
@@ -171,6 +185,7 @@ public class BossAttacks : MonoBehaviour
             leechAttackBetween = 1;
             leechAttackHappened = 0;
             leechAttack = false;
+            Bossfight.attackIsGoingOn = false;
             Debug.Log("Leeches End");
         }
     }//done

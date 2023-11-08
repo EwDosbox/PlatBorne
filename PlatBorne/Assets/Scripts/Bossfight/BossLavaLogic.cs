@@ -24,11 +24,15 @@ public class BossLavaLogic : MonoBehaviour
             {
                 maxSpeed += speed * Time.deltaTime;
                 if (maxSpeed > 2) maxSpeed = 2;
-                rb.velocity = Vector2.up * maxSpeed;              
+                rb.velocity = Vector2.up * maxSpeed;
             }
             else rb.velocity = Vector2.up * 0;
         }
-        else rb.velocity = Vector2.down * speed * 20;
+        else
+        {
+            rb.velocity = Vector2.down * speed * 20;
+            Bossfight.attackIsGoingOn = false; //End of Attack
+        }
         if (rb.position.y < -18f) Destroy(gameObject);
     }
 }

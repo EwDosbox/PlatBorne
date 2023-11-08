@@ -184,7 +184,11 @@ public class PlayerScript : MonoBehaviour
                 touchedFallHitbox = false;
             }
         }
-        if (Bossfight.playerPlayDamage) hunterDamage.Play();
+        if (Bossfight.playerPlayDamage)
+        {
+            hunterDamage.Play();
+            Bossfight.playerPlayDamage = false;
+        }
     }
         private bool DoesHunterTouchGround(Collider2D hunter, Collider2D level1, Collider2D level2)
         {

@@ -30,17 +30,12 @@ public class Bossfight : MonoBehaviour
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
     bool playerInvincible = false;
-    private bool attackTimerBool = false;
-    private float attackTimer = 5f;
-
-    bool bossHitboxRight;
-    bool bossHitboxLeft;
-    bool bossHitboxUp;
-    bool bossHitboxDown;
-    bool bossHitbox;
+    private float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
+    //****************
     static public bool bossfightStarted = false;
     static public int playerHP = 3;
     static public bool playerPlayDamage = false;
+    static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -57,7 +52,7 @@ public class Bossfight : MonoBehaviour
         attackNumberLeech = 0;
         attackNumberSword = 0;
         return 1;
-    }    
+    }
     private void BossDeath()
     {
         BossDeath01.Play();
@@ -79,23 +74,13 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        //for debugging
     }
     private void Update()
     {
-        if (PlayerHealth.playerDeath) PlayerDeath(); 
+        if (PlayerHealth.playerDeath) PlayerDeath();
         if (bossInvincible) text.text = "Boss Invincible";
         else text.text = "Boss Vunerable";
-        if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
-        {
-            phase = 1;
-            timerOn = true;
-            bossfightStarted = true;
-            attackTimerBool = true;
-            bossHealthBar.BossStart();
-            playerHealth.PlayerStart();
-            PreBossDialog.Play();
-            OSTLoop.enabled = true;
-        }
         if (bossfightStarted)
         {
             //ÈASOVAÈ
@@ -108,8 +93,8 @@ public class Bossfight : MonoBehaviour
                 else invincibilityTimerPlayer = 0f;
                 if (phase == 4) phaseTimer += Time.deltaTime;
                 else phaseTimer = 0f;
-                if (attackTimerBool) attackTimer += Time.deltaTime;
-                else attackTimer = 0f;
+                if (!attackIsGoingOn) timerBetweenAttacks += Time.deltaTime;
+                else timerBetweenAttacks = 0f;
             }
 
             if (invincibilityTimerBoss >= 60)
@@ -122,7 +107,6 @@ public class Bossfight : MonoBehaviour
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
             }
-
             if (!bossInvincible && phase <= 3) //Phase 1,2,3 Boss Damage
             {
                 if (PlayerScript.bossHitbox)
@@ -166,31 +150,95 @@ public class Bossfight : MonoBehaviour
                 bossHealthBar.Set(bossHP); //UI
                 if (bossHP <= 0) BossDeath();
             }
-            if ((PlayerScript.bossHitbox && bossInvincible && !playerInvincible) || (PlayerScript.bossDamage && !playerInvincible))
+
+            if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
-                playerInvincible = true;
+                if (!playerInvincible)
+                {
+                    playerInvincible = true;
+                    playerPlayDamage = true;
+                    playerHP--;
+                    Debug.Log(playerHP);
+                    playerHealth.ChangeHealth(); //UI
+                    Debug.Log("Hunter has taken Damage");
+                    if (playerHP == 0)
+                    {
+                        PlayerDeath();
+                    }
+                }
                 PlayerScript.bossHitbox = false;
                 PlayerScript.bossDamage = false;
-                playerPlayDamage = true;
-                playerHP--;
-                Debug.Log(playerHP);
-                playerHealth.ChangeHealth(); //UI
-                Debug.Log("Hunter has taken Damage");
-                if (playerHP == 0)
-                {
-                    PlayerDeath();
-                }
             }
 
             switch (phase)
             {
                 case 1:
                     {
-                        if (!bossInvincible)
+                        if (timerBetweenAttacks > 6 - phase) //doba èekání na další útok
                         {
-                            //attack.PhaseAttack();
+                            /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                            {
+                                attack.BossAttackRushPlayer(true);
+                                attackNumberRush = resetPromenych();
+                            }
+                            else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
+                            {
+                                attack.BossAttackRushPlayer(false);
+                                attackNumberRush = attackNumberRush = resetPromenych();
+                            }*/
+                            if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                            {
+                                Debug.Log("Lava");
+                                attack.BossAttackFloorIsLava();
+                                attackNumberFloorIsLava = resetPromenych();
+                            }
+                            else
+                            {
+                                Debug.Log("Dagger");
+                                attack.BossAttackDagger();
+                                attackNumberDagger = resetPromenych();
+                            }
                         }
-                        else if (attackTimer > 10)
+                    }
+                    break;
+                case 2:
+                    {
+                        if (timerBetweenAttacks > 6 - phase)
+                        {
+                            {
+                                /*if (((PlayerScript.bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                {
+                                    attack.BossAttackRushPlayer(true);
+                                    attackNumberRush = resetPromenych();
+                                }
+                                else if (((PlayerScript.bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
+                                {
+                                    attack.BossAttackRushPlayer(false);
+                                    attackNumberRush = resetPromenych();
+                                }*/
+                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                                {
+                                    attack.BossAttackFloorIsLava();
+                                    attackNumberFloorIsLava = resetPromenych();
+                                }
+                                else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
+                                {
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger = resetPromenych();
+                                }
+                                else
+                                {
+                                    if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
+                                    else attack.BossAttackLeechRight();
+                                    attackNumberLeech = resetPromenych();
+                                }
+                            }
+                        }
+                        break;
+                    }
+                case 3:
+                    {
+                        if (timerBetweenAttacks > 6 - phase)
                         {
                                 /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
                                 {
@@ -200,138 +248,81 @@ public class Bossfight : MonoBehaviour
                                 else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
                                 {
                                     attack.BossAttackRushPlayer(false);
-                                    attackNumberRush = attackNumberRush = resetPromenych();
+                                    attackNumberRush = resetPromenych();
                                 }*/
-                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                                if (attackNumberSword < 1 && PlayerScript.bossHitboxLeft)
                                 {
-                                    Debug.Log("Lava");
+                                    attack.BossAttackSwordLeft();
+                                    attackNumberSword = resetPromenych();
+                                }
+                                else if (attackNumberSword < 1 && PlayerScript.bossHitboxRight)
+                                {
+                                    attack.BossAttackSwordRight();
+                                    attackNumberSword = resetPromenych();
+                                }
+                                else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                                {
                                     attack.BossAttackFloorIsLava();
                                     attackNumberFloorIsLava = resetPromenych();
                                 }
                                 else
                                 {
-                                    Debug.Log("Dagger");
                                     attack.BossAttackDagger();
                                     attackNumberDagger = resetPromenych();
                                 }
-                            attackTimer = 0f;
-                        }                            
-                        }
+                            }
                         break;
-                case 2:
-                {
-                    if (attackTimer > 8)
+                    }
+                case 4:
                     {
-                        //if (!bossInvincible) attack.PhaseAttack();
-                        //else
+                        if (timerBetweenAttacks > 6 - phase)
                         {
-                            /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                            {
-                                attack.BossAttackRushPlayer(true);
-                                attackNumberRush = resetPromenych();
-                            }
-                            else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                            {
-                                attack.BossAttackRushPlayer(false);
-                                attackNumberRush = resetPromenych();
-                            }*/
-                            if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                            {
-                                attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = resetPromenych();
-                            }
-                            else if (attackNumberLeech < 1)
-                            {
-                                if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
+                                /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
+                                {
+                                    attack.BossAttackRushPlayer(true);
+                                    attackNumberRush = resetPromenych();
+                                }
+                                else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
+                                {
+                                    attack.BossAttackRushPlayer(false);
+                                    attackNumberRush = resetPromenych();
+                                }*/
+                                if (attackNumberSword < 1 && PlayerScript.bossHitboxLeft)
+                                {
+                                    attack.BossAttackSwordLeft();
+                                    attackNumberSword = resetPromenych();
+                                }
+                                else if (attackNumberSword < 1 && PlayerScript.bossHitboxRight)
+                                {
+                                    attack.BossAttackSwordRight();
+                                    attackNumberSword = resetPromenych();
+                                }
+                                else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                                {
+                                    attack.BossAttackFloorIsLava();
+                                    attackNumberFloorIsLava = resetPromenych();
+                                }
                                 else
                                 {
-                                    attack.BossAttackLeechRight();
-                                    attackNumberLeech = resetPromenych();
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger = resetPromenych();
                                 }
                             }
-                            else
-                            {
-                                attack.BossAttackDagger();
-                                attackNumberDagger = resetPromenych();
-                            }
-                        }
-                        attackTimer = 0f;
+                        break;
                     }
-                    break;
-                }
-            case 3:
-                {
-                    if (attackTimer > 8)
-                    {
-                        if (!bossInvincible) attack.PhaseAttack();
-                        else
-                        {
-                            /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                            {
-                                attack.BossAttackRushPlayer(true);
-                                attackNumberRush = resetPromenych();
-                            }
-                            else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                            {
-                                attack.BossAttackRushPlayer(false);
-                                attackNumberRush = resetPromenych();
-                            }*/
-                            if (attackNumberSword < 1 && PlayerScript.bossHitboxLeft)
-                            {
-                                attack.BossAttackSwordLeft();
-                                attackNumberSword = resetPromenych();
-                            }
-                            else if (attackNumberSword < 1 && PlayerScript.bossHitboxRight)
-                            {
-                                attack.BossAttackSwordRight();
-                                attackNumberSword = resetPromenych();
-                            }
-                            else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                            {
-                                attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = resetPromenych();
-                            }
-                            else
-                            {
-                                attack.BossAttackDagger();
-                                attackNumberDagger = resetPromenych();
-                            }
-                        }
-                        attackTimer = 0f;
-                    }
-                    break;
-                }
-            case 4:
-                {
-                    if (attackTimer > 6)
-                    {
-                        if (attackNumberSword < 1 && (PlayerScript.bossHitboxLeft || PlayerScript.bossHitboxRight))
-                        {
-                            attack.BossAttackSwordBoth(true, false, 0);
-                            attackNumberSword = resetPromenych();
-                        }
-                        else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                        {
-                            attack.BossAttackFloorIsLava();
-                            attackNumberFloorIsLava = resetPromenych();
-                        }
-                        else if (attackNumberDagger > 1)
-                        {
-                            attack.BossAttackDagger();
-                            attackNumberDagger = resetPromenych();
-                        }
-                        else
-                        {
-                            if (phaseTimer % 2 == 0) attack.BossAttackLeechLeft();
-                            else if (phaseTimer % 3 == 0) attack.BossAttackLeechRight();
-                            else attack.BossAttackLeechBoth();
-                            attackNumberSword = resetPromenych();
-                        }
-                        attackTimer = 0f;
-                    }
-                    break;
-                }
             }
+        }
+        //start of bossfight
+        else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
+        {
+            phase = 1;
+            timerOn = true;
+            bossfightStarted = true;
+            attackIsGoingOn = false;
+            bossHealthBar.BossStart();
+            playerHealth.PlayerStart();
+            PreBossDialog.Play();
+            OSTLoop.enabled = true;
         }
     }
 }
