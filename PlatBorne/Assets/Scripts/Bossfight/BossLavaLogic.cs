@@ -5,8 +5,8 @@ public class BossLavaLogic : MonoBehaviour
     private Rigidbody2D rb;
     private float timer = 0;
     private bool goUp = true;
-    [SerializeField] float speed = 0.5f;
-    [SerializeField] float maxSpeed = 0;
+    float speed = 0.1f;
+    float maxSpeed = 0;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class BossLavaLogic : MonoBehaviour
             }
             else rb.velocity = Vector2.up * 0;
         }
-        else rb.velocity = Vector2.down * speed * 2;
+        else rb.velocity = Vector2.down * speed * 20;
         if (rb.position.y < -18f) Destroy(gameObject);
     }
 }

@@ -22,7 +22,6 @@ public class Bossfight : MonoBehaviour
 
     public int phase = 1;
     bool attackIsGoing = false;
-    static public int playerHP = 3;
     public int bossHP = 60;
     bool bossInvincible = true;
     float timer = 0f;
@@ -40,6 +39,8 @@ public class Bossfight : MonoBehaviour
     bool bossHitboxDown;
     bool bossHitbox;
     static public bool bossfightStarted = false;
+    static public int playerHP = 3;
+    static public bool playerPlayDamage = false;
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -78,7 +79,6 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-        voiceLines.PlayBossDamage01();
     }
     private void Update()
     {
@@ -96,7 +96,6 @@ public class Bossfight : MonoBehaviour
             PreBossDialog.Play();
             OSTLoop.enabled = true;
         }
-
         if (bossfightStarted)
         {
             //ÈASOVAÈ
@@ -118,7 +117,7 @@ public class Bossfight : MonoBehaviour
                 invincibilityTimerBoss = 0;
                 bossInvincible = false;
             }
-            if (invincibilityTimerPlayer > 1)
+            if (invincibilityTimerPlayer > 2) //seconds of invincibility after damage
             {
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
@@ -167,11 +166,14 @@ public class Bossfight : MonoBehaviour
                 bossHealthBar.Set(bossHP); //UI
                 if (bossHP <= 0) BossDeath();
             }
-            if (PlayerScript.bossHitbox && bossInvincible)
+            if ((PlayerScript.bossHitbox && bossInvincible && !playerInvincible) || (PlayerScript.bossDamage && !playerInvincible))
             {
                 playerInvincible = true;
                 PlayerScript.bossHitbox = false;
+                PlayerScript.bossDamage = false;
+                playerPlayDamage = true;
                 playerHP--;
+                Debug.Log(playerHP);
                 playerHealth.ChangeHealth(); //UI
                 Debug.Log("Hunter has taken Damage");
                 if (playerHP == 0)

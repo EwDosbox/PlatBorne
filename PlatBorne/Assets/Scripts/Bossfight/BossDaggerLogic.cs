@@ -29,7 +29,7 @@ public class BossDaggerLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer = Time.deltaTime;
+        timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
             Destroy(gameObject);

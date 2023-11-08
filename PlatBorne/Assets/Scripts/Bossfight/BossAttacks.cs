@@ -33,7 +33,7 @@ public class BossAttacks : MonoBehaviour
 
     public void BossAttackFloorIsLava()
     {
-        Vector3 position = new Vector3(0, -15f, 3);
+        Vector3 position = new Vector3(0, -15f, 0.8f); //z = BUDE V POPØEDÍ
         Instantiate(lava, position, Quaternion.identity);
         return;
     }//done

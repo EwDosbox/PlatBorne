@@ -5,7 +5,7 @@ public class BossHealthBar : MonoBehaviour
 {
 
     public Slider slider;
-    [SerializeField] private float speedToFill = 10; //60/5 = 12
+    public float speedToFill = 10;
     private bool start = false;
     private float timer = 0;
 

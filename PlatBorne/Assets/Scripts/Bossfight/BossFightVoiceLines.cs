@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class BossFightVoiceLines : MonoBehaviour
 {
-    [SerializeField] private AudioSource BossDamage01, BossDamage02, BossDamage03, PreBossDialog;
+    [SerializeField] private AudioSource BossDamage01, BossDamage02, BossDamage03, PreBossDialog, FinalDamage;
     private string dialogue = null;
     public GameObject DialoguePanel;
     public Text DialogueText;
@@ -46,6 +46,14 @@ public class BossFightVoiceLines : MonoBehaviour
         DialoguePanel.SetActive(true);
         dialogue = "So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city...";
         PreBossDialog.Play();
+        Typing(dialogue);
+    }
+
+    public void PlayBossFinalDamage()
+    {
+        DialoguePanel.SetActive(true);
+        dialogue = "AAAAAAAHHHH";
+        FinalDamage.Play();
         Typing(dialogue);
     }
     private void TextReset()

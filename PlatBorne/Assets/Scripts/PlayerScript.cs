@@ -32,6 +32,7 @@ public class PlayerScript : MonoBehaviour
     static public bool bossHitboxUp = false;
     static public bool bossHitboxDown = false;
     static public bool bossHitbox = false;
+    static public bool bossDamage = false;
     //******
     public int playerHP = 3;
     public bool playerInvincible = false;
@@ -63,16 +64,13 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
-        if (collision.gameObject.CompareTag("Damage"))
-        {
-            Bossfight.playerHP--;
-            hunterDamage.Play();
-            health.ChangeHealth();
-            playerInvincible = true;
-        }
         if (collision.gameObject.name == "Level Finish") SceneManager.LoadScene("LevelBoss");
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Damage")) bossDamage = true;
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox Right")) bossHitboxRight = false;
@@ -80,6 +78,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = false;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = false;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
+        if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
     }
     void Update()
     {
@@ -106,7 +105,9 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
             rigidBody.velocity = Vector2.zero;
-            if (jumpSpeed < 10f) jumpSpeed += stairJumpSpeed;
+            //kamil
+            if (jumpSpeed < 12f && Bossfight.bossfightStarted) jumpSpeed += stairJumpSpeed * 2; //Double jump speed + vìtší jump pøi bossfightu
+            else if (jumpSpeed < 10f) jumpSpeed += stairJumpSpeed;
         }
         //flipovani spritu
         if (((Input.GetKeyDown(KeyCode.A) && transform.localScale.x > 0) ||
@@ -151,13 +152,14 @@ public class PlayerScript : MonoBehaviour
         {
             playerWasInAir = true;
         }
-
+        //timerSTART
         if (isPlaying)
         {
             timer += Time.deltaTime;
             if (timer > 1) isPlaying = false;
         }
         else timer = 0;
+        //timerEND
 
         if (playerWasInAir && !isPlayerInAir && touchedFallHitbox)
         {
@@ -182,6 +184,7 @@ public class PlayerScript : MonoBehaviour
                 touchedFallHitbox = false;
             }
         }
+        if (Bossfight.playerPlayDamage) hunterDamage.Play();
     }
         private bool DoesHunterTouchGround(Collider2D hunter, Collider2D level1, Collider2D level2)
         {
