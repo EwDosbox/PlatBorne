@@ -106,19 +106,9 @@ public class PlayerScript : MonoBehaviour
         {
             rigidBody.velocity = Vector2.zero;
             //kamil
-            if (jumpSpeed < 12f && Bossfight.bossfightStarted) jumpSpeed += stairJumpSpeed * 2; //Double jump speed + vìtší jump pøi bossfightu
-            else if (jumpSpeed < 10f) jumpSpeed += stairJumpSpeed;
+            if (jumpSpeed < 12f && Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8; //Double jump speed + vìtší jump pøi bossfightu
+            else if (jumpSpeed < 10f) jumpSpeed += Time.deltaTime * 4;
         }
-        //flipovani spritu
-        if (((Input.GetKeyDown(KeyCode.A) && transform.localScale.x > 0) ||
-            (Input.GetKeyDown(KeyCode.D) && transform.localScale.x < 0)) &&
-            !isPlayerInAir)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            rigidBody.transform.localScale = scale;
-        }
-
         if (Input.GetKeyUp(KeyCode.W) && !isPlayerInAir)
         {
             rigidBody.velocity = Vector2.up * jumpSpeed +
@@ -135,6 +125,16 @@ public class PlayerScript : MonoBehaviour
                 hunterJump.Play();
                 isPlaying = true;
             }
+        }
+
+        //flipovani spritu
+        if (((Input.GetKeyDown(KeyCode.A) && transform.localScale.x > 0) ||
+            (Input.GetKeyDown(KeyCode.D) && transform.localScale.x < 0)) &&
+            !isPlayerInAir)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            rigidBody.transform.localScale = scale;
         }
 
         if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
