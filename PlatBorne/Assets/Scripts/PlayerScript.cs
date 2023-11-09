@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -38,7 +36,6 @@ public class PlayerScript : MonoBehaviour
     public bool playerInvincible = false;
     private float timer = 0;
     private bool isPlaying = false;
-    private float stairJumpSpeed = 0.009f;
     private bool touchedFallHitbox = false;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -88,15 +85,13 @@ public class PlayerScript : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(rigidBody.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
         //inputs
-        if (Input.GetKey(KeyCode.A) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.left * movementSpeed +
-                                 new Vector2(0, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(-1 * movementSpeed, rigidBody.velocity.y);
         }
-        if (Input.GetKey(KeyCode.D) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.D) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.right * movementSpeed +
-                                 new Vector2(0, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(1 * movementSpeed, rigidBody.velocity.y);
         }
         if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isPlayerInAir)
         {
@@ -104,16 +99,15 @@ public class PlayerScript : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.zero;
+            rigidBody.velocity = new Vector2(0, 0);
             //kamil
             if (jumpSpeed < 12f && Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8; //Double jump speed + vìtší jump pøi bossfightu
             else if (jumpSpeed < 10f) jumpSpeed += Time.deltaTime * 4;
         }
         if (Input.GetKeyUp(KeyCode.W) && !isPlayerInAir)
         {
-            rigidBody.velocity = Vector2.up * jumpSpeed +
-                                 new Vector2(rigidBody.velocity.x, 0);
-            jumpSpeed = 5;
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
+            jumpSpeed = 5f;
             //Stats
             int numberOfJump = PlayerPrefs.GetInt("NumberOfJumps", 0);
             numberOfJump++;
