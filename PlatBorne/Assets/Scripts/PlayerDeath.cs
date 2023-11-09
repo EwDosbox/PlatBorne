@@ -1,37 +1,20 @@
 using System.Collections;
+using UnityEditor;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class PlayerDeath : MonoBehaviour
 {
     [SerializeField] private AudioSource VLDeath01, VLDeath02, VLDeath03, VLDeath04, VLDeath05, VLDeath06, VLDeath07, VLDeath08, VLDeath09, VLDeath10, VLDeath11, VLDeath12, VLDeath13, VLDeath14, VLDeath15, VLDeath16, VLDeath17;
-    //[SerializeField] float speed, waiting;
-    public GameObject DialoguePanel;
+    public Text DialogueText;
     string dialogue;
-    //public Text DialogueText;
     int bossDeathCount;
 
     private void Start()
     {
-        /* dialogue[0] = "First death is always best one.";
-         dialogue[1] = "You cannot escape Death.";
-         dialogue[2] = "3rd time the charm?";
-         dialogue[3] = "Die hunter and never come back.";
-         dialogue[4] = "Leave hunter, go back to drinking the blood of gods.";
-         dialogue[5] = "You are weak, cheeky hunter.";
-         dialogue[6] = "I have slain bigger than you.";
-         dialogue[7] = "First time is funny, 8 times is bloody annoying.";
-         dialogue[8] = "Are you even trying?";
-         dialogue[9] = "Dying 10 times must be an achievement.";
-         dialogue[10] = "Until we meet again.";
-         dialogue[11] = "You are not Kenough.";
-         dialogue[12] = "You are not My Little Pogchamp.";
-         dialogue[13] = "You need to kill me, Muppet, not yourself.";
-         dialogue[14] = "Skill issue.";
-         dialogue[15] = "The only thing I know for real You are dead again…how?!";
-         dialogue[16] = "zzz";
-        */
         //int bossDeathCount = PlayerPrefs.GetInt("PlayerDeath", 1);
         int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath",0);
         switch (bossDeathCount)
@@ -40,7 +23,7 @@ public class PlayerDeath : MonoBehaviour
                 {
                     dialogue = "First death is always best one.";
                     VLDeath01.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death01");
                     break;
                 }
@@ -48,7 +31,7 @@ public class PlayerDeath : MonoBehaviour
                 {
                     dialogue = "You cannot escape Death.";
                     VLDeath02.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death02");
                     break;
                 }
@@ -56,7 +39,7 @@ public class PlayerDeath : MonoBehaviour
                 {
                     dialogue = "3rd time the charm?";
                     VLDeath03.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death03");
                     break;
                 }
@@ -64,7 +47,7 @@ public class PlayerDeath : MonoBehaviour
                 {
                     dialogue = "Die hunter and never come back.";
                     VLDeath04.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death04");
                     break;
                 }
@@ -72,96 +55,104 @@ public class PlayerDeath : MonoBehaviour
                 {
                     dialogue = "Leave hunter, go back to drinking the blood of gods.";
                     VLDeath05.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death05");
                     break;
                 }
             case 6:
                 {
+                    dialogue = "You are weak, cheeky hunter.";
                     VLDeath06.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death06");
                     break;
                 }
             case 7:
                 {
+                    dialogue = "I have slain bigger than you.";
                     VLDeath07.Play();
-                  //  StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death07");
                     break;
                 }
             case 8:
                 {
+                    dialogue = "First time is funny, 8 times is bloody annoying.";
                     VLDeath08.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death08");
                     break;
                 }
             case 9:
                 {
+                    dialogue = "Are you even trying?";
                     VLDeath09.Play();
-                    //StartCoroutine(Typing().ToString()); 
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death09");
                     break;
                 }
             case 10:
                 {
+                    dialogue = "Dying 10 times must be an achievement.";
                     VLDeath10.Play();
-                    //Typing();
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death10");
                     break;
                 }
             case 11:
                 {
+                    dialogue = "Until we meet again.";
                     VLDeath11.Play();
-                   // StartCoroutine(Typing().ToString()); 
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death11");
                     break;
                 }
             case 12:
                 {
+                    dialogue = "You are not Kenough.";
                     VLDeath12.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death12");
                     break;
                 }
             case 13:
                 {
+                    dialogue = "You are not My Little Pogchamp.";
                     VLDeath13.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death13");
                     break;
                 }
             case 14:
                 {
+                    dialogue = "You need to kill me, Muppet, not yourself.";
                     VLDeath14.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death14");
                     break;
                 }
             case 15:
                 {
+                    dialogue = "Skill issue.";
                     VLDeath15.Play();
-                   // StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death15");
                     break;
                 }
             case 16:
                 {
+                    dialogue = "The only thing I know for real You are dead again…how?!";
                     VLDeath16.Play();
-                    //StartCoroutine(Typing().ToString());
+                    Typing(dialogue);
                     Debug.Log("Play Voice Line Player Death16");
-                    break;
-                }
-            case 17:
-                {
-                    VLDeath17.Play();
-                    //StartCoroutine(Typing().ToString());
-                    Debug.Log("Play Voice Line Player Death17");
                     break;
                 }
             default:
                 {
+                    dialogue = "...";
+                    VLDeath17.Play();
+                    Typing(dialogue);
+                    Debug.Log("Play Voice Line Player Death17");
                     break;
                 }
         }
@@ -172,7 +163,42 @@ public class PlayerDeath : MonoBehaviour
         {
             SceneManager.LoadScene("LevelBoss");
             Debug.Log("A hunter has respawned");
-
         }
+        //text
+        if (textType)
+        {
+            timerTextSpeed += Time.deltaTime;
+            Debug.Log(timerTextSpeed);
+            if (timerTextSpeed > textSpeed)
+            {
+                timerTextSpeed = 0;
+                j++;
+                Typing(dialogue);
+            }
+        }
+    }
+    //***
+    public float textSpeed;
+    private float timerTextSpeed = 0;
+    private bool textType = false;
+    private bool textReset = false;
+    private int j = 0;
+    //***
+    private void TextReset()
+    {
+        textType = false;
+        textReset = true;
+        Debug.Log("Text Reset");
+        j = 0;
+    }
+
+    private void Typing(string s)
+    {
+        textType = true;
+        if (j == s.Length)
+        {
+            TextReset();
+        }
+        else DialogueText.text += s[j];
     }
 }

@@ -280,10 +280,9 @@ MonoBehaviour:
   VLDeath15: {fileID: 744945291}
   VLDeath16: {fileID: 744945290}
   VLDeath17: {fileID: 744945289}
-  speed: 2
-  waiting: 0.06
-  DialoguePanel: {fileID: 1593728991}
-  DialogueText: {fileID: 55242368}
+  DialogueText: {fileID: 0}
+  textSpeed: 0
+  waitingTime: 0
 --- !u!82 &744945289
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1994,10 +1993,9 @@ MonoBehaviour:
   VLDeath15: {fileID: 788092554}
   VLDeath16: {fileID: 788092553}
   VLDeath17: {fileID: 788092552}
-  speed: 2
-  waiting: 0.06
-  DialoguePanel: {fileID: 1593728991}
   DialogueText: {fileID: 55242368}
+  textSpeed: 0.05
+  waitingTime: 0
 --- !u!82 &788092552
 AudioSource:
   m_ObjectHideFlags: 0
