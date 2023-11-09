@@ -101,7 +101,7 @@ public class PlayerScript : MonoBehaviour
         {
             rigidBody.velocity = new Vector2(0, 0);
             //kamil
-            if (jumpSpeed < 12f && Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8; //Double jump speed + vìtší jump pøi bossfightu
+            if (jumpSpeed < 10f && Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8; //Double jump speed
             else if (jumpSpeed < 10f) jumpSpeed += Time.deltaTime * 4;
         }
         if (Input.GetKeyUp(KeyCode.W) && !isPlayerInAir)

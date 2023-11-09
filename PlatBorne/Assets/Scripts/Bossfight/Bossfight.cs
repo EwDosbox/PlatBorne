@@ -21,7 +21,6 @@ public class Bossfight : MonoBehaviour
     public Text text;
 
     public int phase = 1;
-    bool attackIsGoing = false;
     public int bossHP = 60;
     bool bossInvincible = true;
     float timer = 0f;
@@ -250,25 +249,21 @@ public class Bossfight : MonoBehaviour
                                     attack.BossAttackRushPlayer(false);
                                     attackNumberRush = resetPromenych();
                                 }*/
-                                if (attackNumberSword < 1 && PlayerScript.bossHitboxLeft)
+                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
-                                    attack.BossAttackSwordLeft();
-                                    attackNumberSword = resetPromenych();
+                                attack.BossAttackFloorIsLava();
+                                attackNumberFloorIsLava = resetPromenych();
                                 }
-                                else if (attackNumberSword < 1 && PlayerScript.bossHitboxRight)
-                                {
-                                    attack.BossAttackSwordRight();
-                                    attackNumberSword = resetPromenych();
-                                }
-                                else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                                {
-                                    attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava = resetPromenych();
-                                }
-                                else
+                                else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
                                 {
                                     attack.BossAttackDagger();
                                     attackNumberDagger = resetPromenych();
+                                }
+                                else 
+                                {
+                                    if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
+                                    else attack.BossAttackSwordRight();
+                                    attackNumberSword = resetPromenych();
                                 }
                             }
                         break;
@@ -315,7 +310,7 @@ public class Bossfight : MonoBehaviour
         //start of bossfight
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {
-            phase = 1;
+            phase = 3;
             timerOn = true;
             bossfightStarted = true;
             attackIsGoingOn = false;

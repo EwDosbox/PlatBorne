@@ -27,10 +27,10 @@ public class BossSwordLogic : MonoBehaviour
         if (!isRightSword) rotation = -rotation;
         Quaternion newRotation = Quaternion.Euler(0, 0, rotation);
         transform.rotation = newRotation;
-        if (timer > speed + (speed / 2))
+        if (rb.transform.rotation.eulerAngles.z < 100)
         {
             Destroy(gameObject);
-            Bossfight.attackIsGoingOn = true;
+            Bossfight.attackIsGoingOn = false;
         }
     }
 }

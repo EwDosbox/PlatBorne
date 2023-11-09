@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossAttacks : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class BossAttacks : MonoBehaviour
     public GameObject dagger;
     public GameObject sword;
     public Rigidbody2D rb;
+    public GameObject warningLeft;
+    public GameObject warningRight;
     [SerializeField] private AudioSource BossScream;
     //IN UNITY
     public float leechAttackBetween;
     public float leechAttackDifference;
     public float leechAttackMaxSpawnRate;
-    //
+    //IN UNITY
 
     public int phase;
     public bool bossHitboxRight = false;
@@ -30,9 +33,12 @@ public class BossAttacks : MonoBehaviour
     private bool daggerAttack = false;
     private int daggerAttackHappened = 0;
     private bool leechAttack = false;
-    private int leechAttackHappened = 0;    
+    private int leechAttackHappened = 0;
     private bool swordAttackTimer = false;
     private float timerSwordAttack = 0;
+    private float warningTimer = 0f;
+    private bool boolWarningTimer = false;
+    private bool swordAttackIsLeft = true;
 
     public void BossAttackFloorIsLava()
     {
@@ -50,7 +56,7 @@ public class BossAttacks : MonoBehaviour
             Vector3 position = new Vector3(20, -3.76f, 3);
             switch (daggerAttackHappened)
             {
-                case 1: 
+                case 1:
                     position = new Vector3(20f, 0f, 3);
                     break;
                 case 2:
@@ -81,15 +87,31 @@ public class BossAttacks : MonoBehaviour
     } //done
     public void BossAttackSwordLeft()
     {
+        swordAttackIsLeft = true;
         Bossfight.attackIsGoingOn = true;
-        Vector3 position = new Vector3(-21f, -1.3f , 3);
-        Instantiate(sword, position, quaternion.identity);
+        boolWarningTimer = true;
+        warningLeft.SetActive(true);
+        if (warningTimer > 2f)
+        {
+            warningLeft.SetActive(false);
+            boolWarningTimer = false;
+            Vector3 position = new Vector3(-21f, -1.3f, 3);
+            Instantiate(sword, position, quaternion.identity);
+        }
     }//done
     public void BossAttackSwordRight()
     {
+        swordAttackIsLeft = false;
         Bossfight.attackIsGoingOn = true;
-        Vector3 position = new Vector3(21f, -1.3f, 3);
-        Instantiate(sword, position, quaternion.identity);
+        boolWarningTimer = true;
+        warningRight.SetActive(true);
+        if (warningTimer > 2f)
+        {
+            boolWarningTimer = false;
+            warningRight.SetActive(false);
+            Vector3 position = new Vector3(21f, -1.3f, 3);
+            Instantiate(sword, position, quaternion.identity);
+        }
     }//done
     public void BossAttackSwordBoth(bool bothAtTheSameTime, bool leftFirst, float timeBetweenAttacks)
     {
@@ -220,5 +242,13 @@ public class BossAttacks : MonoBehaviour
             else if (leechAttackWhere == 1) BossAttackLeechRight();
             else BossAttackLeechBoth();
         }
+        if (boolWarningTimer)
+        {
+            warningTimer += Time.deltaTime;
+            if (warningTimer > 2f) if (swordAttackIsLeft) BossAttackSwordLeft();
+                                   else BossAttackSwordRight();
+        }
+        else warningTimer = 0;
     }
-}
+    }
+
