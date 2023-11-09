@@ -79,116 +79,109 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
-        isPlayerInAir = !DoesHunterTouchGround(hunterFeet, levelWoods, levelLondon);
+        positionYIs = transform.position.y;
         rigidBody.rotation = 0;
         //animator
         animator.SetFloat("Speed", Mathf.Abs(rigidBody.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
+        //pouze pokud se dotyka zeme
+        if(hunterFeet.IsTouching(levelLondon) ||
+           hunterFeet.IsTouching(levelWoods)) isPlayerInAir = false;
+        else isPlayerInAir = true;
         //inputs
-        if (Input.GetKey(KeyCode.A) && !isPlayerInAir)
-        {
-            rigidBody.velocity = new Vector2(-1 * movementSpeed, rigidBody.velocity.y);
-        }
-        if (Input.GetKey(KeyCode.D) && !isPlayerInAir)
-        {
-            rigidBody.velocity = new Vector2(1 * movementSpeed, rigidBody.velocity.y);
-        }
-        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !isPlayerInAir)
-        {
-            rigidBody.velocity = new Vector2(0, 0);
-        }
-        if (Input.GetKey(KeyCode.W) && !isPlayerInAir)
-        {
-            rigidBody.velocity = new Vector2(0, 0);
-            //kamil
-            if (jumpSpeed < 10f && Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8; //Double jump speed
-            else if (jumpSpeed < 10f) jumpSpeed += Time.deltaTime * 4;
-        }
-        if (Input.GetKeyUp(KeyCode.W) && !isPlayerInAir)
-        {
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
-            jumpSpeed = 5f;
-            //Stats
-            int numberOfJump = PlayerPrefs.GetInt("NumberOfJumps", 0);
-            numberOfJump++;
-            PlayerPrefs.SetInt("NumberOfJumps", numberOfJump);
-            PlayerPrefs.Save();
-            //Stats
-            if (!isPlaying)
-            {
-                hunterJump.Play();
-                isPlaying = true;
-            }
-        }
-
-        //flipovani spritu
-        if (((Input.GetKeyDown(KeyCode.A) && transform.localScale.x > 0) ||
-            (Input.GetKeyDown(KeyCode.D) && transform.localScale.x < 0)) &&
-            !isPlayerInAir)
-        {
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            rigidBody.transform.localScale = scale;
-        }
-
-        if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) && !isPlayerInAir && !Input.GetKey(KeyCode.W))
-        {
-            hunterWalk.enabled = true;
-        }
-        else hunterWalk.enabled = false;
-
-        positionYIs = transform.position.y;
         if (!isPlayerInAir)
         {
+            if (Input.GetKey(KeyCode.A))
+            {
+                rigidBody.velocity = new Vector2(-1 * movementSpeed, rigidBody.velocity.y);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                rigidBody.velocity = new Vector2(1 * movementSpeed, rigidBody.velocity.y);
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                rigidBody.velocity = new Vector2(0, 0);
+                if (jumpSpeed < 10f)
+                {
+                    if (Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8;
+                    else jumpSpeed += Time.deltaTime * 4; //Double jump speed
+                }
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
+                if (Bossfight.bossfightStarted) jumpSpeed = 7f;
+                else jumpSpeed = 5f;
+                //Stats
+                int numberOfJumps = PlayerPrefs.GetInt("numberOfJumps");
+                numberOfJumps++;
+                PlayerPrefs.SetInt("numberOfJumps", numberOfJumps);
+                PlayerPrefs.Save();
+                //Sound
+                if (!isPlaying)
+                {
+                    hunterJump.Play();
+                    isPlaying = true;
+                }
+            }
+            //Flipovani spritu
+            if (((Input.GetKey(KeyCode.A) && transform.localScale.x > 0) ||
+                 (Input.GetKey(KeyCode.D) && transform.localScale.x < 0)) &&
+                !(Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)))
+            {
+                Vector3 scale = transform.localScale;
+                scale.x *= -1;
+                rigidBody.transform.localScale = scale;
+            }
+            //Sound
+            if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) && !Input.GetKey(KeyCode.W))
+            {
+                hunterWalk.enabled = true;
+            }
+            else hunterWalk.enabled = false;
+            //sound po dopadu
             if (!touchedFallHitbox) positionYWas = positionYIs;
+            //fell
+            if (playerWasInAir && touchedFallHitbox)
+            {
+                if (positionYWas > positionYIs)
+                {
+                    Debug.Log("Player fell");
+                    positionYWas = positionYIs;
+                    hunterDrop.Play();
+                    playerFell++;
+                    playVoiceLine = true;
+                    //Stats
+                    int numberOfFalls = PlayerPrefs.GetInt("numberOfFalls", 0);
+                    numberOfFalls++;
+                    Debug.Log(numberOfFalls);
+                    PlayerPrefs.SetInt("numberOfJumps", numberOfFalls);
+                    PlayerPrefs.Save();
+                }
+                else
+                {
+                    playerWasInAir = false;
+                    touchedFallHitbox = false;
+                }
+            }
         }
         else
         {
             playerWasInAir = true;
         }
-        //timerSTART
+        //sound vyskoceni
         if (isPlaying)
         {
             timer += Time.deltaTime;
             if (timer > 1) isPlaying = false;
         }
         else timer = 0;
-        //timerEND
-
-        if (playerWasInAir && !isPlayerInAir && touchedFallHitbox)
-        {
-            if (positionYWas > positionYIs)
-                {
-                    Debug.Log("Player fell");
-                positionYWas = positionYIs;
-                    hunterDrop.Play();
-                    playerFell++;
-                    playVoiceLine = true;
-                    //Stats
-                    int numberOfFall = PlayerPrefs.GetInt("NumberOfFalls", 0);
-                    numberOfFall++;
-                    Debug.Log(numberOfFall);
-                    PlayerPrefs.SetInt("NumberOfJumps", numberOfFall);
-                    PlayerPrefs.Save();
-                    //Stats
-                }
-            else
-            {
-                playerWasInAir = false;
-                touchedFallHitbox = false;
-            }
-        }
+        //damage
         if (Bossfight.playerPlayDamage)
         {
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;
         }
     }
-        private bool DoesHunterTouchGround(Collider2D hunter, Collider2D level1, Collider2D level2)
-        {
-            bool doesHunterTouchLevel1 = hunter.IsTouching(level1);
-            bool doesHunterTouchLevel2 = hunter.IsTouching(level2);
-            bool doesHunterTouchGround = doesHunterTouchLevel1 || doesHunterTouchLevel2;
-            return doesHunterTouchGround;
-        }
 }
