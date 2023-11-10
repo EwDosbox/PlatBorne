@@ -107,9 +107,10 @@ public class BossAttacks : MonoBehaviour
         warningRight.SetActive(true);
         if (warningTimer > 2f)
         {
-            boolWarningTimer = false;
             warningRight.SetActive(false);
+            boolWarningTimer = false;
             Vector3 position = new Vector3(21f, -1.3f, 3);
+            Debug.Log("BossSwordRight");
             Instantiate(sword, position, quaternion.identity);
         }
     }//done
@@ -211,7 +212,7 @@ public class BossAttacks : MonoBehaviour
             Debug.Log("Leeches End");
         }
     }//done
-    public void PhaseAttack() //rushes the player, screams before ***needs Vorm***
+    /*public void PhaseAttack() //rushes the player, screams before ***needs Vorm***
     {
         BossScream.Play();
         //animation for screaming
@@ -225,7 +226,7 @@ public class BossAttacks : MonoBehaviour
         {
             yield return null;
         }
-    }
+    }*/
     private void Update()
     {
         if (swordAttackTimer) timerSwordAttack += Time.deltaTime;
@@ -246,7 +247,7 @@ public class BossAttacks : MonoBehaviour
         {
             warningTimer += Time.deltaTime;
             if (warningTimer > 2f) if (swordAttackIsLeft) BossAttackSwordLeft();
-                                   else BossAttackSwordRight();
+            else BossAttackSwordRight();
         }
         else warningTimer = 0;
     }

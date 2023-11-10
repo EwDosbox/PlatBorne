@@ -182,7 +182,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 87471cf221f8d484897b01117ec966b8, type: 3}
-    m_FontSize: 70
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -282,7 +282,6 @@ MonoBehaviour:
   VLDeath17: {fileID: 744945289}
   DialogueText: {fileID: 0}
   textSpeed: 0
-  waitingTime: 0
 --- !u!82 &744945289
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1995,7 +1994,6 @@ MonoBehaviour:
   VLDeath17: {fileID: 788092552}
   DialogueText: {fileID: 55242368}
   textSpeed: 0.05
-  waitingTime: 0
 --- !u!82 &788092552
 AudioSource:
   m_ObjectHideFlags: 0

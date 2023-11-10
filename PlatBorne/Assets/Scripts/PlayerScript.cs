@@ -19,8 +19,8 @@ public class PlayerScript : MonoBehaviour
     bool isPlayerInAir;
     public int movementSpeed;
     public float jumpSpeed;
-    double positionYWas;
-    double positionYIs;
+    float positionYWas;
+    float positionYIs;
     bool playerWasInAir = false;
     public int playerFell = 0;
     //*****
@@ -79,14 +79,16 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
-        positionYIs = transform.position.y;
         rigidBody.rotation = 0;
         //animator
         animator.SetFloat("Speed", Mathf.Abs(rigidBody.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
         //pouze pokud se dotyka zeme
-        if(hunterFeet.IsTouching(levelLondon) ||
-           hunterFeet.IsTouching(levelWoods)) isPlayerInAir = false;
+        if (hunterFeet.IsTouching(levelLondon) ||
+           hunterFeet.IsTouching(levelWoods))
+        {
+            isPlayerInAir = false;
+        }
         else isPlayerInAir = true;
         //inputs
         if (!isPlayerInAir)
@@ -140,30 +142,28 @@ public class PlayerScript : MonoBehaviour
                 hunterWalk.enabled = true;
             }
             else hunterWalk.enabled = false;
-            //sound po dopadu
-            if (!touchedFallHitbox) positionYWas = positionYIs;
             //fell
-            if (playerWasInAir && touchedFallHitbox)
+            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y))
             {
-                if (positionYWas > positionYIs)
-                {
-                    Debug.Log("Player fell");
-                    positionYWas = positionYIs;
-                    hunterDrop.Play();
-                    playerFell++;
-                    playVoiceLine = true;
-                    //Stats
-                    int numberOfFalls = PlayerPrefs.GetInt("numberOfFalls", 0);
-                    numberOfFalls++;
-                    Debug.Log(numberOfFalls);
-                    PlayerPrefs.SetInt("numberOfJumps", numberOfFalls);
-                    PlayerPrefs.Save();
-                }
-                else
-                {
-                    playerWasInAir = false;
-                    touchedFallHitbox = false;
-                }
+                Debug.Log("Player fell");
+                hunterDrop.Play();
+                playerFell++;
+                playVoiceLine = true;
+                playerWasInAir = false;
+                touchedFallHitbox = false;
+                //Stats
+                /*int numberOfFalls = PlayerPrefs.GetInt("numberOfFalls", 0);
+                numberOfFalls++;
+                Debug.Log(numberOfFalls);
+                PlayerPrefs.SetInt("numberOfJumps", numberOfFalls);
+                PlayerPrefs.Save();*/
+            }
+            else
+            {
+                positionYWas = transform.position.y;
+                Debug.Log(positionYWas);
+                playerWasInAir = false;
+                touchedFallHitbox = false;
             }
         }
         else
