@@ -35,6 +35,7 @@ public class Bossfight : MonoBehaviour
     static public int playerHP = 3;
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
+    public float bossfightTimer;
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -76,6 +77,7 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
+        SaveLoadSystem.PlayerSave("Bossfight", player.transform.position.x, player.transform.position.y, bossfightTimer, playerHP);
         if (PlayerHealth.playerDeath) PlayerDeath();
         if (bossInvincible) text.text = "Boss Invincible";
         else text.text = "Boss Vunerable";
@@ -320,6 +322,8 @@ public class Bossfight : MonoBehaviour
             playerHealth.PlayerStart();
             PreBossDialog.Play();
             OSTLoop.enabled = true;
+            if (PlayerPrefs.HasKey("BossfightTimer")) bossfightTimer = PlayerPrefs.GetFloat("BossfightTimer");
+            else bossfightTimer = 0;
         }
     }
 }

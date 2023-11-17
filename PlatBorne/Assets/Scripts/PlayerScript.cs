@@ -37,6 +37,7 @@ public class PlayerScript : MonoBehaviour
     private float timer = 0;
     private bool isPlaying = false;
     private bool touchedFallHitbox = false;
+    public float londonTimer;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -61,7 +62,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
-        if (collision.gameObject.name == "Level Finish") SceneManager.LoadScene("LevelBoss");
+        if (collision.gameObject.CompareTag("LevelLondon_Finish")) SceneManager.LoadScene("LevelBoss");
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -76,6 +77,15 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = false;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
         if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
+    }
+
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey("LondonTimer"))
+        {
+            //PlayerLoad
+        }
+        else londonTimer = 0;
     }
     void Update()
     {
@@ -183,5 +193,8 @@ public class PlayerScript : MonoBehaviour
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;
         }
+        londonTimer += Time.deltaTime;
+        //Save
+        SaveLoadSystem.PlayerSave("London",transform.position.x,transform.position.y,londonTimer);
     }
 }
