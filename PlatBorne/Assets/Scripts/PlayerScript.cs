@@ -137,6 +137,11 @@ public class PlayerScript : MonoBehaviour
                     isPlaying = true;
                 }
             }
+            //no momentum
+            if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
+            {
+                rigidBody.velocity = Vector2.zero;
+            }
             //Flipovani spritu
             if (((Input.GetKey(KeyCode.A) && transform.localScale.x > 0) ||
                  (Input.GetKey(KeyCode.D) && transform.localScale.x < 0)) &&
