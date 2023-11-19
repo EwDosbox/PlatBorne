@@ -1,9 +1,5 @@
-using System.Collections;
-using UnityEditor;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class PlayerDeath : MonoBehaviour

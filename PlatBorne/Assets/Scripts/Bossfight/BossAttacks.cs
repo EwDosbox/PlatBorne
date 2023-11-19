@@ -1,7 +1,5 @@
-using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BossAttacks : MonoBehaviour
 {
