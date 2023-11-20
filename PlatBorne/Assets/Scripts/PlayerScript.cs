@@ -185,7 +185,7 @@ public class PlayerScript : MonoBehaviour
                 //save
                 float numberOfFalls = PlayerPrefs.GetFloat("NumberOfFalls", 0);
                 numberOfFalls++;
-                PlayerPrefs.SetFloat("NumberOfFumps", numberOfFalls);
+                PlayerPrefs.SetFloat("NumberOfFalls", numberOfFalls);
                 PlayerPrefs.Save();
             }
             else
