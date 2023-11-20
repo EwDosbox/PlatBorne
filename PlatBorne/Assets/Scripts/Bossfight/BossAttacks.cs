@@ -89,7 +89,7 @@ public class BossAttacks : MonoBehaviour
         Bossfight.attackIsGoingOn = true;
         boolWarningTimer = true;
         warningLeft.SetActive(true);
-        if (warningTimer > 2f)
+        if (warningTimer > 2.5f)
         {
             warningLeft.SetActive(false);
             boolWarningTimer = false;
@@ -103,7 +103,7 @@ public class BossAttacks : MonoBehaviour
         Bossfight.attackIsGoingOn = true;
         boolWarningTimer = true;
         warningRight.SetActive(true);
-        if (warningTimer > 2f)
+        if (warningTimer > 2.5f)
         {
             warningRight.SetActive(false);
             boolWarningTimer = false;

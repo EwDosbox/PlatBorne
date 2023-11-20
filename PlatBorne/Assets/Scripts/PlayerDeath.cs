@@ -11,8 +11,7 @@ public class PlayerDeath : MonoBehaviour
 
     private void Start()
     {
-        int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath", 0);
-        bossDeathCount += 1;
+        int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
         switch (bossDeathCount)
         {
             case 1:
@@ -157,7 +156,6 @@ public class PlayerDeath : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Escape))
         {
-            Debug.Log("Key Pressed");
             SceneManager.LoadScene("LevelBoss");
             Debug.Log("A hunter has respawned");
         }

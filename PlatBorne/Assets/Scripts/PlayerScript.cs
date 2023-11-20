@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,14 +55,18 @@ public class PlayerScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         if (collision.gameObject.CompareTag("Boss Hitbox Right")) bossHitboxRight = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
-        if (collision.gameObject.CompareTag("LevelLondon_Finish")) SceneManager.LoadScene("LevelBoss");
+        if (collision.gameObject.CompareTag("LevelLondon_Finish"))
+        {
+            PlayerPrefs.SetFloat("GameTimer", PlayerPrefs.GetFloat("LondonTimer"));
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("LevelBoss");
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -80,11 +85,24 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey("LondonTimer"))
+        if (PlayerPrefs.HasKey("Level"))
         {
-            //PlayerLoad
+            if (PlayerPrefs.GetString("Level") == "london")
+            {
+                if (PlayerPrefs.HasKey("HunterPositionX"))
+                {
+                    float poziceX = PlayerPrefs.GetFloat("HunterPositionX");
+                    float poziceY = PlayerPrefs.GetFloat("HunterPositionY");
+                    rigidBody.transform.position = new Vector3(poziceX, poziceY, 0.79f);
+                }
+            }
         }
-        else londonTimer = 0;
+        PlayerPrefs.SetString("Level", "london");
+        if (!PlayerPrefs.HasKey("LondonTimer"))
+        {
+            PlayerPrefs.SetFloat("LondonTimer", 0f);
+            PlayerPrefs.Save();
+        }
     }
     void Update()
     {
@@ -125,9 +143,9 @@ public class PlayerScript : MonoBehaviour
                 if (Bossfight.bossfightStarted) jumpSpeed = 7f;
                 else jumpSpeed = 5f;
                 //Stats
-                int numberOfJumps = PlayerPrefs.GetInt("numberOfJumps");
-                numberOfJumps++;
-                PlayerPrefs.SetInt("numberOfJumps", numberOfJumps);
+                float numberOfJumps = PlayerPrefs.GetFloat("NumberOfJumps", 0f);
+                Debug.Log(numberOfJumps);
+                PlayerPrefs.SetFloat("NumberOfJumps", numberOfJumps);
                 PlayerPrefs.Save();
                 //Sound
                 if (!isPlaying)
@@ -137,7 +155,7 @@ public class PlayerScript : MonoBehaviour
                 }
             }
             //no momentum
-            if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
+            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
             {
                 rigidBody.velocity = Vector2.zero;
             }
@@ -157,25 +175,22 @@ public class PlayerScript : MonoBehaviour
             }
             else hunterWalk.enabled = false;
             //fell
-            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y))
+            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
             {
-                Debug.Log("Player fell");
                 hunterDrop.Play();
                 playerFell++;
                 playVoiceLine = true;
                 playerWasInAir = false;
                 touchedFallHitbox = false;
-                //Stats
-                /*int numberOfFalls = PlayerPrefs.GetInt("numberOfFalls", 0);
+                //save
+                float numberOfFalls = PlayerPrefs.GetFloat("NumberOfFalls", 0);
                 numberOfFalls++;
-                Debug.Log(numberOfFalls);
-                PlayerPrefs.SetInt("numberOfJumps", numberOfFalls);
-                PlayerPrefs.Save();*/
+                PlayerPrefs.SetFloat("NumberOfFumps", numberOfFalls);
+                PlayerPrefs.Save();
             }
             else
             {
                 positionYWas = transform.position.y;
-                Debug.Log(positionYWas);
                 playerWasInAir = false;
                 touchedFallHitbox = false;
             }
@@ -198,8 +213,12 @@ public class PlayerScript : MonoBehaviour
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;
         }
-        londonTimer += Time.deltaTime;
         //Save
-        SaveLoadSystem.PlayerSave("London",transform.position.x,transform.position.y,londonTimer);
+        PlayerPrefs.SetFloat("HunterPositionX", transform.position.x);
+        PlayerPrefs.SetFloat("HunterPositionY", transform.position.y);
+        londonTimer = PlayerPrefs.GetFloat("LondonTimer");
+        londonTimer += Time.deltaTime;
+        PlayerPrefs.SetFloat("LondonTimer", londonTimer);
+        PlayerPrefs.Save();
     }
 }

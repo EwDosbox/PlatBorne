@@ -27,7 +27,6 @@ public class BossSwordLogic : MonoBehaviour
         if (!isRightSword) rotation = -rotation;
         Quaternion newRotation = Quaternion.Euler(0, 0, rotation);
         transform.rotation = newRotation;
-        Debug.Log(rb.transform.rotation.eulerAngles.z);
         if ((rb.transform.rotation.eulerAngles.z < 125  && !isRightSword)|| (rb.transform.rotation.eulerAngles.z > 180 && isRightSword))
         {
             Destroy(gameObject);

@@ -54,11 +54,16 @@ public class MainMenu : MonoBehaviour
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.99f);
-        if (!PlayerPrefs.HasKey("PreGame")) //If Player had already seen the cutscene or not
+        if (!PlayerPrefs.HasKey("PreGameCutsceneSeen"))
         {
             SceneManager.LoadScene("PreGameCutscene");
-            PlayerPrefs.SetInt("PreGame", 1);
+            PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
             Debug.Log("Scene: PreGameCutscene");
+        }
+        else if (PlayerPrefs.GetString("Level") == "bossfight")
+        {
+            SceneManager.LoadScene("Bossfight");
+            Debug.Log("Scene: LevelBossfight");
         }
         else
         {

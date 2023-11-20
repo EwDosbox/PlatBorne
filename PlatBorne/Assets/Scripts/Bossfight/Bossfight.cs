@@ -56,7 +56,7 @@ public class Bossfight : MonoBehaviour
     private void BossDeath()
     {
         BossDeath01.Play();
-        PlayerPrefs.SetFloat("Boss Time", timer);
+        PlayerPrefs.SetFloat("BossTimer", timer);
         PlayerPrefs.Save();
         SceneManager.LoadScene("EndgameCutscene");
         Debug.Log("Boss Has Died");
@@ -66,6 +66,9 @@ public class Bossfight : MonoBehaviour
         int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
         ded++;
         PlayerPrefs.SetInt("NumberOfDeath", ded);
+        float gameTimer = PlayerPrefs.GetFloat("GameTimer");
+        gameTimer += timer;
+        PlayerPrefs.SetFloat("GameTimer", gameTimer);
         PlayerPrefs.Save();
         Debug.Log("Hunter has Died");
         SceneManager.LoadScene("PlayerDeath");
@@ -73,6 +76,8 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        PlayerPrefs.SetString("Level", "bossfight");
+        PlayerPrefs.Save();
         //Absolute fucking reset
         bossfightStarted = false;
         bossHP = 60;
@@ -84,7 +89,6 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
-        SaveLoadSystem.PlayerSave("Bossfight", player.transform.position.x, player.transform.position.y, bossfightTimer, playerHP);
         if (playerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Invincible";
         else text.text = "Boss Vunerable";
