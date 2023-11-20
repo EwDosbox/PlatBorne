@@ -24,7 +24,7 @@ public class Bossfight : MonoBehaviour
     public int bossHP = 60;
     bool bossInvincible = true;
     float timer = 0f;
-    bool timerOn = true;
+    bool timerOn = false;
     float phaseTimer = 0f;
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
@@ -73,12 +73,19 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
-        //for debugging
+        //Absolute fucking reset
+        bossfightStarted = false;
+        bossHP = 60;
+        playerHP = 3;
+        phase = 1;
+        phaseTimer = 0;
+        timerOn = false;
+        timer = 0f;
     }
     private void Update()
     {
         SaveLoadSystem.PlayerSave("Bossfight", player.transform.position.x, player.transform.position.y, bossfightTimer, playerHP);
-        if (PlayerHealth.playerDeath) PlayerDeath();
+        if (playerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Invincible";
         else text.text = "Boss Vunerable";
         if (bossfightStarted)

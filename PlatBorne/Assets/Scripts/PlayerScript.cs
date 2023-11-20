@@ -32,7 +32,6 @@ public class PlayerScript : MonoBehaviour
     static public bool bossHitbox = false;
     static public bool bossDamage = false;
     //******
-    public int playerHP = 3;
     public bool playerInvincible = false;
     private float timer = 0;
     private bool isPlaying = false;
@@ -184,6 +183,7 @@ public class PlayerScript : MonoBehaviour
         else
         {
             playerWasInAir = true;
+            hunterWalk.enabled = false;
         }
         //sound vyskoceni
         if (isPlaying)
