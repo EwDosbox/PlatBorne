@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class MainMenu : MonoBehaviour
     public Animator sign;
 
     public GameObject panel;
+    public Button continueButton;
+    public Button newGameButton;
 
     public TMP_Text text;
     
@@ -24,6 +27,12 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator Start()
     {
+        if (PlayerPrefs.HasKey("HasASavedGame"))
+        {
+            continueButton.interactable = true;
+        }
+        else continueButton.interactable = false;
+
         if (PlayerPrefs.HasKey("MusicVolume"))
         {
             SetMusicVolume();
@@ -42,33 +51,46 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         text.gameObject.SetActive(true);
     }
-
-    public void PlayGame()
+    public void NewGame()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_PlayGame());
+        StartCoroutine(_NewGame());
+    }
+    private IEnumerator _NewGame()
+    {
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt("HasASavedGame", 1);
+        PlayerPrefs.Save();
+        InGame = true;
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.99f);
+        SceneManager.LoadScene("PreGameCutscene");
+        PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
+        Debug.Log("Scene: PreGameCutscene");
     }
 
-    private IEnumerator _PlayGame()
+    public void GameContinue()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_GameContinue());
+    }
+
+    private IEnumerator _GameContinue()
     {
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.99f);
-        if (!PlayerPrefs.HasKey("PreGameCutsceneSeen"))
         {
-            SceneManager.LoadScene("PreGameCutscene");
-            PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
-            Debug.Log("Scene: PreGameCutscene");
-        }
-        else if (PlayerPrefs.GetString("Level") == "bossfight")
-        {
-            SceneManager.LoadScene("Bossfight");
-            Debug.Log("Scene: LevelBossfight");
-        }
-        else
-        {
-            SceneManager.LoadScene("LevelLondon");
-            Debug.Log("Scene: LevelLondon");
+            if (PlayerPrefs.GetString("Level") == "bossfight")
+            {
+                SceneManager.LoadScene("Bossfight");
+                Debug.Log("Scene: LevelBossfight");
+            }
+            else
+            {
+                SceneManager.LoadScene("LevelLondon");
+                Debug.Log("Scene: LevelLondon");
+            }
         }
     }
 

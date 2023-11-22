@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,10 @@ public class LondonDialogue : MonoBehaviour
     [SerializeField] private AudioSource Fell01, Fell02, Fell03, Fell04, Fell05, Fell06, Fell07, Fell08, Fell09, Fell10, Fell11, Fell12, Fell13, Fell14, Fell15, Fell16, Fell17, Fell18, Fell19, Fell20, Fell21, Fell22;
     int j = 0;
     int[] voiceLinesArray;
+    int RNGsaved = 0;
+    int RNGnow = 0;
+    public int minimum;
+    public int maximum;
 
     void Randomize(int[] voiceLines)
     {
@@ -19,21 +24,46 @@ public class LondonDialogue : MonoBehaviour
             voiceLines[random1] = voiceLines[random2];
             voiceLines[random2] = temp;
         }
+        string saved = null;
+        for (int i = 0; i < voiceLines.Length; i++)
+        {
+            saved += voiceLines[i].ToString();
+            if (i < voiceLines.Length - 1)saved += ",";
+        }
+        PlayerPrefs.SetString("LondonVoiceLinesArray", saved);
+        PlayerPrefs.Save();
         return;
     }
     void Start()
     {
         voiceLinesArray = new int[21];
-        for (int i = 0; i < voiceLinesArray.Length; i++)
+        if (PlayerPrefs.HasKey("LondonVoiceLinesArray"))
         {
-            voiceLinesArray[i] = i;
+            string vlTemp = PlayerPrefs.GetString("LondonVoiceLinesArray");
+            string[] arrayVLChar = vlTemp.Split(",");
+            for(int i = 0;i < arrayVLChar.Length;i++) voiceLinesArray[i] = int.Parse(arrayVLChar[i]);
+            RNGnow = PlayerPrefs.GetInt("RNGNow");
+            RNGsaved = PlayerPrefs.GetInt("RNGSaved");
+            j = PlayerPrefs.GetInt("LondonVoiceLinesJ");
         }
-        Randomize(voiceLinesArray);
+        else
+        { 
+            for (int i = 0; i < voiceLinesArray.Length; i++)
+            {
+                voiceLinesArray[i] = i;
+            }
+            Randomize(voiceLinesArray);
+        }
     }
     void Update()
     {
-            if (PlayerScript.playVoiceLine)
+        if (PlayerScript.playVoiceLine)
+        {
+            if (RNGnow == RNGsaved)
             {
+                System.Random rng = new System.Random();
+                RNGsaved = rng.Next(minimum, maximum + 1);
+                RNGnow = 0;
                 switch (voiceLinesArray[j])
                 {
                     case 1:
@@ -176,6 +206,17 @@ public class LondonDialogue : MonoBehaviour
                     Randomize(voiceLinesArray);
                     j = 0;
                 }
+                PlayerPrefs.SetInt("RNGSaved", RNGsaved);
+                PlayerPrefs.SetInt("RNGNow", RNGnow);
+                PlayerPrefs.SetInt("LondonVoiceLinesJ", j);
+                PlayerPrefs.Save();
             }
+            else
+            {
+                RNGnow++;
+                PlayerPrefs.SetInt("RNGnow", RNGnow);
+                PlayerPrefs.Save();
+            }
+        }
     }
 }

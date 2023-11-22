@@ -669,7 +669,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 500350840}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_MethodName: NewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -840,6 +840,8 @@ MonoBehaviour:
   transitionAnim: {fileID: 2023857625}
   sign: {fileID: 131006006}
   panel: {fileID: 656634129}
+  continueButton: {fileID: 1002858782}
+  newGameButton: {fileID: 411466804}
   text: {fileID: 1566216441}
   InGame: 0
   PreGameCutscene: 0
@@ -1704,7 +1706,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 500350840}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_MethodName: GameContinue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
