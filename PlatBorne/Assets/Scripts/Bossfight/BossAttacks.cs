@@ -245,7 +245,7 @@ public class BossAttacks : MonoBehaviour
         {
             warningTimer += Time.deltaTime;
             if (warningTimer > 2f) if (swordAttackIsLeft) BossAttackSwordLeft();
-            else BossAttackSwordRight();
+                                   else BossAttackSwordRight();
         }
         else warningTimer = 0;
     }

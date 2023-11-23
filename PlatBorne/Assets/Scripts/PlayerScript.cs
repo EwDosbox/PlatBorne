@@ -5,6 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
+    //***********KONAMI CHEAT CODE*************
+    private static readonly KeyCode[] konamiCode =
+        { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow,
+          KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow,
+          KeyCode.B, KeyCode.A };
+    private int konamiIndex = 0;
+    private void KonamiCheatCodeTriggered()
+    {
+        SceneManager.LoadScene("LevelBoss");
+        konamiIndex = 0;
+    }
+    //***********KONAMI CHEAT CODE*************
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
     [SerializeField] private AudioSource hunterJump;
@@ -220,5 +232,18 @@ public class PlayerScript : MonoBehaviour
         londonTimer += Time.deltaTime;
         PlayerPrefs.SetFloat("LondonTimer", londonTimer);
         PlayerPrefs.Save();
+        //****KONAMI CODE****
+        if (Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(konamiCode[konamiIndex]))
+            {
+                konamiIndex++;
+                if (konamiIndex == konamiCode.Length)
+                {
+                    KonamiCheatCodeTriggered();
+                }
+            }
+            else konamiIndex = 0;
+        }
     }
 }
