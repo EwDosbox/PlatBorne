@@ -44,6 +44,10 @@ public class Bossfight : MonoBehaviour
     int attackNumberSword = 0;
     //****************
 
+
+
+    public BoxCollider2D bounds;
+
     private int resetPromenych()
     {
         attackNumberRush = 0;
@@ -94,6 +98,9 @@ public class Bossfight : MonoBehaviour
         else text.text = "Boss Vunerable";
         if (bossfightStarted)
         {
+            //VIKTOR
+            if (timer >= 0.25f) bounds.isTrigger = false;
+            //VIKTOR
             //ÈASOVAÈ
             if (timerOn)
             {
@@ -324,7 +331,7 @@ public class Bossfight : MonoBehaviour
         }
         //start of bossfight
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
-        {
+        {            
             phase = 1;
             timerOn = true;
             bossfightStarted = true;
