@@ -80,6 +80,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        bounds.isTrigger = true;
         PlayerPrefs.SetString("Level", "bossfight");
         PlayerPrefs.Save();
         //Absolute fucking reset
