@@ -6,39 +6,79 @@ public class PlayerHealth : MonoBehaviour
     public Image hp1;
     public Image hp2;
     public Image hp3;
+    public Image hp1_GodMode;
+    public Image hp2_GodMode;
+    public Image hp3_GodMode;
+    public Bossfight bossfight;
     private float timer = 0f;
     private bool kemoMilujuANenavidimTimery = false;
-    public Bossfight bossfight;
-    public void ChangeHealth()
+    public void ChangeHealth(bool isGodModeActive)
     {
-        switch(Bossfight.playerHP)
+        Debug.Log(Bossfight.godMode);
+        switch (Bossfight.playerHP)
         {
             default:
                 {
-                    hp1.enabled = true;
-                    hp2.enabled = true;
-                    hp3.enabled = true;
+                    if (Bossfight.godMode)
+                    {
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = true;
+                        hp3_GodMode.enabled = true;
+                    }
+                    else
+                    {
+                        hp1.enabled = true;
+                        hp2.enabled = true;
+                        hp3.enabled = true;
+                    }
                     break;
                 }
             case 2:
                 {
-                    hp1.enabled = true;
-                    hp2.enabled = true;
-                    hp3.enabled = false;
+                    if (Bossfight.godMode)
+                    {
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = true;
+                        hp3_GodMode.enabled = false;
+                    }
+                    else
+                    {
+                        hp1.enabled = true;
+                        hp2.enabled = true;
+                        hp3.enabled = false;
+                    }
                     break;
                 }
             case 1:
                 {
-                    hp1.enabled = true;
-                    hp2.enabled = false;
-                    hp3.enabled = false;
+                    if (Bossfight.godMode)
+                    {
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
+                    }
+                    else
+                    {
+                        hp1.enabled = true;
+                        hp2.enabled = false;
+                        hp3.enabled = false;
+                    }
                     break;
                 }
             case 0:
                 {
-                    hp1.enabled = false;
-                    hp2.enabled = false;
-                    hp3.enabled = false;
+                    if (Bossfight.godMode)
+                    {
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
+                    }
+                    else
+                    {
+                        hp1.enabled = false;
+                        hp2.enabled = false;
+                        hp3.enabled = false;
+                    }
                     break;
                 }
         }
@@ -47,20 +87,51 @@ public class PlayerHealth : MonoBehaviour
     public void PlayerStart()
     {
         kemoMilujuANenavidimTimery = true;
-        if (timer > 1) hp1.enabled = true;
-        if (timer > 3) hp2.enabled = true;
-        if (timer > 5) 
+        Debug.Log("GodMode:" + Bossfight.godMode);
+        if (Bossfight.godMode)
         {
-            hp3.enabled = true;
-            kemoMilujuANenavidimTimery = false;
+            if (timer > 1) hp1_GodMode.enabled = true;
+            if (timer > 3) hp2_GodMode.enabled = true;
+            if (timer > 5)
+            {
+                hp3_GodMode.enabled = true;
+                kemoMilujuANenavidimTimery = false;
+            }
+        }
+        else
+        {
+            if (timer > 1) hp1.enabled = true;
+            if (timer > 3) hp2.enabled = true;
+            if (timer > 5)
+            {
+                hp3.enabled = true;
+                kemoMilujuANenavidimTimery = false;
+            }
         }
     }
-
+    public void GodMode()
+    {
+        if (Bossfight.godMode)
+        {
+            if (hp1.enabled) hp1_GodMode.enabled = true;
+            if (hp2.enabled) hp2_GodMode.enabled = true;
+            if (hp3.enabled) hp3_GodMode.enabled = true;
+        }
+        else
+        {
+            hp1_GodMode.enabled = false;
+            hp2_GodMode.enabled = false;
+            hp3_GodMode.enabled = false;
+        }
+    }
     private void Start()
     {
         hp1.enabled = false;
         hp2.enabled = false;
         hp3.enabled = false;
+        hp1_GodMode.enabled = false;
+        hp2_GodMode.enabled = false;
+        hp3_GodMode.enabled = false;
     }
 
     private void Update()
@@ -69,6 +140,7 @@ public class PlayerHealth : MonoBehaviour
         {
             timer += Time.deltaTime;
             PlayerStart();
+
         }
     }
 }

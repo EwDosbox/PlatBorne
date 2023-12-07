@@ -36,6 +36,8 @@ public class Bossfight : MonoBehaviour
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
     public float bossfightTimer;
+    static public bool godMode = false;
+    static public bool pussyMode = false;
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -172,13 +174,13 @@ public class Bossfight : MonoBehaviour
 
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
-                if (!playerInvincible)
+                if (!playerInvincible && !godMode)
                 {
                     playerInvincible = true;
                     playerPlayDamage = true;
                     playerHP--;
                     Debug.Log(playerHP);
-                    playerHealth.ChangeHealth(); //UI
+                    playerHealth.ChangeHealth(godMode); //UI
                     Debug.Log("Hunter has taken Damage");
                     if (playerHP == 0)
                     {
@@ -188,7 +190,6 @@ public class Bossfight : MonoBehaviour
                 PlayerScript.bossHitbox = false;
                 PlayerScript.bossDamage = false;
             }
-            Debug.Log(timerBetweenAttacks);
             switch (phase)
             {
                 case 1:
@@ -245,11 +246,16 @@ public class Bossfight : MonoBehaviour
                                     attack.BossAttackDagger();
                                     attackNumberDagger = resetPromenych();
                                 }
-                                else
+                                else if (attackNumberLeech < 1)
                                 {
                                     if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
                                     else attack.BossAttackLeechRight();
                                     attackNumberLeech = resetPromenych();
+                                }
+                                else
+                                {
+                                    attack.BossAttackDagger();
+                                    attackNumberDagger = resetPromenych();
                                 }
                             }
                         }
@@ -337,6 +343,10 @@ public class Bossfight : MonoBehaviour
             timerOn = true;
             bossfightStarted = true;
             attackIsGoingOn = false;
+            if (PlayerPrefs.HasKey("GodMode")) godMode = bool.Parse(PlayerPrefs.GetString("GodMode"));
+            else godMode = false;
+            //testing
+            godMode = true;
             bossHealthBar.BossStart();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
