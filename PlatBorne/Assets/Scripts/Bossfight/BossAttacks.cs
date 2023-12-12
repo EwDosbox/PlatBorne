@@ -37,6 +37,7 @@ public class BossAttacks : MonoBehaviour
     private float warningTimer = 0f;
     private bool boolWarningTimer = false;
     private bool swordAttackIsLeft = true;
+    private int[] daggerPosition;
 
     public void BossAttackFloorIsLava()
     {
@@ -48,40 +49,55 @@ public class BossAttacks : MonoBehaviour
     public void BossAttackDagger()
     {
         Bossfight.attackIsGoingOn = true;
-        daggerAttack = true;
-        if (daggerTimer > 1 && daggerAttackHappened <= 6)
+        Vector3 position = new Vector3(20, -3.76f, 3);
+        int random = UnityEngine.Random.Range(1, 5);
+        switch(random)
         {
-            Vector3 position = new Vector3(20, -3.76f, 3);
-            switch (daggerAttackHappened)
+            case 1:
+                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
+                return;
+            case 2:
+                daggerPosition = new int[6] { 6, 5, 4, 3, 2, 1 }; //FIX THE NUMBERS
+                return;
+            case 3:
+                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
+                return;
+            case 4:
+                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
+                return;
+        }
+        int i = 0;
+        for (float timer = 0; i == daggerPosition.Length; timer += Time.deltaTime)
+        {            
+            if (daggerTimer > 1)
             {
-                case 1:
-                    position = new Vector3(20f, 0f, 3);
-                    break;
-                case 2:
-                    position = new Vector3(20f, -7.50f, 3);
-                    break;
-                case 3:
-                    position = new Vector3(-20f, -3.76f, 3);
-                    break;
-                case 4:
-                    position = new Vector3(-20f, 0f, 3);
-                    break;
-                case 5:
-                    position = new Vector3(-20f, -7.50f, 3);
-                    break;
+                switch (daggerPosition[i])
+                {
+                    case 1:
+                        position = new Vector3(20, -3.76f, 3);
+                        break;
+                    case 2:
+                        position = new Vector3(20f, 0f, 3);
+                        break;
+                    case 3:
+                        position = new Vector3(20f, -7.50f, 3);
+                        break;
+                    case 4:
+                        position = new Vector3(-20f, -3.76f, 3);
+                        break;
+                    case 5:
+                        position = new Vector3(-20f, 0f, 3);
+                        break;
+                    case 6:
+                        position = new Vector3(-20f, -7.50f, 3);
+                        break;
+                }
+                Instantiate(dagger, position, Quaternion.identity);
+                i++;
             }
-            Instantiate(dagger, position, Quaternion.identity);
-            daggerAttackHappened++;
-            daggerTimer = 0;
         }
-        else if (daggerAttackHappened > 6)//attackEnd
-        {
-            daggerTimer = 0;
-            daggerAttackHappened = 0;
-            daggerAttack = false;
-            Bossfight.attackIsGoingOn = false;
-            Debug.Log("Daggers End");
-        }
+        Bossfight.attackIsGoingOn = false;
+        Debug.Log("Daggers End");
     } //done
     public void BossAttackSwordLeft()
     {
@@ -228,11 +244,6 @@ public class BossAttacks : MonoBehaviour
     private void Update()
     {
         if (swordAttackTimer) timerSwordAttack += Time.deltaTime;
-        if (daggerAttack)
-        {
-            daggerTimer += Time.deltaTime;
-            BossAttackDagger();
-        }
 
         if (leechAttack)
         {

@@ -19,9 +19,9 @@ public class Bossfight : MonoBehaviour
     public GameObject player;
     private Rigidbody2D rb;
     public Text text;
+    public GameObject pauseMenu;
 
     public int phase = 1;
-    public int bossHP = 60;
     bool bossInvincible = true;
     float timer = 0f;
     bool timerOn = false;
@@ -32,12 +32,11 @@ public class Bossfight : MonoBehaviour
     private float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
     //****************
     static public bool bossfightStarted = false;
-    static public int playerHP = 3;
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
-    public float bossfightTimer;
-    static public bool godMode = false;
-    static public bool pussyMode = false;
+    private float bossfightTimer;
+    private bool godMode = false;
+    private bool pussyMode = false;
     //****************
     int attackNumberRush = 0;
     int attackNumberDagger = 0;
@@ -45,9 +44,6 @@ public class Bossfight : MonoBehaviour
     int attackNumberLeech = 0;
     int attackNumberSword = 0;
     //****************
-
-
-
     public BoxCollider2D bounds;
 
     private int resetPromenych()
@@ -87,8 +83,9 @@ public class Bossfight : MonoBehaviour
         PlayerPrefs.Save();
         //Absolute fucking reset
         bossfightStarted = false;
-        bossHP = 60;
-        playerHP = 3;
+        bossHealthBar.SetHP(60);
+        bossHealthBar.Slider();
+        playerHealth.SetHP(3);
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
@@ -96,9 +93,12 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
-        if (playerHP == 0 && bossfightStarted) PlayerDeath();
+        if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) BossDeath();
+        if (playerHealth.GetHP() == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Invincible";
         else text.text = "Boss Vunerable";
+        if (pauseMenu.active) timerOn = false;
+        else if (bossfightStarted) timerOn = true;
         if (bossfightStarted)
         {
             //VIKTOR
@@ -128,15 +128,13 @@ public class Bossfight : MonoBehaviour
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
             }
-            if (!bossInvincible && phase <= 3) //Phase 1,2,3 Boss Damage
+            if (!bossInvincible && phase <= 3 && PlayerScript.bossHitbox) //Phase 1,2,3 Boss Damage
             {
-                if (PlayerScript.bossHitbox)
-                {
                     bossInvincible = true;
                     playerInvincible = true;
-                    bossHP -= 20;
-                    bossHealthBar.Set(bossHP); //UI
-                    switch (bossHP)
+                    bossHealthBar.SetHP(bossHealthBar.GetHP() - 20);
+                playerHealth.SetHP(3);
+                    switch (bossHealthBar.GetHP())
                     {
                         case 40:
                             {
@@ -153,36 +151,28 @@ public class Bossfight : MonoBehaviour
                                 break;
                             }
                     }
-                    if (bossHP == 0 && phase == 3)
+                    if (bossHealthBar.GetHP() == 0 && phase == 3)
                     {
                         BossDamage03.Play();
                         Debug.Log("Phase 4 Start");
-                        bossHP = 60;
+                        bossHealthBar.Slider();
+                        bossHealthBar.SetHP(60);
+                        bossHealthBar.LastPhase();
                         phase = 4;
                         OSTLoop.enabled = false;
                         OSTPhase4.enabled = true;
                     }
-                }
             }
-            else if (phase == 4 && phaseTimer >= 1)
-            {
-                phaseTimer = 0;
-                bossHP--;
-                bossHealthBar.Set(bossHP); //UI
-                if (bossHP <= 0) BossDeath();
-            }
-
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
                 if (!playerInvincible && !godMode)
                 {
                     playerInvincible = true;
                     playerPlayDamage = true;
-                    playerHP--;
-                    Debug.Log(playerHP);
-                    playerHealth.ChangeHealth(godMode); //UI
+                    playerHealth.SetHP(playerHealth.GetHP() - 1);
+                    playerHealth.SetGodMode(godMode);
                     Debug.Log("Hunter has taken Damage");
-                    if (playerHP == 0)
+                    if (playerHealth.GetHP() == 0)
                     {
                         PlayerDeath();
                     }
@@ -316,7 +306,7 @@ public class Bossfight : MonoBehaviour
                                 }
                             else if (attackNumberLeech < 1)
                                 {
-                                if (bossHP < 20) attack.BossAttackLeechBoth();
+                                if (bossHealthBar.GetHP() <= 20) attack.BossAttackLeechBoth();
                                 else if (PlayerScript.bossHitboxRight) attack.BossAttackLeechRight();
                                 else attack.BossAttackLeechLeft();
                                 attackNumberLeech = resetPromenych();
@@ -340,14 +330,13 @@ public class Bossfight : MonoBehaviour
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {            
             phase = 1;
-            timerOn = true;
             bossfightStarted = true;
             attackIsGoingOn = false;
             if (PlayerPrefs.HasKey("GodMode")) godMode = bool.Parse(PlayerPrefs.GetString("GodMode"));
             else godMode = false;
             //testing
             godMode = true;
-            bossHealthBar.BossStart();
+            bossHealthBar.Slider();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
             OSTLoop.enabled = true;

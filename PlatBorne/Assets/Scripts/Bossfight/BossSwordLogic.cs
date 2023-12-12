@@ -5,10 +5,10 @@ public class BossSwordLogic : MonoBehaviour
     private Rigidbody2D rb;
     private GameObject left;
     private GameObject right;
-    [SerializeField] private float speed = 2;
+    public float speed = 2;
     private bool isRightSword = false;
     private float rotation = 0f;
-    [SerializeField] private float wantedRotation = 180;
+    public float wantedRotation = 180;
     private float timer;
 
     void Start()
