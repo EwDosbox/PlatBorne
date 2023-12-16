@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToSelfDestruct: 6
-  speed: 15
+  speed: 12.5
 --- !u!61 &3285248144055442025
 BoxCollider2D:
   m_ObjectHideFlags: 0

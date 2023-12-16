@@ -156,7 +156,6 @@ public class PlayerScript : MonoBehaviour
                 else jumpSpeed = 5f;
                 //Stats
                 float numberOfJumps = PlayerPrefs.GetFloat("NumberOfJumps", 0f);
-                Debug.Log(numberOfJumps);
                 PlayerPrefs.SetFloat("NumberOfJumps", numberOfJumps);
                 PlayerPrefs.Save();
                 //Sound

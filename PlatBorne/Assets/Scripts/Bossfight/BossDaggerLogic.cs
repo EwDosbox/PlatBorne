@@ -7,12 +7,11 @@ public class BossDaggerLogic : MonoBehaviour
     [SerializeField] private float timeToSelfDestruct;
     bool goLeft = false;
     [SerializeField] private float speed;
-    private float timer;
+    private float timer = 0;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player");
         if (rb.position.x >= 0)
         {
             rb.velocity = Vector2.left * speed;

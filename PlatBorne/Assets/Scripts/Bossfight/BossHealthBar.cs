@@ -20,23 +20,22 @@ public class BossHealthBar : MonoBehaviour
     
     private void Update()
     {
-        slider.value = bossHP;
+        slider.value = this.bossHP;
     }
 
     public void Slider()
     {
-        for(float timer = 0; !isFilled; timer = Time.deltaTime) 
+        for (float timer = 0; slider.value != slider.maxValue; timer += Time.deltaTime) 
         {
-            slider.value = timer * speedToFill;
-            if (slider.maxValue == slider.value) isFilled = true;            
+            slider.value = timer * speedToFill;           
         }        
     }
 
     public void LastPhase()
     {
-        for (float timer = 0; bossHP != 0; timer = Time.deltaTime)
+        for (float timer = 0; this.bossHP != 0; timer = Time.deltaTime)
         {
-            if (timer >= 1) bossHP--;
+            if (timer >= 1) this.bossHP--;
         }
     }
 }

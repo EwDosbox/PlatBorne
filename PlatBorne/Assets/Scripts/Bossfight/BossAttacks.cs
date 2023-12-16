@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -17,20 +18,20 @@ public class BossAttacks : MonoBehaviour
     public float leechAttackBetween;
     public float leechAttackDifference;
     public float leechAttackMaxSpawnRate;
+    [SerializeField] public float timerBetweenDaggerAttack = 1;
     //IN UNITY
-
+    Vector3 daggerVector = new Vector3();
     public int phase;
     public bool bossHitboxRight = false;
     public bool bossHitboxLeft = false;
     public bool bossHitboxUp = false;
     public bool bossHitboxDown = false;
     public bool bossHitbox = false;
-    private float daggerTimer = 0;
     private float leechTimer = 0;
     private int leechAttackWhere = 0; //0 = LeftRight, 1 = RightLeft, 2 = Both
-    private bool daggerAttack = false;
-    private int daggerAttackHappened = 0;
     private bool leechAttack = false;
+    private float daggerTimer = 0;
+    private bool daggerTimerIsOn = false;
     private int leechAttackHappened = 0;
     private bool swordAttackTimer = false;
     private float timerSwordAttack = 0;
@@ -38,7 +39,8 @@ public class BossAttacks : MonoBehaviour
     private bool boolWarningTimer = false;
     private bool swordAttackIsLeft = true;
     private int[] daggerPosition;
-
+    private bool bossAttackDaggerFirstTime = true;
+    private int daggerIndex = 0;
     public void BossAttackFloorIsLava()
     {
         Bossfight.attackIsGoingOn = true;
@@ -48,57 +50,66 @@ public class BossAttacks : MonoBehaviour
     }//done
     public void BossAttackDagger()
     {
-        Bossfight.attackIsGoingOn = true;
-        Vector3 position = new Vector3(20, -3.76f, 3);
-        int random = UnityEngine.Random.Range(1, 5);
-        switch(random)
+        Debug.Log("Boss Attack First Time: " + bossAttackDaggerFirstTime);
+        if (bossAttackDaggerFirstTime)
         {
-            case 1:
-                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
-                return;
-            case 2:
-                daggerPosition = new int[6] { 6, 5, 4, 3, 2, 1 }; //FIX THE NUMBERS
-                return;
-            case 3:
-                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
-                return;
-            case 4:
-                daggerPosition = new int[6] { 1, 2, 3, 4, 5, 6 };
-                return;
-        }
-        int i = 0;
-        for (float timer = 0; i == daggerPosition.Length; timer += Time.deltaTime)
-        {            
-            if (daggerTimer > 1)
+            Bossfight.attackIsGoingOn = true;
+            int random = UnityEngine.Random.Range(1, 5);
+            switch (random)
             {
-                switch (daggerPosition[i])
-                {
-                    case 1:
-                        position = new Vector3(20, -3.76f, 3);
-                        break;
-                    case 2:
-                        position = new Vector3(20f, 0f, 3);
-                        break;
-                    case 3:
-                        position = new Vector3(20f, -7.50f, 3);
-                        break;
-                    case 4:
-                        position = new Vector3(-20f, -3.76f, 3);
-                        break;
-                    case 5:
-                        position = new Vector3(-20f, 0f, 3);
-                        break;
-                    case 6:
-                        position = new Vector3(-20f, -7.50f, 3);
-                        break;
-                }
-                Instantiate(dagger, position, Quaternion.identity);
-                i++;
+                default:
+                    daggerPosition = new int[6] { 2, 1, 3, 5, 4, 6 };
+                    break;
+                case 2:
+                    daggerPosition = new int[6] { 1, 4, 2, 5, 3, 6 };
+                    break;
+                case 3:
+                    daggerPosition = new int[6] { 1, 3, 5, 4, 2, 6 };
+                    break;
+                case 4:
+                    daggerPosition = new int[6] { 6, 3, 5, 1, 4, 2 };
+                    break;
             }
         }
-        Bossfight.attackIsGoingOn = false;
-        Debug.Log("Daggers End");
-    } //done
+        Debug.Log("Timer: " + daggerTimer);
+        daggerTimerIsOn = true;
+        if (daggerIndex < daggerPosition.Length)
+        {
+            if (daggerTimer > timerBetweenDaggerAttack)
+            {
+                switch (daggerPosition[daggerIndex])
+                {
+                    case 1:
+                        daggerVector = new Vector3(20f, 0f, 3);
+                        break;
+                    case 2:
+                        daggerVector = new Vector3(20, -3.76f, 3);
+                        break;
+                    case 3:
+                        daggerVector = new Vector3(20f, -7.50f, 3);
+                        break;
+                    case 4:
+                        daggerVector = new Vector3(-20f, 0f, 3);
+                        break;
+                    case 5:
+                        daggerVector = new Vector3(-20f, -3.76f, 3);
+                        break;
+                    case 6:
+                        daggerVector = new Vector3(-20f, -7.50f, 3);
+                        break;
+                }
+                Instantiate(dagger, daggerVector, Quaternion.identity);
+                daggerIndex++;
+                daggerTimer -= timerBetweenDaggerAttack;
+            }
+        }
+        else
+        {
+            daggerTimerIsOn = false;
+            Bossfight.attackIsGoingOn = false;
+            daggerIndex = 0;
+        }
+    }
     public void BossAttackSwordLeft()
     {
         swordAttackIsLeft = true;
@@ -244,6 +255,18 @@ public class BossAttacks : MonoBehaviour
     private void Update()
     {
         if (swordAttackTimer) timerSwordAttack += Time.deltaTime;
+
+        if (daggerTimerIsOn)
+        {
+            daggerTimer += Time.deltaTime;
+            bossAttackDaggerFirstTime = false;
+            BossAttackDagger();
+        }
+        else
+        {
+            daggerTimer = 0;
+            bossAttackDaggerFirstTime = true;
+        }
 
         if (leechAttack)
         {

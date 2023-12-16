@@ -84,7 +84,6 @@ public class Bossfight : MonoBehaviour
         //Absolute fucking reset
         bossfightStarted = false;
         bossHealthBar.SetHP(60);
-        bossHealthBar.Slider();
         playerHealth.SetHP(3);
         phase = 1;
         phaseTimer = 0;
@@ -204,7 +203,6 @@ public class Bossfight : MonoBehaviour
                             }
                             else
                             {
-                                Debug.Log("Dagger");
                                 attack.BossAttackDagger();
                                 attackNumberDagger = resetPromenych();
                             }
@@ -335,7 +333,6 @@ public class Bossfight : MonoBehaviour
             if (PlayerPrefs.HasKey("GodMode")) godMode = bool.Parse(PlayerPrefs.GetString("GodMode"));
             else godMode = false;
             //testing
-            godMode = true;
             bossHealthBar.Slider();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
