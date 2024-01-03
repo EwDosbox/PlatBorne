@@ -19,6 +19,7 @@ public class Bossfight : MonoBehaviour
     public GameObject player;
     private Rigidbody2D rb;
     public Text text;
+    public Text pussyModeOn;
     public GameObject pauseMenu;
 
     public int phase = 1;
@@ -89,13 +90,15 @@ public class Bossfight : MonoBehaviour
         phaseTimer = 0;
         timerOn = false;
         timer = 0f;
+        if (PlayerPrefs.GetInt("PussyMode") > 0) pussyMode = true;
+        else pussyMode = false;
     }
     private void Update()
     {
         if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) BossDeath();
         if (playerHealth.GetHP() == 0 && bossfightStarted) PlayerDeath();
-        if (bossInvincible) text.text = "Boss Invincible";
-        else text.text = "Boss Vunerable";
+        if (bossInvincible) text.text = "Boss Is Invincible";
+        else text.text = "Boss Is Vunerable";
         if (pauseMenu.active) timerOn = false;
         else if (bossfightStarted) timerOn = true;
         if (bossfightStarted)
@@ -132,7 +135,8 @@ public class Bossfight : MonoBehaviour
                     bossInvincible = true;
                     playerInvincible = true;
                     bossHealthBar.SetHP(bossHealthBar.GetHP() - 20);
-                playerHealth.SetHP(3);
+                    playerHealth.SetHP(3);
+                 if (pussyMode) playerHealth.SetHP(3);
                     switch (bossHealthBar.GetHP())
                     {
                         case 40:
@@ -330,8 +334,10 @@ public class Bossfight : MonoBehaviour
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
-            if (PlayerPrefs.HasKey("GodMode")) godMode = bool.Parse(PlayerPrefs.GetString("GodMode"));
+            if (PlayerPrefs.GetInt("GodMode") > 0) godMode = true;
             else godMode = false;
+            if (pussyMode) pussyModeOn.gameObject.SetActive(true);
+            else pussyModeOn.gameObject.SetActive(false);
             //testing
             bossHealthBar.Slider();
             playerHealth.PlayerStart();

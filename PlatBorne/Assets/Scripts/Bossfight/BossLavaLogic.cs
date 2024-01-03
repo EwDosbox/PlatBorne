@@ -27,7 +27,7 @@ public class BossLavaLogic : MonoBehaviour
         }
         else if (goUp)
         {
-            if (rb.position.y <= -7.5f)
+            if (rb.position.y <= -11.4f)
             {
                 rb.velocity += Vector2.up * acceleration * Time.deltaTime;
             }
