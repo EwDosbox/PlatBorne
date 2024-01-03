@@ -104,7 +104,7 @@ public class Bossfight : MonoBehaviour
         if (bossfightStarted)
         {
             //VIKTOR
-            if (timer >= 0.25f) bounds.isTrigger = false;
+            bounds.isTrigger = false;
             //VIKTOR
             //ÈASOVAÈ
             if (timerOn)
@@ -342,6 +342,7 @@ public class Bossfight : MonoBehaviour
             bossHealthBar.Slider();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
+            godMode = true;
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("BossfightTimer")) bossfightTimer = PlayerPrefs.GetFloat("BossfightTimer");
             else bossfightTimer = 0;
