@@ -7,7 +7,6 @@ public class BossHealthBar : MonoBehaviour
 
     public Slider slider;
     public float speedToFill = 10;
-    private bool isFilled = false;
     private int bossHP = 0;
 
     public void SetHP(int bossHP) { this.bossHP = bossHP; }

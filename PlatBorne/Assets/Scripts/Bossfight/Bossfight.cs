@@ -11,6 +11,7 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource BossDeath01;
     [SerializeField] private AudioSource OSTLoop;
     [SerializeField] private AudioSource OSTPhase4;
+    [SerializeField] private SpriteRenderer bossSprite;
 
     public BossFightVoiceLines voiceLines;
     public BossHealthBar bossHealthBar;
@@ -39,7 +40,7 @@ public class Bossfight : MonoBehaviour
     private bool godMode = false;
     private bool pussyMode = false;
     //****************
-    int attackNumberRush = 0;
+    //int attackNumberRush = 0;
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
     int attackNumberLeech = 0;
@@ -49,7 +50,7 @@ public class Bossfight : MonoBehaviour
 
     private int resetPromenych()
     {
-        attackNumberRush = 0;
+        //attackNumberRush = 0;
         attackNumberDagger = 0;
         attackNumberFloorIsLava = 0;
         attackNumberLeech = 0;
@@ -101,11 +102,13 @@ public class Bossfight : MonoBehaviour
         else text.text = "Boss Is Vunerable";
         if (pauseMenu.active) timerOn = false;
         else if (bossfightStarted) timerOn = true;
+        //Boss Sprite Flip
+        if (player.transform.position.x > 1.5) bossSprite.flipX = true;
+        else if (player.transform.position.x < -1.5) bossSprite.flipX = false;
+        //****//
         if (bossfightStarted)
         {
-            //VIKTOR
             bounds.isTrigger = false;
-            //VIKTOR
             //ÈASOVAÈ
             if (timerOn)
             {
@@ -132,39 +135,42 @@ public class Bossfight : MonoBehaviour
             }
             if (!bossInvincible && phase <= 3 && PlayerScript.bossHitbox) //Phase 1,2,3 Boss Damage
             {
-                    bossInvincible = true;
-                    playerInvincible = true;
-                    bossHealthBar.SetHP(bossHealthBar.GetHP() - 20);
-                    playerHealth.SetHP(3);
-                 if (pussyMode) playerHealth.SetHP(3);
-                    switch (bossHealthBar.GetHP())
-                    {
-                        case 40:
-                            {
-                                phase = 2;
-                                BossDamage01.Play();
-                                Debug.Log("Phase 2 Start");
-                                break;
-                            }
-                        case 20:
-                            {
-                                phase = 3;
-                                BossDamage02.Play();
-                                Debug.Log("Phase 3 Start");
-                                break;
-                            }
-                    }
-                    if (bossHealthBar.GetHP() == 0 && phase == 3)
-                    {
-                        BossDamage03.Play();
-                        Debug.Log("Phase 4 Start");
-                        bossHealthBar.Slider();
-                        bossHealthBar.SetHP(60);
-                        bossHealthBar.LastPhase();
-                        phase = 4;
-                        OSTLoop.enabled = false;
-                        OSTPhase4.enabled = true;
-                    }
+                bossInvincible = true;
+                playerInvincible = true;
+                playerHealth.SetHP(3);
+                if (pussyMode) playerHealth.SetHP(3);
+                switch (bossHealthBar.GetHP())
+                {
+                    case 60:
+                        {
+                            bossHealthBar.SetHP(40);
+                            phase = 2;
+                            BossDamage01.Play();
+                            Debug.Log("Phase 2 Start");
+                            break;
+                        }
+                    case 40:
+                        {
+                            bossHealthBar.SetHP(20);
+                            phase = 3;
+                            BossDamage02.Play();
+                            Debug.Log("Phase 3 Start");
+                            break;
+                        }
+                    case 20:
+                        {
+                            bossHealthBar.SetHP(1);
+                            BossDamage03.Play();
+                            Debug.Log("Phase 4 Start");
+                            bossHealthBar.Slider();
+                            bossHealthBar.SetHP(60);
+                            bossHealthBar.LastPhase();
+                            phase = 4;
+                            OSTLoop.enabled = false;
+                            OSTPhase4.enabled = true;
+                            break;
+                        }
+                }
             }
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
@@ -343,6 +349,8 @@ public class Bossfight : MonoBehaviour
             playerHealth.PlayerStart();
             PreBossDialog.Play();
             godMode = true;
+            phase = 3;
+            bossHealthBar.SetHP(40);
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("BossfightTimer")) bossfightTimer = PlayerPrefs.GetFloat("BossfightTimer");
             else bossfightTimer = 0;

@@ -109,7 +109,7 @@ public class BossAttacks : MonoBehaviour
             Bossfight.attackIsGoingOn = false;
             daggerIndex = 0;
         }
-    }
+    }//done
     public void BossAttackSwordLeft()
     {
         swordAttackIsLeft = true;
@@ -123,7 +123,7 @@ public class BossAttacks : MonoBehaviour
             Vector3 position = new Vector3(-21f, -1.3f, 3);
             Instantiate(sword, position, quaternion.identity);
         }
-    }//done
+    }
     public void BossAttackSwordRight()
     {
         swordAttackIsLeft = false;
@@ -138,7 +138,7 @@ public class BossAttacks : MonoBehaviour
             Debug.Log("BossSwordRight");
             Instantiate(sword, position, quaternion.identity);
         }
-    }//done
+    }
     public void BossAttackSwordBoth(bool bothAtTheSameTime, bool leftFirst, float timeBetweenAttacks)
     {
         if (bothAtTheSameTime)
@@ -163,7 +163,7 @@ public class BossAttacks : MonoBehaviour
             return;
         }
 
-    }//done
+    }
     public void BossAttackLeechLeft()
     {
         Bossfight.attackIsGoingOn = true;
@@ -181,7 +181,7 @@ public class BossAttacks : MonoBehaviour
         else if (leechAttackHappened > 17)//attackEnd
         {
             leechTimer = 0;
-            leechAttackBetween = 1;
+            leechAttackBetween = 0.5f;
             leechAttackHappened = 0;
             leechAttack = false;
             Bossfight.attackIsGoingOn = false;
@@ -199,12 +199,13 @@ public class BossAttacks : MonoBehaviour
             Instantiate(leech, position, Quaternion.identity);
             leechAttackHappened++;
             leechTimer = 0;
-            if (leechAttackBetween > 0.10f) leechAttackBetween -= 0.04f;
+            if (leechAttackBetween > leechAttackMaxSpawnRate) leechAttackBetween -= leechAttackDifference;
+            else leechAttackBetween = leechAttackMaxSpawnRate;
         }
         else if (leechAttackHappened > 17)//attackEnd
         {
             leechTimer = 0;
-            leechAttackBetween = 1;
+            leechAttackBetween = 0.5f;
             leechAttackHappened = 0;
             leechAttack = false;
             Bossfight.attackIsGoingOn = false;

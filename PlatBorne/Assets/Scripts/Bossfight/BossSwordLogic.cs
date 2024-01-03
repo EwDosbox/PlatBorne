@@ -1,15 +1,11 @@
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class BossSwordLogic : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private GameObject left;
-    private GameObject right;
-    public float speed = 2;
+    public float speed = 60;
     private bool isRightSword = false;
-    private float rotation = 0f;
-    public float wantedRotation = 180;
-    private float timer;
 
     void Start()
     {
@@ -22,11 +18,8 @@ public class BossSwordLogic : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
-        rotation = wantedRotation * (timer / speed);
-        if (!isRightSword) rotation = -rotation;
-        Quaternion newRotation = Quaternion.Euler(0, 0, rotation);
-        transform.rotation = newRotation;
+        if (!isRightSword) transform.Rotate(Vector3.forward, -speed * Time.deltaTime);
+        else transform.Rotate(Vector3.forward, speed * Time.deltaTime);
         if ((rb.transform.rotation.eulerAngles.z < 125  && !isRightSword)|| (rb.transform.rotation.eulerAngles.z > 180 && isRightSword))
         {
             Destroy(gameObject);

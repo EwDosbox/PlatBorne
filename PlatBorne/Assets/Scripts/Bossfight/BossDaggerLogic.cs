@@ -5,7 +5,6 @@ public class BossDaggerLogic : MonoBehaviour
     private Rigidbody2D rb;
     private GameObject player;
     [SerializeField] private float timeToSelfDestruct;
-    bool goLeft = false;
     [SerializeField] private float speed;
     private float timer = 0;
     // Start is called before the first frame update
