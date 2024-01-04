@@ -1,16 +1,30 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.ShaderData;
 
 public class PlayerDeath : MonoBehaviour
 {
     [SerializeField] private AudioSource VLDeath01, VLDeath02, VLDeath03, VLDeath04, VLDeath05, VLDeath06, VLDeath07, VLDeath08, VLDeath09, VLDeath10, VLDeath11, VLDeath12, VLDeath13, VLDeath14, VLDeath15, VLDeath16, VLDeath17;
     public Text DialogueText;
+    public Text pussyModeText;
+    bool pussyModeActive = false;
     string dialogue;
+    float waitingTimer = 0;
     int bossDeathCount;
 
     private void Start()
     {
+        if (PlayerPrefs.HasKey("PussyMode")) 
+        {
+            int numberPussy = (PlayerPrefs.GetInt("PussyMode"));
+            if (numberPussy == 1)
+            {
+                pussyModeActive = true;
+                pussyModeText.text = "Press 'Space' to deactivate Pussy Mode\n(heal after each phase)";
+            }
+            else pussyModeText.text = "Press 'Space' to activate Pussy Mode\n(heal after each phase)";
+        }
         int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
         switch (bossDeathCount)
         {
@@ -154,6 +168,7 @@ public class PlayerDeath : MonoBehaviour
     }
     private void Update()
     {
+        waitingTimer += Time.deltaTime;
         if (Input.GetKey(KeyCode.Escape))
         {
             SceneManager.LoadScene("LevelBoss");
@@ -169,6 +184,24 @@ public class PlayerDeath : MonoBehaviour
                 j++;
                 Typing(dialogue, DialogueText);
             }
+        }
+        if (Input.GetKey(KeyCode.Space) && waitingTimer > 1)
+        {
+            if (pussyModeActive)
+            {
+                pussyModeActive = false;
+                pussyModeText.text = "Pussy Mode Deactivated";
+                PlayerPrefs.SetInt("PussyMode", 0);
+                PlayerPrefs.Save();
+            }
+            else
+            {
+                pussyModeActive = true;
+                pussyModeText.text = "Pussy Mode Activated";
+                PlayerPrefs.SetInt("PussyMode", 1);
+                PlayerPrefs.Save();
+            }
+            waitingTimer = 0;
         }
     }
     //***

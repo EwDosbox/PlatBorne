@@ -63,7 +63,6 @@ public class Bossfight : MonoBehaviour
         PlayerPrefs.SetFloat("BossTimer", timer);
         PlayerPrefs.Save();
         SceneManager.LoadScene("EndgameCutscene");
-        Debug.Log("Boss Has Died");
     }
     public void PlayerDeath()
     {
@@ -133,11 +132,11 @@ public class Bossfight : MonoBehaviour
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
             }
-            if (!bossInvincible && phase <= 3 && PlayerScript.bossHitbox) //Phase 1,2,3 Boss Damage
+            //Boss Damage
+            if (!bossInvincible && PlayerScript.bossHitbox)
             {
                 bossInvincible = true;
                 playerInvincible = true;
-                playerHealth.SetHP(3);
                 if (pussyMode) playerHealth.SetHP(3);
                 switch (bossHealthBar.GetHP())
                 {
@@ -172,6 +171,11 @@ public class Bossfight : MonoBehaviour
                         }
                 }
             }
+            else if (bossHealthBar.GetHP() == 0)
+            {
+                BossDeath();
+            }
+            //Player Damage
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
                 if (!playerInvincible && !godMode)
@@ -296,16 +300,6 @@ public class Bossfight : MonoBehaviour
                     {
                         if (timerBetweenAttacks > 6 - phase)
                         {
-                            /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                            {
-                                attack.BossAttackRushPlayer(true);
-                                attackNumberRush = resetPromenych();
-                            }
-                            else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                            {
-                                attack.BossAttackRushPlayer(false);
-                                attackNumberRush = resetPromenych();
-                            }*/
                             if (attackNumberSword < 1 && attackNumberLeech < 1)
                             {
                                 if (PlayerScript.bossHitboxRight) attack.BossAttackSwordBoth(false, false, 1f);
@@ -344,13 +338,9 @@ public class Bossfight : MonoBehaviour
             else godMode = false;
             if (pussyMode) pussyModeOn.gameObject.SetActive(true);
             else pussyModeOn.gameObject.SetActive(false);
-            //testing
             bossHealthBar.Slider();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
-            godMode = true;
-            phase = 3;
-            bossHealthBar.SetHP(40);
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("BossfightTimer")) bossfightTimer = PlayerPrefs.GetFloat("BossfightTimer");
             else bossfightTimer = 0;
