@@ -4255,7 +4255,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 'Press ''Space'' to activate Pussy Mode
+
+    (heal after each phase)'
 --- !u!222 &1874847005
 CanvasRenderer:
   m_ObjectHideFlags: 0

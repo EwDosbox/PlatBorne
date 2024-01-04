@@ -23,8 +23,7 @@ public class BossHealthBar : MonoBehaviour
     
     private void Update()
     {
-        slider.value = this.bossHP;
-        if (consistentDamage)
+        if (consistentDamage && slider.value == slider.maxValue)
         {
             timer += Time.deltaTime;
             if (timer >= 1)
@@ -42,11 +41,14 @@ public class BossHealthBar : MonoBehaviour
             }
             else sliderHealth = false;
         }
+        else slider.value = this.bossHP;
     }
 
     public void Slider()
     {
         sliderHealth = true;
+        slider.value = float.MinValue;
+        this.bossHP = 60;
     }
 
     public void LastPhase()

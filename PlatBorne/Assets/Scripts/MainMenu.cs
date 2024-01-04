@@ -63,7 +63,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.99f);
+        yield return new WaitForSeconds(0.9f);
         SceneManager.LoadScene("PreGameCutscene");
         PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
         Debug.Log("Scene: PreGameCutscene");
@@ -79,7 +79,7 @@ public class MainMenu : MonoBehaviour
     {
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.99f);
+        yield return new WaitForSeconds(0.9f);
         {
             if (PlayerPrefs.GetString("Level") == "bossfight")
             {
@@ -103,7 +103,7 @@ public class MainMenu : MonoBehaviour
     private IEnumerator _Settings()
     {
         transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.99f);
+        yield return new WaitForSeconds(0.9f);
         SceneManager.LoadScene("Settings");
     }
 
@@ -130,7 +130,7 @@ public class MainMenu : MonoBehaviour
     private IEnumerator _MMenu()
     {
         transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.99f);
+        yield return new WaitForSeconds(0.9f);
         SceneManager.LoadScene("MainMenu");
     }
 

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.ShaderData;
 
 public class PlayerDeath : MonoBehaviour
 {
@@ -23,7 +22,6 @@ public class PlayerDeath : MonoBehaviour
                 pussyModeActive = true;
                 pussyModeText.text = "Press 'Space' to deactivate Pussy Mode\n(heal after each phase)";
             }
-            else pussyModeText.text = "Press 'Space' to activate Pussy Mode\n(heal after each phase)";
         }
         int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
         switch (bossDeathCount)

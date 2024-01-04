@@ -22,6 +22,8 @@ public class Bossfight : MonoBehaviour
     public Text text;
     public Text pussyModeOn;
     public GameObject pauseMenu;
+    public GameObject UI_BossHP;
+    public GameObject UI_PlayerHP;
 
     public int phase = 1;
     bool bossInvincible = true;
@@ -80,12 +82,12 @@ public class Bossfight : MonoBehaviour
     private void Start()
     {
         bounds.isTrigger = true;
+        UI_BossHP.active = false;
+        UI_PlayerHP.active = false;
         PlayerPrefs.SetString("Level", "bossfight");
         PlayerPrefs.Save();
         //Absolute fucking reset
         bossfightStarted = false;
-        bossHealthBar.SetHP(60);
-        playerHealth.SetHP(3);
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
@@ -171,7 +173,7 @@ public class Bossfight : MonoBehaviour
                         }
                 }
             }
-            else if (bossHealthBar.GetHP() == 0)
+            else if (bossHealthBar.GetHP() == 0 && phase == 4)
             {
                 BossDeath();
             }
@@ -330,7 +332,9 @@ public class Bossfight : MonoBehaviour
         }
         //start of bossfight
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
-        {            
+        {
+            UI_BossHP.active = true;
+            UI_PlayerHP.active = true;
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
