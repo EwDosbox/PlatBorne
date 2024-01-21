@@ -110,7 +110,6 @@ MonoBehaviour:
   hunterDrop: {fileID: 2867845862149728934}
   hunterJump: {fileID: 6935579868319366984}
   hunterWalk: {fileID: 1737323820918138992}
-  spriteRenderer: {fileID: 0}
   animator: {fileID: 166162755306215924}
   rigidBody: {fileID: 4160181815571881102}
   levelWoods: {fileID: 0}
@@ -120,8 +119,8 @@ MonoBehaviour:
   movementSpeed: 4
   jumpSpeed: 5
   playerFell: 0
-  playerHP: 3
   playerInvincible: 0
+  londonTimer: 0
 --- !u!50 &4160181815571881102
 Rigidbody2D:
   serializedVersion: 4
@@ -344,7 +343,7 @@ MonoBehaviour:
   - {x: -2.5654888, y: 0.64513683, z: 0.000005531813}
   m_ShapePathHash: 1262231140
   m_Mesh: {fileID: 0}
-  m_InstanceId: -2272
+  m_InstanceId: 49998
   m_LocalBounds:
     m_Center: {x: -0.4807415, y: -0.014605045, z: 0}
     m_Extent: {x: 3.6983037, y: 6.415678, z: 0}
@@ -764,7 +763,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.14033121, y: -5.8211536}
+  m_Offset: {x: -0.39506388, y: -6.285946}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -775,7 +774,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.0177903, y: 1.157692}
+  m_Size: {x: 5.3239326, y: 0.22810793}
   m_EdgeRadius: 0
 --- !u!95 &166162755306215924
 Animator:
