@@ -1017,7 +1017,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 226789424}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1436,7 +1436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290174287}
   - component: {fileID: 290174286}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Global Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2327,7 +2327,7 @@ GameObject:
   - component: {fileID: 470427903}
   - component: {fileID: 470427905}
   - component: {fileID: 470427904}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4381,7 +4381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 791289476}
   - component: {fileID: 791289475}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light 2D_lustr2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6634,7 +6634,7 @@ GameObject:
   - component: {fileID: 1007113567}
   - component: {fileID: 1007113569}
   - component: {fileID: 1007113568}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10299,7 +10299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1063838036}
   - component: {fileID: 1063838035}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10427,7 +10427,7 @@ GameObject:
   - component: {fileID: 1094528664}
   - component: {fileID: 1094528663}
   - component: {fileID: 1094528662}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12238,7 +12238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1472564574}
   - component: {fileID: 1472564573}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light 2D_lustr1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12320,7 +12320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1478774099}
   - component: {fileID: 1478774100}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12560,6 +12560,14 @@ PrefabInstance:
       propertyPath: levelLondon
       value: 
       objectReference: {fileID: 1094528659}
+    - target: {fileID: 1631469603606533073, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: jumpModifier
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1631469603606533073, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: minJumpHeight
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4160181815571881102, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_Constraints
       value: 4
@@ -13382,7 +13390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1711669964}
   - component: {fileID: 1711669965}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14726,7 +14734,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1966661734}
   - component: {fileID: 1966661733}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15811,7 +15819,7 @@ GameObject:
   - component: {fileID: 2138486521}
   - component: {fileID: 2138486523}
   - component: {fileID: 2138486522}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

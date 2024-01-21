@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,15 +22,20 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioSource hunterWalk;
 
     public Animator animator;
-    public Rigidbody2D rigidBody;
-    public CompositeCollider2D levelWoods;
-    public CompositeCollider2D levelLondon;
+    public Rigidbody2D rb;
+    [SerializeField] LayerMask groundLayer;
     public PlayerHealth health;
     public Collider2D hunterFeet;
 
-    bool isPlayerInAir;
-    public int movementSpeed;
-    public float jumpSpeed;
+    //Movement Variables
+    [SerializeField] public int walkSpeed;
+    [SerializeField] public float maxJumpHeight;
+    [SerializeField] public float minJumpHeight;
+    [SerializeField] public float jumpModifier;
+    private bool isPlayerInAir;
+    private float jumpHeight;
+    //Movement Variables
+
     float positionYWas;
     float positionYIs;
     bool playerWasInAir = false;
@@ -97,6 +101,7 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
+        jumpHeight = minJumpHeight;
         if (PlayerPrefs.HasKey("Level"))
         {
             if (PlayerPrefs.GetString("Level") == "london")
@@ -105,7 +110,7 @@ public class PlayerScript : MonoBehaviour
                 {
                     float poziceX = PlayerPrefs.GetFloat("HunterPositionX");
                     float poziceY = PlayerPrefs.GetFloat("HunterPositionY");
-                    rigidBody.transform.position = new Vector3(poziceX, poziceY, 0.79f);
+                    rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
                 }
             }
         }
@@ -118,42 +123,28 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
-        rigidBody.rotation = 0;
         //animator
-        animator.SetFloat("Speed", Mathf.Abs(rigidBody.velocity.x));
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
         //pouze pokud se dotyka zeme
-        if (hunterFeet.IsTouching(levelLondon) ||
-           hunterFeet.IsTouching(levelWoods))
-        {
-            isPlayerInAir = false;
-        }
+        if (Physics2D.IsTouchingLayers(hunterFeet, groundLayer)) isPlayerInAir = false;
         else isPlayerInAir = true;
         //inputs
         if (!isPlayerInAir)
         {
-            if (Input.GetKey(KeyCode.A))
-            {
-                rigidBody.velocity = new Vector2(-1 * movementSpeed, rigidBody.velocity.y);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                rigidBody.velocity = new Vector2(1 * movementSpeed, rigidBody.velocity.y);
-            }
             if (Input.GetKey(KeyCode.W))
             {
-                rigidBody.velocity = new Vector2(0, 0);
-                if (jumpSpeed < 10f)
+                rb.velocity = new Vector2(0, 0);
+                jumpHeight += Time.deltaTime * jumpModifier;
+                if (jumpHeight > maxJumpHeight)
                 {
-                    if (Bossfight.bossfightStarted) jumpSpeed += Time.deltaTime * 8;
-                    else jumpSpeed += Time.deltaTime * 4; //Double jump speed
+                    jumpHeight = maxJumpHeight;
                 }
             }
             if (Input.GetKeyUp(KeyCode.W))
             {
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
-                if (Bossfight.bossfightStarted) jumpSpeed = 7f;
-                else jumpSpeed = 5f;
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+                jumpHeight = minJumpHeight;
                 //Stats
                 float numberOfJumps = PlayerPrefs.GetFloat("NumberOfJumps", 0f);
                 PlayerPrefs.SetFloat("NumberOfJumps", numberOfJumps);
@@ -165,10 +156,17 @@ public class PlayerScript : MonoBehaviour
                     isPlaying = true;
                 }
             }
-            //no momentum
-            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W))
             {
-                rigidBody.velocity = Vector2.zero;
+                rb.velocity = new Vector2(-walkSpeed, rb.velocity.y);
+            }
+            if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
+            {
+                rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
+            }
+            if (!Input.anyKey)
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
             }
             //Flipovani spritu
             if (((Input.GetKey(KeyCode.A) && transform.localScale.x > 0) ||
@@ -177,7 +175,7 @@ public class PlayerScript : MonoBehaviour
             {
                 Vector3 scale = transform.localScale;
                 scale.x *= -1;
-                rigidBody.transform.localScale = scale;
+                rb.transform.localScale = scale;
             }
             //Sound
             if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) && !Input.GetKey(KeyCode.W))
