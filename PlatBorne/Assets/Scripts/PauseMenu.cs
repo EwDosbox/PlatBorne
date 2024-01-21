@@ -12,17 +12,12 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public static bool IsInSettings = false;
 
-    private void Start()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameIsPaused)
             {
-                Cursor.lockState = CursorLockMode.Locked;
                 if (!IsInSettings)
                 {
                     Resume();
@@ -35,7 +30,6 @@ public class PauseMenu : MonoBehaviour
             else
             {
                 Pause();
-                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
