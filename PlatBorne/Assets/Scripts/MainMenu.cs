@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -60,13 +61,13 @@ public class MainMenu : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.SetInt("HasASavedGame", 1);
+        PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
         PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
-        SceneManager.LoadScene("PreGameCutscene");
-        PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
         Debug.Log("Scene: PreGameCutscene");
+        SceneManager.LoadScene("PreGameCutscene");
     }
 
     public void GameContinue()
@@ -80,17 +81,27 @@ public class MainMenu : MonoBehaviour
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
+        Debug.Log(PlayerPrefs.GetString("Level"));
+        switch (PlayerPrefs.GetString("Level"))
         {
-            if (PlayerPrefs.GetString("Level") == "bossfight")
-            {
-                SceneManager.LoadScene("Bossfight");
-                Debug.Log("Scene: LevelBossfight");
-            }
-            else
-            {
-                SceneManager.LoadScene("LevelLondon");
-                Debug.Log("Scene: LevelLondon");
-            }
+            case "bricus":
+                {
+                    SceneManager.LoadScene("LevelBoss");
+                    Debug.Log("Scene: LevelBossfight");
+                    break;
+                }
+            case "london":
+                {
+                    SceneManager.LoadScene("LevelLondon");
+                    Debug.Log("Scene: LevelLondon");
+                    break;
+                }
+            default:
+                {
+                    SceneManager.LoadScene("LevelLondon");
+                    Debug.Log("Scene: LevelLondon");
+                    break;             
+                }
         }
     }
 
@@ -150,7 +161,6 @@ public class MainMenu : MonoBehaviour
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
-
     //*****************************************stary, prvni kod*************************
     //public void GoToScene(string sceneName)
     //{

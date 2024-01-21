@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public static bool IsInSettings = false;
 
+    public Saves save;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -100,4 +101,5 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("Application has quit");
         Application.Quit();
     }
+
 }

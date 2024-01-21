@@ -1,9 +1,11 @@
+using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
+    public Saves save;
     //***********KONAMI CHEAT CODE*************
     private static readonly KeyCode[] konamiCode =
         { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow,
@@ -12,6 +14,7 @@ public class PlayerScript : MonoBehaviour
     private int konamiIndex = 0;
     private void KonamiCheatCodeTriggered()
     {
+        save.PositionSave(transform.position.x, transform.position.y);
         SceneManager.LoadScene("LevelBoss");
         konamiIndex = 0;
     }
@@ -53,7 +56,9 @@ public class PlayerScript : MonoBehaviour
     private float timer = 0;
     private bool isPlaying = false;
     private bool touchedFallHitbox = false;
-    public float londonTimer;
+    //stats
+    private float numberOfJumps = 0;
+    private float numberOfFalls = 0;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -79,8 +84,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
         if (collision.gameObject.CompareTag("LevelLondon_Finish"))
         {
-            PlayerPrefs.SetFloat("GameTimer", PlayerPrefs.GetFloat("LondonTimer"));
-            PlayerPrefs.Save();
+            save.timer(timer, 1);
             SceneManager.LoadScene("LevelBoss");
         }
     }
@@ -102,24 +106,7 @@ public class PlayerScript : MonoBehaviour
     private void Start()
     {
         jumpHeight = minJumpHeight;
-        if (PlayerPrefs.HasKey("Level"))
-        {
-            if (PlayerPrefs.GetString("Level") == "london")
-            {
-                if (PlayerPrefs.HasKey("HunterPositionX"))
-                {
-                    float poziceX = PlayerPrefs.GetFloat("HunterPositionX");
-                    float poziceY = PlayerPrefs.GetFloat("HunterPositionY");
-                    rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
-                }
-            }
-        }
-        PlayerPrefs.SetString("Level", "london");
-        if (!PlayerPrefs.HasKey("LondonTimer"))
-        {
-            PlayerPrefs.SetFloat("LondonTimer", 0f);
-            PlayerPrefs.Save();
-        }
+        LoadMovement();
     }
     void Update()
     {
@@ -145,10 +132,8 @@ public class PlayerScript : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
                 jumpHeight = minJumpHeight;
-                //Stats
-                float numberOfJumps = PlayerPrefs.GetFloat("NumberOfJumps", 0f);
-                PlayerPrefs.SetFloat("NumberOfJumps", numberOfJumps);
-                PlayerPrefs.Save();
+                numberOfJumps++;
+                save.jumps(numberOfJumps, 1);
                 //Sound
                 if (!isPlaying)
                 {
@@ -191,11 +176,8 @@ public class PlayerScript : MonoBehaviour
                 playVoiceLine = true;
                 playerWasInAir = false;
                 touchedFallHitbox = false;
-                //save
-                float numberOfFalls = PlayerPrefs.GetFloat("NumberOfFalls", 0);
                 numberOfFalls++;
-                PlayerPrefs.SetFloat("NumberOfFalls", numberOfFalls);
-                PlayerPrefs.Save();
+                save.falls(numberOfFalls, 1);
             }
             else
             {
@@ -222,13 +204,7 @@ public class PlayerScript : MonoBehaviour
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;
         }
-        //Save
-        PlayerPrefs.SetFloat("HunterPositionX", transform.position.x);
-        PlayerPrefs.SetFloat("HunterPositionY", transform.position.y);
-        londonTimer = PlayerPrefs.GetFloat("LondonTimer");
-        londonTimer += Time.deltaTime;
-        PlayerPrefs.SetFloat("LondonTimer", londonTimer);
-        PlayerPrefs.Save();
+        save.PositionSave(transform.position.x, transform.position.y);
         //****KONAMI CODE****
         if (Input.anyKeyDown)
         {
@@ -242,5 +218,27 @@ public class PlayerScript : MonoBehaviour
             }
             else konamiIndex = 0;
         }
+    }
+
+    private void LoadMovement()
+    {        
+        switch (PlayerPrefs.GetString("Level"))
+        {
+            case "london":
+                {
+                    if (PlayerPrefs.HasKey("HunterPositionX_London"))
+                    {
+                        float poziceY = PlayerPrefs.GetFloat("HunterPositionY_London");
+                        float poziceX = PlayerPrefs.GetFloat("HunterPositionX_London");
+                        Debug.Log(poziceX + " " + poziceY);
+                        rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
+                    }
+                    break;
+                }
+            case "bricus":
+                {
+                    break;
+                }
+        }        
     }
 }

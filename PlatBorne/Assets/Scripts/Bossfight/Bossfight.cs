@@ -24,7 +24,7 @@ public class Bossfight : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject UI_BossHP;
     public GameObject UI_PlayerHP;
-
+    public Saves save;
     public int phase = 1;
     bool bossInvincible = true;
     float timer = 0f;
@@ -42,7 +42,6 @@ public class Bossfight : MonoBehaviour
     private bool godMode = false;
     private bool pussyMode = false;
     //****************
-    //int attackNumberRush = 0;
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
     int attackNumberLeech = 0;
@@ -52,7 +51,6 @@ public class Bossfight : MonoBehaviour
 
     private int resetPromenych()
     {
-        //attackNumberRush = 0;
         attackNumberDagger = 0;
         attackNumberFloorIsLava = 0;
         attackNumberLeech = 0;
@@ -62,8 +60,7 @@ public class Bossfight : MonoBehaviour
     private void BossDeath()
     {
         BossDeath01.Play();
-        PlayerPrefs.SetFloat("BossTimer", timer);
-        PlayerPrefs.Save();
+        save.timer(timer, 2);
         SceneManager.LoadScene("EndgameCutscene");
     }
     public void PlayerDeath()
@@ -71,20 +68,18 @@ public class Bossfight : MonoBehaviour
         int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
         ded++;
         PlayerPrefs.SetInt("NumberOfDeath", ded);
-        float gameTimer = PlayerPrefs.GetFloat("GameTimer");
-        gameTimer += timer;
-        PlayerPrefs.SetFloat("GameTimer", gameTimer);
-        PlayerPrefs.Save();
+        save.timer(timer, 2);
         Debug.Log("Hunter has Died");
         SceneManager.LoadScene("PlayerDeath");
     }
+
 
     private void Start()
     {
         bounds.isTrigger = true;
         UI_BossHP.active = false;
         UI_PlayerHP.active = false;
-        PlayerPrefs.SetString("Level", "bossfight");
+        PlayerPrefs.SetString("Level", "bricus");
         PlayerPrefs.Save();
         //Absolute fucking reset
         bossfightStarted = false;
@@ -346,7 +341,7 @@ public class Bossfight : MonoBehaviour
             playerHealth.PlayerStart();
             PreBossDialog.Play();
             OSTLoop.enabled = true;
-            if (PlayerPrefs.HasKey("BossfightTimer")) bossfightTimer = PlayerPrefs.GetFloat("BossfightTimer");
+            if (PlayerPrefs.HasKey("Timer_Bricus")) bossfightTimer = PlayerPrefs.GetFloat("Timer_Bricus");
             else bossfightTimer = 0;
         }
     }
