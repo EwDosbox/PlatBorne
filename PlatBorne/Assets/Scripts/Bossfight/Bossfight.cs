@@ -59,6 +59,8 @@ public class Bossfight : MonoBehaviour
     }
     private void BossDeath()
     {
+        PlayerPrefs.SetInt("CanDash", 1);
+        PlayerPrefs.Save();
         BossDeath01.Play();
         save.timer(timer, 2);
         SceneManager.LoadScene("EndgameCutscene");

@@ -1,4 +1,5 @@
-using JetBrains.Annotations;
+using System;
+using System.Diagnostics;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,19 +26,24 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioSource hunterWalk;
 
     public Animator animator;
-    public Rigidbody2D rb;
-    [SerializeField] LayerMask groundLayer;
     public PlayerHealth health;
-    public Collider2D hunterFeet;
 
     //Movement Variables
-    [SerializeField] public int walkSpeed;
-    [SerializeField] public float maxJumpHeight;
-    [SerializeField] public float minJumpHeight;
-    [SerializeField] public float jumpModifier;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Collider2D hunterFeet;
+    [SerializeField] private int walkSpeed;
+    [SerializeField] private float maxJumpHeight;
+    [SerializeField] private float minJumpHeight;
+    [SerializeField] private float jumpModifier;
     private bool isPlayerInAir;
     private float jumpHeight;
     //Movement Variables
+    //DASH variables
+    [SerializeField] public bool canDash;
+    private Stopwatch stopwatchDash;
+    private TimeSpan timeDash;
+    //DASH variables
 
     float positionYWas;
     float positionYIs;
@@ -88,7 +94,6 @@ public class PlayerScript : MonoBehaviour
             SceneManager.LoadScene("LevelBoss");
         }
     }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Damage")) bossDamage = true;
@@ -106,6 +111,11 @@ public class PlayerScript : MonoBehaviour
     private void Start()
     {
         jumpHeight = minJumpHeight;
+        if (PlayerPrefs.GetInt("CanDash", 0) == 0) canDash = false;
+        else canDash = true;
+        timeDash = new TimeSpan(0, 0, 2);
+        stopwatchDash = new Stopwatch();
+        stopwatchDash.Start();
         LoadMovement();
     }
     void Update()
@@ -191,6 +201,18 @@ public class PlayerScript : MonoBehaviour
             playerWasInAir = true;
             hunterWalk.enabled = false;
         }
+        if (stopwatchDash.Elapsed > timeDash) 
+        {
+            if (Input.GetKey(KeyCode.LeftShift) && canDash)
+            {
+                Dash();
+                stopwatchDash.Restart();
+            }
+        }
+        else
+        {
+            stopwatchDash.Start();
+        }
         //sound vyskoceni
         if (isPlaying)
         {
@@ -230,7 +252,7 @@ public class PlayerScript : MonoBehaviour
                     {
                         float poziceY = PlayerPrefs.GetFloat("HunterPositionY_London");
                         float poziceX = PlayerPrefs.GetFloat("HunterPositionX_London");
-                        Debug.Log(poziceX + " " + poziceY);
+                        UnityEngine.Debug.Log(poziceX + " " + poziceY);
                         rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
                     }
                     break;
@@ -240,5 +262,9 @@ public class PlayerScript : MonoBehaviour
                     break;
                 }
         }        
+    }
+    private void Dash()
+    {
+        UnityEngine.Debug.Log("dash");
     }
 }
