@@ -77,7 +77,7 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
-    private void LoadMusicVolume()
+    public void LoadMusicVolume()
     {
         musicVolSlider.value = PlayerPrefs.GetFloat("MusicVolume");
 
@@ -92,7 +92,7 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
 
-    private void LoadSFXvolume()
+    public void LoadSFXvolume()
     {
         SFXVolSlider.value = PlayerPrefs.GetFloat("SFXvolume");
 

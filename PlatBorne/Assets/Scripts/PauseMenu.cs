@@ -13,6 +13,7 @@ public class PauseMenu : MonoBehaviour
     public static bool IsInSettings = false;
 
     public Saves save;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -38,12 +39,11 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_Pause());
+        _Pause();
     }
 
-    private IEnumerator _Pause()
+    private void _Pause()
     {
-        yield return new WaitForSeconds(srcOne.length);
         pauseMenu.SetActive(true);
         GameIsPaused = true;
     }
@@ -51,12 +51,11 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_Resume());
+        _Resume();
     }
 
-    private IEnumerator _Resume()
+    private void _Resume()
     {
-        yield return new WaitForSeconds(srcOne.length);
         pauseMenu.SetActive(false);
         GameIsPaused = false;
     }
@@ -64,12 +63,11 @@ public class PauseMenu : MonoBehaviour
     public void Settings()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_Settings());
+        _Settings();
     }
 
-    private IEnumerator _Settings()
+    public void _Settings()
     {
-        yield return new WaitForSeconds(srcOne.length);
         IsInSettings = true;
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(true);
@@ -78,12 +76,11 @@ public class PauseMenu : MonoBehaviour
     public void ReturnFromSettings()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_ReturnFromSettings());
+        _ReturnFromSettings();
     }
 
-    private IEnumerator _ReturnFromSettings()
+    private void _ReturnFromSettings()
     {
-        yield return new WaitForSeconds(srcOne.length);
         IsInSettings = false;
         settingsMenu.SetActive(false);
         pauseMenu.SetActive(true);
@@ -92,14 +89,12 @@ public class PauseMenu : MonoBehaviour
     public void Quit()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_Quit());
+        _Quit();
     }
 
-    private IEnumerator _Quit()
+    private void _Quit()
     {
-        yield return new WaitForSeconds(srcOne.length);
         Debug.Log("Application has quit");
         Application.Quit();
     }
-
 }

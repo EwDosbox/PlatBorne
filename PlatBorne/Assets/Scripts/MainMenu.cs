@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] GameObject mainMenuBackground;
+    [SerializeField] GameObject settingsMenu;
 
     public AudioSource src;
     public AudioClip srcOne;
@@ -59,7 +61,7 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator _NewGame()
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteAll(); //prepsat na vsechny playerPrefs samostatne, zvuk nemazat (au moje uši kurva)
         PlayerPrefs.SetInt("HasASavedGame", 1);
         PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
         PlayerPrefs.Save();
@@ -108,14 +110,15 @@ public class MainMenu : MonoBehaviour
     public void Settings()
     {
         src.PlayOneShot(srcOne);
-        StartCoroutine(_Settings());
+        mainMenuBackground.SetActive(false);
+        settingsMenu.SetActive(true);
     }
 
-    private IEnumerator _Settings()
+    public void ReturnFromSettings()
     {
-        transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.9f);
-        SceneManager.LoadScene("Settings");
+        mainMenuBackground.SetActive(true);
+        src.PlayOneShot(srcOne);
+        settingsMenu.SetActive(false);
     }
 
     public void Quit()
@@ -130,6 +133,8 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Application has quit");
         Application.Quit();
     }
+
+
 
     public void MMenu()
     {
