@@ -120,12 +120,12 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
+        rb.rotation = 0;
         //animator
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
         //pouze pokud se dotyka zeme
-        if (Physics2D.IsTouchingLayers(hunterFeet, groundLayer)) isPlayerInAir = false;
-        else isPlayerInAir = true;
+        isPlayerInAir = !Physics2D.IsTouchingLayers(hunterFeet, groundLayer);
         //inputs
         if (!isPlayerInAir)
         {
