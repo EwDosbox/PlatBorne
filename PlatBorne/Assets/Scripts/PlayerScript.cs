@@ -31,6 +31,7 @@ public class PlayerScript : MonoBehaviour
     //Movement Variables
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask pushRightLayer;
     [SerializeField] private Collider2D hunterFeet;
     [SerializeField] private int walkSpeed;
     [SerializeField] private float maxJumpHeight;
@@ -126,6 +127,8 @@ public class PlayerScript : MonoBehaviour
         animator.SetBool("IsJumping", isPlayerInAir);
         //pouze pokud se dotyka zeme
         isPlayerInAir = !Physics2D.IsTouchingLayers(hunterFeet, groundLayer);
+        //stairs will now push!
+        if(Physics2D.IsTouchingLayers(hunterFeet, pushRightLayer)) rb.position = new Vector2(rb.position.x + 0.01f, rb.position.y);
         //inputs
         if (!isPlayerInAir)
         {
