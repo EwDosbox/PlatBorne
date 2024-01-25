@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,7 +28,7 @@ public class Bossfight : MonoBehaviour
     public Saves save;
     public int phase = 1;
     bool bossInvincible = true;
-    float timer = 0f;
+    Stopwatch timer = new Stopwatch();
     bool timerOn = false;
     float phaseTimer = 0f;
     float invincibilityTimerBoss = 0f;
@@ -62,7 +63,6 @@ public class Bossfight : MonoBehaviour
         PlayerPrefs.SetInt("CanDash", 1);
         PlayerPrefs.Save();
         BossDeath01.Play();
-        save.timer(timer, 2);
         SceneManager.LoadScene("EndgameCutscene");
     }
     public void PlayerDeath()
@@ -70,8 +70,6 @@ public class Bossfight : MonoBehaviour
         int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
         ded++;
         PlayerPrefs.SetInt("NumberOfDeath", ded);
-        save.timer(timer, 2);
-        Debug.Log("Hunter has Died");
         SceneManager.LoadScene("PlayerDeath");
     }
 
@@ -88,7 +86,7 @@ public class Bossfight : MonoBehaviour
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
-        timer = 0f;
+        timer = save.timerLoad(2);
         if (PlayerPrefs.GetInt("PussyMode") > 0) pussyMode = true;
         else pussyMode = false;
     }
@@ -110,7 +108,7 @@ public class Bossfight : MonoBehaviour
             //ÈASOVAÈ
             if (timerOn)
             {
-                timer += Time.deltaTime;
+                save.timerSave(timer, 2);
                 if (bossInvincible) invincibilityTimerBoss += Time.deltaTime;
                 else invincibilityTimerBoss = 0f;
                 if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;
@@ -144,7 +142,6 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(40);
                             phase = 2;
                             BossDamage01.Play();
-                            Debug.Log("Phase 2 Start");
                             break;
                         }
                     case 40:
@@ -152,14 +149,12 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(20);
                             phase = 3;
                             BossDamage02.Play();
-                            Debug.Log("Phase 3 Start");
                             break;
                         }
                     case 20:
                         {
                             bossHealthBar.SetHP(1);
                             BossDamage03.Play();
-                            Debug.Log("Phase 4 Start");
                             bossHealthBar.Slider();
                             bossHealthBar.SetHP(60);
                             bossHealthBar.LastPhase();
@@ -183,7 +178,6 @@ public class Bossfight : MonoBehaviour
                     playerPlayDamage = true;
                     playerHealth.SetHP(playerHealth.GetHP() - 1);
                     playerHealth.SetGodMode(godMode);
-                    Debug.Log("Hunter has taken Damage");
                     if (playerHealth.GetHP() == 0)
                     {
                         PlayerDeath();
@@ -210,7 +204,6 @@ public class Bossfight : MonoBehaviour
                             }*/
                             if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
-                                Debug.Log("Lava");
                                 attack.BossAttackFloorIsLava();
                                 attackNumberFloorIsLava = resetPromenych();
                             }
@@ -342,6 +335,7 @@ public class Bossfight : MonoBehaviour
             bossHealthBar.Slider();
             playerHealth.PlayerStart();
             PreBossDialog.Play();
+            timer.Start();
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("Timer_Bricus")) bossfightTimer = PlayerPrefs.GetFloat("Timer_Bricus");
             else bossfightTimer = 0;
