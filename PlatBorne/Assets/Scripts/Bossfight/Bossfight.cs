@@ -13,6 +13,7 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource OSTLoop;
     [SerializeField] private AudioSource OSTPhase4;
     [SerializeField] private SpriteRenderer bossSprite;
+    [SerializeField] private GameObject DashOrb;
 
     public BossFightVoiceLines voiceLines;
     public BossHealthBar bossHealthBar;
@@ -42,6 +43,7 @@ public class Bossfight : MonoBehaviour
     private float bossfightTimer;
     private bool godMode = false;
     private bool pussyMode = false;
+    private bool bossIsDead = false;
     //****************
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
@@ -60,10 +62,11 @@ public class Bossfight : MonoBehaviour
     }
     private void BossDeath()
     {
-        PlayerPrefs.SetInt("CanDash", 1);
-        PlayerPrefs.Save();
+        bossIsDead = true;
+        Destroy(bossSprite); //tohle se pak musí upravit jak bude aniamce
+        Instantiate(DashOrb);
+        text.text = "Boss Is Dead";
         BossDeath01.Play();
-        SceneManager.LoadScene("EndgameCutscene");
     }
     public void PlayerDeath()
     {
@@ -159,6 +162,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(60);
                             bossHealthBar.LastPhase();
                             phase = 4;
+                            text.text = "Survive";
                             OSTLoop.enabled = false;
                             OSTPhase4.enabled = true;
                             break;

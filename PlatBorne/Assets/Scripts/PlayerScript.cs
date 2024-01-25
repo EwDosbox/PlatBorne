@@ -41,7 +41,8 @@ public class PlayerScript : MonoBehaviour
     private float jumpHeight;
     //Movement Variables
     //DASH variables
-    [SerializeField] public bool canDash;
+    private bool canDash = false;
+    public bool CanDash { get; set; }
     private Stopwatch stopwatchDash;
     private TimeSpan timeDash;
     //DASH variables
@@ -93,6 +94,10 @@ public class PlayerScript : MonoBehaviour
         {
             LevelLondon.reachedTheEnd = true;
             SceneManager.LoadScene("LevelBoss");
+        }
+        if (collision.gameObject.CompareTag("LevelBricus_Finish"))
+        {
+            SceneManager.LoadScene("Cutscene_AfterBricus");
         }
     }
     private void OnTriggerStay2D(Collider2D collision)

@@ -68,8 +68,7 @@ public class MainMenu : MonoBehaviour
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
-        Debug.Log("Scene: PreGameCutscene");
-        SceneManager.LoadScene("PreGameCutscene");
+        SceneManager.LoadScene("Cutscene_StartGame");
     }
 
     public void GameContinue()
