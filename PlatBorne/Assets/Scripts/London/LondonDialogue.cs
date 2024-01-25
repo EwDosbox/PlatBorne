@@ -53,12 +53,18 @@ public class LondonDialogue : MonoBehaviour
                 voiceLinesArray[i] = i;
             }
             Randomize(voiceLinesArray);
+            System.Random rng = new System.Random();
+            RNGsaved = rng.Next(minimum, maximum + 1);
+            RNGnow = 0;
         }
     }
     void Update()
     {
         if (PlayerScript.playVoiceLine)
         {
+            RNGnow++;
+            PlayerScript.playVoiceLine = false;
+            Debug.Log("now " + RNGnow + "...saved " + RNGsaved);
             if (RNGnow == RNGsaved)
             {
                 System.Random rng = new System.Random();
@@ -213,7 +219,6 @@ public class LondonDialogue : MonoBehaviour
             }
             else
             {
-                RNGnow++;
                 PlayerPrefs.SetInt("RNGnow", RNGnow);
                 PlayerPrefs.Save();
             }
