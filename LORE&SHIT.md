@@ -74,13 +74,6 @@ You still cannot believe it. For the first time you are outside of the living he
 - When you fish out all the fishes (bruh why)
 Instead of trying to get to Krteček, you decide to stay a little while and chill with the fish. As you are looking at the moving water, you realize how easy it must be being a fish. You close your eyes and wonder what would you do with such an easy life. You fall asleep pretty quickly. When you wake up, you see only water and all the fish beside you. "Have I become a fish?" you think. First you are shoked, but after a little while you accept and embrace your new life as a fish. You no longer feel hatred or the need to kill any monsters...you feel happiness as you swim away with your new friends.
 ## BOSS KRTEČEK
-Ah, Hunter...I have been waiting...The Moon has told me everything...Your soul will be judged right here, right now...wherever you like it or not. You will be judged based on your actions...
-(if not killed anyone in ACT II)
-Your soul...can still be saved, the question is...do you accept? 
-(accepted) Very well Hunter **Moon Ending**
-(Refused) May the Judge be Mercifull on your soul...Too bad I am the judge...**laughing**
-### MOON ENDING
-YOUR BODY IS DEAD, YOUR SOUL IS TRAPPED INSIDE OF IT! YOU CANNOT RUN ANYMORE! IS THIS WHAT SALVATION FEELS LIKE?! IS THIS WHAT YOU DESERVED?! YOU CANNOT THINK ABOUT ANYTHING ELSE BUT THE HORRORS BEYOND HUMAN COMPREHENSION! THEY ARE SCREAMING, EVERYONE, EVERY SOUL KILLED! YOU HEAR THEM ALL! YOUR EYES CANNOT SEE ANYTHING ELSE BUT RED! THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE END THIS CANNOT BE THE...END
 ### NEUTRAL ENDING
 - (Player has slayin bosses with pussy mode ON)
 As you stand there, before the very creature that may have slaughtered millions of your people, you feel...mixed...have you really done what you could done? It may be dead, but you dont feel happy...you are not...satisfied. You look at the sky once more...the moon is still red...the reason you fight, the reason you went all this way...just for nothing to change... Only one question lies in your mind..."What now?"...
