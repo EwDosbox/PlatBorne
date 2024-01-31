@@ -15,6 +15,7 @@ TagManager:
   - Boss hitbox
   - Boss Hitbox
   - LevelLondon_Finish
+  - LevelBricus_Finish
   layers:
   - Default
   - TransparentFX

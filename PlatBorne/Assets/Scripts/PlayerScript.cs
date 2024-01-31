@@ -41,7 +41,8 @@ public class PlayerScript : MonoBehaviour
     private float jumpHeight;
     //Movement Variables
     //DASH variables
-    [SerializeField] public bool canDash;
+    private bool canDash = false;
+    public bool CanDash { get; set; }
     private Stopwatch stopwatchDash;
     private TimeSpan timeDash;
     //DASH variables
@@ -91,8 +92,12 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
         if (collision.gameObject.CompareTag("LevelLondon_Finish"))
         {
-            save.timer(timer, 1);
+            LevelLondon.reachedTheEnd = true;
             SceneManager.LoadScene("LevelBoss");
+        }
+        if (collision.gameObject.CompareTag("LevelBricus_Finish"))
+        {
+            SceneManager.LoadScene("Cutscene_AfterBricus");
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -146,7 +151,8 @@ public class PlayerScript : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
                 jumpHeight = minJumpHeight;
                 numberOfJumps++;
-                save.jumps(numberOfJumps, 1);
+                save.Jumps(numberOfJumps, 1);
+                PlayerPrefs.Save();
                 //Sound
                 if (!isPlaying)
                 {
@@ -190,7 +196,8 @@ public class PlayerScript : MonoBehaviour
                 playerWasInAir = false;
                 touchedFallHitbox = false;
                 numberOfFalls++;
-                save.falls(numberOfFalls, 1);
+                save.Falls(numberOfFalls, 1);
+                PlayerPrefs.Save();
             }
             else
             {

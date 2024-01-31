@@ -22,6 +22,7 @@ public class MainMenu : MonoBehaviour
     public GameObject panel;
     public Button continueButton;
     public Button newGameButton;
+    public Saves save;
 
     public TMP_Text text;
     
@@ -61,15 +62,13 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator _NewGame()
     {
-        PlayerPrefs.DeleteAll(); //prepsat na vsechny playerPrefs samostatne, zvuk nemazat (au moje uši kurva)
+        save.NewGameSaveReset();
         PlayerPrefs.SetInt("HasASavedGame", 1);
-        PlayerPrefs.SetInt("PreGameCutsceneSeen", 1);
         PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
-        Debug.Log("Scene: PreGameCutscene");
-        SceneManager.LoadScene("PreGameCutscene");
+        SceneManager.LoadScene("Cutscene_StartGame");
     }
 
     public void GameContinue()
