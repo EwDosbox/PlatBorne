@@ -34,14 +34,14 @@ public class Bossfight : MonoBehaviour
     float phaseTimer = 0f;
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
-    bool playerInvincible = false;
+    static bool playerInvincible = false;
     private float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
     //****************
     static public bool bossfightStarted = false;
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
     private float bossfightTimer;
-    private bool godMode = false;
+    static public bool godMode = false;
     private bool pussyMode = false;
     private bool bossIsDead = false;
     //****************

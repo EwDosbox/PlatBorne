@@ -12881,6 +12881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e453edb1527bb45b31e74d4b70787a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHealth: {fileID: 1921264130}
 --- !u!114 &1533022694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12976,7 +12977,7 @@ MonoBehaviour:
     m_ActionName: UI/ToggleConsole[/Keyboard/backquote,/Keyboard/semicolon]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: 62b09ce4-eca1-49ab-b6ca-35c46f928037
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!1 &1558361832
