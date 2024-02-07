@@ -18,7 +18,7 @@
                     "name": "Walk",
                     "type": "Value",
                     "id": "70bafd58-9377-4c1e-a6d9-b8fd90d75dca",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -46,39 +46,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "1D Axis",
-                    "id": "7e8dc765-a195-4a19-9b5c-3822a04754ff",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Negative",
-                    "id": "969184e9-ca8f-409d-b982-09f5579c4c13",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Positive",
-                    "id": "170f5e23-34de-4e02-abee-44332c30cc98",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "3532621e-d9e4-4851-9d0c-668651fb785a",
                     "path": "<Keyboard>/shift",
@@ -88,6 +55,39 @@
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Keyboard",
+                    "id": "3389cdaa-c57d-4089-a1ac-56adf9c1d510",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "left",
+                    "id": "a7e68845-d4e9-4425-b02d-85ac0475b12e",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "588ab329-19f7-4bff-9134-ddc81c578680",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
@@ -137,6 +137,34 @@
                 {
                     "name": "",
                     "id": "4c010945-99f6-478f-8c60-78e5c7b6cd23",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Console",
+            "id": "a89c3590-fc35-4df6-807a-b79b048b9aa8",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "e8b23b39-bf05-452a-8755-3788f45be88a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b48a6534-04b8-4263-91c3-83d3b258e658",
                     "path": "",
                     "interactions": "",
                     "processors": "",

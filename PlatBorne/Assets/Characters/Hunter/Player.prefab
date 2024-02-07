@@ -92,7 +92,7 @@ SpriteRenderer:
   m_Size: {x: 12.8, y: 12.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1631469603606533073
@@ -144,7 +144,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9c753a669da6acf4e94a0dbb2abf1ffa, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -712,6 +712,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 70bafd58-9377-4c1e-a6d9-b8fd90d75dca
     m_ActionName: Movement/Walk[/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ae88ca1e-6e0e-42e0-95ce-e19569cc0c80
+    m_ActionName: Movement/Dash[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8b23b39-bf05-452a-8755-3788f45be88a
+    m_ActionName: Console/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Movement
@@ -729,3 +737,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf6f5eb9949634a8c9cbba5aff2f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxJumpHeight: 10
+  minJumpHeight: 5
+  jumpModifier: 2
+  isPlayerInAir: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  feet: {fileID: 0}
+  movementSpeed: 0

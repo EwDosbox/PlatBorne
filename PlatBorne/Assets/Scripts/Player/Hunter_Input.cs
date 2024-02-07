@@ -15,10 +15,10 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @Hunter_Input: IInputActionCollection2, IDisposable
+public partial class @HunterInput: IInputActionCollection2, IDisposable
 {
     public InputActionAsset asset { get; }
-    public @Hunter_Input()
+    public @HunterInput()
     {
         asset = InputActionAsset.FromJson(@"{
     ""name"": ""Hunter_Input"",
@@ -40,7 +40,7 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
                     ""name"": ""Walk"",
                     ""type"": ""Value"",
                     ""id"": ""70bafd58-9377-4c1e-a6d9-b8fd90d75dca"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -68,39 +68,6 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""7e8dc765-a195-4a19-9b5c-3822a04754ff"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Negative"",
-                    ""id"": ""969184e9-ca8f-409d-b982-09f5579c4c13"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Positive"",
-                    ""id"": ""170f5e23-34de-4e02-abee-44332c30cc98"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Walk"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""3532621e-d9e4-4851-9d0c-668651fb785a"",
                     ""path"": ""<Keyboard>/shift"",
@@ -110,6 +77,39 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""3389cdaa-c57d-4089-a1ac-56adf9c1d510"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a7e68845-d4e9-4425-b02d-85ac0475b12e"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""588ab329-19f7-4bff-9134-ddc81c578680"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Walk"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -168,6 +168,34 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Console"",
+            ""id"": ""a89c3590-fc35-4df6-807a-b79b048b9aa8"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8b23b39-bf05-452a-8755-3788f45be88a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b48a6534-04b8-4263-91c3-83d3b258e658"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""New action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -183,6 +211,9 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
         // Fishing
         m_Fishing = asset.FindActionMap("Fishing", throwIfNotFound: true);
         m_Fishing_Newaction = m_Fishing.FindAction("New action", throwIfNotFound: true);
+        // Console
+        m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
+        m_Console_Newaction = m_Console.FindAction("New action", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,8 +280,8 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Dash;
     public struct MovementActions
     {
-        private @Hunter_Input m_Wrapper;
-        public MovementActions(@Hunter_Input wrapper) { m_Wrapper = wrapper; }
+        private @HunterInput m_Wrapper;
+        public MovementActions(@HunterInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Jump => m_Wrapper.m_Movement_Jump;
         public InputAction @Walk => m_Wrapper.m_Movement_Walk;
         public InputAction @Dash => m_Wrapper.m_Movement_Dash;
@@ -309,8 +340,8 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Settings;
     public struct UIActions
     {
-        private @Hunter_Input m_Wrapper;
-        public UIActions(@Hunter_Input wrapper) { m_Wrapper = wrapper; }
+        private @HunterInput m_Wrapper;
+        public UIActions(@HunterInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Settings => m_Wrapper.m_UI_Settings;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
@@ -355,8 +386,8 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
     private readonly InputAction m_Fishing_Newaction;
     public struct FishingActions
     {
-        private @Hunter_Input m_Wrapper;
-        public FishingActions(@Hunter_Input wrapper) { m_Wrapper = wrapper; }
+        private @HunterInput m_Wrapper;
+        public FishingActions(@HunterInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Newaction => m_Wrapper.m_Fishing_Newaction;
         public InputActionMap Get() { return m_Wrapper.m_Fishing; }
         public void Enable() { Get().Enable(); }
@@ -394,6 +425,52 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
         }
     }
     public FishingActions @Fishing => new FishingActions(this);
+
+    // Console
+    private readonly InputActionMap m_Console;
+    private List<IConsoleActions> m_ConsoleActionsCallbackInterfaces = new List<IConsoleActions>();
+    private readonly InputAction m_Console_Newaction;
+    public struct ConsoleActions
+    {
+        private @HunterInput m_Wrapper;
+        public ConsoleActions(@HunterInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Newaction => m_Wrapper.m_Console_Newaction;
+        public InputActionMap Get() { return m_Wrapper.m_Console; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ConsoleActions set) { return set.Get(); }
+        public void AddCallbacks(IConsoleActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ConsoleActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ConsoleActionsCallbackInterfaces.Add(instance);
+            @Newaction.started += instance.OnNewaction;
+            @Newaction.performed += instance.OnNewaction;
+            @Newaction.canceled += instance.OnNewaction;
+        }
+
+        private void UnregisterCallbacks(IConsoleActions instance)
+        {
+            @Newaction.started -= instance.OnNewaction;
+            @Newaction.performed -= instance.OnNewaction;
+            @Newaction.canceled -= instance.OnNewaction;
+        }
+
+        public void RemoveCallbacks(IConsoleActions instance)
+        {
+            if (m_Wrapper.m_ConsoleActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IConsoleActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ConsoleActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ConsoleActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public ConsoleActions @Console => new ConsoleActions(this);
     public interface IMovementActions
     {
         void OnJump(InputAction.CallbackContext context);
@@ -405,6 +482,10 @@ public partial class @Hunter_Input: IInputActionCollection2, IDisposable
         void OnSettings(InputAction.CallbackContext context);
     }
     public interface IFishingActions
+    {
+        void OnNewaction(InputAction.CallbackContext context);
+    }
+    public interface IConsoleActions
     {
         void OnNewaction(InputAction.CallbackContext context);
     }
