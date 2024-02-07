@@ -126,52 +126,15 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
-        rb.rotation = 0;
         //animator
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         animator.SetBool("IsJumping", isPlayerInAir);
         //pouze pokud se dotyka zeme
-        isPlayerInAir = !Physics2D.IsTouchingLayers(hunterFeet, groundLayer);
         //stairs will now push!
         if(Physics2D.IsTouchingLayers(hunterFeet, pushRightLayer)) rb.position = new Vector2(rb.position.x + 0.01f, rb.position.y);
         //inputs
         if (!isPlayerInAir)
         {
-            if (Input.GetKey(KeyCode.W))
-            {
-                rb.velocity = new Vector2(0, 0);
-                jumpHeight += Time.deltaTime * jumpModifier;
-                if (jumpHeight > maxJumpHeight)
-                {
-                    jumpHeight = maxJumpHeight;
-                }
-            }
-            if (Input.GetKeyUp(KeyCode.W))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-                jumpHeight = minJumpHeight;
-                numberOfJumps++;
-                save.Jumps(numberOfJumps, 1);
-                PlayerPrefs.Save();
-                //Sound
-                if (!isPlaying)
-                {
-                    hunterJump.Play();
-                    isPlaying = true;
-                }
-            }
-            if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W))
-            {
-                rb.velocity = new Vector2(-walkSpeed, rb.velocity.y);
-            }
-            if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
-            {
-                rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
-            }
-            if (!Input.anyKey)
-            {
-                rb.velocity = new Vector2(0, rb.velocity.y);
-            }
             //Flipovani spritu
             if (((Input.GetKey(KeyCode.A) && transform.localScale.x > 0) ||
                  (Input.GetKey(KeyCode.D) && transform.localScale.x < 0)) &&
@@ -181,12 +144,6 @@ public class PlayerScript : MonoBehaviour
                 scale.x *= -1;
                 rb.transform.localScale = scale;
             }
-            //Sound
-            if (((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))) && !Input.GetKey(KeyCode.W))
-            {
-                hunterWalk.enabled = true;
-            }
-            else hunterWalk.enabled = false;
             //fell
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
             {
@@ -210,18 +167,6 @@ public class PlayerScript : MonoBehaviour
         {
             playerWasInAir = true;
             hunterWalk.enabled = false;
-        }
-        if (stopwatchDash.Elapsed > timeDash) 
-        {
-            if (Input.GetKey(KeyCode.LeftShift) && canDash)
-            {
-                Dash();
-                stopwatchDash.Restart();
-            }
-        }
-        else
-        {
-            stopwatchDash.Start();
         }
         //sound vyskoceni
         if (isPlaying)
@@ -272,9 +217,5 @@ public class PlayerScript : MonoBehaviour
                     break;
                 }
         }        
-    }
-    private void Dash()
-    {
-        UnityEngine.Debug.Log("dash");
     }
 }
