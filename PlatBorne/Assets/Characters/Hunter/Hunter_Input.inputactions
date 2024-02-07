@@ -2,70 +2,146 @@
     "name": "Hunter_Input",
     "maps": [
         {
-            "name": "Hunter",
-            "id": "dfd79bc7-8d8f-4b23-93a0-f8a8c013586a",
+            "name": "Movement",
+            "id": "48a0cb44-6737-4e38-b684-8645afafda84",
             "actions": [
                 {
-                    "name": "Movement",
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "26750ebb-02a0-4f77-8765-42025b876982",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Walk",
                     "type": "Value",
-                    "id": "724e8d31-4fba-48e7-90a8-2f8ab56c68c2",
-                    "expectedControlType": "Vector2",
+                    "id": "70bafd58-9377-4c1e-a6d9-b8fd90d75dca",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
-                    "type": "Value",
-                    "id": "40decd41-4a2d-45b2-9607-90a9f9f37547",
-                    "expectedControlType": "",
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "ae88ca1e-6e0e-42e0-95ce-e19569cc0c80",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
-                    "name": "X-axis",
-                    "id": "a616d170-4e29-4d5c-824e-21a9eaf31af8",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "left",
-                    "id": "bc52b680-1707-4e36-8c3a-d0e4793a3f5a",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "c04d9d68-7fc0-41b6-8d80-29043399bcfd",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
-                    "id": "cea8b298-b6f3-49c5-acb0-edbd5fc97e90",
+                    "id": "e54800a4-4245-40bb-949a-d4c2e2640587",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "7e8dc765-a195-4a19-9b5c-3822a04754ff",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Negative",
+                    "id": "969184e9-ca8f-409d-b982-09f5579c4c13",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Positive",
+                    "id": "170f5e23-34de-4e02-abee-44332c30cc98",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Walk",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "3532621e-d9e4-4851-9d0c-668651fb785a",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "0e1e2b2f-4613-4672-9231-f76b523b4c17",
+            "actions": [
+                {
+                    "name": "Settings",
+                    "type": "Button",
+                    "id": "7ca48a7b-7202-4c56-8bc4-283869c4c538",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2043b01a-14cf-43bb-ae4f-7bff8df9dd3a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Settings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Fishing",
+            "id": "f45fa694-b27c-44f0-9804-42bb218a6a25",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "3970f5f7-ee82-4e2a-bda7-14c1502eee37",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4c010945-99f6-478f-8c60-78e5c7b6cd23",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
