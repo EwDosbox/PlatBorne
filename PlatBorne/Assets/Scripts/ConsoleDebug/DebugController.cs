@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class DebugController : MonoBehaviour
 {
@@ -11,9 +12,18 @@ public class DebugController : MonoBehaviour
     //commands {
     public static DebugCommand ROSEBUD;
     public static DebugCommand HELP;
+    public static DebugCommand KILL_BRICUS;
+    public static DebugCommand KILL_MOLE;
+    public static DebugCommand PLAYER_HEAL;
+    public static DebugCommand PUSSYMODE_TRUE;
+    public static DebugCommand PUSSYMODE_FALSE;
+    public static DebugCommand TELEPORT_LONDON;
+    public static DebugCommand TELEPORT_CHURCH;
+    public static DebugCommand TELEPORT_BIRMINGHAM;
     //commands }
     public List<object> commandList;
     public PlayerHealth playerHealth;
+    public Bossfight bossfight;
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
@@ -59,10 +69,58 @@ public class DebugController : MonoBehaviour
             showHelp = true;
         });
 
+        KILL_BRICUS = new DebugCommand("kill_bricus", "Kills boss Bricus", "kill_bricus", () =>
+        {
+            bossfight.BossDeath();
+        });
+
+        KILL_MOLE = new DebugCommand("kill_mole", "Kills boss Mole", "kill_mole", () =>
+        {
+            Debug.Log("Mole Died");
+        });
+
+        PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
+        {
+            playerHealth.SetHP(3);    
+        });
+
+        PUSSYMODE_TRUE = new DebugCommand("pussymode_true", "Enables Pussy Mode (for bosses only)", "pussymode_true", () =>
+        {
+            PlayerPrefs.SetInt("PussyMode", 1);
+        });
+
+        PUSSYMODE_FALSE = new DebugCommand("pussymode_false", "Disables Pussy Mode (for bosses only)", "pussymode_false", () =>
+        {
+            PlayerPrefs.DeleteKey("PussyMode");
+        });
+
+        TELEPORT_LONDON = new DebugCommand("teleport_london", "Teleports Player to London", "teleport_london", () =>
+        {
+            SceneManager.LoadScene("LevelLondon");
+        });
+
+        TELEPORT_CHURCH = new DebugCommand("teleport_church", "Teleports Player to Church (Bricus)", "teleport_church", () =>
+        {
+            SceneManager.LoadScene("LevelBoss");
+        });
+
+        TELEPORT_BIRMINGHAM = new DebugCommand("teleport_birmingham", "Teleports Player to Birmingham", "teleport_birmingham", () =>
+        {
+            Debug.Log("Work In Progress");
+        });
+
         commandList = new List<object>
         {
             ROSEBUD,
-            HELP
+            HELP,
+            KILL_BRICUS,
+            KILL_MOLE,
+            PLAYER_HEAL,
+            PUSSYMODE_TRUE,
+            PUSSYMODE_FALSE,
+            TELEPORT_LONDON,
+            TELEPORT_CHURCH,
+            TELEPORT_BIRMINGHAM
         };
     }
 

@@ -60,12 +60,14 @@ public class Bossfight : MonoBehaviour
         attackNumberSword = 0;
         return 1;
     }
-    private void BossDeath()
+    public void BossDeath()
     {
         bossIsDead = true;
         Destroy(bossSprite); //tohle se pak musí upravit jak bude aniamce
         Instantiate(DashOrb);
         text.text = "Boss Is Dead";
+        bossHealthBar.SetHP(0);
+        bossHealthBar.enabled = false;
         BossDeath01.Play();
     }
     public void PlayerDeath()
@@ -196,16 +198,6 @@ public class Bossfight : MonoBehaviour
                     {
                         if (timerBetweenAttacks > 6 - phase) //doba èekání na další útok
                         {
-                            /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                            {
-                                attack.BossAttackRushPlayer(true);
-                                attackNumberRush = resetPromenych();
-                            }
-                            else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                            {
-                                attack.BossAttackRushPlayer(false);
-                                attackNumberRush = attackNumberRush = resetPromenych();
-                            }*/
                             if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
@@ -224,16 +216,6 @@ public class Bossfight : MonoBehaviour
                         if (timerBetweenAttacks > 6 - phase)
                         {
                             {
-                                /*if (((PlayerScript.bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                                {
-                                    attack.BossAttackRushPlayer(true);
-                                    attackNumberRush = resetPromenych();
-                                }
-                                else if (((PlayerScript.bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                                {
-                                    attack.BossAttackRushPlayer(false);
-                                    attackNumberRush = resetPromenych();
-                                }*/
                                 if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
@@ -263,16 +245,6 @@ public class Bossfight : MonoBehaviour
                     {
                         if (timerBetweenAttacks > 6 - phase)
                         {
-                                /*if ((bossHitboxDown && rb.position.x > 6.60) && attackNumberRush < 1) //RushRight
-                                {
-                                    attack.BossAttackRushPlayer(true);
-                                    attackNumberRush = resetPromenych();
-                                }
-                                else if ((bossHitboxDown && rb.position.x < -6.60) && attackNumberRush < 1) //RushLeft
-                                {
-                                    attack.BossAttackRushPlayer(false);
-                                    attackNumberRush = resetPromenych();
-                                }*/
                                 if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                 attack.BossAttackFloorIsLava();
