@@ -4,7 +4,7 @@ using UnityEngine.InputSystem.Composites;
 
 public class HunterInputScript : MonoBehaviour
 {
-    private HunterInput input;
+    private PlayerInput input;
     private Rigidbody2D rb;
 
     private float jumpHeight;
@@ -18,17 +18,25 @@ public class HunterInputScript : MonoBehaviour
     [SerializeField] private Collider2D feet;
 
     [SerializeField] private float movementSpeed;
+    private bool walkL;
+    private bool walkR;
 
     private void Awake()
     {
-        input = new HunterInput();
+        input = new PlayerInput();
         rb = GetComponent<Rigidbody2D>();
         jumpHeight = minJumpHeight;
+        walkL = false;
+        walkR = false;
     }
 
     private void FixedUpdate()
     {
         isPlayerInAir = Physics2D.IsTouchingLayers(feet, groundLayer);
+        if (walkL) rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+        if (walkR) rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
+        else rb.velocity = Vector2.zero;
+        //rb.velocity = input.Movement.Walk.ReadValue<Vector2>() * movementSpeed;
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -48,17 +56,31 @@ public class HunterInputScript : MonoBehaviour
             //hunterWalk.enabled = false;
         }
     }
-    public void Walk(InputAction.CallbackContext context)
+    public void WalkL(InputAction.CallbackContext context)
     {
         if(isPlayerInAir)
         {
             if (context.started)
             {
-                rb.velocity = new Vector2(context.ReadValue<Vector2>().x * movementSpeed, rb.velocity.y);
+                walkL = true;
             }
             if (context.canceled)
             {
-                rb.velocity = Vector2.zero;
+                walkL = false;
+            }
+        }
+    }
+    public void WalkR(InputAction.CallbackContext context)
+    {
+        if (isPlayerInAir)
+        {
+            if (context.started)
+            {
+                walkR = true;
+            }
+            if (context.canceled)
+            {
+                walkR = false;
             }
         }
     }

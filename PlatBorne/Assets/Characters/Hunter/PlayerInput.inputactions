@@ -1,5 +1,5 @@
 {
-    "name": "Hunter_Input",
+    "name": "PlayerInput",
     "maps": [
         {
             "name": "Movement",
@@ -15,18 +15,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Walk",
-                    "type": "Value",
-                    "id": "70bafd58-9377-4c1e-a6d9-b8fd90d75dca",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Dash",
                     "type": "Button",
                     "id": "ae88ca1e-6e0e-42e0-95ce-e19569cc0c80",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WalkL",
+                    "type": "Button",
+                    "id": "70bafd58-9377-4c1e-a6d9-b8fd90d75dca",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "WalkR",
+                    "type": "Button",
+                    "id": "749690b4-78de-4166-b009-bd18f8655819",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -47,6 +56,28 @@
                 },
                 {
                     "name": "",
+                    "id": "744e55f1-87fc-4065-bb42-84cbee8e6341",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WalkL",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c97c55b-cb25-4c22-ae2b-02229fe6d20d",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WalkR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3532621e-d9e4-4851-9d0c-668651fb785a",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
@@ -55,39 +86,6 @@
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Keyboard",
-                    "id": "3389cdaa-c57d-4089-a1ac-56adf9c1d510",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "left",
-                    "id": "a7e68845-d4e9-4425-b02d-85ac0475b12e",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "588ab329-19f7-4bff-9134-ddc81c578680",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Walk",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         },
