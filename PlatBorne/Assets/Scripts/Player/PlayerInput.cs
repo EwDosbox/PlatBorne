@@ -28,6 +28,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ""id"": ""48a0cb44-6737-4e38-b684-8645afafda84"",
             ""actions"": [
                 {
+                    ""name"": ""WalkL"",
+                    ""type"": ""Button"",
+                    ""id"": ""6ded747e-1e14-412d-ab5e-8d5b3b33c98a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WalkR"",
+                    ""type"": ""Button"",
+                    ""id"": ""f337d391-e060-413f-8d83-f7eaf37a217f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""26750ebb-02a0-4f77-8765-42025b876982"",
@@ -44,27 +62,31 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""WalkL"",
-                    ""type"": ""Button"",
-                    ""id"": ""70bafd58-9377-4c1e-a6d9-b8fd90d75dca"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""WalkR"",
-                    ""type"": ""Button"",
-                    ""id"": ""749690b4-78de-4166-b009-bd18f8655819"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1576802f-568f-495d-8df0-3a09f90b1479"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WalkL"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3532621e-d9e4-4851-9d0c-668651fb785a"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
                 {
                     ""name"": """",
                     ""id"": ""e54800a4-4245-40bb-949a-d4c2e2640587"",
@@ -78,34 +100,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""744e55f1-87fc-4065-bb42-84cbee8e6341"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""WalkL"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2c97c55b-cb25-4c22-ae2b-02229fe6d20d"",
+                    ""id"": ""83ec7647-5a37-40be-8af0-90a7786d0948"",
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""WalkR"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3532621e-d9e4-4851-9d0c-668651fb785a"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -200,10 +200,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
 }");
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
-        m_Movement_Dash = m_Movement.FindAction("Dash", throwIfNotFound: true);
         m_Movement_WalkL = m_Movement.FindAction("WalkL", throwIfNotFound: true);
         m_Movement_WalkR = m_Movement.FindAction("WalkR", throwIfNotFound: true);
+        m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
+        m_Movement_Dash = m_Movement.FindAction("Dash", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Settings = m_UI.FindAction("Settings", throwIfNotFound: true);
@@ -274,18 +274,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     // Movement
     private readonly InputActionMap m_Movement;
     private List<IMovementActions> m_MovementActionsCallbackInterfaces = new List<IMovementActions>();
-    private readonly InputAction m_Movement_Jump;
-    private readonly InputAction m_Movement_Dash;
     private readonly InputAction m_Movement_WalkL;
     private readonly InputAction m_Movement_WalkR;
+    private readonly InputAction m_Movement_Jump;
+    private readonly InputAction m_Movement_Dash;
     public struct MovementActions
     {
         private @PlayerInput m_Wrapper;
         public MovementActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Jump => m_Wrapper.m_Movement_Jump;
-        public InputAction @Dash => m_Wrapper.m_Movement_Dash;
         public InputAction @WalkL => m_Wrapper.m_Movement_WalkL;
         public InputAction @WalkR => m_Wrapper.m_Movement_WalkR;
+        public InputAction @Jump => m_Wrapper.m_Movement_Jump;
+        public InputAction @Dash => m_Wrapper.m_Movement_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -295,34 +295,34 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MovementActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MovementActionsCallbackInterfaces.Add(instance);
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
-            @Dash.started += instance.OnDash;
-            @Dash.performed += instance.OnDash;
-            @Dash.canceled += instance.OnDash;
             @WalkL.started += instance.OnWalkL;
             @WalkL.performed += instance.OnWalkL;
             @WalkL.canceled += instance.OnWalkL;
             @WalkR.started += instance.OnWalkR;
             @WalkR.performed += instance.OnWalkR;
             @WalkR.canceled += instance.OnWalkR;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
         {
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
-            @Dash.started -= instance.OnDash;
-            @Dash.performed -= instance.OnDash;
-            @Dash.canceled -= instance.OnDash;
             @WalkL.started -= instance.OnWalkL;
             @WalkL.performed -= instance.OnWalkL;
             @WalkL.canceled -= instance.OnWalkL;
             @WalkR.started -= instance.OnWalkR;
             @WalkR.performed -= instance.OnWalkR;
             @WalkR.canceled -= instance.OnWalkR;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -480,10 +480,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public ConsoleActions @Console => new ConsoleActions(this);
     public interface IMovementActions
     {
-        void OnJump(InputAction.CallbackContext context);
-        void OnDash(InputAction.CallbackContext context);
         void OnWalkL(InputAction.CallbackContext context);
         void OnWalkR(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

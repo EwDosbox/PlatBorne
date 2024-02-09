@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 166162755306215924}
   - component: {fileID: -1930123028944904493}
   - component: {fileID: 7186549255527368089}
+  - component: {fileID: 8166118421023468212}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -143,7 +144,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 9c753a669da6acf4e94a0dbb2abf1ffa, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -673,9 +674,103 @@ MonoBehaviour:
   maxJumpHeight: 10
   minJumpHeight: 7
   jumpModifier: 2
-  isPlayerInAir: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   feet: {fileID: 1445144076408963031}
   movementSpeed: 5
+  isPlayerInAir: 0
+--- !u!114 &8166118421023468212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8187474341752157242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: f02fd02f24f8f474fae52a4fc9d3516b, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_MethodName: WalkL
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6ded747e-1e14-412d-ab5e-8d5b3b33c98a
+    m_ActionName: Movement/WalkL[/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_MethodName: WalkR
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f337d391-e060-413f-8d83-f7eaf37a217f
+    m_ActionName: Movement/WalkR[/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_MethodName: Jump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 26750ebb-02a0-4f77-8765-42025b876982
+    m_ActionName: Movement/Jump[/Keyboard/w]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ae88ca1e-6e0e-42e0-95ce-e19569cc0c80
+    m_ActionName: Movement/Dash[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7ca48a7b-7202-4c56-8bc4-283869c4c538
+    m_ActionName: UI/Settings[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3970f5f7-ee82-4e2a-bda7-14c1502eee37
+    m_ActionName: Fishing/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e8b23b39-bf05-452a-8755-3788f45be88a
+    m_ActionName: Console/New action
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Movement
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

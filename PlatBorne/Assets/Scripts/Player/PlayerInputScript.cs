@@ -4,7 +4,6 @@ using UnityEngine.InputSystem.Composites;
 
 public class HunterInputScript : MonoBehaviour
 {
-    private PlayerInput input;
     private Rigidbody2D rb;
 
     private float jumpHeight;
@@ -13,84 +12,89 @@ public class HunterInputScript : MonoBehaviour
     [SerializeField] private float jumpModifier;
     private float jumpTime;
 
-    public bool isPlayerInAir;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D feet;
 
     [SerializeField] private float movementSpeed;
-    private bool walkL;
-    private bool walkR;
+    public bool isPlayerInAir;
+    private bool shouldWalkL = false;
+    private bool shouldWalkR = false;
+    private bool shouldJump;
+
+    private bool jumpIsPressed;
 
     private void Awake()
     {
-        input = new PlayerInput();
         rb = GetComponent<Rigidbody2D>();
         jumpHeight = minJumpHeight;
-        walkL = false;
-        walkR = false;
     }
-
     private void FixedUpdate()
     {
-        isPlayerInAir = Physics2D.IsTouchingLayers(feet, groundLayer);
-        if (walkL) rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-        if (walkR) rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
-        else rb.velocity = Vector2.zero;
-        //rb.velocity = input.Movement.Walk.ReadValue<Vector2>() * movementSpeed;
+        isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
+        if (!isPlayerInAir)
+        {
+            if (!jumpIsPressed)
+            {
+                if (shouldWalkR)        rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
+                else if (shouldWalkL)   rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+                else                    rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+            if (jumpIsPressed) rb.velocity = new Vector2(0, rb.velocity.y);
+            if (shouldJump)
+            {// behaves like a weird stopwatch
+                jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
+                if (jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+                shouldJump = false;
+            }
+        }
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(isPlayerInAir)
+        if (context.started)
         {
-            if (context.started)
-            {
-                jumpTime = Time.time;//when i pressed
-            }
-            if(context.canceled) 
-            {// behaves like a weird stopwatch
-                jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
-                if(jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-            }
-            //hunterWalk.enabled = false;
+            jumpTime = Time.time;//when i pressed
+            jumpIsPressed = true;
         }
+        if (context.canceled)
+        {
+            shouldJump = true;
+            jumpIsPressed = false;
+        }
+        //hunterWalk.enabled = false;
     }
     public void WalkL(InputAction.CallbackContext context)
     {
-        if(isPlayerInAir)
+        if (context.started)
         {
-            if (context.started)
-            {
-                walkL = true;
-            }
-            if (context.canceled)
-            {
-                walkL = false;
-            }
+            shouldWalkL = true;
+            shouldWalkR = false;
+        }
+        if (context.canceled)
+        {
+            shouldWalkL = false;
         }
     }
     public void WalkR(InputAction.CallbackContext context)
     {
-        if (isPlayerInAir)
+        if (context.started)
         {
-            if (context.started)
-            {
-                walkR = true;
-            }
-            if (context.canceled)
-            {
-                walkR = false;
-            }
+            shouldWalkL = false;
+            shouldWalkR = true;
+        }
+        if (context.canceled)
+        {
+            shouldWalkR = false;
         }
     }
     public void Dash(InputAction.CallbackContext context)
+    {
+        if (context.performed)
         {
-            if (context.performed)
-            {
-                Debug.Log("Dash");
-            } 
+            Debug.Log("Dash");
         }
+    }
 }
 /*
 

@@ -6,6 +6,24 @@
             "id": "48a0cb44-6737-4e38-b684-8645afafda84",
             "actions": [
                 {
+                    "name": "WalkL",
+                    "type": "Button",
+                    "id": "6ded747e-1e14-412d-ab5e-8d5b3b33c98a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "WalkR",
+                    "type": "Button",
+                    "id": "f337d391-e060-413f-8d83-f7eaf37a217f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Jump",
                     "type": "Button",
                     "id": "26750ebb-02a0-4f77-8765-42025b876982",
@@ -22,27 +40,31 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "WalkL",
-                    "type": "Button",
-                    "id": "70bafd58-9377-4c1e-a6d9-b8fd90d75dca",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "WalkR",
-                    "type": "Button",
-                    "id": "749690b4-78de-4166-b009-bd18f8655819",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
+                {
+                    "name": "",
+                    "id": "1576802f-568f-495d-8df0-3a09f90b1479",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WalkL",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3532621e-d9e4-4851-9d0c-668651fb785a",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
                 {
                     "name": "",
                     "id": "e54800a4-4245-40bb-949a-d4c2e2640587",
@@ -56,34 +78,12 @@
                 },
                 {
                     "name": "",
-                    "id": "744e55f1-87fc-4065-bb42-84cbee8e6341",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WalkL",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2c97c55b-cb25-4c22-ae2b-02229fe6d20d",
+                    "id": "83ec7647-5a37-40be-8af0-90a7786d0948",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "WalkR",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3532621e-d9e4-4851-9d0c-668651fb785a",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
