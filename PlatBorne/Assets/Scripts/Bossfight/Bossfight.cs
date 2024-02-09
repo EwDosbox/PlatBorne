@@ -20,6 +20,7 @@ public class Bossfight : MonoBehaviour
     public PlayerHealth playerHealth;
     public BossAttacks attack;
     public GameObject player;
+    public GameObject levelMove;
     private Rigidbody2D rb;
     public Text text;
     public Text pussyModeOn;
@@ -68,7 +69,7 @@ public class Bossfight : MonoBehaviour
         text.text = "Boss Is Dead";
         bossHealthBar.SetHP(0);
         bossHealthBar.enabled = false;
-        BossDeath01.Play();
+        BossDeath01.Play();        
     }
     public void PlayerDeath()
     {
@@ -81,12 +82,12 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        levelMove.SetActive(false);
         bounds.isTrigger = true;
         UI_BossHP.active = false;
         UI_PlayerHP.active = false;
         PlayerPrefs.SetString("Level", "bricus");
         PlayerPrefs.Save();
-        //Absolute fucking reset
         bossfightStarted = false;
         phase = 1;
         phaseTimer = 0;
