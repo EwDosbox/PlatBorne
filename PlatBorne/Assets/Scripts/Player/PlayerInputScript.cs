@@ -21,8 +21,16 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldWalkL = false;
     private bool shouldWalkR = false;
     private bool shouldJump;
-
     private bool jumpIsPressed;
+
+    //Dash
+    static public bool CanDash;
+    private Vector2 velocityBeforeDash;
+    private bool shouldDash;
+    private bool dashing;
+    private float dashStarted;
+    [SerializeField] private float dashLength;
+    [SerializeField] private float dashDistance;
 
     private void Awake()
     {
@@ -35,7 +43,23 @@ public class PlayerInputScript : MonoBehaviour
         animator.SetBool("IsJumping", isPlayerInAir);
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
-        if (!isPlayerInAir)
+        if (shouldDash)
+        {
+            dashStarted = Time.time;
+            velocityBeforeDash = rb.velocity;
+            rb.velocity = new Vector2(dashDistance, 0);
+            shouldDash = false;
+        }
+        else if (dashing)
+        {
+            rb.velocity = new Vector2(dashDistance, 0);
+            if((Time.time - dashStarted) >= dashLength)
+            {
+                dashing = false;
+                rb.velocity = velocityBeforeDash;
+            }
+        }
+        else if (!isPlayerInAir)
         {
             if (!jumpIsPressed)
             {
@@ -65,6 +89,17 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldJump = true;
             jumpIsPressed = false;
+            /*
+            numberOfJumps++;
+            save.Jumps(numberOfJumps, 1);
+            PlayerPrefs.Save();
+            //Sound
+            if (!isPlaying)
+            {
+                hunterJump.Play();
+                isPlaying = true;
+            }
+            */
         }
         //hunterWalk.enabled = false;
     }
@@ -98,33 +133,10 @@ public class PlayerInputScript : MonoBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("Dash");
+            if (CanDash)
+            {
+                shouldDash = true;
+            }
         }
     }
 }
-/*
-
-if (Input.GetKeyUp(KeyCode.W))
-{
-    numberOfJumps++;
-    save.Jumps(numberOfJumps, 1);
-    PlayerPrefs.Save();
-    //Sound
-    if (!isPlaying)
-    {
-        hunterJump.Play();
-        isPlaying = true;
-    }
-}
-if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W))
-{
-    rb.velocity = new Vector2(-walkSpeed, rb.velocity.y);
-}
-if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W))
-{
-    rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
-}
-if (!Input.anyKey)
-{
-    rb.velocity = new Vector2(0, rb.velocity.y);
-}*/

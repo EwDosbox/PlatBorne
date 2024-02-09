@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fff21e11fe423409b8abe7791dc698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanDash: 0
   save: {fileID: 0}
   hunterDamage: {fileID: 8938530666380570138}
   hunterDrop: {fileID: 2867845862149728934}
@@ -115,17 +116,10 @@ MonoBehaviour:
   animator: {fileID: 166162755306215924}
   health: {fileID: 0}
   rb: {fileID: 4160181815571881102}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
   pushRightLayer:
     serializedVersion: 2
     m_Bits: 128
   hunterFeet: {fileID: 1445144076408963031}
-  walkSpeed: 5
-  maxJumpHeight: 10
-  minJumpHeight: 5
-  jumpModifier: 4
   playerFell: 0
   playerInvincible: 0
 --- !u!50 &4160181815571881102
@@ -679,7 +673,6 @@ MonoBehaviour:
     m_Bits: 64
   feet: {fileID: 1445144076408963031}
   movementSpeed: 5
-  isPlayerInAir: 0
 --- !u!114 &8166118421023468212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,7 +747,19 @@ MonoBehaviour:
     m_ActionId: 26750ebb-02a0-4f77-8765-42025b876982
     m_ActionName: Movement/Jump[/Keyboard/w]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
+        m_MethodName: Dash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: ae88ca1e-6e0e-42e0-95ce-e19569cc0c80
     m_ActionName: Movement/Dash[/Keyboard/shift]
   - m_PersistentCalls:

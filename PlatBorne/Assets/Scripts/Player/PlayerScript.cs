@@ -7,10 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
-    public bool CanDash;
-    //DELETE NEXT TIME
-
-
     public Saves save;
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
