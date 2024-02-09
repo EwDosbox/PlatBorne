@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Composites;
 
-public class HunterInputScript : MonoBehaviour
+public class PlayerInputScript : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private Animator animator;
 
     private float jumpHeight;
     [SerializeField] private float maxJumpHeight;
@@ -16,7 +17,7 @@ public class HunterInputScript : MonoBehaviour
     [SerializeField] private Collider2D feet;
 
     [SerializeField] private float movementSpeed;
-    public bool isPlayerInAir;
+    static public bool isPlayerInAir;
     private bool shouldWalkL = false;
     private bool shouldWalkR = false;
     private bool shouldJump;
@@ -26,18 +27,21 @@ public class HunterInputScript : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         jumpHeight = minJumpHeight;
     }
     private void FixedUpdate()
     {
+        animator.SetBool("IsJumping", isPlayerInAir);
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
         if (!isPlayerInAir)
         {
             if (!jumpIsPressed)
             {
-                if (shouldWalkR)        rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
-                else if (shouldWalkL)   rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-                else                    rb.velocity = new Vector2(0, rb.velocity.y);
+                if (shouldWalkR) rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
+                else if (shouldWalkL) rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+                else rb.velocity = new Vector2(0, rb.velocity.y);
             }
             if (jumpIsPressed) rb.velocity = new Vector2(0, rb.velocity.y);
             if (shouldJump)
@@ -70,6 +74,7 @@ public class HunterInputScript : MonoBehaviour
         {
             shouldWalkL = true;
             shouldWalkR = false;
+            if (!isPlayerInAir) transform.localScale = new Vector2(-0.19f, 0.19f);
         }
         if (context.canceled)
         {
@@ -82,6 +87,7 @@ public class HunterInputScript : MonoBehaviour
         {
             shouldWalkL = false;
             shouldWalkR = true;
+            if (!isPlayerInAir) transform.localScale = new Vector2(+0.19f, 0.19f);
         }
         if (context.canceled)
         {

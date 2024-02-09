@@ -4,8 +4,13 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class PlayerScript : MonoBehaviour
 {
+    public bool CanDash;
+    //DELETE NEXT TIME
+
+
     public Saves save;
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
@@ -17,22 +22,9 @@ public class PlayerScript : MonoBehaviour
 
     //Movement Variables
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask pushRightLayer;
     [SerializeField] private Collider2D hunterFeet;
-    [SerializeField] private int walkSpeed;
-    [SerializeField] private float maxJumpHeight;
-    [SerializeField] private float minJumpHeight;
-    [SerializeField] private float jumpModifier;
-    private bool isPlayerInAir;
-    private float jumpHeight;
     //Movement Variables
-    //DASH variables
-    private bool canDash = false;
-    public bool CanDash { get; set; }
-    private Stopwatch stopwatchDash;
-    private TimeSpan timeDash;
-    //DASH variables
 
     float positionYWas;
     float positionYIs;
@@ -103,34 +95,15 @@ public class PlayerScript : MonoBehaviour
 
     private void Start()
     {
-        jumpHeight = minJumpHeight;
-        if (PlayerPrefs.GetInt("CanDash", 0) == 0) canDash = false;
-        else canDash = true;
-        timeDash = new TimeSpan(0, 0, 2);
-        stopwatchDash = new Stopwatch();
-        stopwatchDash.Start();
         LoadMovement();
     }
     void Update()
     {
-        //animator
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
-        animator.SetBool("IsJumping", isPlayerInAir);
-        //pouze pokud se dotyka zeme
         //stairs will now push!
         if(Physics2D.IsTouchingLayers(hunterFeet, pushRightLayer)) rb.position = new Vector2(rb.position.x + 0.01f, rb.position.y);
         //inputs
-        if (!isPlayerInAir)
+        if (!PlayerInputScript.isPlayerInAir)
         {
-            //Flipovani spritu
-            if (((Input.GetKey(KeyCode.A) && transform.localScale.x > 0) ||
-                 (Input.GetKey(KeyCode.D) && transform.localScale.x < 0)) &&
-                !(Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)))
-            {
-                Vector3 scale = transform.localScale;
-                scale.x *= -1;
-                rb.transform.localScale = scale;
-            }
             //fell
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
             {
