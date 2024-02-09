@@ -218,7 +218,7 @@ public class PlayerScript : MonoBehaviour
         }
         else timer = 0;
         //damage
-        if (Bossfight.playerPlayDamage)
+        if (Bossfight.playerPlayDamage && !health.GodMode)
         {
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;

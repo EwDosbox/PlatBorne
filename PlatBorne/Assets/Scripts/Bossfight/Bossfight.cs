@@ -98,7 +98,7 @@ public class Bossfight : MonoBehaviour
     private void Update()
     {
         if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) BossDeath();
-        if (playerHealth.GetHP() == 0 && bossfightStarted) PlayerDeath();
+        if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
         if (pauseMenu.active) timerOn = false;
@@ -139,7 +139,7 @@ public class Bossfight : MonoBehaviour
             {
                 bossInvincible = true;
                 playerInvincible = true;
-                if (pussyMode) playerHealth.SetHP(3);
+                if (pussyMode) playerHealth.PlayerHP = 3;
                 switch (bossHealthBar.GetHP())
                 {
                     case 60:
@@ -182,9 +182,8 @@ public class Bossfight : MonoBehaviour
                 {
                     playerInvincible = true;
                     playerPlayDamage = true;
-                    playerHealth.SetHP(playerHealth.GetHP() - 1);
-                    playerHealth.SetGodMode(godMode);
-                    if (playerHealth.GetHP() == 0)
+                    playerHealth.PlayerHP -= 1;
+                    if (playerHealth.PlayerHP == 0)
                     {
                         PlayerDeath();
                     }
@@ -309,7 +308,7 @@ public class Bossfight : MonoBehaviour
             if (pussyMode) pussyModeOn.gameObject.SetActive(true);
             else pussyModeOn.gameObject.SetActive(false);
             bossHealthBar.Slider();
-            playerHealth.PlayerStart();
+            StartCoroutine(playerHealth.PlayerHPStart());
             PreBossDialog.Play();
             timer.Start();
             OSTLoop.enabled = true;

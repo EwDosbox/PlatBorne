@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,20 +13,35 @@ public class PlayerHealth : MonoBehaviour
     public Image hp2_GodMode;
     public Image hp3_GodMode;
     private int playerHP = 0;
-    private bool godMode = false;
-    private bool pussyMode = false;
-    private bool playerStart = false;
-    private float waitingTimer = 0;
+    private bool godMode;
+    private bool pussyMode;
 
-    public void SetHP(int playerHP) { this.playerHP = playerHP; }
-    public int GetHP() { return this.playerHP; }
-    public void SetGodMode(bool godMode) {  this.godMode = godMode; }
-    public void SetPussyMode(bool pussyMode) {  this.pussyMode = pussyMode; }
-
-    public void PlayerStart()
+    public bool GodMode
     {
-        playerStart = true;
-        this.playerHP = 3;
+        set 
+        { 
+            godMode = value;
+            HPChanged();
+        }
+        get { return godMode; }
+    }
+
+    public bool PussyMode
+    {
+        set { godMode = value; }
+        get { return godMode;  }
+    }
+    public int PlayerHP
+    {
+        set 
+        {
+            if (value <= 3 && value >= 0 && !godMode)
+            {
+                playerHP = value;
+                HPChanged();
+            }
+        }
+        get { return playerHP; }
     }
     private void Start()
     {
@@ -36,6 +54,16 @@ public class PlayerHealth : MonoBehaviour
             }
             else pussyMode = false;
         }
+
+        if (PlayerPrefs.HasKey("GodMode"))
+        {
+            int numberGod = (PlayerPrefs.GetInt("GodMode"));
+            if (numberGod == 1)
+            {
+                godMode = true;
+            }
+            else godMode = false;
+        }
         hp1.enabled = false;
         hp2.enabled = false;
         hp3.enabled = false;
@@ -44,101 +72,88 @@ public class PlayerHealth : MonoBehaviour
         hp3_GodMode.enabled = false;
     }
 
-    private void Update()
+    public IEnumerator PlayerHPStart()
     {
-        if (playerStart)
+        playerHP = 3;
+        yield return new WaitForSeconds(2f);
+        if (godMode) hp1_GodMode.enabled = true;
+        else hp1.enabled = true;
+        yield return new WaitForSeconds(2f);
+        if (godMode) hp2_GodMode.enabled = true;
+        else hp2.enabled = true;
+        yield return new WaitForSeconds(2f);
+        if (godMode) hp3_GodMode.enabled = true;
+        else hp3.enabled = true;
+    }
+
+    private void HPChanged()
+    {
+        switch (playerHP)
         {
-            waitingTimer += Time.deltaTime;
-            if (godMode)
-            {
-                if (waitingTimer > 2) hp1_GodMode.enabled = true;
-                if (waitingTimer > 5) hp2_GodMode.enabled = true;
-                if (waitingTimer > 8)
+            default:
                 {
-                    hp3_GodMode.enabled = true;
-                    playerStart = false;
+                    if (godMode)
+                    {
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = true;
+                        hp3_GodMode.enabled = true;
+                    }
+                    else
+                    {
+                        hp1.enabled = true;
+                        hp2.enabled = true;
+                        hp3.enabled = true;
+                    }
+                    break;
                 }
-            }
-            else
-            {
-                if (waitingTimer > 1) hp1.enabled = true;
-                if (waitingTimer > 3) hp2.enabled = true;
-                if (waitingTimer > 5)
+            case 2:
                 {
-                    hp3.enabled = true;
-                    playerStart = false;
+                    if (godMode)
+                    {
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = true;
+                        hp3_GodMode.enabled = false;
+                    }
+                    else
+                    {
+                        hp1.enabled = true;
+                        hp2.enabled = true;
+                        hp3.enabled = false;
+                    }
+                    break;
                 }
-            }
-        }
-        else
-        {
-            switch (playerHP)
-            {
-                default:
+            case 1:
+                {
+                    if (godMode)
                     {
-                        if (godMode)
-                        {
-                            hp1_GodMode.enabled = true;
-                            hp2_GodMode.enabled = true;
-                            hp3_GodMode.enabled = true;
-                        }
-                        else
-                        {
-                            hp1.enabled = true;
-                            hp2.enabled = true;
-                            hp3.enabled = true;
-                        }
-                        break;
+                        hp1_GodMode.enabled = true;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                     }
-                case 2:
+                    else
                     {
-                        if (godMode)
-                        {
-                            hp1_GodMode.enabled = true;
-                            hp2_GodMode.enabled = true;
-                            hp3_GodMode.enabled = false;
-                        }
-                        else
-                        {
-                            hp1.enabled = true;
-                            hp2.enabled = true;
-                            hp3.enabled = false;
-                        }
-                        break;
+                        hp1.enabled = true;
+                        hp2.enabled = false;
+                        hp3.enabled = false;
                     }
-                case 1:
+                    break;
+                }
+            case 0:
+                {
+                    if (godMode)
                     {
-                        if (godMode)
-                        {
-                            hp1_GodMode.enabled = true;
-                            hp2_GodMode.enabled = false;
-                            hp3_GodMode.enabled = false;
-                        }
-                        else
-                        {
-                            hp1.enabled = true;
-                            hp2.enabled = false;
-                            hp3.enabled = false;
-                        }
-                        break;
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                     }
-                case 0:
+                    else
                     {
-                        if (godMode)
-                        {
-                            hp1_GodMode.enabled = false;
-                            hp2_GodMode.enabled = false;
-                            hp3_GodMode.enabled = false;
-                        }
-                        else
-                        {
-                            hp1.enabled = false;
-                            hp2.enabled = false;
-                            hp3.enabled = false;
-                        }
-                        break;
+                        hp1.enabled = false;
+                        hp2.enabled = false;
+                        hp3.enabled = false;
                     }
-            }
+                    break;
+                }
         }
     }
 }

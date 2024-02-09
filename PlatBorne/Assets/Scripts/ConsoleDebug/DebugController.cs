@@ -20,10 +20,12 @@ public class DebugController : MonoBehaviour
     public static DebugCommand TELEPORT_LONDON;
     public static DebugCommand TELEPORT_CHURCH;
     public static DebugCommand TELEPORT_BIRMINGHAM;
+    public static DebugCommand RESET_PREFS;
     //commands }
     public List<object> commandList;
     public PlayerHealth playerHealth;
     public Bossfight bossfight;
+    public Saves save;
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
@@ -35,9 +37,9 @@ public class DebugController : MonoBehaviour
         float y = 0;
         if (showHelp)
         {
-            GUI.Box(new Rect(0, y, Screen.width, 100), "");
+            GUI.Box(new Rect(0, y, Screen.width, 250), "");
             Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandList.Count);
-            scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 90), scroll, viewport);
+            scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 240), scroll, viewport);
             for (int i = 0; i < commandList.Count; i++)
             {
                 DebugCommandBase command = commandList[i] as DebugCommandBase;
@@ -47,7 +49,7 @@ public class DebugController : MonoBehaviour
             }
             GUI.EndScrollView();
             {
-                y += 100;
+                y += 250;
             }
         }
         GUI.Box(new Rect(0, y, Screen.width, 30), "");
@@ -61,7 +63,7 @@ public class DebugController : MonoBehaviour
     {
         ROSEBUD = new DebugCommand("rosebud", "Enables GodMode", "rosebud", () =>
         {
-            playerHealth.SetGodMode(true);
+            playerHealth.GodMode = true;
         });
 
         HELP = new DebugCommand("help", "Shows all commands", "help", () =>
@@ -81,7 +83,7 @@ public class DebugController : MonoBehaviour
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
         {
-            playerHealth.SetHP(3);    
+            playerHealth.PlayerHP = 3; 
         });
 
         PUSSYMODE_TRUE = new DebugCommand("pussymode_true", "Enables Pussy Mode (for bosses only)", "pussymode_true", () =>
@@ -109,18 +111,24 @@ public class DebugController : MonoBehaviour
             Debug.Log("Work In Progress");
         });
 
+        RESET_PREFS  = new DebugCommand("reset_prefs", "Resets all PlayerPrefs", "reset_prefs", () =>
+        {
+            save.NewGameSaveReset();
+        });
+
         commandList = new List<object>
         {
             ROSEBUD,
-            HELP,
-            KILL_BRICUS,
-            KILL_MOLE,
-            PLAYER_HEAL,
-            PUSSYMODE_TRUE,
-            PUSSYMODE_FALSE,
-            TELEPORT_LONDON,
+            HELP, //Bigger UI, cannot move
+            KILL_BRICUS, 
+            KILL_MOLE, 
+            PLAYER_HEAL, 
+            PUSSYMODE_TRUE, //UI CHANGE
+            PUSSYMODE_FALSE, //UI CHANGE
+            TELEPORT_LONDON, 
             TELEPORT_CHURCH,
-            TELEPORT_BIRMINGHAM
+            TELEPORT_BIRMINGHAM, 
+            RESET_PREFS
         };
     }
 
