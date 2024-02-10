@@ -1,20 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using TMPro;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 public class Cutscene_EndGameStats : MonoBehaviour
 {
     public Text[] mainText;
     public Text[] dataText;
+    public AudioSource soundEffect;
     public int numberOfStrings;
     string[] writerText =
     {
@@ -23,7 +16,7 @@ public class Cutscene_EndGameStats : MonoBehaviour
         "Number of Jumps:",
         "Number of Deaths (Bricus):",
         "Time (London):",
-        "Time (Bricus)"
+        "Time (Bricus):"
     };
     string[] writerData;
     int i = 0;
@@ -39,7 +32,7 @@ public class Cutscene_EndGameStats : MonoBehaviour
     void Start()
     {
         writerData = new string[numberOfStrings];
-        writerData[0] = "An Ending";
+        writerData[0] = "Work In Progress";
         writerData[1] = PlayerPrefs.GetInt("NumberOfFalls_London").ToString();
         writerData[2] = PlayerPrefs.GetInt("NumberOfJumps_Act1").ToString();
         writerData[3] = PlayerPrefs.GetInt("NumberOfDeath").ToString();
@@ -73,23 +66,27 @@ public class Cutscene_EndGameStats : MonoBehaviour
     }
     IEnumerator TypeWriterText()
     {
+        soundEffect.Play();
         foreach (char c in writerText[i])
         {
             mainText[i].text += c;
             yield return new WaitForSeconds(timeBtwChars);
         }
+        soundEffect.Stop();
         yield return new WaitForSeconds(delayBeforeData);
         isFinishedText = true;
     }
     IEnumerator TypeWriterData()
     {
+        soundEffect.Play();
         foreach (char c in writerData[i])
         {
             dataText[i].text += c;
             yield return new WaitForSeconds(timeBtwChars);
         }
+        soundEffect.Stop();
         yield return new WaitForSeconds(delayBeforeText);
         isFinishedData = true;
-        i++;
+        i++;        
     }
 }
