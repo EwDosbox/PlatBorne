@@ -43,19 +43,21 @@ public class Saves : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void Jumps(float numberOfJumps, int stage)
-    {
-        PlayerPrefs.SetFloat("NumberOfJumps_Act1", numberOfJumps);
-        PlayerPrefs.Save();
-    }
 
-    public void Falls(float number, int act)
+    public void PlayerFell()
     {
-        if (act == 1)
+        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")
         {
-            PlayerPrefs.SetFloat("NumberOfFalls_London", number);
+            int xxx = PlayerPrefs.GetInt("NumberOfFalls_Act1");
+            xxx++;
+            PlayerPrefs.SetInt("NumberOfFalls_Act1", xxx);
         }
-        else PlayerPrefs.SetFloat("NumberOfFalls_Birmingham", number);
+        else
+        {
+            int xxx = PlayerPrefs.GetInt("NumberOfFalls_Act2");
+            xxx++;
+            PlayerPrefs.SetInt("NumberOfFalls_Act2", xxx);
+        }
         PlayerPrefs.Save();
     }
 
@@ -87,7 +89,7 @@ public class Saves : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public float timerLoad(int stage)
+    public float TimerLoad(int stage)
     {
         switch (stage)
         {
@@ -109,5 +111,22 @@ public class Saves : MonoBehaviour
                 }
         }
         return 0;
+    }
+
+    public void PlayerJumped()
+    {
+        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")
+        {
+            int xxx = PlayerPrefs.GetInt("NumberOfJumps_Act1");
+            xxx++;
+            PlayerPrefs.SetInt("NumberOfJumps_Act1", xxx);            
+        }
+        else
+        {
+            int xxx = PlayerPrefs.GetInt("NumberOfJumps_Act2");
+            xxx++;
+            PlayerPrefs.SetInt("NumberOfJumps_Act2", xxx);
+        }
+        PlayerPrefs.Save();
     }
 }

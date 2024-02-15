@@ -1,3 +1,5 @@
+using System.Threading;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Composites;
@@ -6,6 +8,7 @@ public class PlayerInputScript : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator animator;
+    public Saves save;
 
     private float jumpHeight;
     [SerializeField] private float maxJumpHeight;
@@ -22,6 +25,11 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldWalkR = false;
     private bool shouldJump;
     private bool jumpIsPressed;
+    public AudioSource jumpSound;
+    public AudioSource walkSound;
+    public AudioSource dashSound;
+    private bool isPlaying;
+    private float time;
 
     //Dash
     static public bool CanDash;
@@ -63,9 +71,21 @@ public class PlayerInputScript : MonoBehaviour
         {
             if (!jumpIsPressed)
             {
-                if (shouldWalkR) rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
-                else if (shouldWalkL) rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-                else rb.velocity = new Vector2(0, rb.velocity.y);
+                if (shouldWalkR)
+                {
+                    rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
+                    walkSound.Play();
+                }
+                else if (shouldWalkL)
+                {
+                    rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+                    walkSound.Play();
+                }
+                else
+                {
+                    rb.velocity = new Vector2(0, rb.velocity.y);
+                    walkSound.Stop();
+                }
             }
             if (jumpIsPressed) rb.velocity = new Vector2(0, rb.velocity.y);
             if (shouldJump)
@@ -76,6 +96,16 @@ public class PlayerInputScript : MonoBehaviour
                 shouldJump = false;
             }
         }
+        if (isPlaying) //timer for a jump SFX
+        {
+            time += Time.deltaTime;
+            if (time > 0.5f)
+            {
+                isPlaying = false;
+                time = 0;
+            }
+        }
+        
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -89,19 +119,14 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldJump = true;
             jumpIsPressed = false;
-            /*
-            numberOfJumps++;
-            save.Jumps(numberOfJumps, 1);
-            PlayerPrefs.Save();
+            save.PlayerJumped();
             //Sound
             if (!isPlaying)
             {
-                hunterJump.Play();
+                jumpSound.Play();
                 isPlaying = true;
             }
-            */
         }
-        //hunterWalk.enabled = false;
     }
     public void WalkL(InputAction.CallbackContext context)
     {
@@ -113,6 +138,7 @@ public class PlayerInputScript : MonoBehaviour
         }
         if (context.canceled)
         {
+            walkSound.Stop();
             shouldWalkL = false;
         }
     }
@@ -135,6 +161,7 @@ public class PlayerInputScript : MonoBehaviour
         {
             if (CanDash)
             {
+                dashSound.Play();
                 shouldDash = true;
             }
         }

@@ -12239,6 +12239,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fff21e11fe423409b8abe7791dc698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &1320009158 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 6935579868319366984, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+  m_PrefabInstance: {fileID: 1524745206}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &1320009162 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1737323820918138992, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+  m_PrefabInstance: {fileID: 1524745206}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1334442571
 GameObject:
   m_ObjectHideFlags: 0
@@ -13007,6 +13017,14 @@ PrefabInstance:
       propertyPath: minJumpHeight
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 1737323820918138992, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1737323820918138992, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4160181815571881102, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_Constraints
       value: 4
@@ -13051,6 +13069,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6935579868319366984, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: BypassEffects
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6935579868319366984, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: save
+      value: 
+      objectReference: {fileID: 2107925548}
+    - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: jumpSound
+      value: 
+      objectReference: {fileID: 1320009158}
+    - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: walkSound
+      value: 
+      objectReference: {fileID: 1320009162}
     - target: {fileID: 7746885465002688859, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_Mesh
       value: 

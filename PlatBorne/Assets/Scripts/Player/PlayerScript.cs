@@ -39,9 +39,6 @@ public class PlayerScript : MonoBehaviour
     private float timer = 0;
     private bool isPlaying = false;
     private bool touchedFallHitbox = false;
-    //stats
-    private float numberOfJumps = 0;
-    private float numberOfFalls = 0;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -108,9 +105,7 @@ public class PlayerScript : MonoBehaviour
                 playVoiceLine = true;
                 playerWasInAir = false;
                 touchedFallHitbox = false;
-                numberOfFalls++;
-                save.Falls(numberOfFalls, 1);
-                PlayerPrefs.Save();
+                save.PlayerFell();
             }
             else
             {
@@ -150,7 +145,6 @@ public class PlayerScript : MonoBehaviour
                     {
                         float poziceY = PlayerPrefs.GetFloat("HunterPositionY_London");
                         float poziceX = PlayerPrefs.GetFloat("HunterPositionX_London");
-                        UnityEngine.Debug.Log(poziceX + " " + poziceY);
                         rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
                     }
                     break;

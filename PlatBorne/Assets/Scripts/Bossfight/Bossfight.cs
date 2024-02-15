@@ -97,7 +97,7 @@ public class Bossfight : MonoBehaviour
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
-        timer = save.timerLoad(2);
+        timer = save.TimerLoad(2);
         if (PlayerPrefs.GetInt("PussyMode") > 0) pussyMode = true;
         else pussyMode = false;
     }

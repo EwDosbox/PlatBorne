@@ -102,7 +102,7 @@ class Cutscene_EndGameStats : MonoBehaviour
     public static string TimeConvertor(float totalSeconds)
     {
         TimeSpan time = TimeSpan.FromSeconds(totalSeconds);
-        return time.ToString("hh':'mm':'ss':'.ffff");
+        return time.ToString("hh':'mm':'ss'.'ffff");
     }
 
 }

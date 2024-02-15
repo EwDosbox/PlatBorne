@@ -12,10 +12,7 @@ public class LevelLondon : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetString("Level", "london");
-        if (PlayerPrefs.HasKey("Timer_London"))
-        {
-            londonTimer.Equals(save.timerLoad(1));
-        }
+        londonTimer.Equals(save.TimerLoad(1));
     }
     void Update()
     {
