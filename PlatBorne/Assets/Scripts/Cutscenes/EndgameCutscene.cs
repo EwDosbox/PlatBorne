@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Linq;
 
-public class EndgameCutscene : MonoBehaviour
+class EndgameCutscene : MonoBehaviour
 {
     public Text mainText;
     int i = 0;
@@ -46,7 +46,7 @@ public class EndgameCutscene : MonoBehaviour
             Debug.Log("Scene: Cutscene_EndGameStats");
         }
     }
-    IEnumerator TypeWriter()
+    private IEnumerator TypeWriter()
     {
         soundEffect.Play();
         foreach (char c in text[i])

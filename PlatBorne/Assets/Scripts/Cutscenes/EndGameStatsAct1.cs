@@ -3,20 +3,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Cutscene_EndGameStats : MonoBehaviour
+class Cutscene_EndGameStats : MonoBehaviour
 {
     public Text[] mainText;
     public Text[] dataText;
+    public Text endingText;
     public AudioSource soundEffect;
     public int numberOfStrings;
     string[] writerText =
     {
-        "Ending:",
         "Number of Falls:",
         "Number of Jumps:",
-        "Number of Deaths (Bricus):",
+        "Number of Deaths (Brecus):",
         "Time (London):",
-        "Time (Bricus):"
+        "Time (Brecus):"
     };
     string[] writerData;
     int i = 0;
@@ -32,13 +32,12 @@ public class Cutscene_EndGameStats : MonoBehaviour
     void Start()
     {
         writerData = new string[numberOfStrings];
-        writerData[0] = "Work In Progress";
-        writerData[1] = PlayerPrefs.GetInt("NumberOfFalls_London").ToString();
-        writerData[2] = PlayerPrefs.GetInt("NumberOfJumps_Act1").ToString();
-        writerData[3] = PlayerPrefs.GetInt("NumberOfDeath").ToString();
-        writerData[4] = PlayerPrefs.GetFloat("Timer_London").ToString();
-        writerData[5] = PlayerPrefs.GetFloat("Timer_Bricus").ToString();
-        StartCoroutine("Wait");
+        writerData[0] = PlayerPrefs.GetInt("NumberOfFalls_London").ToString();
+        writerData[1] = PlayerPrefs.GetInt("NumberOfJumps_Act1").ToString();
+        writerData[2] = PlayerPrefs.GetInt("NumberOfDeath").ToString();
+        writerData[3] = PlayerPrefs.GetFloat("Timer_London").ToString();
+        writerData[4] = PlayerPrefs.GetFloat("Timer_Bricus").ToString();
+        StartCoroutine(Ending("ACT I Finished"));
     }
 
     private void Update()
@@ -59,12 +58,7 @@ public class Cutscene_EndGameStats : MonoBehaviour
         //continue
         if (Input.anyKeyDown) SceneManager.LoadScene("MainMenu");
     }
-    IEnumerator Wait()
-    {
-        yield return new WaitForSeconds(delayBeforeStart);
-        isFinishedData = true;
-    }
-    IEnumerator TypeWriterText()
+    private IEnumerator TypeWriterText()
     {
         soundEffect.Play();
         foreach (char c in writerText[i])
@@ -88,5 +82,19 @@ public class Cutscene_EndGameStats : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeText);
         isFinishedData = true;
         i++;        
+    }
+
+    IEnumerator Ending(string ending)
+    {
+        yield return new WaitForSeconds(delayBeforeStart);
+        soundEffect.Play();
+        foreach (char c in ending)
+        {
+            endingText.text += c;
+            yield return new WaitForSeconds(timeBtwChars);
+        }
+        soundEffect.Stop();
+        yield return new WaitForSeconds(delayBeforeText);
+        isFinishedData = true;
     }
 }
