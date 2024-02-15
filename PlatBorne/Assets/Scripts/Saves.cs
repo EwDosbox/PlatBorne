@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Saves : MonoBehaviour
 {
@@ -54,63 +55,59 @@ public class Saves : MonoBehaviour
         {
             PlayerPrefs.SetFloat("NumberOfFalls_London", number);
         }
+        else PlayerPrefs.SetFloat("NumberOfFalls_Birmingham", number);
         PlayerPrefs.Save();
     }
 
-    public void timerSave(Stopwatch timer, int stage)
+    public void timerSave(float timer, int stage)
     {
-        TimeSpan time = timer.Elapsed;
-        string sTime = time.Hours.ToString() + ":" + time.Minutes.ToString() + ":" + time.Seconds.ToString();
         switch(stage)
         {
             case 1:
                 {
-                    PlayerPrefs.SetString("Timer_London", sTime);
+                    PlayerPrefs.SetFloat("Timer_London", timer);
                     break;
                 }
             case 2:
                 {
-                    PlayerPrefs.SetString("Timer_Bricus", sTime);
+                    PlayerPrefs.SetFloat("Timer_Bricus", timer);
                     break;
                 }
             case 3:
                 {
+                    PlayerPrefs.SetFloat("Timer_Birmingham", timer);
                     break;
                 }
             case 4: 
                 {
+                    PlayerPrefs.SetFloat("Timer_Mole", timer);
                     break;
                 }
         }
         PlayerPrefs.Save();
     }
 
-    public Stopwatch timerLoad(int stage)
+    public float timerLoad(int stage)
     {
-        Stopwatch time = new Stopwatch();
-        string sTime = null;
         switch (stage)
         {
             case 1:
                 {
-                    sTime = PlayerPrefs.GetString("Timer_London");
-                    break;
+                    return PlayerPrefs.GetFloat("Timer_London");
                 }
             case 2:
                 {
-                    sTime = PlayerPrefs.GetString("Timer_Bricus");
-                    break;
+                    return PlayerPrefs.GetFloat("Timer_Bricus");
                 }
             case 3:
                 {
-                    break;
+                    return PlayerPrefs.GetFloat("Timer_Birmingham");
                 }
             case 4:
                 {
-                    break;
+                    return PlayerPrefs.GetFloat("Timer_Mole");
                 }
         }
-        time.Equals(TimeSpan.Parse(sTime));
-        return time;
+        return 0;
     }
 }

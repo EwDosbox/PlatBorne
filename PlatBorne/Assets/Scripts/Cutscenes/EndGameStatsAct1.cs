@@ -35,8 +35,8 @@ class Cutscene_EndGameStats : MonoBehaviour
         writerData[0] = PlayerPrefs.GetInt("NumberOfFalls_London").ToString();
         writerData[1] = PlayerPrefs.GetInt("NumberOfJumps_Act1").ToString();
         writerData[2] = PlayerPrefs.GetInt("NumberOfDeath").ToString();
-        writerData[3] = PlayerPrefs.GetFloat("Timer_London").ToString();
-        writerData[4] = PlayerPrefs.GetFloat("Timer_Bricus").ToString();
+        writerData[3] = PlayerPrefs.GetString("Timer_London");
+        writerData[4] = PlayerPrefs.GetString("Timer_Bricus");
         StartCoroutine(Ending("ACT I Finished"));
     }
 

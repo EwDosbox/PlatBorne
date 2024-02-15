@@ -30,7 +30,7 @@ public class Bossfight : MonoBehaviour
     public Saves save;
     public int phase = 1;
     bool bossInvincible = true;
-    Stopwatch timer = new Stopwatch();
+    float timer;
     bool timerOn = false;
     float phaseTimer = 0f;
     float invincibilityTimerBoss = 0f;
@@ -310,8 +310,7 @@ public class Bossfight : MonoBehaviour
             else pussyModeOn.gameObject.SetActive(false);
             bossHealthBar.Slider();
             StartCoroutine(playerHealth.PlayerHPStart());
-            PreBossDialog.Play();
-            timer.Start();
+            PreBossDialog.Play();            
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("Timer_Bricus")) bossfightTimer = PlayerPrefs.GetFloat("Timer_Bricus");
             else bossfightTimer = 0;
