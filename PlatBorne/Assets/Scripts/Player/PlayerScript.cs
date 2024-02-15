@@ -101,7 +101,6 @@ public class PlayerScript : MonoBehaviour
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
             {
                 hunterDrop.Play();
-                playerFell++;
                 playVoiceLine = true;
                 playerWasInAir = false;
                 touchedFallHitbox = false;
@@ -119,13 +118,6 @@ public class PlayerScript : MonoBehaviour
             playerWasInAir = true;
             hunterWalk.enabled = false;
         }
-        //sound vyskoceni
-        if (isPlaying)
-        {
-            timer += Time.deltaTime;
-            if (timer > 1) isPlaying = false;
-        }
-        else timer = 0;
         //damage
         if (Bossfight.playerPlayDamage && !health.GodMode)
         {
