@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,11 +17,13 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private GameObject DashOrb;
 
     public BossFightVoiceLines voiceLines;
+    public Animator bossAnimation;
     public BossHealthBar bossHealthBar;
     public PlayerHealth playerHealth;
     public BossAttacks attack;
     public GameObject player;
     public GameObject levelMove;
+    public GameObject boss;
     private Rigidbody2D rb;
     public Text text;
     public Text pussyModeOn;
@@ -61,15 +64,17 @@ public class Bossfight : MonoBehaviour
         attackNumberSword = 0;
         return 1;
     }
-    public void BossDeath()
+    public IEnumerator BossDeath()
     {
         bossIsDead = true;
-        Destroy(bossSprite); //tohle se pak musí upravit jak bude aniamce
+        BossDeath01.Play();
+        bossAnimation.SetBool("Boss Death", true);
+        yield return new WaitForSeconds(1.78f);
+        Destroy(boss);
         Instantiate(DashOrb);
         text.text = "Boss Is Dead";
         bossHealthBar.SetHP(0);
-        bossHealthBar.enabled = false;
-        BossDeath01.Play();        
+        bossHealthBar.enabled = false;      
     }
     public void PlayerDeath()
     {
@@ -98,7 +103,7 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
-        if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) BossDeath();
+        if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
         if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
@@ -174,7 +179,7 @@ public class Bossfight : MonoBehaviour
             }
             else if (bossHealthBar.GetHP() == 0 && phase == 4)
             {
-                BossDeath();
+                StartCoroutine(BossDeath());
             }
             //Player Damage
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)

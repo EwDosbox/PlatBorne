@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,8 +36,8 @@ class Cutscene_EndGameStats : MonoBehaviour
         writerData[0] = PlayerPrefs.GetInt("NumberOfFalls_London").ToString();
         writerData[1] = PlayerPrefs.GetInt("NumberOfJumps_Act1").ToString();
         writerData[2] = PlayerPrefs.GetInt("NumberOfDeath").ToString();
-        writerData[3] = PlayerPrefs.GetString("Timer_London");
-        writerData[4] = PlayerPrefs.GetString("Timer_Bricus");
+        writerData[3] = TimeConvertor(PlayerPrefs.GetFloat("Timer_London"));
+        writerData[4] = TimeConvertor(PlayerPrefs.GetFloat("Timer_Bricus"));
         StartCoroutine(Ending("ACT I Finished"));
     }
 
@@ -97,4 +98,11 @@ class Cutscene_EndGameStats : MonoBehaviour
         yield return new WaitForSeconds(delayBeforeText);
         isFinishedData = true;
     }
+
+    public static string TimeConvertor(float totalSeconds)
+    {
+        TimeSpan time = TimeSpan.FromSeconds(totalSeconds);
+        return time.ToString("hh':'mm':'ss':'.ffff");
+    }
+
 }

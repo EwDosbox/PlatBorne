@@ -7,7 +7,7 @@ using UnityEngine;
 public class LevelLondon : MonoBehaviour
 {
     public Saves save;
-    Stopwatch londonTimer = new Stopwatch();
+    private float londonTimer;
     static public bool reachedTheEnd = false;
     void Start()
     {
@@ -16,14 +16,13 @@ public class LevelLondon : MonoBehaviour
         {
             londonTimer.Equals(save.timerLoad(1));
         }
-        londonTimer.Start();
     }
     void Update()
     {
-        save.timerSave(londonTimer, 1);
-        if (reachedTheEnd)
+        londonTimer += Time.deltaTime;
+        if (!reachedTheEnd)
         {
-            londonTimer.Stop();
+            save.timerSave(londonTimer, 1);
         }
     }
 }

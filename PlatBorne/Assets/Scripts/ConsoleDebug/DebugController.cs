@@ -12,7 +12,7 @@ public class DebugController : MonoBehaviour
     //commands {
     public static DebugCommand ROSEBUD;
     public static DebugCommand HELP;
-    public static DebugCommand KILL_BRICUS;
+    public static DebugCommand KILL_BRECUS;
     public static DebugCommand KILL_MOLE;
     public static DebugCommand PLAYER_HEAL;
     public static DebugCommand PUSSYMODE_TRUE;
@@ -71,9 +71,9 @@ public class DebugController : MonoBehaviour
             showHelp = true;
         });
 
-        KILL_BRICUS = new DebugCommand("kill_bricus", "Kills boss Bricus", "kill_bricus", () =>
+        KILL_BRECUS = new DebugCommand("kill_brecus", "Kills boss Brecus", "kill_brecus", () =>
         {
-            bossfight.BossDeath();
+            StartCoroutine(bossfight.BossDeath());
         });
 
         KILL_MOLE = new DebugCommand("kill_mole", "Kills boss Mole", "kill_mole", () =>
@@ -120,7 +120,7 @@ public class DebugController : MonoBehaviour
         {
             ROSEBUD,
             HELP, //Bigger UI, cannot move
-            KILL_BRICUS, 
+            KILL_BRECUS, 
             KILL_MOLE, 
             PLAYER_HEAL, 
             PUSSYMODE_TRUE, //UI CHANGE
