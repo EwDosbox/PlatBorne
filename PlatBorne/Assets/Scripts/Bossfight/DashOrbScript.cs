@@ -11,7 +11,8 @@ public class DashOrbScript : MonoBehaviour
     {        
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerInputScript.CanDash = true;
+            PlayerInputScript player = new PlayerInputScript();
+            player.abilityToDash = true;
             levelMove.SetActive(true);
             Destroy(dashOrb);
         }

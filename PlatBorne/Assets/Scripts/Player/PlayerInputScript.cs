@@ -19,6 +19,7 @@ public class PlayerInputScript : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D feet;
 
+    private bool isPlayerFacingLeft;
     [SerializeField] private float movementSpeed;
     static public bool isPlayerInAir;
     private bool shouldWalkL = false;
@@ -26,25 +27,29 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldJump;
     private bool jumpIsPressed;
     public AudioSource jumpSound;
-    public AudioSource walkSound;
+    public AudioSource walkSound;// placeholder in Inspector; so it doesnt throw errors
     public AudioSource dashSound;
     private bool isPlaying;
     private float time;
 
     //Dash
-    static public bool CanDash;
+    [SerializeField] public bool abilityToDash;
+    private bool canDash;
+    private float timeOfLastDash;
+    [SerializeField] public float dashCooldown;
     private Vector2 velocityBeforeDash;
     private bool shouldDash;
     private bool dashing;
     private float dashStarted;
-    [SerializeField] private float dashLength;
-    [SerializeField] private float dashDistance;
+    [SerializeField] private float dashTimeLength;
+    [SerializeField] private float dashVelocity;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         jumpHeight = minJumpHeight;
+        timeOfLastDash = 0;
     }
     private void FixedUpdate()
     {
@@ -55,13 +60,14 @@ public class PlayerInputScript : MonoBehaviour
         {
             dashStarted = Time.time;
             velocityBeforeDash = rb.velocity;
-            rb.velocity = new Vector2(dashDistance, 0);
             shouldDash = false;
+            dashing = true;
         }
         else if (dashing)
         {
-            rb.velocity = new Vector2(dashDistance, 0);
-            if((Time.time - dashStarted) >= dashLength)
+            if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
+            else rb.velocity = new Vector2(+dashVelocity, 0);
+            if ((Time.time - dashStarted) >= dashTimeLength)
             {
                 dashing = false;
                 rb.velocity = velocityBeforeDash;
@@ -73,11 +79,13 @@ public class PlayerInputScript : MonoBehaviour
             {
                 if (shouldWalkR)
                 {
+                    isPlayerFacingLeft = false;
                     rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
                     walkSound.Play();
                 }
                 else if (shouldWalkL)
                 {
+                    isPlayerFacingLeft = true;
                     rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
                     walkSound.Play();
                 }
@@ -87,7 +95,7 @@ public class PlayerInputScript : MonoBehaviour
                     walkSound.Stop();
                 }
             }
-            if (jumpIsPressed) rb.velocity = new Vector2(0, rb.velocity.y);
+            else rb.velocity = new Vector2(0, rb.velocity.y);
             if (shouldJump)
             {// behaves like a weird stopwatch
                 jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
@@ -105,7 +113,7 @@ public class PlayerInputScript : MonoBehaviour
                 time = 0;
             }
         }
-        
+
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -119,7 +127,8 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldJump = true;
             jumpIsPressed = false;
-            save.PlayerJumped();
+            //save.PlayerJumped();
+            //not created an instance (save = new Save()) so it throws an error
             //Sound
             if (!isPlaying)
             {
@@ -159,7 +168,7 @@ public class PlayerInputScript : MonoBehaviour
     {
         if (context.performed)
         {
-            if (CanDash)
+            if(abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
             {
                 dashSound.Play();
                 shouldDash = true;

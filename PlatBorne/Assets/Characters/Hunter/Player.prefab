@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fff21e11fe423409b8abe7791dc698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanDash: 0
   save: {fileID: 0}
   hunterDamage: {fileID: 8938530666380570138}
   hunterDrop: {fileID: 2867845862149728934}
@@ -665,6 +664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf6f5eb9949634a8c9cbba5aff2f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  save: {fileID: 0}
   maxJumpHeight: 10
   minJumpHeight: 7
   jumpModifier: 2
@@ -673,6 +673,13 @@ MonoBehaviour:
     m_Bits: 64
   feet: {fileID: 1445144076408963031}
   movementSpeed: 5
+  jumpSound: {fileID: 0}
+  walkSound: {fileID: 0}
+  dashSound: {fileID: 0}
+  abilityToDash: 0
+  dashCooldown: 3
+  dashTimeLength: 0.5
+  dashVelocity: 7
 --- !u!114 &8166118421023468212
 MonoBehaviour:
   m_ObjectHideFlags: 0
