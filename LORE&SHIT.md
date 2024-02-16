@@ -65,18 +65,45 @@ You're a cunt you know that? Imagine if I had a respawn mechanic and a health re
 You have killed that nasty insect that was stopping your way to achieving your ultimate goal. Now, leaving London, you feel fresh wind blowing on your hat. You look at the sky, your heart and blood boiling. The moon is still red. Yet that doesn't stop you. You feel determined to kill every, single, monster that crosses your path. You step outside of London's border...
 CONTINUES IN ACT II
 # ACT II
-You still cannot believe it. For the first time you are outside of the living hell. As you look around, all you see are fields which were once full of people, villages and live...now, all you see is chaos and blood-thirsty monsters.
+### Guide on reading
+No indentations is the narrator. One indentation is the Hoonter.
+## Prologue
+- Only blood-thirsty monsters and chaos was left at the outskirts of London, a living hell...
+- This desolate place was once full of glamour and happiness
+    - "Reduced to Ash and Darkness"
+- Fear the Old Mole, Hoonter!
 ### HUNTER HAS FALLEN
 - 
 ### HUNTER HAS FALLEN TOO MUCH
 - 
 ## FISH ENDING
-- When you fish out all the fishes (bruh why)
-Instead of trying to get to Krteček, you decide to stay a little while and chill with the fish. As you are looking at the moving water, you realize how easy it must be being a fish. You close your eyes and wonder what would you do with such an easy life. You fall asleep pretty quickly. When you wake up, you see only water and all the fish beside you. "Have I become a fish?" you think. First you are shoked, but after a little while you accept and embrace your new life as a fish. You no longer feel hatred or the need to kill any monsters...you feel happiness as you swim away with your new friends.
+- **When you fish out all the fishes (bruh why)**
+- The lake is comforting. You stay and fall to slumber.
+- You dream of having an easy life, of not having to mindlessly kill monsters, of not being scared of the Sanguine Moon, of living how you like.
+- When you wake up, you see only water and all the fish beside you.
+    - "Have I become a fish?"
+- You are shocked, but accepting of your fate. Your prayers were heard. You no longer feel the ever-burning hatred or the need to kill any monsters...
+- You finally feel joy as you swim away with your new friends.
 ## BOSS KRTEČEK
 ### NEUTRAL ENDING
-- (Player has slayin bosses with pussy mode ON)
-As you stand there, before the very creature that may have slaughtered millions of your people, you feel...mixed...have you really done what you could done? It may be dead, but you dont feel happy...you are not...satisfied. You look at the sky once more...the moon is still red...the reason you fight, the reason you went all this way...just for nothing to change... Only one question lies in your mind..."What now?"...
+- **Player has slayed bosses with pussy mode ON**
+- The everlasting slaughterer lies on the cold moist ground, yet you feel..
+- nothing. Void still fills your heart and soul...
+    - "Where is the bliss, the delight of the new Moon?"
+- There is none.
+- The moon still shines with its flaming red abhorrent colour
+    - "Its... still bloody? Do I have to kill more? What is there left for me to kill?"
+- There is none
+    - "Unholy Moon! Ooooh You wretched gory Moon! Why do you torture me! I do what you please... "
+    - "Yet it's all for naught!"
+    - "What now?"
 ### GOOD ENDING
-- (Player has slayin bosses with pussy mode OFF)
-As you stand there, before the very creature that may have slaughtered millions of your people, you feel...good...really good. You are the only one who was able to kill it. A smile shows on your face and a fire in your eyes. You feel alive...You feel powerfull...You feel like you could slay gods. You look at the sky filled with determination...The moon is not as bright...not as bloody red...Your purpose is being slowly achieved. You are ready to give anything...KILL anything for your homeland. You are ready to free United Kingdoms.
+- **Player has slayed bosses with pussy mode OFF**
+- The everlasting slaughterer lies on the cold moist ground, you feel it..
+- The ever-escaping euphoria of another day, for once it stayed here.
+- You achieved the unachievable..
+    - "I did it, The night is getting shallower"
+- The Moon is starting to cleanse itself from the horrible appalling cruel crimson color.
+- You feel indescribable joy, your heart is about to rupture. It's here
+    - "Will I be the one to free it?"
+- The quest of cleansing The Great Kingdoms of Britain is once again achievable.
