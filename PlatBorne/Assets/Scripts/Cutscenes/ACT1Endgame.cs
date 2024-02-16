@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Linq;
 
 class EndgameCutscene : MonoBehaviour
 {
@@ -32,7 +31,7 @@ class EndgameCutscene : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             Debug.Log("Cutscene skipped");
-            SceneManager.LoadScene("Cutscene_EndGameStats");
+            SceneManager.LoadScene("Cutscene_EndGameAct1");
             Debug.Log("Scene: Cutscene_EndGameStats");
         }
         if (isFinishedText && i < 4)
@@ -42,7 +41,7 @@ class EndgameCutscene : MonoBehaviour
         }
         if (!music.isPlaying && music.time >= music.clip.length)
         {
-            SceneManager.LoadScene("Cutscene_EndGameStats");
+            SceneManager.LoadScene("Cutscene_EndGameAct1");
             Debug.Log("Scene: Cutscene_EndGameStats");
         }
     }

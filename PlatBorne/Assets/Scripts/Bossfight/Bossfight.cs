@@ -3,6 +3,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class Bossfight : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class Bossfight : MonoBehaviour
     public GameObject UI_PlayerHP;
     public Saves save;
     public int phase = 1;
+    public GameObject moveNextLevel;
     bool bossInvincible = true;
     float timer;
     bool timerOn = false;
@@ -71,7 +73,7 @@ public class Bossfight : MonoBehaviour
         bossAnimation.SetBool("Boss Death", true);
         yield return new WaitForSeconds(1.78f);
         Destroy(boss);
-        Instantiate(DashOrb);
+        DashOrb.SetActive(true);
         text.text = "Boss Is Dead";
         bossHealthBar.SetHP(0);
         bossHealthBar.enabled = false;      
@@ -97,7 +99,6 @@ public class Bossfight : MonoBehaviour
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
-        timer = save.TimerLoad(2);
         if (PlayerPrefs.GetInt("PussyMode") > 0) pussyMode = true;
         else pussyMode = false;
     }
@@ -119,6 +120,7 @@ public class Bossfight : MonoBehaviour
             //ÈASOVAÈ
             if (timerOn)
             {
+                timer += Time.deltaTime;
                 save.timerSave(timer, 2);
                 if (bossInvincible) invincibilityTimerBoss += Time.deltaTime;
                 else invincibilityTimerBoss = 0f;

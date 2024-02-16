@@ -16,6 +16,7 @@ TagManager:
   - Boss Hitbox
   - LevelLondon_Finish
   - LevelBricus_Finish
+  - DashOrb
   layers:
   - Default
   - TransparentFX

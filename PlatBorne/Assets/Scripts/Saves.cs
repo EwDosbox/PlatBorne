@@ -63,30 +63,33 @@ public class Saves : MonoBehaviour
 
     public void timerSave(float timer, int stage)
     {
-        switch(stage)
+        if (timer != 0)
         {
-            case 1:
-                {
-                    PlayerPrefs.SetFloat("Timer_London", timer);
-                    break;
-                }
-            case 2:
-                {
-                    PlayerPrefs.SetFloat("Timer_Bricus", timer);
-                    break;
-                }
-            case 3:
-                {
-                    PlayerPrefs.SetFloat("Timer_Birmingham", timer);
-                    break;
-                }
-            case 4: 
-                {
-                    PlayerPrefs.SetFloat("Timer_Mole", timer);
-                    break;
-                }
+            switch (stage)
+            {
+                case 1:
+                    {
+                        PlayerPrefs.SetFloat("Timer_London", timer);
+                        break;
+                    }
+                case 2:
+                    {
+                        PlayerPrefs.SetFloat("Timer_Brecus", timer);
+                        break;
+                    }
+                case 3:
+                    {
+                        PlayerPrefs.SetFloat("Timer_Birmingham", timer);
+                        break;
+                    }
+                case 4:
+                    {
+                        PlayerPrefs.SetFloat("Timer_Mole", timer);
+                        break;
+                    }
+            }
+            PlayerPrefs.Save();
         }
-        PlayerPrefs.Save();
     }
 
     public float TimerLoad(int stage)
@@ -99,7 +102,7 @@ public class Saves : MonoBehaviour
                 }
             case 2:
                 {
-                    return PlayerPrefs.GetFloat("Timer_Bricus");
+                    return PlayerPrefs.GetFloat("Timer_Brecus");
                 }
             case 3:
                 {
