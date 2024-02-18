@@ -28,9 +28,11 @@ public class PreGameCutsceneScript : MonoBehaviour
     bool isFinishedText;
     public AudioSource soundEffect;
     public AudioSource music;
+    public AudioSource dramaticLondon;
     public float timeBtwChars;
     public float delay;
     public float delayOriginalName;
+    public float delayFUCK;
 
     private void Start()
     {
@@ -51,8 +53,9 @@ public class PreGameCutsceneScript : MonoBehaviour
             isFinishedText = false;
             StartCoroutine("TypeWriter");
         }
-        else if (isFinishedText && i > 9) 
+        else if (isFinishedText && i == 9) 
         {
+            mainText.CrossFadeAlpha(0, 2f, true);
             isFinishedText = false;
             StartCoroutine("London");            
         }
@@ -64,6 +67,9 @@ public class PreGameCutsceneScript : MonoBehaviour
     }
     private IEnumerator London()
     {
+        yield return new WaitForSeconds(delayFUCK);
+        music.Stop();
+        dramaticLondon.Play();
         yield return new WaitForSeconds(delayOriginalName);
         london.text = "LONDON";
         yield return new WaitForSeconds(delayOriginalName);
