@@ -9,15 +9,20 @@ public class PlayerInputScript : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     public Saves save;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Collider2D feet;
+
+    static public bool CanMove
+    {
+        get;
+        set;
+    }
 
     private float jumpHeight;
     [SerializeField] private float maxJumpHeight;
     [SerializeField] private float minJumpHeight;
     [SerializeField] private float jumpModifier;
     private float jumpTime;
-
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Collider2D feet;
 
     private bool isPlayerFacingLeft;
     [SerializeField] private float movementSpeed;
@@ -50,70 +55,73 @@ public class PlayerInputScript : MonoBehaviour
         animator = GetComponent<Animator>();
         jumpHeight = minJumpHeight;
         timeOfLastDash = 0;
+        CanMove = true;
     }
     private void FixedUpdate()
     {
         animator.SetBool("IsJumping", isPlayerInAir);
         animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
-        if (shouldDash)
+        if (CanMove)
         {
-            dashStarted = Time.time;
-            velocityBeforeDash = rb.velocity;
-            shouldDash = false;
-            dashing = true;
-        }
-        else if (dashing)
-        {
-            if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
-            else rb.velocity = new Vector2(+dashVelocity, 0);
-            if ((Time.time - dashStarted) >= dashTimeLength)
+            if (shouldDash)
             {
-                dashing = false;
-                rb.velocity = velocityBeforeDash;
+                dashStarted = Time.time;
+                velocityBeforeDash = rb.velocity;
+                shouldDash = false;
+                dashing = true;
             }
-        }
-        else if (!isPlayerInAir)
-        {
-            if (!jumpIsPressed)
+            else if (dashing)
             {
-                if (shouldWalkR)
+                if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
+                else rb.velocity = new Vector2(+dashVelocity, 0);
+                if ((Time.time - dashStarted) >= dashTimeLength)
                 {
-                    isPlayerFacingLeft = false;
-                    rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
-                    walkSound.Play();
-                }
-                else if (shouldWalkL)
-                {
-                    isPlayerFacingLeft = true;
-                    rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-                    walkSound.Play();
-                }
-                else
-                {
-                    rb.velocity = new Vector2(0, rb.velocity.y);
-                    walkSound.Stop();
+                    dashing = false;
+                    rb.velocity = velocityBeforeDash;
                 }
             }
-            else rb.velocity = new Vector2(0, rb.velocity.y);
-            if (shouldJump)
-            {// behaves like a weird stopwatch
-                jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
-                if (jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
-                rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-                shouldJump = false;
-            }
-        }
-        if (isPlaying) //timer for a jump SFX
-        {
-            time += Time.deltaTime;
-            if (time > 0.5f)
+            else if (!isPlayerInAir)
             {
-                isPlaying = false;
-                time = 0;
+                if (!jumpIsPressed)
+                {
+                    if (shouldWalkR)
+                    {
+                        isPlayerFacingLeft = false;
+                        rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
+                        walkSound.Play();
+                    }
+                    else if (shouldWalkL)
+                    {
+                        isPlayerFacingLeft = true;
+                        rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+                        walkSound.Play();
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(0, rb.velocity.y);
+                        walkSound.Stop();
+                    }
+                }
+                else rb.velocity = new Vector2(0, rb.velocity.y);
+                if (shouldJump)
+                {// behaves like a weird stopwatch
+                    jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
+                    if (jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
+                    rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+                    shouldJump = false;
+                }
+            }
+            if (isPlaying) //timer for a jump SFX
+            {
+                time += Time.deltaTime;
+                if (time > 0.5f)
+                {
+                    isPlaying = false;
+                    time = 0;
+                }
             }
         }
-
     }
 
     public void Jump(InputAction.CallbackContext context)
@@ -168,7 +176,7 @@ public class PlayerInputScript : MonoBehaviour
     {
         if (context.performed)
         {
-            if(abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
+            if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
             {
                 dashSound.Play();
                 shouldDash = true;

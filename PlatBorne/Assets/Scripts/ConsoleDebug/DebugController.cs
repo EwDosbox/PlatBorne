@@ -29,6 +29,7 @@ public class DebugController : MonoBehaviour
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
+        PlayerInputScript.CanMove = !PlayerInputScript.CanMove;
     }
     Vector2 scroll;
     private void OnGUI()
