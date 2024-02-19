@@ -32,7 +32,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 - No rest for the wicked
 - Imagine loosing all that progress
 - And All it needed was one wrong move
-- Grass grows, Birds Fly, Sun Shines and Hunter…The End Is Coming, You need to hide
+- Grass grows, Birds Fly, Sun Shines and Hunter…The End Is Coming, Coming for you
 - Your incompetence is making my blood boil
 - Is this an Undertale reference?
 - Idiot…
@@ -59,8 +59,6 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 - Skill issue
 - The only thing I know for real You are dead again , how 
 - zzz
-### PUSSY ENGINE
-You're a cunt you know that? Imagine if I had a respawn mechanic and a health regen. You know what fuck you, no happy ending or something for you, you stay in London till you decide to fight me like a real man...or woman...or god knows what you are. Probably not even your mother knows it. What's that? Getting pissed off? Gonna cry? Whatcha gonna do about it? Kill me? I'm waiting. Pussy.
 ### EPILOG
 You have killed that nasty insect that was stopping your way to achieving your ultimate goal. Now, leaving London, you feel fresh wind blowing on your hat. You look at the sky, your heart and blood boiling. The moon is still red. Yet that doesn't stop you. You feel determined to kill every, single, monster that crosses your path. You step outside of London's border...
 CONTINUES IN ACT II
@@ -73,9 +71,33 @@ No indentations is the narrator. One indentation is the Hoonter.
     - "Reduced to Ash and Darkness"
 - Fear the Old Mole, Hoonter!
 ### HUNTER HAS FALLEN
-- 
+- Things go up, things go down
+- Imagine there is a man with a knife chasing you!
+- Hurry up old man!
+- Jump, Dash, Jump, Dash is it really that hard to do?
+- The sun will be up when you get here, which will be...never!
+- Did it hurt? I hope it did
+- Not even a God could watch this...
+- And then God said "Let there be light!", too bad he said that, now everybody must watch your performance.
+- Don't you wanna shove a rocket up your arse?
+- You would be terrible guy to hike with
+- Don't worry, another species killing asteroid will come in around 65,000 years. You have enough time
+- The snail is coming! The snail is coming! The snail is coming!
+- You are based? Based on what? Number of falls?
+- It's taking you so long it would make her bored
+- They said touch grass not kamikaze into it
 ### HUNTER HAS FALLEN TOO MUCH
-- 
+- I felt the ground shake even from here!
+- Maybe you would be better miner, because you should stay on the ground.
+- Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than that.
+- I would have more chance to win a russian roulette with a machine gun than you ever coming here.
+- It's not always about the jumping or falling, Hunter, sometimes it's about the Mets
+- The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus!
+- You have a lot of determination...and probably few broken legs, sucks to be you!
+- Somebody didn't skip leg day
+### HUNTER COMES TO A POOL
+1. Yeah sure, go fishing, we have all the time in the world...
+2. What makes you think a little fishing could help you?
 ## FISH ENDING
 - **When you fish out all the fishes (bruh why)**
 - The lake is comforting. You stay and fall to slumber.
@@ -84,7 +106,24 @@ No indentations is the narrator. One indentation is the Hoonter.
     - "Have I become a fish?"
 - You are shocked, but accepting of your fate. Your prayers were heard. You no longer feel the ever-burning hatred or the need to kill any monsters...
 - You finally feel joy as you swim away with your new friends.
-## BOSS KRTEČEK
+## BOSS MOLE
+- *Hunter Cums* At Last, you did it...took you long enough, now get your ass ready for a real fight!
+- *Phase 2* You wanna play? I will show you how we play with visitors in Birmingham!
+- *Death - Pussy Mode* YOU CANNOT CHANGE WHAT HAS BEEN DONE! *screaming*
+- *Death - Normal*  THE NIGHT WILL ALWAYS PERSIST! *screaming*
+### BOSS DEATH
+1. Welcome to the realm of death
+2. Too bad you won't ever see the moon again
+3. You don't even need the Grim Reaper
+4. I'm on FIRE!
+5. Diggy Diggy Hole Right Into Your Skull!
+6. They are going to glue you back together...IN HELL!!!
+7. El Stupido
+8. Welcome to the Shadow Realm Jimbo
+9. Did it hurt? Good
+10. Dying must be your expertise
+11. May your falls be many, and your days few
+12. Another one for the books
 ### NEUTRAL ENDING
 - **Player has slayed bosses with pussy mode ON**
 - The everlasting slaughterer lies on the cold moist ground, yet you feel..
