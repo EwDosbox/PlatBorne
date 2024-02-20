@@ -65,12 +65,13 @@ CONTINUES IN ACT II
 # ACT II
 ### Guide on reading
 No indentations is the narrator. One indentation is the Hoonter.
-## Prologue
+## **Prologue**
 - Only blood-thirsty monsters and chaos was left at the outskirts of London, a living hell...
 - This desolate place was once full of glamour and happiness
     - "Reduced to Ash and Darkness"
 - Fear the Old Mole, Hoonter!
-### HUNTER HAS FALLEN
+## **[St Martin in the Bull Ring](https://en.wikipedia.org/wiki/St_Martin_in_the_Bull_Ring)**
+### **Hunter has fallen**
 - Things go up, things go down
 - Imagine there is a man with a knife chasing you!
 - Hurry up old man!
@@ -86,7 +87,7 @@ No indentations is the narrator. One indentation is the Hoonter.
 - You are based? Based on what? Number of falls?
 - It's taking you so long it would make her bored
 - They said touch grass not kamikaze into it
-### HUNTER HAS FALLEN TOO MUCH
+### **hunter has fallen too much**
 - I felt the ground shake even from here!
 - Maybe you would be better miner, because you should stay on the ground.
 - Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than that.
@@ -95,10 +96,11 @@ No indentations is the narrator. One indentation is the Hoonter.
 - The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus!
 - You have a lot of determination...and probably few broken legs, sucks to be you!
 - Somebody didn't skip leg day
-### HUNTER COMES TO A POOL
+## **Fishing**
+### **Hunter comes to the water**
 1. Yeah sure, go fishing, we have all the time in the world...
 2. What makes you think a little fishing could help you?
-## FISH ENDING
+### FISH ENDING
 - **When you fish out all the fishes (bruh why)**
 - The lake is comforting. You stay and fall to slumber.
 - You dream of having an easy life, of not having to mindlessly kill monsters, of not being scared of the Sanguine Moon, of living how you like.
