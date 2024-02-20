@@ -33,7 +33,7 @@ public class PlayerInputScript : MonoBehaviour
     private bool jumpIsPressed;
     public AudioSource jumpSound;
     public AudioSource walkSound;// placeholder in Inspector; so it doesnt throw errors
-    public AudioSource dashSound;
+    public AudioSource dashSound;// placeholder in Inspector; so it doesnt throw errors
     private bool isPlaying;
     private float time;
 
@@ -78,7 +78,7 @@ public class PlayerInputScript : MonoBehaviour
                 if ((Time.time - dashStarted) >= dashTimeLength)
                 {
                     dashing = false;
-                    rb.velocity = velocityBeforeDash;
+                    rb.velocity = new Vector2(velocityBeforeDash.x, 0);
                 }
             }
             else if (!isPlayerInAir)
@@ -178,6 +178,7 @@ public class PlayerInputScript : MonoBehaviour
         {
             if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
             {
+                timeOfLastDash = Time.time;
                 dashSound.Play();
                 shouldDash = true;
             }
