@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 
 public class PlayerScript : MonoBehaviour
@@ -38,7 +39,7 @@ public class PlayerScript : MonoBehaviour
     public bool playerInvincible = false;
     private float timer = 0;
     private bool isPlaying = false;
-    private bool touchedFallHitbox = false;
+    public bool touchedFallHitbox = false;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox"))
@@ -59,8 +60,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
-        if (hunterFeet.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
+        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;        
         if (collision.gameObject.CompareTag("LevelLondon_Finish"))
         {
             LevelLondon.reachedTheEnd = true;

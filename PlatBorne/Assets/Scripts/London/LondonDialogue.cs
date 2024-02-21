@@ -44,6 +44,11 @@ public class LondonDialogue : MonoBehaviour
             for(int i = 0;i < arrayVLChar.Length;i++) voiceLinesArray[i] = int.Parse(arrayVLChar[i]);
             RNGnow = PlayerPrefs.GetInt("RNGNow");
             RNGsaved = PlayerPrefs.GetInt("RNGSaved");
+            if (RNGsaved == 0)
+            {
+                System.Random rng = new System.Random();
+                RNGsaved = rng.Next(minimum, maximum + 1);
+            }
             j = PlayerPrefs.GetInt("LondonVoiceLinesJ");
         }
         else
