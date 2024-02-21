@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
 
     public bool PussyMode
     {
-        set { godMode = value; }
+        set { pussyMode = value; }
         get { return godMode;  }
     }
     public int PlayerHP
@@ -100,6 +100,9 @@ public class PlayerHealth : MonoBehaviour
                     }
                     else
                     {
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                         hp1.enabled = true;
                         hp2.enabled = true;
                         hp3.enabled = true;
@@ -116,6 +119,9 @@ public class PlayerHealth : MonoBehaviour
                     }
                     else
                     {
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                         hp1.enabled = true;
                         hp2.enabled = true;
                         hp3.enabled = false;
@@ -132,6 +138,9 @@ public class PlayerHealth : MonoBehaviour
                     }
                     else
                     {
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                         hp1.enabled = true;
                         hp2.enabled = false;
                         hp3.enabled = false;
@@ -148,6 +157,9 @@ public class PlayerHealth : MonoBehaviour
                     }
                     else
                     {
+                        hp1_GodMode.enabled = false;
+                        hp2_GodMode.enabled = false;
+                        hp3_GodMode.enabled = false;
                         hp1.enabled = false;
                         hp2.enabled = false;
                         hp3.enabled = false;

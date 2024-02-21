@@ -60,7 +60,7 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
-        if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
+        if (hunterFeet.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
         if (collision.gameObject.CompareTag("LevelLondon_Finish"))
         {
             LevelLondon.reachedTheEnd = true;

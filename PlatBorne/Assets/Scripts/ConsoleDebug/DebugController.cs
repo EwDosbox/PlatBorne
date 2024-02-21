@@ -11,6 +11,7 @@ public class DebugController : MonoBehaviour
     string input;
     //commands {
     public static DebugCommand ROSEBUD;
+    public static DebugCommand ROSEBUD_OFF;
     public static DebugCommand HELP;
     public static DebugCommand KILL_BRECUS;
     public static DebugCommand KILL_MOLE;
@@ -29,6 +30,7 @@ public class DebugController : MonoBehaviour
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
+        input = "";
         PlayerInputScript.CanMove = !PlayerInputScript.CanMove;
     }
     Vector2 scroll;
@@ -65,6 +67,13 @@ public class DebugController : MonoBehaviour
         ROSEBUD = new DebugCommand("rosebud", "Enables GodMode", "rosebud", () =>
         {
             playerHealth.GodMode = true;
+            PlayerPrefs.SetInt("GodMode", 1);
+        });
+
+        ROSEBUD_OFF = new DebugCommand("rosebud_off", "Disables GodMode", "rosebud_off", () =>
+        {
+            playerHealth.GodMode = false;
+            PlayerPrefs.DeleteKey("GodMode");
         });
 
         HELP = new DebugCommand("help", "Shows all commands", "help", () =>
@@ -120,12 +129,13 @@ public class DebugController : MonoBehaviour
         commandList = new List<object>
         {
             ROSEBUD,
-            HELP, //Bigger UI, cannot move
+            ROSEBUD_OFF,
+            HELP,
             KILL_BRECUS, 
             KILL_MOLE, 
             PLAYER_HEAL, 
-            PUSSYMODE_TRUE, //UI CHANGE
-            PUSSYMODE_FALSE, //UI CHANGE
+            PUSSYMODE_TRUE,
+            PUSSYMODE_FALSE,
             TELEPORT_LONDON, 
             TELEPORT_CHURCH,
             TELEPORT_BIRMINGHAM, 
