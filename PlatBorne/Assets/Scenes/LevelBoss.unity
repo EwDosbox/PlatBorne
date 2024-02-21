@@ -12773,7 +12773,7 @@ PrefabInstance:
       objectReference: {fileID: 1320009162}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: jumpModifier
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: abilityToDash
@@ -12781,11 +12781,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: maxJumpHeight
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: minJumpHeight
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7746885465002688859, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_Mesh

@@ -280,6 +280,7 @@ MonoBehaviour:
   hunterFeet: {fileID: 0}
   playerFell: 0
   playerInvincible: 0
+  touchedFallHitbox: 0
 --- !u!50 &4160181815571881102
 Rigidbody2D:
   serializedVersion: 4
@@ -835,10 +836,10 @@ MonoBehaviour:
   maxJumpHeight: 10
   minJumpHeight: 7
   jumpModifier: 2
-  movementSpeed: 5
-  jumpSound: {fileID: 0}
-  walkSound: {fileID: 0}
-  dashSound: {fileID: 0}
+  movementSpeed: 4
+  jumpSound: {fileID: 1737323820918138992}
+  walkSound: {fileID: 1737323820918138992}
+  dashSound: {fileID: 1737323820918138992}
   abilityToDash: 0
   dashCooldown: 3
   dashTimeLength: 0.5
