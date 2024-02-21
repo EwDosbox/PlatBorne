@@ -1,4 +1,5 @@
 using System.Threading;
+using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -59,8 +60,9 @@ public class PlayerInputScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        animator.SetBool("IsJumping", isPlayerInAir);
-        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        animator.SetBool("isJumpPreparing", jumpIsPressed);
+        animator.SetInteger("verticalSpeed", math.asint(rb.velocity.y));
+        animator.SetInteger("horizontalSpeed",math.asint(rb.velocity.x));
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
         if (CanMove)
         {
