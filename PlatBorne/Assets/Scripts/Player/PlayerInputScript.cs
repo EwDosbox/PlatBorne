@@ -91,12 +91,14 @@ public class PlayerInputScript : MonoBehaviour
                     if (shouldWalkR)
                     {
                         isPlayerFacingLeft = false;
+                        transform.localScale = new Vector2(+0.19f, 0.19f);
                         rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
                         walkSound.Play();
                     }
                     else if (shouldWalkL)
                     {
                         isPlayerFacingLeft = true;
+                        transform.localScale = new Vector2(-0.19f, 0.19f);
                         rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
                         walkSound.Play();
                     }
@@ -154,7 +156,6 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldWalkL = true;
             shouldWalkR = false;
-            if (!isPlayerInAir) transform.localScale = new Vector2(-0.19f, 0.19f);
         }
         if (context.canceled)
         {
@@ -168,7 +169,6 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldWalkL = false;
             shouldWalkR = true;
-            if (!isPlayerInAir) transform.localScale = new Vector2(+0.19f, 0.19f);
         }
         if (context.canceled)
         {
