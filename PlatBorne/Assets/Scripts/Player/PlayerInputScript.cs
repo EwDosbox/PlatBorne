@@ -61,6 +61,7 @@ public class PlayerInputScript : MonoBehaviour
     private void FixedUpdate()
     {
         animator.SetBool("isJumpPreparing", jumpIsPressed);
+        animator.SetBool("isPlayerInAir", isPlayerInAir);
         animator.SetInteger("verticalSpeed", math.asint(rb.velocity.y));
         animator.SetInteger("horizontalSpeed",math.asint(rb.velocity.x));
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
