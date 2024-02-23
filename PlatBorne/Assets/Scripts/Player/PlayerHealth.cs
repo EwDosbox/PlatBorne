@@ -43,6 +43,12 @@ public class PlayerHealth : MonoBehaviour
         }
         get { return playerHP; }
     }
+
+    public void PlayerDamage()
+    {
+        playerHP--;
+        HPChanged();
+    }
     private void Start()
     {
         if (PlayerPrefs.HasKey("PussyMode"))
