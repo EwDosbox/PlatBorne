@@ -1,0 +1,54 @@
+{
+    "name": "Fishing",
+    "maps": [
+        {
+            "name": "Fishing",
+            "id": "94684a42-5dbd-457b-a1c7-7cfb9aa25c6f",
+            "actions": [
+                {
+                    "name": "HookL",
+                    "type": "Button",
+                    "id": "395ab32c-06eb-486b-b8bd-c55ad78bd700",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HookR",
+                    "type": "Button",
+                    "id": "5030fd4e-b7b4-4c5e-8c77-d836c7c19807",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4ea8502d-089e-4d70-b6d9-f6d9eec51071",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HookL",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "da05cbea-4372-4f93-907d-f98473512009",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HookR",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

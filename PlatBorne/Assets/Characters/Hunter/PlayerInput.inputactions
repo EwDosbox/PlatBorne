@@ -118,34 +118,6 @@
             ]
         },
         {
-            "name": "Fishing",
-            "id": "f45fa694-b27c-44f0-9804-42bb218a6a25",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "3970f5f7-ee82-4e2a-bda7-14c1502eee37",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "4c010945-99f6-478f-8c60-78e5c7b6cd23",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "New action",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "Console",
             "id": "a89c3590-fc35-4df6-807a-b79b048b9aa8",
             "actions": [

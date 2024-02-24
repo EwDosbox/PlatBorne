@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: -1930123028944904493}
   - component: {fileID: 3338149418787538915}
   - component: {fileID: 7186549255527368089}
-  - component: {fileID: 8166118421023468212}
+  - component: {fileID: 1543902709659541418}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -277,7 +277,7 @@ MonoBehaviour:
   pushRightLayer:
     serializedVersion: 2
     m_Bits: 128
-  hunterFeet: {fileID: 0}
+  hunterFeet: {fileID: 3338149418787538915}
   playerFell: 0
   playerInvincible: 0
   touchedFallHitbox: 0
@@ -844,7 +844,8 @@ MonoBehaviour:
   dashCooldown: 3
   dashTimeLength: 0.5
   dashVelocity: 7
---- !u!114 &8166118421023468212
+  canFish: 0
+--- !u!114 &1543902709659541418
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -872,7 +873,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7186549255527368089}
-        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
         m_MethodName: WalkL
         m_Mode: 0
         m_Arguments:
@@ -888,7 +889,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7186549255527368089}
-        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
         m_MethodName: WalkR
         m_Mode: 0
         m_Arguments:
@@ -904,7 +905,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7186549255527368089}
-        m_TargetAssemblyTypeName: HunterInputScript, Assembly-CSharp
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
         m_MethodName: Jump
         m_Mode: 0
         m_Arguments:
@@ -938,9 +939,37 @@ MonoBehaviour:
     m_ActionId: 7ca48a7b-7202-4c56-8bc4-283869c4c538
     m_ActionName: UI/Settings[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
+        m_MethodName: HookL
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 3970f5f7-ee82-4e2a-bda7-14c1502eee37
-    m_ActionName: Fishing/New action
+    m_ActionName: Fishing/HookL[/Keyboard/a]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7186549255527368089}
+        m_TargetAssemblyTypeName: PlayerInputScript, Assembly-CSharp
+        m_MethodName: HookR
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ca2482a4-9265-4fde-bed5-f78543acbb6c
+    m_ActionName: Fishing/HookR[/Keyboard/d]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: e8b23b39-bf05-452a-8755-3788f45be88a

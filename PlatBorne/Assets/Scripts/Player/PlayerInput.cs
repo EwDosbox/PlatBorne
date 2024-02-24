@@ -140,34 +140,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Fishing"",
-            ""id"": ""f45fa694-b27c-44f0-9804-42bb218a6a25"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""3970f5f7-ee82-4e2a-bda7-14c1502eee37"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""4c010945-99f6-478f-8c60-78e5c7b6cd23"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""New action"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
             ""name"": ""Console"",
             ""id"": ""a89c3590-fc35-4df6-807a-b79b048b9aa8"",
             ""actions"": [
@@ -207,9 +179,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Settings = m_UI.FindAction("Settings", throwIfNotFound: true);
-        // Fishing
-        m_Fishing = asset.FindActionMap("Fishing", throwIfNotFound: true);
-        m_Fishing_Newaction = m_Fishing.FindAction("New action", throwIfNotFound: true);
         // Console
         m_Console = asset.FindActionMap("Console", throwIfNotFound: true);
         m_Console_Newaction = m_Console.FindAction("New action", throwIfNotFound: true);
@@ -387,52 +356,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     }
     public UIActions @UI => new UIActions(this);
 
-    // Fishing
-    private readonly InputActionMap m_Fishing;
-    private List<IFishingActions> m_FishingActionsCallbackInterfaces = new List<IFishingActions>();
-    private readonly InputAction m_Fishing_Newaction;
-    public struct FishingActions
-    {
-        private @PlayerInput m_Wrapper;
-        public FishingActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Fishing_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Fishing; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(FishingActions set) { return set.Get(); }
-        public void AddCallbacks(IFishingActions instance)
-        {
-            if (instance == null || m_Wrapper.m_FishingActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_FishingActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IFishingActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IFishingActions instance)
-        {
-            if (m_Wrapper.m_FishingActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IFishingActions instance)
-        {
-            foreach (var item in m_Wrapper.m_FishingActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_FishingActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public FishingActions @Fishing => new FishingActions(this);
-
     // Console
     private readonly InputActionMap m_Console;
     private List<IConsoleActions> m_ConsoleActionsCallbackInterfaces = new List<IConsoleActions>();
@@ -488,10 +411,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnSettings(InputAction.CallbackContext context);
-    }
-    public interface IFishingActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
     }
     public interface IConsoleActions
     {

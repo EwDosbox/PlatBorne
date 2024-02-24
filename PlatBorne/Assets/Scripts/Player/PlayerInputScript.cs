@@ -50,6 +50,7 @@ public class PlayerInputScript : MonoBehaviour
     [SerializeField] private float dashTimeLength;
     [SerializeField] private float dashVelocity;
 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
