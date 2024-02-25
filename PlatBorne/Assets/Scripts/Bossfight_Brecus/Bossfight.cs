@@ -13,6 +13,7 @@ public class Bossfight : MonoBehaviour
     [SerializeField] private AudioSource BossDamage03;
     [SerializeField] private AudioSource BossDeath01;
     [SerializeField] private AudioSource OSTLoop;
+    [SerializeField] private AudioSource SFXVunerability;
     [SerializeField] private AudioSource OSTPhase4;
     [SerializeField] private SpriteRenderer bossSprite;
     [SerializeField] private GameObject DashOrb;
@@ -135,6 +136,7 @@ public class Bossfight : MonoBehaviour
             if (invincibilityTimerBoss >= 60)
             {
                 invincibilityTimerBoss = 0;
+                SFXVunerability.Play();
                 bossInvincible = false;
             }
             if (invincibilityTimerPlayer > 2) //seconds of invincibility after damage
