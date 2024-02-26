@@ -5,59 +5,63 @@ using UnityEngine;
 public class FishAIScript : MonoBehaviour
 {
     private Rigidbody2D fishRB;
+    private Collider2D fishCollider;
+    private Collider2D waterBounds;
 
-    [SerializeField] private float _nextFishMovementChange;
-    [SerializeField] private float _lastFishMovementChange;
-    [SerializeField] private bool _isTimeToChangeMovement;
-
-    private float LastFishMovementChange
-    {
-        get
-        {
-            return _lastFishMovementChange;
-        }
-        set
-        {
-            _lastFishMovementChange = Time.time;
-        }
-    }
-    private float NextFishMovementChange
-    {
-        get 
-        {
-            if(_isTimeToChangeMovement)
-            {
-                float x = 3;
-                _nextFishMovementChange = Time.time + Random.Range(0, x);
-            }
-            return _nextFishMovementChange;
-        }
-    }
-    private bool IsTimeToChangeMovement
-    {
-        get
-        {
-            return (Time.time <= NextFishMovementChange);
-        }
-    }
+    private float nextFishMovementChange;
+    private bool isTimeToChangeMovement;
 
     private void Awake()
     {
         fishRB = GetComponent<Rigidbody2D>();
+        fishCollider = GetComponent<Collider2D>();
+        waterBounds = GameObject.Find("Water").GetComponent<Collider2D>();
     }
 
     private void FixedUpdate()
     {
-        if(IsTimeToChangeMovement)
+        isTimeToChangeMovement = Time.time > nextFishMovementChange;
+        if (isTimeToChangeMovement)
         {
-            LastFishMovementChange = 1;            
-            fishRB.velocity = RandomVector();
+            nextFishMovementChange = RandomTime();
+            if (!Physics2D.IsTouching(fishCollider, waterBounds))
+            {
+                
+            }
+            else
+            {
+                if (fishRB.velocity.x > 0)
+                {
+                    if (Random.value > 0.3) fishRB.velocity += RandomPositoveVector();
+                    else fishRB.velocity += RandomNegativeVector();
+                }
+                else
+                {
+                    if (Random.value > 0.3) fishRB.velocity += RandomNegativeVector();
+                    else fishRB.velocity += RandomPositoveVector();
+                }
+            }
         }
     }
 
-    private Vector2 RandomVector()
+    private Vector2 RandomPositoveVector()
     {
         float x = 3;
-        return new Vector2(Random.Range(-x, x), 0);
+        return new Vector2(+Equation(Random.Range(0, x)), 0);
+    }
+    private Vector2 RandomNegativeVector()
+    {
+        float x = 3;
+        return new Vector2(-Equation(Random.Range(0, x)), 0);
+    }
+    private float Equation(double x)
+    {
+        return 3 + (0.5f - 3) / Mathf.Pow((1f + (float)x / 2.6f), 6);
+    }
+
+    private float RandomTime()
+    {
+        float x = 3;
+        return Time.time + Random.Range(0, x);
     }
 }
