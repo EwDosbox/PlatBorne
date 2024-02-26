@@ -26,8 +26,8 @@ public class Mole_AttackMoleRain : MonoBehaviour
             Destroy(gameObject);
         }
         rb = GetComponent<Rigidbody2D>();
-        if (rb.velocity < maxSpeed) rb.velocity += Vector2.down * acceleration;
-        else rb.velocity == maxSpeed;
+        if (rb.velocity.magnitude < maxSpeed) rb.velocity += Vector2.down * acceleration;
+        else rb.velocity = Vector2.down * maxSpeed;
     }
 }
 

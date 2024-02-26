@@ -7,7 +7,7 @@ public class Mole_AttackDrillRain : MonoBehaviour
     Rigidbody2D rb;
     float timer;
     [SerializeField] float timeToSelfDestruct;
-    [SerializeField] float fallingSpeed;
+    [SerializeField] float speed;
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -16,10 +16,10 @@ public class Mole_AttackDrillRain : MonoBehaviour
 
     void Update()
     {
-        timer += Time.DeltaTime;
+        timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
-            Destroy(GameObject);
+            Destroy(gameObject);
         }
     }
 }

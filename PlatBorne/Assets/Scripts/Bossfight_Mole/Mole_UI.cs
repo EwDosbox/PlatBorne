@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Mole_UI : MonoBehaviour
 {
     //UNITY
-    [SerializeField] Text pussyMode;
-    [SerializeField] Slider hpSlider;
+    public Text pussyMode;
+    public Slider hpSlider;
     [SerializeField] float sliderSpeedToFill;
     [SerializeField] GameObject bossSlider;
     //SCRIPTS   
@@ -33,9 +34,9 @@ public class Mole_UI : MonoBehaviour
         }
         else
         {
-            hpSlider.value = health.Health;
+            hpSlider.value = health.BossHealth;
         }
     }
     public void BossHPSliderStart() { sliderStart = true; }
-    public void BossHPSliderDestroy() { bossSlider.isActive(false); }
+    public void BossHPSliderDestroy() { bossSlider.SetActive(false); }
 }

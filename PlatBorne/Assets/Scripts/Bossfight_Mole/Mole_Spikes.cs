@@ -18,7 +18,8 @@ public class Mole_Spikes : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Player"))
         {
-            health.health--; //fix plz
+            health.PlayerDamage();
+            Destroy(gameObject);
         }
     }
     private void Awake()
@@ -39,9 +40,9 @@ public class Mole_Spikes : MonoBehaviour
         {            
             alpha -= fadeSpeed * Time.deltaTime;
             spriteRenderer.color = new Color(1f, 1f, 1f, alpha);
-            if (alpha <= 0) Destroy(GameObject);
+            if (alpha <= 0) Destroy(gameObject);
         }
-        timer = Time.DeltaTime;
+        timer = Time.deltaTime;
         if (timer > timeToSelfDestruct) fadeOut = true;
     }
 }

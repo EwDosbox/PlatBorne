@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mole_AttackMoleRain : MonoBehaviour
+public class Mole_AttackGroundFuckingSomething : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private GameObject ;
     [SerializeField] private float timeToSelfDestruct;
     [SerializeField] private float acceleration;
     [SerializeField] private float maxHeight;
@@ -23,7 +22,7 @@ public class Mole_AttackMoleRain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = transform.Rotate(Vector2.up * rotationSpeed * Time.deltaTime);
+        transform.Rotate(0,0, rotationSpeed);
         timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
@@ -37,8 +36,8 @@ public class Mole_AttackMoleRain : MonoBehaviour
         else rb.velocity += Vector2.up * acceleration;
         if (rb.position.y > maxHeight)
         {
-            rb.velocity = 0;
-            timeSpinning += Time.DeltaTime;
+            rb.velocity = Vector2.zero;
+            timeSpinning += Time.deltaTime;
             if (timeSpinning > timeStayedInAir)
             {
                 rb.velocity += Vector2.down * acceleration;

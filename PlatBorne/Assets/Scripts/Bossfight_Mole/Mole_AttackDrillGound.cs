@@ -19,8 +19,7 @@ public class Mole_AttackDrillGround : MonoBehaviour
         timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
-            Destroy(GameObject);
+            Destroy(gameObject);
         }
     }
-}
 }

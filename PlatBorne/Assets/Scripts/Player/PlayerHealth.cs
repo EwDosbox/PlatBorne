@@ -71,7 +71,11 @@ public class PlayerHealth : MonoBehaviour
         hp2_GodMode.enabled = false;
         hp3_GodMode.enabled = false;
     }
-
+    public void PlayerDamage()
+    {
+        playerHP--;
+        HPChanged();
+    }
     public IEnumerator PlayerHPStart()
     {
         playerHP = 3;

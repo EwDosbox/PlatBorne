@@ -61,7 +61,7 @@ public class Saves : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void timerSave(float timer, int stage)
+    public void TimerSave(float timer, int stage)
     {
         if (timer != 0)
         {
