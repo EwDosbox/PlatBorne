@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Mole_Bossfight : MonoBehaviour
@@ -65,6 +66,7 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabSpike;
     [SerializeField] GameObject prefabPlatforms;
     [SerializeField] GameObject prefabROCK;
+    [SerializeField] GameObject prefabShovelRain;
     //PUBLIC//
 
     //COLLIDERS//
@@ -120,13 +122,62 @@ public class Mole_Bossfight : MonoBehaviour
     int attackNumberDrillSide = 0;
     int attackNumberDrillGround = 0;
     int attackNumberDrillRain = 0;
+    int attackNumberSpikes = 0;
+    int attackNumberRock = 0;
+    string lastAttack = null;
     IEnumerator AttackChooser()
     {
         attackIsGoing = true;
         if (phase == 1)
         {
             yield return new WaitForSeconds(timeForNextAttackPhase1);
+            //if same
+            if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
+            {
+                switch (UnityEngine.Random.Range(1, 4))
+                {
+                    case 1:
+                        lastAttack = "MoleRain";
+                        attackNumberMoleRain++;
+                        Attack_MolesRain();
+                        break;
+                    case 2:
+                        lastAttack = "DrillRain";
+                        attackNumberDrillRain++;
+                        Attack_DrillRain();
+                        break;
+                    case 3:
 
+                        lastAttack = "DrillGround";
+                        attackNumberDrillGround++;
+                        Attack_GroundDrills();
+                        break;
+                }
+            }
+            else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain") 
+            {
+                lastAttack = "MoleRain";
+                attackNumberMoleRain++;
+                Attack_MolesRain();                
+            }
+            else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
+            {
+                lastAttack = "DrillRain";
+                attackNumberDrillRain++;
+                Attack_DrillRain();
+            }
+            else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
+            {
+                lastAttack = "DrillGround";
+                attackNumberDrillGround++;
+                Attack_GroundDrills();
+            }
+            else //DrillSide
+            {
+                lastAttack = "DrillSide";
+                attackNumberDrillSide++;
+                Attack_SideDrills();
+            }
         }
         else if(phase == 2)
         {

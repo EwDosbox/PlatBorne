@@ -54,6 +54,8 @@ public class Mole_Health : MonoBehaviour
 
     public void BossDeath()
     {
+        Mole_UI ui = new Mole_UI();
+        ui.BossHPSliderDestroy();
         bossInvincible = false;
         bossHealth = 0;
         bossDead = true;
