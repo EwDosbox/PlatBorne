@@ -5451,6 +5451,7 @@ MonoBehaviour:
   BossDamage03: {fileID: 914732934}
   BossDeath01: {fileID: 914732933}
   OSTLoop: {fileID: 914732939}
+  SFXVunerability: {fileID: 914732942}
   OSTPhase4: {fileID: 914732938}
   bossSprite: {fileID: 914732931}
   DashOrb: {fileID: 447005116}
