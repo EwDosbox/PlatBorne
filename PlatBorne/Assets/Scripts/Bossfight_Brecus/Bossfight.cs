@@ -122,7 +122,7 @@ public class Bossfight : MonoBehaviour
             if (timerOn)
             {
                 timer += Time.deltaTime;
-                save.timerSave(timer, 2);
+                save.TimerSave(timer, 2);
                 if (bossInvincible) invincibilityTimerBoss += Time.deltaTime;
                 else invincibilityTimerBoss = 0f;
                 if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;

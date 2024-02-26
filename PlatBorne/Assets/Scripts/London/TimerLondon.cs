@@ -19,7 +19,7 @@ public class LevelLondon : MonoBehaviour
         londonTimer += Time.deltaTime;
         if (!reachedTheEnd)
         {
-            save.timerSave(londonTimer, 1);
+            save.TimerSave(londonTimer, 1);
         }
     }
 }
