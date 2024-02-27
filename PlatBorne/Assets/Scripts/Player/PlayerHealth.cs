@@ -12,6 +12,7 @@ public class PlayerHealth : MonoBehaviour
     public Image hp1_GodMode;
     public Image hp2_GodMode;
     public Image hp3_GodMode;
+    public AudioSource hunterGodMode;
     private int playerHP = 0;
     private bool godMode;
     private bool pussyMode;
@@ -19,7 +20,11 @@ public class PlayerHealth : MonoBehaviour
     public bool GodMode
     {
         set 
-        { 
+        {             
+            if (value == true)
+            {
+                hunterGodMode.Play();
+            }
             godMode = value;
             HPChanged();
         }
@@ -71,7 +76,11 @@ public class PlayerHealth : MonoBehaviour
         hp2_GodMode.enabled = false;
         hp3_GodMode.enabled = false;
     }
-
+    public void PlayerDamage()
+    {
+        playerHP--;
+        HPChanged();
+    }
     public IEnumerator PlayerHPStart()
     {
         playerHP = 3;

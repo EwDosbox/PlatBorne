@@ -84,7 +84,6 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
         if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
     }
-
     private void Start()
     {
         LoadMovement();
