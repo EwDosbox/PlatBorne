@@ -6,10 +6,10 @@ using UnityEngine;
 public class FishAIScript : MonoBehaviour
 {
     private Rigidbody2D fishRB;
-    private Collider fishLCollider;
-    private Collider fishRCollider;
-    private Collider waterLCollider;
-    private Collider waterRCollider;
+    public Collider2D fishLCollider;
+    public Collider2D fishRCollider;
+    public Collider2D waterLCollider;
+    public Collider2D waterRCollider;
 
     private float nextFishMovementChange;
     private bool isTimeToChangeMovement;
@@ -17,12 +17,11 @@ public class FishAIScript : MonoBehaviour
     private void Awake()
     {
         fishRB = GetComponent<Rigidbody2D>();
-        Collider[] colliders = FindObjectsOfType<Collider>();
+        Collider2D[] colliders = FindObjectsOfType<Collider2D>();
+        fishLCollider = colliders.FirstOrDefault(x => x.name == "LeftSide");
         fishRCollider = colliders.FirstOrDefault(x => x.name == "RightSide");
         waterRCollider = colliders.FirstOrDefault(x => x.name == "WaterRightSide");
         waterLCollider = colliders.FirstOrDefault(x => x.name == "WaterLeftSide");
-        fishLCollider = colliders.FirstOrDefault(x => x.name == "LeftSide");
-        Debug.Log(colliders.ToString());
     }
 
     private void FixedUpdate()
@@ -31,27 +30,31 @@ public class FishAIScript : MonoBehaviour
         if (isTimeToChangeMovement)
         {
             nextFishMovementChange = RandomTime();
-            // if (Physics2D.IsTouching(fishLCollider, waterLCollider))
+            if (fishRB.velocity.x > 0)
             {
-                fishRB.velocity += RandomVector();
+                if (Random.value > 0.3) fishRB.velocity += RandomVector();
+                else fishRB.velocity -= RandomVector();
             }
-            //else if (Physics2D.IsTouching(fishRCollider, waterRCollider))
+            else
             {
-                fishRB.velocity -= RandomVector();
+                if (Random.value > 0.3) fishRB.velocity -= RandomVector();
+                else fishRB.velocity += RandomVector();
             }
-            //else
-            {
-                if (fishRB.velocity.x > 0)
-                {
-                    if (Random.value > 0.3) fishRB.velocity += RandomVector();
-                    else fishRB.velocity -= RandomVector();
-                }
-                else
-                {
-                    if (Random.value > 0.3) fishRB.velocity -= RandomVector();
-                    else fishRB.velocity += RandomVector();
-                }
-            }
+
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.otherCollider == waterLCollider)
+        {
+            nextFishMovementChange = RandomTime();
+            fishRB.velocity += RandomVector();
+        }
+        else if (collision.otherCollider == waterRCollider)
+        {
+            nextFishMovementChange = RandomTime();
+            fishRB.velocity -= RandomVector();
         }
     }
 
