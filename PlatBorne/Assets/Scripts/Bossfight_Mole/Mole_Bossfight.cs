@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Mole_Bossfight : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] float[] attackRockPositionX;
     [SerializeField] float attackRockPositionY = 0;
     [SerializeField] float attackRockDelay = 0;
+    [SerializeField] float attackSpikesDelay = 0;
     //Shovel Rain - uses same stats as Drill Rain
 
     //PREFABS//
@@ -78,19 +80,24 @@ public class Mole_Bossfight : MonoBehaviour
     private bool colliderPlatform = false;
     private bool colliderGround = false;
 
-    public bool ColliderRight {set {colliderRight = value; } }
-    public bool ColliderLeft {set {colliderLeft = value; } }
-    public bool ColliderMiddleRight {set {colliderMiddleRight = value; } }
-    public bool ColliderMiddleLeft {set {colliderMiddleLeft = value; } }
-    public bool ColliderMiddleMiddle {set {colliderMiddleMiddle = value; } }
-    public bool ColliderPlatform {set {colliderPlatform = value; } }
-    public bool ColliderGround {set {colliderGround = value; } }
+    public bool ColliderRight { set { colliderRight = value; } }
+    public bool ColliderLeft { set { colliderLeft = value; } }
+    public bool ColliderMiddleRight { set { colliderMiddleRight = value; } }
+    public bool ColliderMiddleLeft { set { colliderMiddleLeft = value; } }
+    public bool ColliderMiddleMiddle { set { colliderMiddleMiddle = value; } }
+    public bool ColliderPlatform { set { colliderPlatform = value; } }
+    public bool ColliderGround { set { colliderGround = value; } }
     //PRIVATE//
     private float timer = 0;
     private bool timerOn = false;
     private bool bossStarted = false;
     private bool attackIsGoing = false;
     private int phase = 1;
+    private bool attackSpikesOn = false;
+    private float attackSpikesTimer = 0;
+    private float bossChargeTimer = 0;
+    private float bossChargeDelay = 15;
+    private bool bossCharge = false;
     Rigidbody2D rb;
 
 
@@ -99,176 +106,270 @@ public class Mole_Bossfight : MonoBehaviour
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
     }
-    private void Update()
+    private void FixedUpdate()
     {
+        if (attackSpikesOn) attackSpikesTimer += Time.deltaTime;
         if (bossStarted)
         {
-            if (!attackIsGoing)
-            {
-
-            }
+            if (bossCharge)
+                if (!attackIsGoing)
+                {
+                    if (bossChargeTimer > bossChargeDelay && phase == 2)
+                    {
+                        bossChargeTimer = 0;
+                        Attack_MoleCharge();
+                    }
+                    AttackChooser();
+                }
             timer += Time.deltaTime;
-            save.TimerSave(timer,4);
+            save.TimerSave(timer, 4);
         }
     }
-
-    public void StartBossFight()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        bossStarted = true;
-    }
-    //Attack variables
-    int attackNumberShovel = 0;
-    int attackNumberMoleRain = 0;
-    int attackNumberDrillSide = 0;
-    int attackNumberDrillGround = 0;
-    int attackNumberDrillRain = 0;
-    int attackNumberSpikes = 0;
-    int attackNumberRock = 0;
-    string lastAttack = null;
-    IEnumerator AttackChooser()
-    {
-        attackIsGoing = true;
-        if (phase == 1)
+        if (collision.gameObject.CompareTag("BossStop"))
         {
-            yield return new WaitForSeconds(timeForNextAttackPhase1);
-            //if same
-            if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
+            rb.angularVelocity = 0;
+            if (rb.position.x < -50)
             {
-                switch (UnityEngine.Random.Range(1, 4))
+                //boss is stuck in right
+            }
+            else
+            {
+                //boss is stuck in left
+            }
+        }
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (!bossHealth.BossInvincible) bossHealth.BossHit();
+            else
+            {
+                playerHealth.PlayerDamage();
+            }
+        }
+    }
+        public void StartBossFight()
+        {
+            bossStarted = true;
+        }
+        //Attack variables
+        int attackNumberShovelRain = 0;
+        int attackNumberMoleRain = 0;
+        int attackNumberDrillSide = 0;
+        int attackNumberDrillGround = 0;
+        int attackNumberDrillRain = 0;
+        int attackNumberRock = 0;
+        string lastAttack = null;
+        IEnumerator AttackChooser()
+        {
+            attackIsGoing = true;
+            if (phase == 1)
+            {
+                yield return new WaitForSeconds(timeForNextAttackPhase1);
+                //if same
+                if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
                 {
-                    case 1:
-                        lastAttack = "MoleRain";
-                        attackNumberMoleRain++;
-                        Attack_MolesRain();
-                        break;
-                    case 2:
-                        lastAttack = "DrillRain";
-                        attackNumberDrillRain++;
-                        Attack_DrillRain();
-                        break;
-                    case 3:
+                    switch (UnityEngine.Random.Range(1, 4))
+                    {
+                        case 1:
+                            lastAttack = "MoleRain";
+                            attackNumberMoleRain++;
+                            Attack_MolesRain();
+                            break;
+                        case 2:
+                            lastAttack = "DrillRain";
+                            attackNumberDrillRain++;
+                            Attack_DrillRain();
+                            break;
+                        case 3:
 
-                        lastAttack = "DrillGround";
-                        attackNumberDrillGround++;
-                        Attack_GroundDrills();
-                        break;
+                            lastAttack = "DrillGround";
+                            attackNumberDrillGround++;
+                            Attack_GroundDrills();
+                            break;
+                    }
+                }
+                else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain")
+                {
+                    lastAttack = "MoleRain";
+                    attackNumberMoleRain++;
+                    Attack_MolesRain();
+                }
+                else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
+                {
+                    lastAttack = "DrillRain";
+                    attackNumberDrillRain++;
+                    Attack_DrillRain();
+                }
+                else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
+                {
+                    lastAttack = "DrillGround";
+                    attackNumberDrillGround++;
+                    Attack_GroundDrills();
+                }
+                else //DrillSide
+                {
+                    lastAttack = "DrillSide";
+                    attackNumberDrillSide++;
+                    Attack_SideDrills();
                 }
             }
-            else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain") 
+            else if (phase == 2)
             {
-                lastAttack = "MoleRain";
-                attackNumberMoleRain++;
-                Attack_MolesRain();                
-            }
-            else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
-            {
-                lastAttack = "DrillRain";
-                attackNumberDrillRain++;
-                Attack_DrillRain();
-            }
-            else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
-            {
-                lastAttack = "DrillGround";
-                attackNumberDrillGround++;
-                Attack_GroundDrills();
-            }
-            else //DrillSide
-            {
-                lastAttack = "DrillSide";
-                attackNumberDrillSide++;
-                Attack_SideDrills();
-            }
-        }
-        else if(phase == 2)
-        {
-            yield return new WaitForSeconds(timeForNextAttackPhase2);
-        }
-    }
-
-    //ATTACKS//
-    //PHASE I
-    public void Attack_DrillRain()
-    {
-        attackNumberDrillRain++;
-        for (int i = 0; i < attackDrillRainNumberOfSpawns; i++)
-        {
-            Vector2 position = new Vector2(attackDrillRainPositionX + (i * attackDrillRainShift), attackDrillRainPositionY);
-            Instantiate(prefabDrillRain, position, Quaternion.identity);
-        }
-        attackIsGoing = false;
-    }
-
-    IEnumerator Attack_MolesRain()
-    {
-        attackNumberMoleRain++;
-        for (int i = 0; i < attackMoleRainCycles; i++)
-        {
-            for (int j = 0; j < attackMoleRainNumberOfSpawns; j += 2)
-            {
-                Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
-                Instantiate(prefabMoleRain, position, Quaternion.identity);
-            }
-            yield return new WaitForSeconds(attackMoleRainDelay);
-            for (int j= 1; j < attackMoleRainNumberOfSpawns; j += 2)
-            {
-                Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
-                Instantiate(prefabMoleRain, position, Quaternion.identity);
+                yield return new WaitForSeconds(timeForNextAttackPhase2);
+                if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
+                {
+                    lastAttack = "ShovelRain";
+                    attackNumberShovelRain++;
+                    Attack_ShovelRain();
+                }
+                else if (lastAttack != "Rock")
+                {
+                    lastAttack = "Rock";
+                    attackNumberRock++;
+                    Attack_Rock();
+                }
+                else if (lastAttack != "ShovelRain" || lastAttack != "MoleRain")
+                {
+                    lastAttack = "MoleRain";
+                    attackNumberMoleRain++;
+                    Attack_MolesRain();
+                }
+                else //drillSide
+                {
+                    lastAttack = "DrillSide";
+                    attackNumberDrillSide++;
+                    Attack_SideDrills();
+                }
+                if (attackSpikesTimer > attackSpikesDelay)
+                {
+                    attackSpikesTimer = 0;
+                    attackSpikesOn = true;
+                    Attack_Spikes();
+                }
             }
         }
-        attackIsGoing = false;
-    }
 
-    private void Attack_SideDrills()
-    {
-        attackNumberDrillSide++;
-        Vector2[] position = new Vector2[4];
-        position[0] = new Vector2(attackDrillSidePositionX, attackDrillGroundPositionY);
-        position[1] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, attackDrillGroundPositionY);
-        position[2] = new Vector2(attackDrillSidePositionX, -attackDrillGroundPositionY);
-        position[3] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, -attackDrillGroundPositionY);
-        for (int i = 0; i > 4; i++)
+        //ATTACKS//
+        //PHASE I
+        public void Attack_DrillRain()
         {
-            Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            attackNumberDrillRain++;
+            for (int i = 0; i < attackDrillRainNumberOfSpawns; i++)
+            {
+                Vector2 position = new Vector2(attackDrillRainPositionX + (i * attackDrillRainShift), attackDrillRainPositionY);
+                Instantiate(prefabDrillRain, position, Quaternion.identity);
+            }
+            attackIsGoing = false;
         }
-        attackIsGoing = false;
-    }
-    //PHASE II
-    private void Attack_GroundDrills()
-    {
-        attackNumberDrillGround++;
-    }
 
-    private void Attack_ShovelRain()
-    {
-        attackNumberShovel++;
-    }
+        IEnumerator Attack_MolesRain()
+        {
+            attackNumberMoleRain++;
+            for (int i = 0; i < attackMoleRainCycles; i++)
+            {
+                for (int j = 0; j < attackMoleRainNumberOfSpawns; j += 2)
+                {
+                    Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
+                    Instantiate(prefabMoleRain, position, Quaternion.identity);
+                }
+                yield return new WaitForSeconds(attackMoleRainDelay);
+                for (int j = 1; j < attackMoleRainNumberOfSpawns; j += 2)
+                {
+                    Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
+                    Instantiate(prefabMoleRain, position, Quaternion.identity);
+                }
+            }
+            attackIsGoing = false;
+        }
 
-    private void Attack_MoleCharge()
-    {
-        if (colliderLeft)
+        private void Attack_SideDrills()
         {
-            rb.velocity += Vector2.left * attackMoleChargeSpeed * Time.deltaTime;
+            attackNumberDrillSide++;
+            Vector2[] position = new Vector2[4];
+            position[0] = new Vector2(attackDrillSidePositionX, attackDrillGroundPositionY);
+            position[1] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, attackDrillGroundPositionY);
+            position[2] = new Vector2(attackDrillSidePositionX, -attackDrillGroundPositionY);
+            position[3] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, -attackDrillGroundPositionY);
+            for (int i = 0; i > 4; i++)
+            {
+                Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            }
+            attackIsGoing = false;
         }
-        else 
+        //PHASE II
+        IEnumerator Attack_GroundDrills()
         {
-            rb.velocity += Vector2.right * attackMoleChargeSpeed * Time.deltaTime;
+            attackNumberDrillSide++;
+            for (int i = 0; i > 20; i++)
+            {
+                yield return new WaitForSeconds(attackDrillGroundSpeed);
+                Instantiate(prefabDrillSide, new Vector2(attackDrillGroundPositionX + (attackDrillGroundShift * i), attackDrillGroundPositionY), Quaternion.identity);
+            }
+            attackIsGoing = false;
         }
-    }
 
-    /*IEnumerator Attack_Rock()
-    {
-        Vector2 position;
-        if (colliderMiddleLeft)
+        IEnumerator Attack_ShovelRain()
         {
-            position = new Vector2();
+            attackNumberShovelRain++;
+            for (int i = 0; i < attackMoleRainNumberOfSpawns; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                Vector2 position = new Vector2(attackMoleRainPositionX + (i * attackMoleRainShift), attackMoleRainPositionY);
+                Instantiate(prefabShovelRain, position, Quaternion.identity);
+            }
+            attackIsGoing = false;
         }
-        else if (colliderMiddleMiddle)
+
+        IEnumerator Attack_MoleCharge()
         {
-            position = new Vector2();   
+            if (colliderLeft)
+            {
+                yield return new WaitForSeconds(attackMoleChargeTimer);
+                rb.velocity = Vector2.left * attackMoleChargeSpeed * Time.deltaTime;
+            }
+            else
+            {
+                yield return new WaitForSeconds(attackMoleChargeTimer);
+                rb.velocity += Vector2.right * attackMoleChargeSpeed * Time.deltaTime;
+            }
         }
-        else //Middle Right
+
+        private void Attack_Rock()
         {
-            position = new Vector2();
+            Vector2 position;
+            if (colliderMiddleLeft)
+            {
+                position = new Vector2();
+                //animation
+                Instantiate(prefabROCK, position, Quaternion.identity);
+            }
+            else if (colliderMiddleMiddle)
+            {
+                position = new Vector2();
+                //animation
+                Instantiate(prefabROCK, position, Quaternion.identity);
+            }
+            else //Middle Right
+            {
+                position = new Vector2();
+                //animation
+                Instantiate(prefabROCK, position, Quaternion.identity);
+            }
         }
-    }*/
+
+        private void Attack_Spikes()
+        {
+            Vector2[] position = new Vector2[6];
+            position[0] = new Vector2(0, 0);
+            position[1] = new Vector2(0, 0);
+            position[2] = new Vector2(0, 0);
+            position[3] = new Vector2(0, 0);
+            position[4] = new Vector2(0, 0);
+            position[5] = new Vector2(0, 0);
+            for (int i = 0; i < 6; i++)
+            {
+                Instantiate(prefabSpike, position[i], Quaternion.identity);
+            }
+        }
 }

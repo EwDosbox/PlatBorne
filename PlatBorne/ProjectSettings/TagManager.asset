@@ -17,6 +17,7 @@ TagManager:
   - LevelLondon_Finish
   - LevelBricus_Finish
   - DashOrb
+  - BossStop
   layers:
   - Default
   - TransparentFX

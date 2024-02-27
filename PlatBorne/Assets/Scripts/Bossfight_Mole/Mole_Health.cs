@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -24,6 +25,11 @@ public class Mole_Health : MonoBehaviour
         { 
             if (value <= 0 && value >= 100) bossHealth = value; 
         }
+    }
+    public bool BossInvincible
+    {
+        get { return BossInvincible; }
+        set { bossInvincible = value; }
     }
 
     public void BossHit()

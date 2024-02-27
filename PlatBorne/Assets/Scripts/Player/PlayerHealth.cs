@@ -16,6 +16,13 @@ public class PlayerHealth : MonoBehaviour
     private int playerHP = 0;
     private bool godMode;
     private bool pussyMode;
+    private bool playerInvincible;
+
+    IEnumerator InvincibleWait()
+    {
+        yield return new WaitForSeconds(3);
+        playerInvincible = true;
+    }
 
     public bool GodMode
     {
@@ -48,6 +55,16 @@ public class PlayerHealth : MonoBehaviour
         }
         get { return playerHP; }
     }
+
+    public bool PlayerInvincible
+    {
+        get { return playerInvincible; }
+        set 
+        { 
+            if (value == true) StartCoroutine(InvincibleWait());
+            playerInvincible = value; 
+        }
+    }
     private void Start()
     {
         if (PlayerPrefs.HasKey("PussyMode"))
@@ -78,8 +95,12 @@ public class PlayerHealth : MonoBehaviour
     }
     public void PlayerDamage()
     {
-        playerHP--;
-        HPChanged();
+        if (!playerInvincible)
+        {
+            playerHP--;
+            PlayerInvincible = true;
+            HPChanged();
+        }
     }
     public IEnumerator PlayerHPStart()
     {
