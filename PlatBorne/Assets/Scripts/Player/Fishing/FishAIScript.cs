@@ -49,12 +49,12 @@ public class FishAIScript : MonoBehaviour
         if (collision.otherCollider == waterLCollider)
         {
             nextFishMovementChange = RandomTime();
-            fishRB.velocity += RandomVector();
+            fishRB.velocity = RandomVector();
         }
         else if (collision.otherCollider == waterRCollider)
         {
             nextFishMovementChange = RandomTime();
-            fishRB.velocity -= RandomVector();
+            fishRB.velocity = -RandomVector();
         }
     }
 

@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FishSpawnScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject fish;
+    private void Awake()
     {
-        
+        Instantiate(fish);
+        PlayerFishingScript.FishCatchArea = fish.GetComponentsInChildren<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
-
-    // Update is called once per frame
-    void Update()
+    public void CatchedFish()
     {
-        
+        Destroy(fish);
+        Instantiate(fish);
+        PlayerFishingScript.FishCatchArea = fish.GetComponentsInChildren<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
 }

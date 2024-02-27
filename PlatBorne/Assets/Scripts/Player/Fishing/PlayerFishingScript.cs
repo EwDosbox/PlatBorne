@@ -1,27 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerFishingScript : MonoBehaviour
 {
+    //************* PRIVATE
     private Rigidbody2D hookRB;
-
+    //Movement
     private bool shouldHookMoveLeft;
     private bool shouldHookMoveRight;
 
     private float holdTime;
+    //Fish Catching Logic
+    private Collider2D fishCatchArea;
+    private Collider2D hookCatchArea;
+
+    private bool isAlreadyCatching;
+    private bool catchedFish;
+
+    private float catchingTime;
+    private float catchingTimeNeeded;
+
+    private FishSpawnScript spawnScript;
+    //************* PUBLIC
+    public static bool CatchedFish
+    {
+        get;
+        set;
+    }
+    public static Collider2D FishCatchArea
+    {
+        set { }
+    }
 
     private void Awake()
     {
         hookRB = GetComponent<Rigidbody2D>();
+        Collider2D[] colliders = FindObjectsOfType<Collider2D>();
+        hookCatchArea = colliders.FirstOrDefault(collider => collider.name == "HookCatchArea");
         shouldHookMoveLeft = false;
         shouldHookMoveRight = false;
         holdTime = 0;
+        isAlreadyCatching = false;
+        catchedFish = false;
+        catchingTimeNeeded = 1.5f;
     }
     private void FixedUpdate()
     {
+        //Movement
         if (shouldHookMoveLeft)
         {
             hookRB.AddRelativeForce(new Vector2(-(float)Equation(Time.time - holdTime), 0));
@@ -30,8 +59,26 @@ public class PlayerFishingScript : MonoBehaviour
         {
             hookRB.AddRelativeForce(new Vector2(+(float)Equation(Time.time - holdTime), 0));
         }
+        //Fish Catching logic
+        if (Physics2D.IsTouching(hookCatchArea, fishCatchArea))
+        {
+            if (isAlreadyCatching)
+            {
+                if (Time.time - catchingTime > catchingTimeNeeded)
+                {
+                    spawnScript.CatchedFish();
+                    isAlreadyCatching = false;
+                }
+                isAlreadyCatching = true;
+            }
+            else
+            {
+                catchingTime = Time.time;
+                isAlreadyCatching = true;
+            }
+        }
+        else isAlreadyCatching = false;
     }
-
     private double Equation(float time)
     {
         return 4 + (1 - 4) / (1 + math.pow(time / 0.5, 26));
