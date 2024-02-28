@@ -14,8 +14,8 @@ public class PlayerFishingScript : MonoBehaviour
     private bool shouldHookMoveRight;
 
     private float holdTime;
-    //Fish Catching Logic
-    private Collider2D fishCatchArea;
+    //fish Catching Logic
+    private static Collider2D fishCatchArea;
     private Collider2D hookCatchArea;
 
     private bool isAlreadyCatching;
@@ -24,8 +24,10 @@ public class PlayerFishingScript : MonoBehaviour
     private float catchingTime;
     private float catchingTimeNeeded;
 
-    private FishSpawnScript spawnScript;
+    private FishSpawnScript fish;
+
     //************* PUBLIC
+    public GameObject fishPrefab;
     public static bool CatchedFish
     {
         get;
@@ -33,7 +35,10 @@ public class PlayerFishingScript : MonoBehaviour
     }
     public static Collider2D FishCatchArea
     {
-        set { }
+        set
+        {
+            fishCatchArea = value;
+        }
     }
 
     private void Awake()
@@ -47,6 +52,8 @@ public class PlayerFishingScript : MonoBehaviour
         isAlreadyCatching = false;
         catchedFish = false;
         catchingTimeNeeded = 1.5f;
+        fish = new FishSpawnScript(fishPrefab);
+        fish.SpawnFish();
     }
     private void FixedUpdate()
     {
@@ -59,14 +66,15 @@ public class PlayerFishingScript : MonoBehaviour
         {
             hookRB.AddRelativeForce(new Vector2(+(float)Equation(Time.time - holdTime), 0));
         }
-        //Fish Catching logic
+        //fish Catching logic
         if (Physics2D.IsTouching(hookCatchArea, fishCatchArea))
         {
             if (isAlreadyCatching)
             {
                 if (Time.time - catchingTime > catchingTimeNeeded)
                 {
-                    spawnScript.CatchedFish();
+                    fish = new FishSpawnScript(fishPrefab);
+                    fish.SpawnFish();
                     isAlreadyCatching = false;
                 }
                 isAlreadyCatching = true;
