@@ -17,7 +17,10 @@ public class Mole_AttackMoleRain : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();        
     }
 
-    // Update is called once per frame
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
+    }
     void Update()
     {
         timer += Time.deltaTime;
