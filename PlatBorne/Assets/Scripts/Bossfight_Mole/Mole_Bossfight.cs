@@ -7,11 +7,11 @@ using UnityEngine.UIElements;
 public class Mole_Bossfight : MonoBehaviour
 {
     //SCRIPTS//
-    Mole_Health bossHealth = new Mole_Health();
-    PlayerHealth playerHealth = new PlayerHealth();
-    Mole_WeakSpot weakSpot = new Mole_WeakSpot();
-    Mole_UI bossUI = new Mole_UI();
-    Saves save = new Saves();
+    [SerializeField] Mole_Health bossHealth;
+    [SerializeField] PlayerHealth playerHealth;
+    [SerializeField] Mole_WeakSpot weakSpot;
+    [SerializeField] Mole_UI bossUI;
+    [SerializeField] Saves save;
     //INSPECTOR//
     [Tooltip("Audio")]
     [SerializeField] AudioSource SFXbossHit;
@@ -43,23 +43,13 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] float[] attackDrillSidePositionY;
     [SerializeField] float attackDrillSideShift = 0;
     [SerializeField] float attackDrillSideSpeed = 0;
-    //Mole Rain
-    [SerializeField] float attackMoleRainPositionX;
-    [SerializeField] int attackMoleRainCycles;
-    [SerializeField] float attackMoleRainPositionY = 0;
-    [SerializeField] float attackMoleRainShift = 0;
-    [SerializeField] float attackMoleRainFallSpeed = 0;
-    [SerializeField] float attackMoleRainDelay = 0;
-    [SerializeField] int attackMoleRainNumberOfSpawns = 0;
     //Mole Charge
     [SerializeField] float attackMoleChargeSpeed;
     [SerializeField] float attackMoleChargeStuntTime;
     float attackMoleChargeTimer;
-    //Rock
-    [SerializeField] float[] attackRockPositionX;
-    [SerializeField] float attackRockPositionY = 0;
     [SerializeField] float attackRockDelay = 0;
     [SerializeField] float attackSpikesDelay = 0;
+    [SerializeField] float attackMoleRainDelay = 0;
     //Shovel Rain - uses same stats as Drill Rain
 
     //PREFABS//
@@ -71,6 +61,8 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabPlatforms;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
+    //OTHER
+    [SerializeField] GameObject levelMove;
     //PUBLIC//
 
     //COLLIDERS//
@@ -146,9 +138,12 @@ public class Mole_Bossfight : MonoBehaviour
 
     private void Awake()
     {
+        levelMove.SetActive(false);
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
         PlayerPrefs.SetString("Level", "mole");
+        StartCoroutine(bossUI.BossHPSliderStart());
+        StartBossFight();
         phase = 1;
     }
     private void FixedUpdate()
@@ -219,6 +214,7 @@ public class Mole_Bossfight : MonoBehaviour
         bossHealth.BossHealth = 100;
         OSTPart1.Play();
         bossUI.BossHPSliderStart();
+        playerHealth.PlayerHPStart();
     }
 
     IEnumerator BossDeath()
@@ -227,6 +223,7 @@ public class Mole_Bossfight : MonoBehaviour
         yield return new WaitForSeconds(2);
         bossUI.BossHPSliderDestroy();
         Destroy(rb);
+        levelMove.SetActive(true);
     }
 
 
@@ -346,18 +343,19 @@ public class Mole_Bossfight : MonoBehaviour
     IEnumerator Attack_MolesRain()
     {
         attackNumberMoleRain++;
-        for (int i = 0; i < attackMoleRainCycles; i++)
+        for (int i = 0; i < 16; i++)
         {
-            for (int j = 0; j < attackMoleRainNumberOfSpawns; j += 2)
+            int attackMoleRainShift = 2;
+            float x = -16.68f;
+            for (int j = 0; j < 16; j += 2)
             {
-                Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
+                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
-            yield
-            return new WaitForSeconds(attackMoleRainDelay);
-            for (int j = 1; j < attackMoleRainNumberOfSpawns; j += 2)
+            yield return new WaitForSeconds(attackMoleRainDelay);
+            for (int j = 1; j < 16; j += 2)
             {
-                Vector2 position = new Vector2(attackMoleRainPositionX + (j * attackMoleRainShift), attackMoleRainPositionY);
+                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
         }
@@ -395,14 +393,21 @@ public class Mole_Bossfight : MonoBehaviour
     IEnumerator Attack_ShovelRain()
     {
         attackNumberShovelRain++;
-        for (int i = 0; i < attackMoleRainNumberOfSpawns; i++)
+        for (int i = 0; i < 16; i++)
         {
-            yield
-            return new WaitForSeconds(0.2f);
-            Vector2 position;
-            if (colliderRight) position = new Vector2(attackMoleRainPositionX + (i * attackMoleRainShift), attackMoleRainPositionY);
-            else position = new Vector2(attackMoleRainPositionX + (i * attackMoleRainShift), attackMoleRainPositionY);
-            Instantiate(prefabShovelRain, position, Quaternion.identity);
+            int attackMoleRainShift = 2;
+            float x = -16.68f;
+            for (int j = 0; j < 16; j += 2)
+            {
+                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
+                Instantiate(prefabShovelRain, position, Quaternion.identity);
+            }
+            yield return new WaitForSeconds(attackMoleRainDelay);
+            for (int j = 1; j < 16; j += 2)
+            {
+                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
+                Instantiate(prefabShovelRain, position, Quaternion.identity);
+            }
         }
         attackIsGoing = false;
     }
@@ -411,14 +416,12 @@ public class Mole_Bossfight : MonoBehaviour
     {
         if (colliderLeft)
         {
-            yield
-            return new WaitForSeconds(attackMoleChargeTimer);
+            yield return new WaitForSeconds(attackMoleChargeTimer);
             rb.velocity = Vector2.left * attackMoleChargeSpeed * Time.deltaTime;
         }
         else
         {
-            yield
-            return new WaitForSeconds(attackMoleChargeTimer);
+            yield return new WaitForSeconds(attackMoleChargeTimer);
             rb.velocity += Vector2.right * attackMoleChargeSpeed * Time.deltaTime;
         }
     }
@@ -426,21 +429,22 @@ public class Mole_Bossfight : MonoBehaviour
     private void Attack_Rock()
     {
         Vector2 position;
+        float y = -9;
         if (colliderMiddleLeft)
         {
-            position = new Vector2();
+            position = new Vector2(-13.24f, y);
             //animation
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else if (colliderMiddleMiddle)
         {
-            position = new Vector2();
+            position = new Vector2(0, y);
             //animation
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else //Middle Right
         {
-            position = new Vector2();
+            position = new Vector2(13.24f, y);
             //animation
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
@@ -451,12 +455,13 @@ public class Mole_Bossfight : MonoBehaviour
         if (colliderMiddleRight || colliderMiddleLeft)
         {
             Vector2[] position = new Vector2[6];
-            position[0] = new Vector2(0, 0);
-            position[1] = new Vector2(0, 0);
-            position[2] = new Vector2(0, 0);
-            position[3] = new Vector2(0, 0);
-            position[4] = new Vector2(0, 0);
-            position[5] = new Vector2(0, 0);
+            float y = -2.62f;
+            position[0] = new Vector2(-8.2544f, y);
+            position[1] = new Vector2(8.2544f, y);
+            position[2] = new Vector2(-6.4772f, y);
+            position[3] = new Vector2(6.4772f, y);
+            position[4] = new Vector2(-4.701f, y);
+            position[5] = new Vector2(4.701f, y);
             for (int i = 0; i < 6; i++)
             {
                 Instantiate(prefabSpike, position[i], Quaternion.identity);

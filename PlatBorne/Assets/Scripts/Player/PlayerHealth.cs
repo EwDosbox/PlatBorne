@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public Image hp2_GodMode;
     public Image hp3_GodMode;
     public AudioSource hunterGodMode;
-    private int playerHP = 0;
+    private int playerHP = 3;
     private bool godMode;
     private bool pussyMode;
     private bool playerInvincible;
