@@ -22,10 +22,11 @@ public class PlayerFishingScript : MonoBehaviour
     private float catchingTimeNeeded;
 
     private FishSpawnScript fish;
-
+    private FishInventory inventory;
 
     //************* PUBLIC
     public GameObject fishPrefab;
+    public GameObject fishRainbowPrefab;
     public static Collider2D FishCatchArea
     {
         set
@@ -45,8 +46,8 @@ public class PlayerFishingScript : MonoBehaviour
         isAlreadyCatching = false;
         catchingTimeNeeded = 1.5f;
         fish = new FishSpawnScript(fishPrefab);
-        FishInventory.RandomizeColors();
-        fish.SpawnFish(FishInventory.NextFishColor);
+        inventory = new FishInventory();
+        fish.SpawnFish(inventory.NextFishColor);
     }
     private void FixedUpdate()
     {
@@ -66,10 +67,26 @@ public class PlayerFishingScript : MonoBehaviour
             {
                 if (Time.time - catchingTime > catchingTimeNeeded)
                 {
-                    FishInventory.CatchedFish();
-                    Destroy(fish);
-                    fish = new FishSpawnScript(fishPrefab);
-                    fish.SpawnFish(FishInventory.NextFishColor);
+                    //nespawnuje se rainbow fish
+                    if (inventory.FishCatched == inventory.Count)
+                    {
+                        inventory.CatchedFish();
+                        Destroy(fish);
+                        fish = new FishSpawnScript(fishRainbowPrefab);
+                        fish.SpawnFish();// spawns rainbow one
+                    }
+                    else if (inventory.FishCatched >= inventory.Count)
+                    {
+                        Debug.Log("fish Ending");
+                        //ending
+                    }
+                    else
+                    {
+                        inventory.CatchedFish();
+                        Destroy(fish);
+                        fish = new FishSpawnScript(fishPrefab);
+                        fish.SpawnFish(inventory.NextFishColor);//haze chybu
+                    }
                     isAlreadyCatching = false;
                 }
                 isAlreadyCatching = true;

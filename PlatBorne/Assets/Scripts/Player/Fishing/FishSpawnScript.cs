@@ -12,10 +12,15 @@ public class FishSpawnScript : MonoBehaviour
         Destroy(Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(go => go.name == "Fish(Clone)"));
         this.fishPrefab = fishPrefab;
     }
-    public void SpawnFish(Color color)
+    public void SpawnFish(Color color)// spawn colored one
     {
         fishPrefab.GetComponent<SpriteRenderer>().color = color;
         Instantiate(fishPrefab, RandomFishLocation(),new Quaternion());
+        PlayerFishingScript.FishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
+    }
+    public void SpawnFish()// spawn rainbow one
+    {
+        Instantiate(fishPrefab, RandomFishLocation(), new Quaternion());
         PlayerFishingScript.FishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
     private Vector3 RandomFishLocation()

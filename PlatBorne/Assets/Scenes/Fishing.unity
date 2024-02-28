@@ -1095,6 +1095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 6348202001293769175, guid: a211623b20199e44c93d0b04423011ec, type: 3}
+  fishRainbowPrefab: {fileID: 6348202001293769175, guid: ad10606798120ab4cbbb14464ef54dd5, type: 3}
 --- !u!1 &1161111913
 GameObject:
   m_ObjectHideFlags: 0

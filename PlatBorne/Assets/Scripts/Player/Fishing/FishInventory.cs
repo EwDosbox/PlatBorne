@@ -13,20 +13,31 @@ public class FishInventory : MonoBehaviour
     private static List<Color> fishColors;
 
     //********************* PUBLIC
-    public static List<Color> FishColors
+
+    public int FishCatched
     {
-        get { return fishColors; }
+        get
+        {
+            return fishCatched;
+        }
     }
-    public static Color NextFishColor
+    public int Count
+    {
+        get
+        {
+            return fishInventory.Count;
+        }
+    }
+    public Color NextFishColor
     {
         get { return fishColors[fishCatched]; }
     }
-    private void Awake()
+
+    public FishInventory()
     {
         fishInventory = Resources.FindObjectsOfTypeAll<GameObject>().Where(go => go.name.StartsWith("InventoryFish (")).ToList();
         fishSpriteRenderer = new List<SpriteRenderer>();
         fishInventory.ForEach(fish => fishSpriteRenderer.Add(fish.GetComponent<SpriteRenderer>()));
-        Debug.Log(fishSpriteRenderer[0].color);
         RandomizeColors();
         fishCatched = 0;
         for (int i = 0; i < fishSpriteRenderer.Count; i++)
@@ -34,8 +45,9 @@ public class FishInventory : MonoBehaviour
             fishSpriteRenderer[i].color = fishColors[i];
         }
     }
+
     // Random Color
-    public static void RandomizeColors()
+    private void RandomizeColors()
     {
         fishColors = new List<Color>();
         for (int i = 0; i < 6; i++)
@@ -44,8 +56,10 @@ public class FishInventory : MonoBehaviour
         }
     }
     //Catched Fish
-    public static void CatchedFish()
+    public void CatchedFish()
     {
+        //Save
+        fishInventory[fishCatched].SetActive(false);
         fishCatched++;
     }
 }
