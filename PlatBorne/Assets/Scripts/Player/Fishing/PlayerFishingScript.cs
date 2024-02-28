@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,20 +17,15 @@ public class PlayerFishingScript : MonoBehaviour
     private Collider2D hookCatchArea;
 
     private bool isAlreadyCatching;
-    private bool catchedFish;
 
     private float catchingTime;
     private float catchingTimeNeeded;
 
     private FishSpawnScript fish;
 
+
     //************* PUBLIC
     public GameObject fishPrefab;
-    public static bool CatchedFish
-    {
-        get;
-        set;
-    }
     public static Collider2D FishCatchArea
     {
         set
@@ -50,10 +43,10 @@ public class PlayerFishingScript : MonoBehaviour
         shouldHookMoveRight = false;
         holdTime = 0;
         isAlreadyCatching = false;
-        catchedFish = false;
         catchingTimeNeeded = 1.5f;
         fish = new FishSpawnScript(fishPrefab);
-        fish.SpawnFish();
+        FishInventory.RandomizeColors();
+        fish.SpawnFish(FishInventory.NextFishColor);
     }
     private void FixedUpdate()
     {
@@ -73,8 +66,10 @@ public class PlayerFishingScript : MonoBehaviour
             {
                 if (Time.time - catchingTime > catchingTimeNeeded)
                 {
+                    FishInventory.CatchedFish();
+                    Destroy(fish);
                     fish = new FishSpawnScript(fishPrefab);
-                    fish.SpawnFish();
+                    fish.SpawnFish(FishInventory.NextFishColor);
                     isAlreadyCatching = false;
                 }
                 isAlreadyCatching = true;
@@ -89,7 +84,7 @@ public class PlayerFishingScript : MonoBehaviour
     }
     private double Equation(float time)
     {
-        return 4 + (1 - 4) / (1 + math.pow(time / 0.5, 26));
+        return 4 + (1 - 4) / (1 + Mathf.Pow(time / 0.5f, 26));
     }
     // Input Actions
     public void HookL(InputAction.CallbackContext context)
