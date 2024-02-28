@@ -2,6 +2,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -100,6 +101,24 @@ public class PlayerHealth : MonoBehaviour
             playerHP--;
             PlayerInvincible = true;
             HPChanged();
+        }
+    }
+
+    public void PlayerDeath(int boss)
+    {
+        if (boss == 1)
+        {
+            int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
+            ded++;
+            PlayerPrefs.SetInt("NumberOfDeath", ded);
+            SceneManager.LoadScene("PlayerDeath");
+        }
+        else if (boss == 2)
+        {
+            int ded = PlayerPrefs.GetInt("NumberOfDeath_Mole", 0);
+            ded++;
+            PlayerPrefs.SetInt("NumberOfDeath_Mole", ded);
+            SceneManager.LoadScene("PlayerDeath");
         }
     }
     public IEnumerator PlayerHPStart()
