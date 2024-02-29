@@ -68,14 +68,14 @@ public class PlayerFishingScript : MonoBehaviour
                 if (Time.time - catchingTime > catchingTimeNeeded)
                 {
                     //nespawnuje se rainbow fish
-                    if (inventory.FishCatched == inventory.Count)
+                    if (inventory.FishCatched == inventory.Count - 1)
                     {
                         inventory.CatchedFish();
                         Destroy(fish);
                         fish = new FishSpawnScript(fishRainbowPrefab);
                         fish.SpawnFish();// spawns rainbow one
                     }
-                    else if (inventory.FishCatched >= inventory.Count)
+                    else if (inventory.FishCatched == inventory.Count)
                     {
                         Debug.Log("fish Ending");
                         //ending
@@ -88,6 +88,7 @@ public class PlayerFishingScript : MonoBehaviour
                         fish.SpawnFish(inventory.NextFishColor);//haze chybu
                     }
                     isAlreadyCatching = false;
+                    catchingTime = Time.time;
                 }
                 isAlreadyCatching = true;
             }
