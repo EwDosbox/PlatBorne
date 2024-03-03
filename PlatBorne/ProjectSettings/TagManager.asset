@@ -18,6 +18,7 @@ TagManager:
   - LevelBricus_Finish
   - DashOrb
   - BossStop
+  - CameraCollider
   layers:
   - Default
   - TransparentFX

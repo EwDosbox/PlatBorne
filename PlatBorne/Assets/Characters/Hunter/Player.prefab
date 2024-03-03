@@ -272,7 +272,6 @@ MonoBehaviour:
   hunterDrop: {fileID: 2867845862149728934}
   hunterJump: {fileID: 6935579868319366984}
   hunterWalk: {fileID: 1737323820918138992}
-  hunterGodMode: {fileID: -5483046848910292859}
   animator: {fileID: 166162755306215924}
   health: {fileID: 0}
   rb: {fileID: 4160181815571881102}
