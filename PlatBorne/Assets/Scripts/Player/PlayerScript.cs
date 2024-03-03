@@ -86,7 +86,8 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
-        LoadMovement();
+        //LoadMovement();
+        //unadded for debbuging leave till saves are working in birmigham
     }
     void Update()
     {
