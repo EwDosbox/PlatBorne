@@ -46,7 +46,6 @@ public class PlayerScript : MonoBehaviour
         {
             bossHitbox = true;
         }
-        if (collision.gameObject.CompareTag("CameraCollider")) CameraBirghmingwayScript.Cam(collision);
     }
     private void OnCollisionExit(Collision collision)
     {
