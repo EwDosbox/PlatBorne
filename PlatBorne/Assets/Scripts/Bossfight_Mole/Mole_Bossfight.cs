@@ -7,11 +7,11 @@ using UnityEngine.UIElements;
 public class Mole_Bossfight : MonoBehaviour
 {
     //SCRIPTS//
-    [SerializeField] Mole_Health bossHealth;
-    [SerializeField] PlayerHealth playerHealth;
-    [SerializeField] Mole_WeakSpot weakSpot;
-    [SerializeField] Mole_UI bossUI;
-    [SerializeField] Saves save;
+    public Mole_Health bossHealth;
+    public PlayerHealth playerHealth;
+    public Mole_WeakSpot weakSpot;
+    public Mole_UI bossUI;
+    public Saves save;
     //INSPECTOR//
     [Tooltip("Audio")]
     [SerializeField] AudioSource SFXbossHit;
@@ -136,13 +136,14 @@ public class Mole_Bossfight : MonoBehaviour
     private bool bossCharge = false;
     Rigidbody2D rb;
 
-    private void Awake()
+    private void Start()
     {
+        bossHealth.BossHealth = 100;
+        playerHealth.PlayerHP = 3;
         levelMove.SetActive(false);
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
         PlayerPrefs.SetString("Level", "mole");
-        StartCoroutine(bossUI.BossHPSliderStart());
         StartBossFight();
         phase = 1;
     }
@@ -210,11 +211,10 @@ public class Mole_Bossfight : MonoBehaviour
     }
     public void StartBossFight()
     {
-        bossStarted = true;
-        bossHealth.BossHealth = 100;
-        OSTPart1.Play();
+        bossStarted = true;        
+        //OSTPart1.Play();
         bossUI.BossHPSliderStart();
-        playerHealth.PlayerHPStart();
+        playerHealth.StartHPUI();
     }
 
     IEnumerator BossDeath()

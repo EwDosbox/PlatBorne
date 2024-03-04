@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,6 @@ public class Mole_UI : MonoBehaviour
     //UNITY
     public Text pussyMode;
     public Slider hpSlider;
-    [SerializeField] float sliderSpeedToFill = 20;
     [SerializeField] GameObject bossSlider;
     private bool takeBossHealth = false;
     //SCRIPTS   
@@ -24,18 +24,19 @@ public class Mole_UI : MonoBehaviour
     }
     void Update()
     {
-        if (takeBossHealth) hpSlider.value = health.BossHealth;        
-    }
-    public IEnumerator BossHPSliderStart() 
-    {
-        int value = 0;
-        while(hpSlider.value != hpSlider.maxValue)
+        if (hpSlider.enabled)
         {
-            value++;
-            hpSlider.value = value;
-            yield return new WaitForSeconds(0.05f);
+            if (takeBossHealth) hpSlider.value = health.BossHealth;
+            else
+            {
+                hpSlider.value = hpSlider.value + Time.deltaTime * 16.667f;
+                if (hpSlider.value == hpSlider.maxValue) takeBossHealth = true;
+            }
         }
-        takeBossHealth = true;
+    }
+    public void BossHPSliderStart() 
+    {
+        hpSlider.enabled = true;
     }
     public void BossHPSliderDestroy() { hpSlider.enabled = false; }
 }

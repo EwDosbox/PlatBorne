@@ -3352,7 +3352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossHealth: {fileID: 1060101276}
-  playerHealth: {fileID: 0}
+  playerHealth: {fileID: 1837068395}
   weakSpot: {fileID: 0}
   bossUI: {fileID: 1461745944}
   save: {fileID: 1837068380}
@@ -7850,7 +7850,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1252351634}
   - component: {fileID: 1252351636}
-  - component: {fileID: 1252351635}
   m_Layer: 5
   m_Name: Boss Health Bar
   m_TagString: Untagged
@@ -7881,20 +7880,6 @@ RectTransform:
   m_AnchoredPosition: {x: 906, y: 427}
   m_SizeDelta: {x: -126.900024, y: -1005.697}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1252351635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1252351633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfb830ab4fc0faf47a7c57c942a23a13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 1252351636}
-  speedToFill: 20
 --- !u!114 &1252351636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7941,7 +7926,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 100
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -9101,7 +9086,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pussyMode: {fileID: 120485449}
   hpSlider: {fileID: 1252351636}
-  sliderSpeedToFill: 20
   bossSlider: {fileID: 1252351633}
   health: {fileID: 1060101276}
 --- !u!1 &1478492470
@@ -10168,7 +10152,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767835868}
-  - component: {fileID: 1767835870}
   - component: {fileID: 1767835869}
   m_Layer: 5
   m_Name: Player Health
@@ -10299,25 +10282,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1767835870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767835867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f83e191dcb8b4343b7be9e78ae3d0e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hp1: {fileID: 1078083402}
-  hp2: {fileID: 256330943}
-  hp3: {fileID: 616933824}
-  hp1_GodMode: {fileID: 1229186953}
-  hp2_GodMode: {fileID: 1298963202}
-  hp3_GodMode: {fileID: 1602435132}
-  hunterGodMode: {fileID: 1767835869}
 --- !u!1 &1782225135
 GameObject:
   m_ObjectHideFlags: 0
@@ -10920,13 +10884,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f83e191dcb8b4343b7be9e78ae3d0e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp1: {fileID: 0}
-  hp2: {fileID: 0}
-  hp3: {fileID: 0}
-  hp1_GodMode: {fileID: 0}
-  hp2_GodMode: {fileID: 0}
-  hp3_GodMode: {fileID: 0}
-  hunterGodMode: {fileID: 0}
+  hp1: {fileID: 1078083400}
+  hp2: {fileID: 256330941}
+  hp3: {fileID: 616933822}
+  hp1_GodMode: {fileID: 1229186951}
+  hp2_GodMode: {fileID: 1298963200}
+  hp3_GodMode: {fileID: 1602435130}
+  hunterGodMode: {fileID: 1837068396}
+--- !u!82 &1837068396 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: -5483046848910292859, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+  m_PrefabInstance: {fileID: 1837068378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1858851655
 GameObject:
   m_ObjectHideFlags: 0

@@ -318,7 +318,7 @@ public class Bossfight : MonoBehaviour
             if (pussyMode) pussyModeOn.gameObject.SetActive(true);
             else pussyModeOn.gameObject.SetActive(false);
             bossHealthBar.Slider();
-            StartCoroutine(playerHealth.PlayerHPStart());
+            playerHealth.StartHPUI();
             PreBossDialog.Play();            
             OSTLoop.enabled = true;
             if (PlayerPrefs.HasKey("Timer_Bricus")) bossfightTimer = PlayerPrefs.GetFloat("Timer_Bricus");

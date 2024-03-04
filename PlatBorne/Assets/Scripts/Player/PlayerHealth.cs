@@ -4,26 +4,25 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public Image hp1;
-    public Image hp2;
-    public Image hp3;
-    public Image hp1_GodMode;
-    public Image hp2_GodMode;
-    public Image hp3_GodMode;
+    public GameObject hp1;
+    public GameObject hp2;
+    public GameObject hp3;
+    public GameObject hp1_GodMode;
+    public GameObject hp2_GodMode;
+    public GameObject hp3_GodMode;
     public AudioSource hunterGodMode;
-    private int playerHP = 3;
     private bool godMode;
     private bool pussyMode;
     private bool playerInvincible;
-
-    IEnumerator InvincibleWait()
-    {
-        yield return new WaitForSeconds(3);
-        playerInvincible = true;
-    }
+    private bool uiStart = false;
+    private bool uiEnd = false;
+    private float timer;
+    private int playerHP = 3;
+    private float timerInvincibility;
 
     public bool GodMode
     {
@@ -34,7 +33,6 @@ public class PlayerHealth : MonoBehaviour
                 hunterGodMode.Play();
             }
             godMode = value;
-            HPChanged();
         }
         get { return godMode; }
     }
@@ -48,10 +46,9 @@ public class PlayerHealth : MonoBehaviour
     {
         set 
         {
-            if (value <= 3 && value >= 0 && !godMode)
+            if (value <= 3 && value >= 0)
             {
                 playerHP = value;
-                HPChanged();
             }
         }
         get { return playerHP; }
@@ -60,11 +57,7 @@ public class PlayerHealth : MonoBehaviour
     public bool PlayerInvincible
     {
         get { return playerInvincible; }
-        set 
-        { 
-            if (value == true) StartCoroutine(InvincibleWait());
-            playerInvincible = value; 
-        }
+        set { playerInvincible = value; }
     }
     private void Start()
     {
@@ -87,12 +80,12 @@ public class PlayerHealth : MonoBehaviour
             }
             else godMode = false;
         }
-        hp1.enabled = false;
-        hp2.enabled = false;
-        hp3.enabled = false;
-        hp1_GodMode.enabled = false;
-        hp2_GodMode.enabled = false;
-        hp3_GodMode.enabled = false;
+        hp1.SetActive(false);
+        hp2.SetActive(false);
+        hp3.SetActive(false);
+        hp1_GodMode.SetActive(false);
+        hp2_GodMode.SetActive(false);
+        hp3_GodMode.SetActive(false);
     }
     public void PlayerDamage()
     {
@@ -100,7 +93,6 @@ public class PlayerHealth : MonoBehaviour
         {
             playerHP--;
             PlayerInvincible = true;
-            HPChanged();
         }
     }
 
@@ -121,100 +113,124 @@ public class PlayerHealth : MonoBehaviour
             SceneManager.LoadScene("PlayerDeath");
         }
     }
-    public IEnumerator PlayerHPStart()
+
+    public void StartHPUI()
     {
-        playerHP = 3;
-        yield return new WaitForSeconds(2f);
-        if (godMode) hp1_GodMode.enabled = true;
-        else hp1.enabled = true;
-        yield return new WaitForSeconds(2f);
-        if (godMode) hp2_GodMode.enabled = true;
-        else hp2.enabled = true;
-        yield return new WaitForSeconds(2f);
-        if (godMode) hp3_GodMode.enabled = true;
-        else hp3.enabled = true;
+        uiStart = true;
     }
 
-    private void HPChanged()
+    private void Update()
     {
-        switch (playerHP)
+        if (playerInvincible)
         {
-            default:
-                {
-                    if (godMode)
+            timerInvincibility += Time.deltaTime;
+            if (timerInvincibility > 2)
+            {
+                playerInvincible = false;
+                timerInvincibility = 0;
+            }
+        }
+        if (uiStart)
+        {
+            timer += Time.deltaTime;
+            if (timer > 2)
+            {
+                if (godMode) hp1_GodMode.SetActive(true);
+                else hp1.SetActive(true);
+            }
+            if (timer > 4)
+            {
+                if (godMode) hp2_GodMode.SetActive(true);
+                else hp2.SetActive(true);
+            }
+            if (timer > 6)
+            {                
+                if (godMode) hp3_GodMode.SetActive(true);
+                else hp3.SetActive(true);
+                uiEnd = true;
+            }            
+        } //HP START
+        else if (uiEnd)
+        {
+            switch (playerHP)
+            {
+                default:
                     {
-                        hp1_GodMode.enabled = true;
-                        hp2_GodMode.enabled = true;
-                        hp3_GodMode.enabled = true;
+                        if (godMode)
+                        {
+                            hp1_GodMode.SetActive(true);
+                            hp2_GodMode.SetActive(true);
+                            hp3_GodMode.SetActive(true);
+                        }
+                        else
+                        {
+                            hp1_GodMode.SetActive(true);
+                            hp2_GodMode.SetActive(true);
+                            hp3_GodMode.SetActive(true);
+                            hp1.SetActive(true);
+                            hp2.SetActive(true);
+                            hp3.SetActive(true);
+                        }
+                        break;
                     }
-                    else
+                case 2:
                     {
-                        hp1_GodMode.enabled = false;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                        hp1.enabled = true;
-                        hp2.enabled = true;
-                        hp3.enabled = true;
+                        if (godMode)
+                        {
+                            hp1_GodMode.SetActive(true);
+                            hp2_GodMode.SetActive(true);
+                            hp3_GodMode.SetActive(false);
+                        }
+                        else
+                        {
+                            hp1_GodMode.SetActive(false);
+                            hp2_GodMode.SetActive(false);
+                            hp3_GodMode.SetActive(false);
+                            hp1.SetActive(true);
+                            hp2.SetActive(true);
+                            hp3.SetActive(false);
+                        }
+                        break;
                     }
-                    break;
-                }
-            case 2:
-                {
-                    if (godMode)
+                case 1:
                     {
-                        hp1_GodMode.enabled = true;
-                        hp2_GodMode.enabled = true;
-                        hp3_GodMode.enabled = false;
+                        if (godMode)
+                        {
+                            hp1_GodMode.SetActive(true);
+                            hp2_GodMode.SetActive(false);
+                            hp3_GodMode.SetActive(false);
+                        }
+                        else
+                        {
+                            hp1_GodMode.SetActive(false);
+                            hp2_GodMode.SetActive(false);
+                            hp3_GodMode.SetActive(false);
+                            hp1.SetActive(true);
+                            hp2.SetActive(false);
+                            hp3.SetActive(false);
+                        }
+                        break;
                     }
-                    else
+                case 0:
                     {
-                        hp1_GodMode.enabled = false;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                        hp1.enabled = true;
-                        hp2.enabled = true;
-                        hp3.enabled = false;
+                        if (godMode)
+                        {
+                            hp1_GodMode.SetActive(false);
+                            hp2_GodMode.SetActive(false);
+                            hp3_GodMode.SetActive(false);
+                        }
+                        else
+                        {
+                            hp1_GodMode.SetActive(false);
+                            hp2_GodMode.SetActive(false);
+                            hp3_GodMode.SetActive(false);
+                            hp1.SetActive(false);
+                            hp2.SetActive(false);
+                            hp3.SetActive(false);
+                        }
+                        break;
                     }
-                    break;
-                }
-            case 1:
-                {
-                    if (godMode)
-                    {
-                        hp1_GodMode.enabled = true;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                    }
-                    else
-                    {
-                        hp1_GodMode.enabled = false;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                        hp1.enabled = true;
-                        hp2.enabled = false;
-                        hp3.enabled = false;
-                    }
-                    break;
-                }
-            case 0:
-                {
-                    if (godMode)
-                    {
-                        hp1_GodMode.enabled = false;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                    }
-                    else
-                    {
-                        hp1_GodMode.enabled = false;
-                        hp2_GodMode.enabled = false;
-                        hp3_GodMode.enabled = false;
-                        hp1.enabled = false;
-                        hp2.enabled = false;
-                        hp3.enabled = false;
-                    }
-                    break;
-                }
+            }
         }
     }
 }
