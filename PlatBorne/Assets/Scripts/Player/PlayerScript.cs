@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour
         {
             bossHitbox = true;
         }
-        if (collision.gameObject.CompareTag("CameraCollider")) CameraBirghmingwayScript.Cam(collision);
+        //if (collision.gameObject.CompareTag("CameraCollider")) CameraBirghmingwayScript.Cam(collision);
     }
     private void OnCollisionExit(Collision collision)
     {
@@ -62,15 +62,6 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;        
-        if (collision.gameObject.CompareTag("LevelLondon_Finish"))
-        {
-            LevelLondon.reachedTheEnd = true;
-            SceneManager.LoadScene("LevelBoss");
-        }
-        if (collision.gameObject.CompareTag("LevelBricus_Finish"))
-        {
-            SceneManager.LoadScene("Cutscene_AfterBricus");
-        }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -87,8 +78,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
-        //LoadMovement();
-        //unadded for debbuging leave till saves are working in birmigham
+        rb.transform.position = save.LoadMovement();
     }
     void Update()
     {
@@ -125,26 +115,5 @@ public class PlayerScript : MonoBehaviour
             Bossfight.playerPlayDamage = false;
         }
         save.PositionSave(transform.position.x, transform.position.y);
-    }
-
-    private void LoadMovement()
-    {        
-        switch (PlayerPrefs.GetString("Level"))
-        {
-            case "london":
-                {
-                    if (PlayerPrefs.HasKey("HunterPositionX_London"))
-                    {
-                        float poziceY = PlayerPrefs.GetFloat("HunterPositionY_London");
-                        float poziceX = PlayerPrefs.GetFloat("HunterPositionX_London");
-                        rb.transform.position = new Vector3(poziceX, poziceY, 0.79f);
-                    }
-                    break;
-                }
-            case "bricus":
-                {
-                    break;
-                }
-        }        
     }
 }
