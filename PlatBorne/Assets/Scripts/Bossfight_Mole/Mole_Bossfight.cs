@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -226,7 +225,6 @@ public class Mole_Bossfight : MonoBehaviour
         levelMove.SetActive(true);
     }
 
-
     //Attack variables
     int attackNumberShovelRain = 0;
     int attackNumberMoleRain = 0;
@@ -332,10 +330,21 @@ public class Mole_Bossfight : MonoBehaviour
     public void Attack_DrillRain()
     {
         attackNumberDrillRain++;
-        for (int i = 0; i < attackDrillRainNumberOfSpawns; i++)
+        if (colliderLeft)
         {
-            Vector2 position = new Vector2(attackDrillRainPositionX + (i * attackDrillRainShift), attackDrillRainPositionY);
-            Instantiate(prefabDrillRain, position, Quaternion.identity);
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 position = new Vector2(-16.75f + (i * 1), 11);
+                Instantiate(prefabDrillRain, position, Quaternion.identity);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 position = new Vector2(16.75f - (i * 1), 11);
+                Instantiate(prefabDrillRain, position, Quaternion.identity);
+            }
         }
         attackIsGoing = false;
     }
@@ -365,15 +374,35 @@ public class Mole_Bossfight : MonoBehaviour
     private void Attack_SideDrills()
     {
         attackNumberDrillSide++;
-        Vector2[] position = new Vector2[4];
-        position[0] = new Vector2(attackDrillSidePositionX, attackDrillGroundPositionY);
-        position[1] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, attackDrillGroundPositionY);
-        position[2] = new Vector2(attackDrillSidePositionX, -attackDrillGroundPositionY);
-        position[3] = new Vector2(attackDrillSidePositionX + attackDrillSideShift, -attackDrillGroundPositionY);
-        for (int i = 0; i > 4; i++)
+        Vector2[] position = new Vector2[6];
+        position[0] = new Vector2(-19.5f, -5.72f);
+        position[1] = new Vector2(-19.5f, -3.4f);
+        position[2] = new Vector2(-19.5f, -1.08f);
+        //right wall
+        position[3] = new Vector2(19.5f, -5.72f);
+        position[4] = new Vector2(19.5f, -3.4f);
+        position[5] = new Vector2(19.5f, -1.08f);
+        if (colliderMiddleMiddle)
         {
-            Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            for (int i = 0; i > 6; i++)
+            {
+                Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            }
         }
+        else if (colliderMiddleRight)
+        {
+            for (int i = 0; i > 3; i++)
+            {
+                Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            }
+        }
+        else
+        {
+            for (int i = 3; i > 6; i++)
+            {
+                Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+            }
+        }                
         attackIsGoing = false;
     }
     //PHASE II
@@ -382,10 +411,9 @@ public class Mole_Bossfight : MonoBehaviour
         attackNumberDrillSide++;
         for (int i = 0; i > 20; i++)
         {
-            yield
-            return new WaitForSeconds(attackDrillGroundSpeed);
-            if (colliderRight) Instantiate(prefabDrillSide, new Vector2(attackDrillGroundPositionX + (attackDrillGroundShift * i), attackDrillGroundPositionY), Quaternion.identity); //right
-            else Instantiate(prefabDrillSide, new Vector2(attackDrillGroundPositionX + (attackDrillGroundShift * i), attackDrillGroundPositionY), Quaternion.identity); //left
+            yield return new WaitForSeconds(0.5f);
+            if (colliderRight) Instantiate(prefabDrillSide, new Vector2(16.76f + (1 * i), -11), Quaternion.identity); //right
+            else Instantiate(prefabDrillSide, new Vector2(-16.76f - (1 * i), -11), Quaternion.identity); //left
         }
         attackIsGoing = false;
     }
