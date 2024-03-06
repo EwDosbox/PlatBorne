@@ -59,32 +59,14 @@ public class Saves : MonoBehaviour
     }
     public Vector3 LoadMovement()
     {
-        float positionX = 0;
-        float positionY = 0;
         switch (PlayerPrefs.GetString("Level"))
         {
-            case "london":
-                {
-                    if (PlayerPrefs.HasKey("HunterPositionX_London"))
-                    {
-                        positionY = PlayerPrefs.GetFloat("HunterPositionY_London");
-                        positionX = PlayerPrefs.GetFloat("HunterPositionX_London");                        
-                        
-                    }
-                    break;
-                }
-            case "birmingham":
-                {
-                    if (PlayerPrefs.HasKey("HunterPositionX_Birmingham"))
-                    {
-                        positionY = PlayerPrefs.GetFloat("HunterPositionY_Birmingham");
-                        positionX = PlayerPrefs.GetFloat("HunterPositionX_Birmingham");
-                    }
-                    break;
-                }
-            default: break;          
+            case "london": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London"), PlayerPrefs.GetFloat("HunterPositionY_London"), 1);
+            case "brecus": return new Vector3(-31.41f,-11.34f, 1);
+            case "birmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham"), PlayerPrefs.GetFloat("HunterPositionY_Birmingham"), 1);
+            case "mole": return new Vector3(-16.44f, -5.69f, 1);
+            default: return new Vector3(0, 0, 1);       
         }
-        return new Vector3(positionX, positionY, 1);
     }
     public void PlayerFell()
     {

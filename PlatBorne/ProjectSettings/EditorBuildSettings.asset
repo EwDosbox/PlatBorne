@@ -26,4 +26,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscenes/Cutscene_EndGameAct1.unity
     guid: e1586c2cb6489ec4daf7ecd7a731fd58
+  - enabled: 1
+    path: Assets/Scenes/LevelMole.unity
+    guid: bc42ae6ff01a33d409d974a873d29f7c
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene_Ending Fish.unity
+    guid: ef60a3b3fd4ba5b44b7894ead4bf23d2
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene_Ending Good.unity
+    guid: b84786d707c4e7a4bb1e64636deed2f2
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene_Ending Neutral.unity
+    guid: 9f437cff532d02f469127efe472116ec
+  - enabled: 1
+    path: Assets/Scenes/Cutscenes/Cutscene_ACT2Start.unity
+    guid: 32f5fdca6278a6a4383900d55cd04ea0
   m_configObjects: {}

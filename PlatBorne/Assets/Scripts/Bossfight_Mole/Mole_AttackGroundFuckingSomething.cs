@@ -22,7 +22,7 @@ public class Mole_AttackGroundFuckingSomething : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0,0, rotationSpeed);
+        transform.Rotate(0,0, rotationSpeed * Time.deltaTime);
         timer += Time.deltaTime;
         if (timer > timeToSelfDestruct)
         {
@@ -31,16 +31,20 @@ public class Mole_AttackGroundFuckingSomething : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (goDown)
         {
-            rb.velocity += Vector2.down * acceleration;
+            rb.gravityScale = 1;
         }
-        else rb.velocity += Vector2.up * acceleration;
+        else
+        {
+            rb.velocity = Vector2.up * 6;
+            rb.velocity += Vector2.up * acceleration * Time.deltaTime;
+        }
         if (rb.position.y > maxHeight)
         {
             rb.velocity = Vector2.zero;
             timeSpinning += Time.deltaTime;
             if (timeSpinning > timeStayedInAir)
             {
-                rb.velocity += Vector2.down * acceleration;
+                goDown = true;
             }
         }
     }

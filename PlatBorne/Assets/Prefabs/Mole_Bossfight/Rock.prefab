@@ -102,7 +102,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToSelfDestruct: 10
-  acceleration: 0.2
-  maxHeight: -0.5
-  rotationSpeed: 45
-  timeStayedInAir: 3
+  acceleration: 1
+  maxHeight: -1
+  rotationSpeed: 180
+  timeStayedInAir: 2
