@@ -6,7 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
-using static UnityEditor.Rendering.FilterWindow;
 using System.Drawing;
 using System;
 using Color = UnityEngine.Color;
