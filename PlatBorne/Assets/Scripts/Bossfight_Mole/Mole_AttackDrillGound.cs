@@ -8,8 +8,14 @@ public class Mole_AttackDrillGround : MonoBehaviour
     float timer;
     [SerializeField] float timeToSelfDestruct;
     [SerializeField] float speed;
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player") Destroy(gameObject);
+    }
     void Awake()
     {
+        transform.rotation = Quaternion.Euler(0,0,0);
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector2.up * speed;
     }

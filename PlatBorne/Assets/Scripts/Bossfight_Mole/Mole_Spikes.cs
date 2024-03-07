@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mole_Spikes : MonoBehaviour
 {
-    PlayerHealth health = new PlayerHealth();
+    public PlayerHealth playerHealth;
     Rigidbody2D rb;
     [SerializeField] private float timeToSelfDestruct;
     private float alpha = 0f;
@@ -18,7 +18,7 @@ public class Mole_Spikes : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Player"))
         {
-            health.PlayerDamage();
+            playerHealth.PlayerDamage();
             Destroy(gameObject);
         }
     }
