@@ -11,6 +11,7 @@ class ACT2Cutscene_EndGameStats: MonoBehaviour
     public Text endingText;
     public AudioSource soundEffect;
     public int numberOfStrings;
+    public CanvasGroup canvasGroup;
     string[] writerText =
     {
         "Number of Falls:",
@@ -54,7 +55,10 @@ class ACT2Cutscene_EndGameStats: MonoBehaviour
                 StartCoroutine("TypeWriterData");
             }
         }
-        //continue
+        else
+        {
+            StartCoroutine(FadeOutCanvas(canvasGroup, 2));
+        }
         if (Input.anyKeyDown) SceneManager.LoadScene("MainMenu");
     }
     private IEnumerator TypeWriterText()
@@ -103,4 +107,22 @@ class ACT2Cutscene_EndGameStats: MonoBehaviour
         return time.ToString("hh':'mm':'ss'.'ffff");
     }
 
+    IEnumerator FadeOutCanvas(CanvasGroup fadeshit, float time)
+    {
+        float elapsedTime = 0f;
+        float startAlpha = fadeshit.alpha;
+
+        while (elapsedTime < time)
+        {
+            float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / time);
+            fadeshit.alpha = newAlpha;
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+        canvasGroup.alpha = 0f;
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("MainMenu");
+
+    }
 }

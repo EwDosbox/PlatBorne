@@ -10,6 +10,7 @@ class Cutscene_EndGameStats : MonoBehaviour
     public Text[] dataText;
     public Text endingText;
     public AudioSource soundEffect;
+    public CanvasGroup canvasGroup;
     public int numberOfStrings;
     string[] writerText =
     {
@@ -55,6 +56,10 @@ class Cutscene_EndGameStats : MonoBehaviour
                 isFinishedText = false;
                 StartCoroutine("TypeWriterData");
             }
+        }
+        else
+        {
+            StartCoroutine(FadeOutCanvas(canvasGroup, 2));
         }
         //continue
         if (Input.anyKeyDown) SceneManager.LoadScene("MainMenu");
@@ -103,6 +108,25 @@ class Cutscene_EndGameStats : MonoBehaviour
     {
         TimeSpan time = TimeSpan.FromSeconds(totalSeconds);
         return time.ToString("hh':'mm':'ss'.'ffff");
+    }
+
+    IEnumerator FadeOutCanvas(CanvasGroup fadeshit, float time)
+    {
+        float elapsedTime = 0f;
+        float startAlpha = fadeshit.alpha;
+
+        while (elapsedTime < time)
+        {
+            float newAlpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / time);
+            fadeshit.alpha = newAlpha;
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+        canvasGroup.alpha = 0f;
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("MainMenu");
+
     }
 
 }
