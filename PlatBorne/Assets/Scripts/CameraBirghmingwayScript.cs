@@ -7,23 +7,45 @@ using UnityEngine;
 public class CameraBirghmingwayScript : MonoBehaviour
 {
     [SerializeField] private GameObject hunter;
+    [SerializeField] private Camera camera;
     private Vector2 hT;
     private void Update()
     {
         hT = hunter.transform.position;
-        Debug.Log(HunterBetween(new Vector2(10, 10), new Vector2(-10, -10)));
-        SetToHunter();
-    }
-
-    private bool HunterBetween(Vector2 v1, Vector2 v2)
-    {
-        bool hBetween1XA2X = (v1.x > hT.x && hT.x < v2.x);
-        bool hBetween2XA1X = (v2.x > hT.x && hT.x < v1.x);
-        bool hBetweenX = hBetween1XA2X || hBetween2XA1X;
-        bool hBetween1YA2Y = (v1.y > hT.y && hT.y < v2.y);
-        bool hBetween2YA1Y = (v2.y > hT.y && hT.y < v1.y);
-        bool hBetweenY = hBetween1YA2Y || hBetween2YA1Y;
-        return hBetweenX && hBetweenY;
+        if (hT.x < -26)
+        {
+            SetTo(new Vector2(-32, -3));
+            camera.orthographicSize = 4;
+        }
+        else if
+            (
+                hT.y > 5 &&
+                hT.x < -9
+            )
+        {
+            SetTo(new Vector2(hT.x, 5));
+        }
+        else if
+            (
+                hT.y > 9 &&
+                hT.x > -9
+            )
+        {
+            SetTo(new Vector2(-1, hT.y));
+        }
+        else if
+            (
+                hT.x > -25 &&
+                hT.y < -3
+            )
+        {
+            SetTo(new Vector2(hT.x, -3));
+        }
+        else
+        {
+            SetToHunter();
+            camera.orthographicSize = 5;
+        }
     }
     private void SetToHunter()
     {
