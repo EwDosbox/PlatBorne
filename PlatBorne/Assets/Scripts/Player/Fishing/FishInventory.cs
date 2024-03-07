@@ -63,7 +63,7 @@ public class FishInventory : MonoBehaviour
         //Save
         if (fishCatched < fishInventory.Count)
         {
-            fishInventory[fishCatched].SetActive(false);
+            fishInventory[fishCatched].GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(sr => sr.name.Equals("Check")).enabled = true;
         }
         fishCatched++;
     }
