@@ -12,7 +12,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
     [SerializeField] private AudioSource hunterJump;
-    [SerializeField] private AudioSource hunterWalk;
 
     public Animator animator;
     public PlayerHealth health;
@@ -105,7 +104,6 @@ public class PlayerScript : MonoBehaviour
         else
         {
             playerWasInAir = true;
-            hunterWalk.enabled = false;
         }
         //damage
         if (Bossfight.playerPlayDamage && !health.GodMode)
