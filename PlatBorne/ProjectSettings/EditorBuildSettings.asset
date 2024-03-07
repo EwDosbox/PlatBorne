@@ -33,10 +33,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Cutscenes/Cutscene_Ending Fish.unity
     guid: ef60a3b3fd4ba5b44b7894ead4bf23d2
   - enabled: 1
-    path: Assets/Scenes/Cutscenes/Cutscene_Ending Good.unity
+    path: Assets/Scenes/Cutscenes/Cutscene_Ending Neutral.unity
     guid: b84786d707c4e7a4bb1e64636deed2f2
   - enabled: 1
-    path: Assets/Scenes/Cutscenes/Cutscene_Ending Neutral.unity
+    path: Assets/Scenes/Cutscenes/Cutscene_Ending Good.unity
     guid: 9f437cff532d02f469127efe472116ec
   - enabled: 1
     path: Assets/Scenes/Cutscenes/Cutscene_ACT2Start.unity

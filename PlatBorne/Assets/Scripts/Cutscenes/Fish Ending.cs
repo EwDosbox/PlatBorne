@@ -49,7 +49,7 @@ public class FishEnding : MonoBehaviour
         while (!isFinished) yield return null;
         isFinished = false;
         StartCoroutine(FadeInCanvas(canvasHunterFish, 10));
-        StartCoroutine(TypeWriter("\n'Have I become a fish?'", SFXTypewriter, 0.1f, 1, 0, mainText));
+        StartCoroutine(TypeWriter("\n\"Have I become a fish?\"", SFXTypewriter, 0.1f, 1, 0, mainText));
         while (!isFinished) yield return null;
         isFinished = false;
         StartCoroutine(TypeWriter("\n\nYour fate is accepted shockingly fast.", SFXTypewriter, 0.1f, 2, 0, mainText));
