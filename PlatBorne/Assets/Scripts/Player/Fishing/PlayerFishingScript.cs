@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerFishingScript : MonoBehaviour
 {
@@ -77,8 +78,7 @@ public class PlayerFishingScript : MonoBehaviour
                     }
                     else if (inventory.FishCatched == inventory.Count)
                     {
-                        Debug.Log("fish Ending");
-                        //ending
+                        SceneManager.LoadScene("Cutsene_Ending Fish");
                     }
                     else
                     {
