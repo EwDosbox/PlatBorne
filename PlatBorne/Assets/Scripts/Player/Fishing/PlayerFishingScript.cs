@@ -52,6 +52,10 @@ public class PlayerFishingScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            SceneManager.LoadScene("LevelBirmingham");
+        }
         //Movement
         if (shouldHookMoveLeft)
         {

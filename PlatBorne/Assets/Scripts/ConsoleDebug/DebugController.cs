@@ -27,6 +27,7 @@ public class DebugController : MonoBehaviour
     public PlayerHealth playerHealth;
     public Bossfight bossfight;
     public Saves save;
+    public Mole_Bossfight moleBossfight;
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
@@ -88,7 +89,7 @@ public class DebugController : MonoBehaviour
 
         KILL_MOLE = new DebugCommand("kill_mole", "Kills boss Mole", "kill_mole", () =>
         {
-            Debug.Log("Mole Died");
+            StartCoroutine(bossfight.BossDeath());
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
@@ -118,7 +119,7 @@ public class DebugController : MonoBehaviour
 
         TELEPORT_BIRMINGHAM = new DebugCommand("teleport_birmingham", "Teleports Player to Birmingham", "teleport_birmingham", () =>
         {
-            Debug.Log("Work In Progress");
+            SceneManager.LoadScene("LevelBirmingham");
         });
 
         RESET_PREFS  = new DebugCommand("reset_prefs", "Resets all PlayerPrefs", "reset_prefs", () =>

@@ -7,7 +7,7 @@ using UnityEngine;
 public class CameraBirghmingwayScript : MonoBehaviour
 {
     [SerializeField] private GameObject hunter;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cam;
     private Vector2 hT;
     private void Update()
     {
@@ -15,7 +15,7 @@ public class CameraBirghmingwayScript : MonoBehaviour
         if (hT.x < -26)
         {
             SetTo(new Vector2(-32, -3));
-            camera.orthographicSize = 4;
+            cam.orthographicSize = 4;
         }
         else if
             (
@@ -44,7 +44,7 @@ public class CameraBirghmingwayScript : MonoBehaviour
         else
         {
             SetToHunter();
-            camera.orthographicSize = 5;
+            cam.orthographicSize = 5;
         }
     }
     private void SetToHunter()
