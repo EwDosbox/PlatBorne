@@ -11,6 +11,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] GameObject mainMenuBackground;
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] GameObject actSelectorMenu;
 
     public AudioSource src;
     public AudioClip srcOne;
@@ -27,6 +28,23 @@ public class MainMenu : MonoBehaviour
     
     public bool InGame = false;
     public bool PreGameCutscene = false;
+    public bool IsInSettings = false;
+    public bool actMenuOpen = false;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (IsInSettings)
+            {
+                ReturnFromSettings();
+            }
+            else if (actMenuOpen)
+            {
+                CloseActMenu();
+            }
+        }
+    }
 
     private IEnumerator Start()
     {    
@@ -56,7 +74,17 @@ public class MainMenu : MonoBehaviour
         {
             SetSFXVolume();
         }
+
+        yield return new WaitForSeconds(1.1f);
+        panel.SetActive(true);
+        src.PlayOneShot(srcTwo);
+        Debug.Log("cedula spadla");
+        sign.SetTrigger("SignDown");
+        text.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        text.gameObject.SetActive(true);
     }
+
     public void NewGame()
     {
         src.PlayOneShot(srcOne);
@@ -115,6 +143,7 @@ public class MainMenu : MonoBehaviour
     public void Settings()
     {
         src.PlayOneShot(srcOne);
+        IsInSettings = true;
         mainMenuBackground.SetActive(false);
         settingsMenu.SetActive(true);
     }
@@ -122,6 +151,7 @@ public class MainMenu : MonoBehaviour
     public void ReturnFromSettings()
     {
         mainMenuBackground.SetActive(true);
+        IsInSettings = false;
         src.PlayOneShot(srcOne);
         settingsMenu.SetActive(false);
     }
@@ -200,6 +230,78 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.DeleteKey("Timer_Birmingham");
         PlayerPrefs.DeleteKey("Timer_Mole");
     }
+    public void London()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_London());
+    }
+
+    public IEnumerator _London()
+    {
+        InGame = true;
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.9f);
+        SceneManager.LoadScene("LevelLondon");
+    }
+
+    public void Brecus()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_Brecus());
+    }
+
+    public IEnumerator _Brecus()
+    {
+        InGame = true;
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.9f);
+        SceneManager.LoadScene("LevelBoss");
+    }
+
+    public void Birmingham()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_Birmingham());
+    }
+    public IEnumerator _Birmingham()
+    {
+        InGame = true;
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.9f);
+        SceneManager.LoadScene("LevelBirmingham");
+    }
+
+    //public void Mole()
+    //{
+    //    src.PlayOneShot(srcOne);
+    //    StartCoroutine(_Mole());
+    //}
+
+    //public IEnumerator _Mole()
+    //{
+    //    InGame = true;
+    //    transitionAnim.SetTrigger("Fade_End");
+    //    yield return new WaitForSeconds(0.9f);
+    //    SceneManager.LoadScene("LevelMole");
+    //}
+
+    public void OpenActMenu()
+    {
+        src.PlayOneShot(srcOne);
+        actMenuOpen = true;
+        actSelectorMenu.SetActive(true);
+    }
+
+    public void CloseActMenu()
+    {
+        src.PlayOneShot(srcOne);
+        actMenuOpen = false;
+        actSelectorMenu.SetActive(false);
+    }
+
+
+
+
     //*****************************************stary, prvni kod*************************
     //public void GoToScene(string sceneName)
     //{
