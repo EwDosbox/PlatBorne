@@ -48,7 +48,7 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator Start()
     {    
-        SettingsLoad();
+        StartCoroutine(SettingsLoad());
         yield return new WaitForSeconds(1.1f);
         panel.SetActive(true);
         src.PlayOneShot(srcTwo);
@@ -57,7 +57,7 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         text.gameObject.SetActive(true);
     }
-    private void SettingsLoad()
+    private IEnumerator SettingsLoad()
     {
         if (PlayerPrefs.HasKey("HasASavedGame"))
         {
@@ -78,7 +78,6 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(1.1f);
         panel.SetActive(true);
         src.PlayOneShot(srcTwo);
-        Debug.Log("cedula spadla");
         sign.SetTrigger("SignDown");
         text.enabled = true;
         yield return new WaitForSeconds(0.3f);
@@ -238,6 +237,7 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _London()
     {
+        PlayerPrefs.SetString("Level", "london");
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -252,6 +252,7 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _Brecus()
     {
+        PlayerPrefs.SetString("Level", "bricus");
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -265,6 +266,7 @@ public class MainMenu : MonoBehaviour
     }
     public IEnumerator _Birmingham()
     {
+        PlayerPrefs.SetString("Level", "birmingham");
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -279,6 +281,7 @@ public class MainMenu : MonoBehaviour
 
     //public IEnumerator _Mole()
     //{
+    //    PlayerPrefs.SetString("Level", "mole");
     //    InGame = true;
     //    transitionAnim.SetTrigger("Fade_End");
     //    yield return new WaitForSeconds(0.9f);
