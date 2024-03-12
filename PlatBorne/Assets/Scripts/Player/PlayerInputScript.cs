@@ -46,6 +46,7 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldDash;
     private bool dashing;
     private float dashStarted;
+    private bool isMoving = false;
     [SerializeField] private float dashTimeLength;
     [SerializeField] private float dashVelocity;
 
@@ -57,6 +58,11 @@ public class PlayerInputScript : MonoBehaviour
         jumpHeight = minJumpHeight;
         timeOfLastDash = 0;
         CanMove = true;
+    }
+    private void Update()
+    {
+        if (!isPlayerInAir && isMoving) walkSound.enabled = true;
+        else walkSound.enabled = false;
     }
     private void FixedUpdate()
     {
@@ -74,9 +80,11 @@ public class PlayerInputScript : MonoBehaviour
                 velocityBeforeDash = rb.velocity;
                 shouldDash = false;
                 dashing = true;
+                isMoving = false;
             }
             else if (dashing)
             {
+                isMoving = false;
                 if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
                 else rb.velocity = new Vector2(+dashVelocity, 0);
                 if ((Time.time - dashStarted) >= dashTimeLength)
@@ -94,22 +102,26 @@ public class PlayerInputScript : MonoBehaviour
                         isPlayerFacingLeft = false;
                         transform.localScale = new Vector2(+0.19f, 0.19f);
                         rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
-                        walkSound.Play();
+                        isMoving = true;
                     }
                     else if (shouldWalkL)
                     {
                         isPlayerFacingLeft = true;
                         transform.localScale = new Vector2(-0.19f, 0.19f);
                         rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-                        walkSound.Play();
+                        isMoving = true;
                     }
                     else
                     {
+                        isMoving = false;
                         rb.velocity = new Vector2(0, rb.velocity.y);
-                        walkSound.Stop();
                     }
                 }
-                else rb.velocity = new Vector2(0, rb.velocity.y);
+                else
+                {
+                    isMoving = false;
+                    rb.velocity = new Vector2(0, rb.velocity.y);
+                }
                 if (shouldJump)
                 {// behaves like a weird stopwatch
                     jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
@@ -160,7 +172,6 @@ public class PlayerInputScript : MonoBehaviour
         }
         if (context.canceled)
         {
-            walkSound.Stop();
             shouldWalkL = false;
         }
     }

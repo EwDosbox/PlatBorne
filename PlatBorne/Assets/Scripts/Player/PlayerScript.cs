@@ -39,6 +39,7 @@ public class PlayerScript : MonoBehaviour
     private float timer = 0;
     private bool isPlaying = false;
     public bool touchedFallHitbox = false;
+    private bool playWalking = false;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox"))

@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: c84e0a3ce368bc3419cc0f4e8cb8cae9
   - enabled: 1
-    path: Assets/Scenes/Cutscenes/Cutscene_StartGame.unity
+    path: Assets/Scenes/Cutscenes/Cutscene_ACT1Start.unity
     guid: a86c83f5fd339984090721ac27cf58a0
   - enabled: 1
     path: Assets/Scenes/LevelLondon.unity

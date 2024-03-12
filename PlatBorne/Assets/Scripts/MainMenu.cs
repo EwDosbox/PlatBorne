@@ -22,7 +22,6 @@ public class MainMenu : MonoBehaviour
     public GameObject panel;
     public Button continueButton;
     public Button newGameButton;
-    public Saves save;
 
     public TMP_Text text;
     
@@ -30,6 +29,17 @@ public class MainMenu : MonoBehaviour
     public bool PreGameCutscene = false;
 
     private IEnumerator Start()
+    {    
+        SettingsLoad();
+        yield return new WaitForSeconds(1.1f);
+        panel.SetActive(true);
+        src.PlayOneShot(srcTwo);
+        sign.SetTrigger("SignDown");
+        text.enabled = true;
+        yield return new WaitForSeconds(0.3f);
+        text.gameObject.SetActive(true);
+    }
+    private void SettingsLoad()
     {
         if (PlayerPrefs.HasKey("HasASavedGame"))
         {
@@ -46,14 +56,6 @@ public class MainMenu : MonoBehaviour
         {
             SetSFXVolume();
         }
-
-        yield return new WaitForSeconds(1.1f);
-        panel.SetActive(true);
-        src.PlayOneShot(srcTwo);
-        sign.SetTrigger("SignDown");
-        text.enabled = true;
-        yield return new WaitForSeconds(0.3f);
-        text.gameObject.SetActive(true);
     }
     public void NewGame()
     {
@@ -62,15 +64,14 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator _NewGame()
     {
-        save.NewGameSaveReset();
+        NewGameSaveReset();
         PlayerPrefs.SetInt("HasASavedGame", 1);
         PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
-        SceneManager.LoadScene("Cutscene_StartGame");
+        SceneManager.LoadScene("Cutscene_ACT1Start");
     }
-
     public void GameContinue()
     {
         src.PlayOneShot(srcOne);
@@ -82,7 +83,6 @@ public class MainMenu : MonoBehaviour
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
-        Debug.Log(PlayerPrefs.GetString("Level"));
         switch (PlayerPrefs.GetString("Level"))
         {
             case "bricus":
@@ -97,11 +97,17 @@ public class MainMenu : MonoBehaviour
                     Debug.Log("Scene: LevelLondon");
                     break;
                 }
-            default:
+            case "birmingham":
                 {
-                    SceneManager.LoadScene("LevelLondon");
-                    Debug.Log("Scene: LevelLondon");
-                    break;             
+                    SceneManager.LoadScene("LevelBirmingham");
+                    Debug.Log("Scene: LevelBirmingham");
+                    break;
+                }
+            case "mole":
+                {
+                    SceneManager.LoadScene("LevelMole");
+                    Debug.Log("Scene: LevelMole");
+                    break;
                 }
         }
     }
@@ -164,6 +170,35 @@ public class MainMenu : MonoBehaviour
         Debug.Log("SFX: " + volume);
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXvolume", volume);
+    }
+
+    public void NewGameSaveReset()
+    {
+        //MAIN
+        PlayerPrefs.DeleteKey("Level");
+        PlayerPrefs.DeleteKey("GodMode");
+        PlayerPrefs.DeleteKey("PussyMode");
+        //ACT I
+        PlayerPrefs.DeleteKey("NumberOfFalls_London");
+        PlayerPrefs.DeleteKey("NumberOfJumps_Act1");
+        PlayerPrefs.DeleteKey("Timer_London");
+        PlayerPrefs.DeleteKey("Timer_Brecus");
+        PlayerPrefs.DeleteKey("HunterPositionY_London");
+        PlayerPrefs.DeleteKey("HunterPositionX_London");
+        PlayerPrefs.DeleteKey("RNGSaved");
+        PlayerPrefs.DeleteKey("RNGNow");
+        PlayerPrefs.DeleteKey("HasASavedGame");
+        PlayerPrefs.DeleteKey("LondonVoiceLinesJ");
+        PlayerPrefs.DeleteKey("LondonVoiceLinesArray");
+        PlayerPrefs.DeleteKey("Brecus_BeatenWithPussy");
+        //ACT II
+        PlayerPrefs.DeleteKey("Mole_BeatenWithPussy");
+        PlayerPrefs.DeleteKey("HunterPositionX_Birmingham");
+        PlayerPrefs.DeleteKey("HunterPositionY_Birmingham");
+        PlayerPrefs.DeleteKey("NumberOfFalls_Birmingham");
+        PlayerPrefs.DeleteKey("NumberOfJumps_Act2");
+        PlayerPrefs.DeleteKey("Timer_Birmingham");
+        PlayerPrefs.DeleteKey("Timer_Mole");
     }
     //*****************************************stary, prvni kod*************************
     //public void GoToScene(string sceneName)
