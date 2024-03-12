@@ -62,7 +62,7 @@ public class Saves : MonoBehaviour
         switch (PlayerPrefs.GetString("Level"))
         {
             case "london": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London"), PlayerPrefs.GetFloat("HunterPositionY_London"), 1);
-            case "brecus": return new Vector3(-31.41f,-11.34f, 1);
+            case "bricus": return new Vector3(-31.41f,-11.34f, 1);
             case "birmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham"), PlayerPrefs.GetFloat("HunterPositionY_Birmingham"), 1);
             case "mole": return new Vector3(-16.44f, -5.69f, 1);
             default: return new Vector3(0, 0, 1);       
@@ -70,7 +70,7 @@ public class Saves : MonoBehaviour
     }
     public void PlayerFell()
     {
-        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "brecus")
+        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")
         {
             int xxx = PlayerPrefs.GetInt("NumberOfFalls_Act1");
             xxx++;
@@ -142,7 +142,7 @@ public class Saves : MonoBehaviour
 
     public void PlayerJumped()
     {
-        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "brecus")
+        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")
         {
             int xxx = PlayerPrefs.GetInt("NumberOfJumps_Act1");
             xxx++;

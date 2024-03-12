@@ -82,6 +82,7 @@ public class DebugController : MonoBehaviour
         KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss <value>", (x) =>
         {
             if (x == "brecus") StartCoroutine(bossfight.BossDeath());
+            if (x == "mole") StartCoroutine(bossfight.BossDeath());
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
@@ -91,8 +92,16 @@ public class DebugController : MonoBehaviour
 
         PUSSYMODE = new DebugCommand<bool>("pussymode", "Enables/Disables pussy mode", "pussymode <value>", (x) =>
         {
-            if (x) PlayerPrefs.SetInt("PussyMode", 1);
-            else PlayerPrefs.DeleteKey("PussyMode");
+            if (x)
+            {
+                PlayerPrefs.SetInt("PussyMode", 1);
+                playerHealth.PussyMode = true;
+            }
+            else
+            {
+                PlayerPrefs.DeleteKey("PussyMode");
+                playerHealth.PussyMode = false;
+            }
         });
 
 

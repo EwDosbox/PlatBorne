@@ -10693,12 +10693,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f83e191dcb8b4343b7be9e78ae3d0e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp1: {fileID: 1078083400}
-  hp2: {fileID: 256330941}
-  hp3: {fileID: 616933822}
-  hp1_GodMode: {fileID: 1229186951}
-  hp2_GodMode: {fileID: 1298963200}
-  hp3_GodMode: {fileID: 1602435130}
+  hp:
+  - {fileID: 1078083400}
+  - {fileID: 256330941}
+  - {fileID: 616933822}
+  hpGodMode:
+  - {fileID: 1229186951}
+  - {fileID: 1298963200}
+  - {fileID: 1602435130}
   hunterGodMode: {fileID: 1837068396}
 --- !u!82 &1837068396 stripped
 AudioSource:

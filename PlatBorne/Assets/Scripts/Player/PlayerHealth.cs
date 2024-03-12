@@ -8,13 +8,10 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public GameObject hp1;
-    public GameObject hp2;
-    public GameObject hp3;
-    public GameObject hp1_GodMode;
-    public GameObject hp2_GodMode;
-    public GameObject hp3_GodMode;
+    public GameObject[] hp;
+    public GameObject[] hpGodMode;
     public AudioSource hunterGodMode;
+    public AudioSource hunterDamage;
     private bool godMode;
     private bool pussyMode;
     private bool playerInvincible;
@@ -80,18 +77,21 @@ public class PlayerHealth : MonoBehaviour
             }
             else godMode = false;
         }
-        hp1.SetActive(false);
-        hp2.SetActive(false);
-        hp3.SetActive(false);
-        hp1_GodMode.SetActive(false);
-        hp2_GodMode.SetActive(false);
-        hp3_GodMode.SetActive(false);
+        foreach(GameObject temp in hp)
+        {
+            temp.SetActive(false);
+        }
+        foreach (GameObject temp in hpGodMode)
+        {
+            temp.SetActive(false);
+        }
     }
     public void PlayerDamage()
     {
-        if (!playerInvincible)
+        if (!playerInvincible && !godMode)
         {
             playerHP--;
+            hunterDamage.Play();
             PlayerInvincible = true;
         }
     }
@@ -130,106 +130,61 @@ public class PlayerHealth : MonoBehaviour
                 timerInvincibility = 0;
             }
         }
-        if (uiStart)
+        if (uiStart && !uiEnd)
         {
             timer += Time.deltaTime;
-            if (timer > 2)
+            if (timer > 2 && playerHP >= 1)
             {
-                if (godMode) hp1_GodMode.SetActive(true);
-                else hp1.SetActive(true);
+                if (godMode) hpGodMode[0].SetActive(true);
+                hp[0].SetActive(true);
             }
-            if (timer > 4)
+            if (timer > 4 && playerHP >= 2)
             {
-                if (godMode) hp2_GodMode.SetActive(true);
-                else hp2.SetActive(true);
+                if (godMode) hpGodMode[1].SetActive(true);
+                hp[1].SetActive(true);
             }
-            if (timer > 6)
+            if (timer > 6 && playerHP == 3)
             {                
-                if (godMode) hp3_GodMode.SetActive(true);
-                else hp3.SetActive(true);
+                if (godMode) hpGodMode[2].SetActive(true);
+                hp[2].SetActive(true);
                 uiEnd = true;
             }            
-        } //HP START
+            else if (timer > 6) uiEnd = true;
+        }
         else if (uiEnd)
         {
-            switch (playerHP)
+            if (playerHP >= 1)
             {
-                default:
-                    {
-                        if (godMode)
-                        {
-                            hp1_GodMode.SetActive(true);
-                            hp2_GodMode.SetActive(true);
-                            hp3_GodMode.SetActive(true);
-                        }
-                        else
-                        {
-                            hp1_GodMode.SetActive(true);
-                            hp2_GodMode.SetActive(true);
-                            hp3_GodMode.SetActive(true);
-                            hp1.SetActive(true);
-                            hp2.SetActive(true);
-                            hp3.SetActive(true);
-                        }
-                        break;
-                    }
-                case 2:
-                    {
-                        if (godMode)
-                        {
-                            hp1_GodMode.SetActive(true);
-                            hp2_GodMode.SetActive(true);
-                            hp3_GodMode.SetActive(false);
-                        }
-                        else
-                        {
-                            hp1_GodMode.SetActive(false);
-                            hp2_GodMode.SetActive(false);
-                            hp3_GodMode.SetActive(false);
-                            hp1.SetActive(true);
-                            hp2.SetActive(true);
-                            hp3.SetActive(false);
-                        }
-                        break;
-                    }
-                case 1:
-                    {
-                        if (godMode)
-                        {
-                            hp1_GodMode.SetActive(true);
-                            hp2_GodMode.SetActive(false);
-                            hp3_GodMode.SetActive(false);
-                        }
-                        else
-                        {
-                            hp1_GodMode.SetActive(false);
-                            hp2_GodMode.SetActive(false);
-                            hp3_GodMode.SetActive(false);
-                            hp1.SetActive(true);
-                            hp2.SetActive(false);
-                            hp3.SetActive(false);
-                        }
-                        break;
-                    }
-                case 0:
-                    {
-                        if (godMode)
-                        {
-                            hp1_GodMode.SetActive(false);
-                            hp2_GodMode.SetActive(false);
-                            hp3_GodMode.SetActive(false);
-                        }
-                        else
-                        {
-                            hp1_GodMode.SetActive(false);
-                            hp2_GodMode.SetActive(false);
-                            hp3_GodMode.SetActive(false);
-                            hp1.SetActive(false);
-                            hp2.SetActive(false);
-                            hp3.SetActive(false);
-                        }
-                        break;
-                    }
+                if (godMode) hpGodMode[0].SetActive(true);
+                else hpGodMode[0].SetActive(false);
+                hp[0].SetActive(true);
+            }
+            else
+            {
+                if (godMode) hpGodMode[0].SetActive(false);
+                hp[0].SetActive(false);
+            }
+            if (playerHP >= 2)
+            {
+                if (godMode) hpGodMode[1].SetActive(true);
+                else hpGodMode[1].SetActive(false);
+                hp[1].SetActive(true);
+            }
+            else
+            {
+                if (godMode) hpGodMode[1].SetActive(false);
+                hp[1].SetActive(false);
+            }
+            if (playerHP >= 3)
+            {
+                if (godMode) hpGodMode[2].SetActive(true);
+                else hpGodMode[2].SetActive(false);
+                hp[2].SetActive(true);
+            }
+            else
+            {
+                if (godMode) hpGodMode[2].SetActive(false);
+                hp[2].SetActive(false);
             }
         }
     }

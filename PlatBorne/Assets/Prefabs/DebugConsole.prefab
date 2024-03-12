@@ -48,6 +48,7 @@ MonoBehaviour:
   playerHealth: {fileID: 0}
   bossfight: {fileID: 0}
   save: {fileID: 0}
+  moleBossfight: {fileID: 0}
 --- !u!114 &4742276908463281193
 MonoBehaviour:
   m_ObjectHideFlags: 0

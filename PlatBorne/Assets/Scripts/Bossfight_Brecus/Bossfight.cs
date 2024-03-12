@@ -47,9 +47,6 @@ public class Bossfight : MonoBehaviour
     static public bool bossfightStarted = false;
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
-    private float bossfightTimer;
-    static public bool godMode = false;
-    private bool pussyMode = false;
     private bool bossIsDead = false;
     //****************
     int attackNumberDagger = 0;
@@ -90,6 +87,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        timer = save.TimerLoad(2);
         levelMove.SetActive(false);
         bounds.isTrigger = true;
         UI_BossHP.active = false;
@@ -100,8 +98,6 @@ public class Bossfight : MonoBehaviour
         phase = 1;
         phaseTimer = 0;
         timerOn = false;
-        if (PlayerPrefs.GetInt("PussyMode") > 0) pussyMode = true;
-        else pussyMode = false;
     }
     private void Update()
     {
@@ -149,7 +145,7 @@ public class Bossfight : MonoBehaviour
             {
                 bossInvincible = true;
                 playerInvincible = true;
-                if (pussyMode) playerHealth.PlayerHP = 3;
+                if (playerHealth.PussyMode) playerHealth.PlayerHP = 3;
                 switch (bossHealthBar.GetHP())
                 {
                     case 60:
@@ -188,16 +184,8 @@ public class Bossfight : MonoBehaviour
             //Player Damage
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
-                if (!playerInvincible && !godMode)
-                {
-                    playerInvincible = true;
-                    playerPlayDamage = true;
-                    playerHealth.PlayerHP -= 1;
-                    if (playerHealth.PlayerHP == 0)
-                    {
-                        PlayerDeath();
-                    }
-                }
+                playerHealth.PlayerDamage();
+                if (playerHealth.PlayerHP <= 0) PlayerDeath();
                 PlayerScript.bossHitbox = false;
                 PlayerScript.bossDamage = false;
             }
@@ -313,16 +301,12 @@ public class Bossfight : MonoBehaviour
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
-            if (PlayerPrefs.GetInt("GodMode") > 0) godMode = true;
-            else godMode = false;
-            if (pussyMode) pussyModeOn.gameObject.SetActive(true);
+            if (playerHealth.PussyMode) pussyModeOn.gameObject.SetActive(true);
             else pussyModeOn.gameObject.SetActive(false);
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
             PreBossDialog.Play();            
-            OSTLoop.enabled = true;
-            if (PlayerPrefs.HasKey("Timer_Bricus")) bossfightTimer = PlayerPrefs.GetFloat("Timer_Bricus");
-            else bossfightTimer = 0;
+            OSTLoop.enabled = true;            
         }
     }
 }

@@ -50,7 +50,6 @@ public class BossAttacks : MonoBehaviour
     }//done
     public void BossAttackDagger()
     {
-        Debug.Log("Boss Attack First Time: " + bossAttackDaggerFirstTime);
         if (bossAttackDaggerFirstTime)
         {
             Bossfight.attackIsGoingOn = true;
@@ -71,7 +70,6 @@ public class BossAttacks : MonoBehaviour
                     break;
             }
         }
-        Debug.Log("Timer: " + daggerTimer);
         daggerTimerIsOn = true;
         if (daggerIndex < daggerPosition.Length)
         {
