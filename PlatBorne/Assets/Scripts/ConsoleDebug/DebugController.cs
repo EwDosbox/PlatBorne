@@ -10,17 +10,12 @@ public class DebugController : MonoBehaviour
     bool showHelp = false;
     string input;
     //commands {
-    public static DebugCommand ROSEBUD;
-    public static DebugCommand ROSEBUD_OFF;
+    public static DebugCommand<bool> ROSEBUD;
     public static DebugCommand HELP;
-    public static DebugCommand KILL_BRECUS;
-    public static DebugCommand KILL_MOLE;
+    public static DebugCommand<string> KILL_BOSS;
     public static DebugCommand PLAYER_HEAL;
-    public static DebugCommand PUSSYMODE_TRUE;
-    public static DebugCommand PUSSYMODE_FALSE;
-    public static DebugCommand TELEPORT_LONDON;
-    public static DebugCommand TELEPORT_CHURCH;
-    public static DebugCommand TELEPORT_BIRMINGHAM;
+    public static DebugCommand<bool> PUSSYMODE;
+    public static DebugCommand<string> TELEPORT;
     public static DebugCommand RESET_PREFS;
     //commands }
     public List<object> commandList;
@@ -65,16 +60,18 @@ public class DebugController : MonoBehaviour
 
     private void Awake()
     {
-        ROSEBUD = new DebugCommand("rosebud", "Enables GodMode", "rosebud", () =>
+        ROSEBUD = new DebugCommand<bool>("rosebud", "Enables GodMode", "rosebud", (x) =>
         {
-            playerHealth.GodMode = true;
-            PlayerPrefs.SetInt("GodMode", 1);
-        });
-
-        ROSEBUD_OFF = new DebugCommand("rosebud_off", "Disables GodMode", "rosebud_off", () =>
-        {
-            playerHealth.GodMode = false;
-            PlayerPrefs.DeleteKey("GodMode");
+            if (x)
+            {
+                playerHealth.GodMode = true;
+                PlayerPrefs.SetInt("GodMode", 1);
+            }
+            else
+            {
+                playerHealth.GodMode = false;
+                PlayerPrefs.DeleteKey("GodMode");
+            }
         });
 
         HELP = new DebugCommand("help", "Shows all commands", "help", () =>
@@ -82,14 +79,9 @@ public class DebugController : MonoBehaviour
             showHelp = true;
         });
 
-        KILL_BRECUS = new DebugCommand("kill_brecus", "Kills boss Brecus", "kill_brecus", () =>
+        KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss <value>", (x) =>
         {
-            StartCoroutine(bossfight.BossDeath());
-        });
-
-        KILL_MOLE = new DebugCommand("kill_mole", "Kills boss Mole", "kill_mole", () =>
-        {
-            StartCoroutine(bossfight.BossDeath());
+            if (x == "brecus") StartCoroutine(bossfight.BossDeath());
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
@@ -97,29 +89,19 @@ public class DebugController : MonoBehaviour
             playerHealth.PlayerHP = 3; 
         });
 
-        PUSSYMODE_TRUE = new DebugCommand("pussymode_true", "Enables Pussy Mode (for bosses only)", "pussymode_true", () =>
+        PUSSYMODE = new DebugCommand<bool>("pussymode", "Enables/Disables pussy mode", "pussymode <value>", (x) =>
         {
-            PlayerPrefs.SetInt("PussyMode", 1);
+            if (x) PlayerPrefs.SetInt("PussyMode", 1);
+            else PlayerPrefs.DeleteKey("PussyMode");
         });
 
-        PUSSYMODE_FALSE = new DebugCommand("pussymode_false", "Disables Pussy Mode (for bosses only)", "pussymode_false", () =>
-        {
-            PlayerPrefs.DeleteKey("PussyMode");
-        });
 
-        TELEPORT_LONDON = new DebugCommand("teleport_london", "Teleports Player to London", "teleport_london", () =>
+        TELEPORT = new DebugCommand<string>("teleport", "Teleports Player", "teleport <value>", (x) =>
         {
-            SceneManager.LoadScene("LevelLondon");
-        });
-
-        TELEPORT_CHURCH = new DebugCommand("teleport_church", "Teleports Player to Church (Bricus)", "teleport_church", () =>
-        {
-            SceneManager.LoadScene("LevelBoss");
-        });
-
-        TELEPORT_BIRMINGHAM = new DebugCommand("teleport_birmingham", "Teleports Player to Birmingham", "teleport_birmingham", () =>
-        {
-            SceneManager.LoadScene("LevelBirmingham");
+            if (x == "london") SceneManager.LoadScene("LevelLondon");
+            else if (x == "brecus") SceneManager.LoadScene("LevelBoss");
+            else if (x == "birmingham") SceneManager.LoadScene("LevelBirmingham");
+            else if (x == "mole") SceneManager.LoadScene("LevelMole");
         });
 
         RESET_PREFS  = new DebugCommand("reset_prefs", "Resets all PlayerPrefs", "reset_prefs", () =>
@@ -130,16 +112,11 @@ public class DebugController : MonoBehaviour
         commandList = new List<object>
         {
             ROSEBUD,
-            ROSEBUD_OFF,
             HELP,
-            KILL_BRECUS, 
-            KILL_MOLE, 
+            KILL_BOSS,
             PLAYER_HEAL, 
-            PUSSYMODE_TRUE,
-            PUSSYMODE_FALSE,
-            TELEPORT_LONDON, 
-            TELEPORT_CHURCH,
-            TELEPORT_BIRMINGHAM, 
+            PUSSYMODE,
+            TELEPORT,
             RESET_PREFS
         };
     }
@@ -155,6 +132,7 @@ public class DebugController : MonoBehaviour
 
     private void HandleInput()
     {
+        string[] properties = input.Split(' ');
         for (int i = 0; i < commandList.Count; i++)
         {
             DebugCommandBase commandBase = commandList[i] as DebugCommandBase;
@@ -163,6 +141,15 @@ public class DebugController : MonoBehaviour
                 if (commandList[i] as DebugCommand != null)
                 {
                     (commandList[i] as DebugCommand).Invoke();
+                }
+                else if (commandList[i] as DebugCommand<string> != null)
+                {
+                    (commandList[i] as DebugCommand<string>).Invoke(properties[1]);
+                }
+                else if (commandList[i] as DebugCommand<bool> != null)
+                {
+                    if (properties[1] == "true") (commandList[i] as DebugCommand<bool>).Invoke(true);
+                    else if (properties[1] == "false") (commandList[i] as DebugCommand<bool>).Invoke(false);
                 }
             }            
         }
