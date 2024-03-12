@@ -8,9 +8,9 @@ public class PlayerInputScript : MonoBehaviour
 {
     private Rigidbody2D rb;
     private Animator animator;
-    public Saves save;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D feet;
+    public Saves save;
 
     static public bool CanMove
     {
@@ -126,7 +126,7 @@ public class PlayerInputScript : MonoBehaviour
                 {// behaves like a weird stopwatch
                     jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
                     if (jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
-                    rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+                    rb.velocity = new Vector2(rb.velocity.x, jumpHeight);                   
                     shouldJump = false;
                 }
             }
@@ -153,9 +153,7 @@ public class PlayerInputScript : MonoBehaviour
         {
             shouldJump = true;
             jumpIsPressed = false;
-            //save.PlayerJumped();
-            //not created an instance (save = new Save()) so it throws an error
-            //Sound
+            save.PlayerJumped();
             if (!isPlaying)
             {
                 jumpSound.Play();

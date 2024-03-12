@@ -59,19 +59,14 @@ public class Saves : MonoBehaviour
     }
     public Vector3 LoadMovement()
     {
+
             switch (PlayerPrefs.GetString("Level"))
             {            
-                case "london":
-                    {
-                        return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London",-14.6f), PlayerPrefs.GetFloat("HunterPositionY_London",-67.84f), 1);
-                    }
-                case "bricus": return new Vector3(-31.41f, -11.34f, 1);
-                case "birmingham":
-                    {
-                        return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham",-37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham",-4.28f), 1);
-                    }
-                case "mole": return new Vector3(-16.44f, -5.69f, 1);
-                default: return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 1);
+                case "london": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
+            case "bricus": return new Vector3(-31.41f, -11.34f, 0);
+                case "birmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
+            case "mole": return new Vector3(-16.44f, -5.69f, 0);
+                default: return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
         }
     }
     public void PlayerFell()

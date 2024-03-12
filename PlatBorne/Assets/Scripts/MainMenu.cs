@@ -237,7 +237,9 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _London()
     {
+        NewGameSaveReset();
         PlayerPrefs.SetString("Level", "london");
+        PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -252,7 +254,9 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _Brecus()
     {
+        NewGameSaveReset();
         PlayerPrefs.SetString("Level", "bricus");
+        PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -266,7 +270,9 @@ public class MainMenu : MonoBehaviour
     }
     public IEnumerator _Birmingham()
     {
+        NewGameSaveReset();
         PlayerPrefs.SetString("Level", "birmingham");
+        PlayerPrefs.Save();
         InGame = true;
         transitionAnim.SetTrigger("Fade_End");
         yield return new WaitForSeconds(0.9f);
@@ -281,7 +287,9 @@ public class MainMenu : MonoBehaviour
 
     //public IEnumerator _Mole()
     //{
+    //    NewGameSaveReset();
     //    PlayerPrefs.SetString("Level", "mole");
+    //    PlayerPrefs.Save();
     //    InGame = true;
     //    transitionAnim.SetTrigger("Fade_End");
     //    yield return new WaitForSeconds(0.9f);

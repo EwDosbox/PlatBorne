@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cutscenes/Cutscene_EndGameAct2.unity
     guid: ff4227b458686434686a7aa9364e24c1
+  - enabled: 1
+    path: Assets/Scenes/Fishing.unity
+    guid: 6c5015e08def6144cbd800bfdbe46984
   m_configObjects: {}

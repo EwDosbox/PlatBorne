@@ -11,7 +11,6 @@ public class PlayerScript : MonoBehaviour
     public Saves save;
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
-    [SerializeField] private AudioSource hunterJump;
 
     public Animator animator;
     public PlayerHealth health;
@@ -25,7 +24,6 @@ public class PlayerScript : MonoBehaviour
     float positionYWas;
     float positionYIs;
     bool playerWasInAir = false;
-    public int playerFell = 0;
     //*****
     static public bool playVoiceLine = false;
     static public bool bossHitboxRight = false;
@@ -40,6 +38,7 @@ public class PlayerScript : MonoBehaviour
     private bool isPlaying = false;
     public bool touchedFallHitbox = false;
     private bool playWalking = false;
+    public VoiceLinesLevel voiceLines;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox"))
@@ -90,7 +89,7 @@ public class PlayerScript : MonoBehaviour
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
             {
                 hunterDrop.Play();
-                playVoiceLine = true;
+                voiceLines.PlayVL = true;
                 playerWasInAir = false;
                 touchedFallHitbox = false;
                 save.PlayerFell();

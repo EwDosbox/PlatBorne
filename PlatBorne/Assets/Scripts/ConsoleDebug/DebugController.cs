@@ -36,9 +36,9 @@ public class DebugController : MonoBehaviour
         float y = 0;
         if (showHelp)
         {
-            GUI.Box(new Rect(0, y, Screen.width, 250), "");
+            GUI.Box(new Rect(0, y, Screen.width, 150), "");
             Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandList.Count);
-            scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 240), scroll, viewport);
+            scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 140), scroll, viewport);
             for (int i = 0; i < commandList.Count; i++)
             {
                 DebugCommandBase command = commandList[i] as DebugCommandBase;
@@ -48,7 +48,7 @@ public class DebugController : MonoBehaviour
             }
             GUI.EndScrollView();
             {
-                y += 250;
+                y += 150;
             }
         }
         GUI.Box(new Rect(0, y, Screen.width, 30), "");
@@ -64,12 +64,12 @@ public class DebugController : MonoBehaviour
         {
             if (x)
             {
-                playerHealth.GodMode = true;
+                if (playerHealth != null) playerHealth.GodMode = true;
                 PlayerPrefs.SetInt("GodMode", 1);
             }
             else
             {
-                playerHealth.GodMode = false;
+                if (playerHealth != null) playerHealth.GodMode = false;
                 PlayerPrefs.DeleteKey("GodMode");
             }
         });
@@ -81,13 +81,13 @@ public class DebugController : MonoBehaviour
 
         KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss <value>", (x) =>
         {
-            if (x == "brecus") StartCoroutine(bossfight.BossDeath());
+            if (x == "brecus" && bossfight != null) StartCoroutine(bossfight.BossDeath());
             if (x == "mole") StartCoroutine(bossfight.BossDeath());
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
         {
-            playerHealth.PlayerHP = 3; 
+            if (playerHealth != null) playerHealth.PlayerHP = 3; 
         });
 
         PUSSYMODE = new DebugCommand<bool>("pussymode", "Enables/Disables pussy mode", "pussymode <value>", (x) =>
@@ -95,12 +95,12 @@ public class DebugController : MonoBehaviour
             if (x)
             {
                 PlayerPrefs.SetInt("PussyMode", 1);
-                playerHealth.PussyMode = true;
+                if (playerHealth != null) playerHealth.PussyMode = true;
             }
             else
             {
                 PlayerPrefs.DeleteKey("PussyMode");
-                playerHealth.PussyMode = false;
+                if (playerHealth != null) playerHealth.PussyMode = false;
             }
         });
 
@@ -115,7 +115,7 @@ public class DebugController : MonoBehaviour
 
         RESET_PREFS  = new DebugCommand("reset_prefs", "Resets all PlayerPrefs", "reset_prefs", () =>
         {
-            save.NewGameSaveReset();
+            if (save != null) save.NewGameSaveReset();
         });
 
         commandList = new List<object>
