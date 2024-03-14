@@ -84,7 +84,7 @@ public class PlayerFishingScript : MonoBehaviour
                     }
                     else if (inventory.FishCatched == inventory.Count)
                     {
-                        SceneManager.LoadScene("Cutsene_Ending Fish");
+                        SceneManager.LoadScene("Cutscene_Ending Fish");
                     }
                     else
                     {
