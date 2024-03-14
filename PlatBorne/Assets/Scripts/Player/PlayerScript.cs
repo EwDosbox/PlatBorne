@@ -74,6 +74,9 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
         if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
     }
+
+    public void PlayerLoadCustomMovement(float x, float y) { rb.transform.position = new Vector2(x, y); }
+    public void PlayerLoadCustomMovement(float x, float y, float z) { rb.transform.position = new Vector3(x, y, z); }
     private void Start()
     {
         rb.transform.position = save.LoadMovement();

@@ -39,6 +39,8 @@ public class ACT2Start : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             Debug.Log("Cutscene skipped");
+            PlayerPrefs.SetString("Level", "birmingham");
+            PlayerPrefs.Save();
             SceneManager.LoadScene("LevelBirmingham");
         }
         if (isFinishedText && i < 4)
@@ -76,6 +78,8 @@ public class ACT2Start : MonoBehaviour
         }
         canvasGroup.alpha = 0f;
         yield return new WaitForSeconds(1);
+        PlayerPrefs.SetString("Level", "birmingham");
+        PlayerPrefs.Save();
         SceneManager.LoadScene("LevelBirmingham");
     }
 

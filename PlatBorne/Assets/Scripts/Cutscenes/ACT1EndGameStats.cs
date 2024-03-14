@@ -62,7 +62,7 @@ class Cutscene_EndGameStats : MonoBehaviour
             StartCoroutine(FadeOutCanvas(canvasGroup, 2));
         }
         //continue
-        if (Input.anyKeyDown) SceneManager.LoadScene("MainMenu");
+        if (Input.anyKeyDown) SceneManager.LoadScene("Cutscene_ACT2Start");
     }
     private IEnumerator TypeWriterText()
     {
@@ -125,7 +125,7 @@ class Cutscene_EndGameStats : MonoBehaviour
         }
         canvasGroup.alpha = 0f;
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("Cutscene_ACT2Start");
 
     }
 

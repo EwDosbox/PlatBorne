@@ -26,7 +26,7 @@ public class PlayerDeath : MonoBehaviour
                 pussyModeText.text = "Press 'Space' to deactivate Pussy Mode\n(heal after each phase)";
             }
         }
-        if (PlayerPrefs.GetString("Level") == "brecus")
+        if (PlayerPrefs.GetString("Level") == "bricus")
         {
             int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
             switch (bossDeathCount)
