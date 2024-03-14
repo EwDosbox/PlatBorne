@@ -1849,6 +1849,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   mainMenuBackground: {fileID: 1972375398}
   settingsMenu: {fileID: 358900341}
+  actSelectorMenu: {fileID: 0}
   src: {fileID: 2101661423}
   srcOne: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
   srcTwo: {fileID: 8300000, guid: afb5f741a32b96a4da0a7124e1162fe9, type: 3}
@@ -1857,10 +1858,11 @@ MonoBehaviour:
   panel: {fileID: 656634129}
   continueButton: {fileID: 1002858782}
   newGameButton: {fileID: 411466804}
-  save: {fileID: 358900348}
   text: {fileID: 1566216441}
   InGame: 0
   PreGameCutscene: 0
+  IsInSettings: 0
+  actMenuOpen: 0
 --- !u!114 &358900348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2272,7 +2274,6 @@ MonoBehaviour:
   panel: {fileID: 656634129}
   continueButton: {fileID: 1002858782}
   newGameButton: {fileID: 411466804}
-  save: {fileID: 0}
   text: {fileID: 1566216441}
   InGame: 0
   PreGameCutscene: 0
@@ -7503,7 +7504,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1.2
+  m_text: 2.0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 75a1d01551d32884780312c7f83332d2, type: 2}
   m_sharedMaterial: {fileID: -7097969266050918641, guid: 75a1d01551d32884780312c7f83332d2, type: 2}
