@@ -192,7 +192,7 @@ public class PlayerInputScript : MonoBehaviour
             if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
             {
                 timeOfLastDash = Time.time;
-                dashSound.Play();
+                //dashSound.Play();
                 shouldDash = true;
             }
         }

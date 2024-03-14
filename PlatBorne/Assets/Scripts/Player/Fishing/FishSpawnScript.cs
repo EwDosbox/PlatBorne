@@ -7,6 +7,11 @@ using UnityEngine;
 public class FishSpawnScript : MonoBehaviour
 {
     private GameObject fishPrefab;
+
+    private void Awake()
+    {
+        PlayerPrefs.SetString("Level", "fish");
+    }
     public FishSpawnScript(GameObject fishPrefab)
     {
         Destroy(Resources.FindObjectsOfTypeAll<GameObject>().FirstOrDefault(go => go.name == "Fish(Clone)"));
