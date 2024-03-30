@@ -1714,7 +1714,7 @@ MonoBehaviour:
   resolutionDropdown: {fileID: 720685954}
   src: {fileID: 199144479}
   srcOne: {fileID: 0}
-  transitionAnim: {fileID: 0}
+  transitionAnim: {fileID: 808399135}
 --- !u!1 &290174285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1797,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &299253180 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 921375014852426790, guid: 2f1864a4894af884e91229b633df3d68, type: 3}
+  m_PrefabInstance: {fileID: 441666084117698190}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81e453edb1527bb45b31e74d4b70787a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &319362308
 GameObject:
   m_ObjectHideFlags: 0
@@ -10879,7 +10890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1179392695
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10933,7 +10944,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Pussy Mode Is Active
+  m_Text: 
 --- !u!222 &1179392697
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12472,6 +12483,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2107925548}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: console
+      value: 
+      objectReference: {fileID: 299253180}
+    - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: dashSound
       value: 
       objectReference: {fileID: 0}
@@ -12489,7 +12504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: abilityToDash
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7186549255527368089, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: maxJumpHeight
@@ -12511,8 +12526,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -5483046848910292859, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

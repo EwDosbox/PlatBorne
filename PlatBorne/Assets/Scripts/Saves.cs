@@ -60,15 +60,14 @@ public class Saves : MonoBehaviour
     }
     public Vector3 LoadMovement(Vector3 beforeMovement)
     {
-        Debug.Log("Level: " + SceneManager.GetActiveScene().name.ToString());
-            switch (SceneManager.GetActiveScene().name.ToString())
-            {            
-                case "LevelLondon": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
-                case "LevelBoss": return new Vector3(-31.41f, -11.34f, 1);
-                case "LevelBirmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
-                case "LevelMole": return new Vector3(-16.44f, -5.69f, 1);
-                default: return beforeMovement;
-            }
+        switch (SceneManager.GetActiveScene().name.ToString())
+        {
+            case "LevelLondon": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
+            case "LevelBoss": return new Vector3(-31.0946f, -11.26171f, 1);
+            case "LevelBirmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
+            case "LevelMole": return new Vector3(-16.44f, -5.69f, 1);
+            default: return beforeMovement;
+        }
     }
     public Vector3 LoadMovementAfterFish()
     {

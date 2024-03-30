@@ -163,7 +163,6 @@ GameObject:
   - component: {fileID: 3338149418787538915}
   - component: {fileID: 7186549255527368089}
   - component: {fileID: 1543902709659541418}
-  - component: {fileID: -5483046848910292859}
   - component: {fileID: 210385108660400994}
   m_Layer: 0
   m_Name: Player
@@ -255,7 +254,6 @@ MonoBehaviour:
   save: {fileID: 0}
   hunterDamage: {fileID: 0}
   hunterDrop: {fileID: 2867845862149728934}
-  hunterJump: {fileID: 6935579868319366984}
   animator: {fileID: 166162755306215924}
   health: {fileID: 0}
   rb: {fileID: 4160181815571881102}
@@ -263,9 +261,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   hunterFeet: {fileID: 3338149418787538915}
-  playerFell: 0
   playerInvincible: 0
   touchedFallHitbox: 0
+  voiceLines: {fileID: 0}
+  wasFishing: 0
 --- !u!50 &4160181815571881102
 Rigidbody2D:
   serializedVersion: 4
@@ -621,11 +620,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf6f5eb9949634a8c9cbba5aff2f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  save: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   feet: {fileID: 3338149418787538915}
+  save: {fileID: 0}
   maxJumpHeight: 10
   minJumpHeight: 5
   jumpModifier: 4
@@ -633,6 +632,7 @@ MonoBehaviour:
   jumpSound: {fileID: 6935579868319366984}
   walkSound: {fileID: 210385108660400994}
   dashSound: {fileID: 0}
+  console: {fileID: 0}
   abilityToDash: 0
   dashCooldown: 3
   dashTimeLength: 0.5
@@ -739,102 +739,6 @@ MonoBehaviour:
   m_DefaultActionMap: Movement
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!82 &-5483046848910292859
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8187474341752157242}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 69db74e56333c4c41bb5f37a57fe971f, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!82 &210385108660400994
 AudioSource:
   m_ObjectHideFlags: 0

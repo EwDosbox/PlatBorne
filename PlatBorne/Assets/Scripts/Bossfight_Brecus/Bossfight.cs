@@ -3,6 +3,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.ShaderData;
 using Debug = UnityEngine.Debug;
 
 public class Bossfight : MonoBehaviour
@@ -104,7 +105,7 @@ public class Bossfight : MonoBehaviour
         if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
         if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
-        else text.text = "Boss Is Vunerable";
+        else text.text = "Boss Is Vunerable";        
         if (pauseMenu.active) timerOn = false;
         else if (bossfightStarted) timerOn = true;
         //Boss Sprite Flip
@@ -301,8 +302,7 @@ public class Bossfight : MonoBehaviour
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
-            if (playerHealth.PussyMode) pussyModeOn.gameObject.SetActive(true);
-            else pussyModeOn.gameObject.SetActive(false);
+            if (playerHealth.PussyMode) pussyModeOn.text = "Pussy Mode Is Active";
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
             PreBossDialog.Play();            

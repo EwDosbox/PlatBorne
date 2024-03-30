@@ -66,11 +66,14 @@ public class PlayerInputScript : MonoBehaviour
     {
         if (!isPlayerInAir && isMoving) walkSound.enabled = true;
         else walkSound.enabled = false;
-        if (console.ShowConsole) CanMove = false;
+        if (console.ShowConsole)
+        {
+            CanMove = false;
+            if (!isPlayerInAir) rb.velocity = Vector3.zero;
+        }
         if (previousPosition != transform.position) isMoving = true;
         else isMoving = false;
         previousPosition = transform.position;
-        Debug.Log(isMoving);
     }
     private void FixedUpdate()
     {
