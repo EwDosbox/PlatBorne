@@ -5348,9 +5348,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 358900342}
-        m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
-        m_MethodName: MMenu
+      - m_Target: {fileID: 500350840}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: ReturnFromSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

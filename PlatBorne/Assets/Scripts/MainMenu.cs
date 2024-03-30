@@ -153,6 +153,7 @@ public class MainMenu : MonoBehaviour
         IsInSettings = false;
         src.PlayOneShot(srcOne);
         settingsMenu.SetActive(false);
+        Debug.Log("womp womp");
     }
 
     public void Quit()
@@ -166,22 +167,6 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(srcOne.length);
         Debug.Log("Application has quit");
         Application.Quit();
-    }
-
-
-
-    public void MMenu()
-    {
-        src.PlayOneShot(srcOne);
-        StartCoroutine(_MMenu());
-    }
-
-
-    private IEnumerator _MMenu()
-    {
-        transitionAnim.SetTrigger("Fade_End");
-        yield return new WaitForSeconds(0.9f);
-        SceneManager.LoadScene("MainMenu");
     }
 
     public void SetMusicVolume()
