@@ -9,6 +9,10 @@ public class DebugController : MonoBehaviour
     bool showConsole;
     bool showHelp = false;
     string input;
+    public bool ShowConsole
+    {
+        get { return showConsole; } //only for reading
+    }
     //commands {
     public static DebugCommand<bool> ROSEBUD;
     public static DebugCommand HELP;

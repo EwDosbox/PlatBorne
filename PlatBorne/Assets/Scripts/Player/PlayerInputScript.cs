@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Mathematics;
 using UnityEngine;
@@ -36,6 +37,7 @@ public class PlayerInputScript : MonoBehaviour
     public AudioSource dashSound;// placeholder in Inspector; so it doesnt throw errors
     private bool isPlaying;
     private float time;
+    public DebugController console;
 
     //Dash
     [SerializeField] public bool abilityToDash;
@@ -49,7 +51,7 @@ public class PlayerInputScript : MonoBehaviour
     private bool isMoving = false;
     [SerializeField] private float dashTimeLength;
     [SerializeField] private float dashVelocity;
-
+    private Vector3 previousPosition;
 
     private void Awake()
     {
@@ -58,11 +60,17 @@ public class PlayerInputScript : MonoBehaviour
         jumpHeight = minJumpHeight;
         timeOfLastDash = 0;
         CanMove = true;
+        previousPosition = transform.position;
     }
     private void Update()
     {
         if (!isPlayerInAir && isMoving) walkSound.enabled = true;
         else walkSound.enabled = false;
+        if (console.ShowConsole) CanMove = false;
+        if (previousPosition != transform.position) isMoving = true;
+        else isMoving = false;
+        previousPosition = transform.position;
+        Debug.Log(isMoving);
     }
     private void FixedUpdate()
     {
@@ -80,11 +88,9 @@ public class PlayerInputScript : MonoBehaviour
                 velocityBeforeDash = rb.velocity;
                 shouldDash = false;
                 dashing = true;
-                isMoving = false;
             }
             else if (dashing)
             {
-                isMoving = false;
                 if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
                 else rb.velocity = new Vector2(+dashVelocity, 0);
                 if ((Time.time - dashStarted) >= dashTimeLength)
@@ -102,24 +108,20 @@ public class PlayerInputScript : MonoBehaviour
                         isPlayerFacingLeft = false;
                         transform.localScale = new Vector2(+0.19f, 0.19f);
                         rb.velocity = new Vector2(+movementSpeed, rb.velocity.y);
-                        isMoving = true;
                     }
                     else if (shouldWalkL)
                     {
                         isPlayerFacingLeft = true;
                         transform.localScale = new Vector2(-0.19f, 0.19f);
                         rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
-                        isMoving = true;
                     }
                     else
                     {
-                        isMoving = false;
                         rb.velocity = new Vector2(0, rb.velocity.y);
                     }
                 }
                 else
                 {
-                    isMoving = false;
                     rb.velocity = new Vector2(0, rb.velocity.y);
                 }
                 if (shouldJump)
@@ -144,20 +146,23 @@ public class PlayerInputScript : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (!console.ShowConsole)
         {
-            jumpTime = Time.time;//when i pressed
-            jumpIsPressed = true;
-        }
-        if (context.canceled)
-        {
-            shouldJump = true;
-            jumpIsPressed = false;
-            save.PlayerJumped();
-            if (!isPlaying)
+            if (context.started)
             {
-                jumpSound.Play();
-                isPlaying = true;
+                jumpTime = Time.time;//when i pressed
+                jumpIsPressed = true;
+            }
+            if (context.canceled)
+            {
+                shouldJump = true;
+                jumpIsPressed = false;
+                save.PlayerJumped();
+                if (!isPlaying)
+                {
+                    jumpSound.Play();
+                    isPlaying = true;
+                }
             }
         }
     }
@@ -187,13 +192,16 @@ public class PlayerInputScript : MonoBehaviour
     }
     public void Dash(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!console.ShowConsole)
         {
-            if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
+            if (context.performed)
             {
-                timeOfLastDash = Time.time;
-                //dashSound.Play();
-                shouldDash = true;
+                if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
+                {
+                    timeOfLastDash = Time.time;
+                    //dashSound.Play();
+                    shouldDash = true;
+                }
             }
         }
     }
