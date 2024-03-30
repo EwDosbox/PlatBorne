@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Debug = UnityEngine.Debug;
 
@@ -57,16 +58,16 @@ public class Saves : MonoBehaviour
         }
         PlayerPrefs.Save();
     }
-    public Vector3 LoadMovement()
+    public Vector3 LoadMovement(Vector3 beforeMovement)
     {
-        Debug.Log("Level: " + PlayerPrefs.GetString("Level"));
-            switch (PlayerPrefs.GetString("Level"))
+        Debug.Log("Level: " + SceneManager.GetActiveScene().name.ToString());
+            switch (SceneManager.GetActiveScene().name.ToString())
             {            
-                case "london": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
-                case "bricus": return new Vector3(-31.41f, -11.34f, 1);
-                case "birmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
-                case "mole": return new Vector3(-16.44f, -5.69f, 1);
-                default: return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
+                case "LevelLondon": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_London", -14.6f), PlayerPrefs.GetFloat("HunterPositionY_London", -67.84f), 0);
+                case "LevelBoss": return new Vector3(-31.41f, -11.34f, 1);
+                case "LevelBirmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
+                case "LevelMole": return new Vector3(-16.44f, -5.69f, 1);
+                default: return beforeMovement;
         }
     }
     public void PlayerFell()

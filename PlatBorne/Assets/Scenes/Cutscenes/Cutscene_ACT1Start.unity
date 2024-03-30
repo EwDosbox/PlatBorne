@@ -158,6 +158,9 @@ MonoBehaviour:
   soundEffect: {fileID: 368454834}
   music: {fileID: 1123475591}
   dramaticLondon: {fileID: 651150100}
+  mainTextGroup: {fileID: 324341089}
+  dateGroup: {fileID: 1317580271}
+  BIGTEXTGROUP: {fileID: 985648350}
   timeBtwChars: 0.1
   delay: 1.66
   delayOriginalName: 4
@@ -188,6 +191,7 @@ GameObject:
   - component: {fileID: 324341086}
   - component: {fileID: 324341087}
   - component: {fileID: 324341088}
+  - component: {fileID: 324341089}
   m_Layer: 5
   m_Name: Main Text
   m_TagString: Untagged
@@ -256,6 +260,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!225 &324341089
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324341085}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &335026681
 GameObject:
   m_ObjectHideFlags: 0
@@ -736,6 +752,7 @@ GameObject:
   - component: {fileID: 985648348}
   - component: {fileID: 985648347}
   - component: {fileID: 985648346}
+  - component: {fileID: 985648350}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -830,6 +847,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &985648350
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 985648345}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1007559881
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,52 +1020,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1007559882}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1137116387
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1137116389}
-  - component: {fileID: 1137116388}
-  m_Layer: 0
-  m_Name: Cursor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1137116388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137116387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65977f9aa81374a4b98ef299ae4342a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 0}
-  settingsMenu: {fileID: 0}
---- !u!4 &1137116389
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1137116387}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.556206, y: -9.811193, z: -1.0372832}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1184227605
 GameObject:
@@ -1251,6 +1234,7 @@ GameObject:
   - component: {fileID: 1317580270}
   - component: {fileID: 1317580269}
   - component: {fileID: 1317580268}
+  - component: {fileID: 1317580271}
   m_Layer: 5
   m_Name: Date
   m_TagString: Untagged
@@ -1374,6 +1358,18 @@ RectTransform:
   m_AnchoredPosition: {x: 292, y: -188}
   m_SizeDelta: {x: 458.9268, y: 246.9303}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1317580271
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317580267}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1959245214
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,5 +1512,4 @@ SceneRoots:
   - {fileID: 1007559882}
   - {fileID: 1295849666}
   - {fileID: 985648349}
-  - {fileID: 1137116389}
   - {fileID: 258806538}

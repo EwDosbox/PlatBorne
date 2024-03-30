@@ -79,7 +79,7 @@ public class PlayerScript : MonoBehaviour
     public void PlayerLoadCustomMovement(float x, float y, float z) { rb.transform.position = new Vector3(x, y, z); }
     private void Start()
     {
-        rb.transform.position = save.LoadMovement();
+        rb.transform.position = save.LoadMovement(transform.position);
     }
     void Update()
     {
