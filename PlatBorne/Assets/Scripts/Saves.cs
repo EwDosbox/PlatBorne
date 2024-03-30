@@ -68,8 +68,13 @@ public class Saves : MonoBehaviour
                 case "LevelBirmingham": return new Vector3(PlayerPrefs.GetFloat("HunterPositionX_Birmingham", -37.87f), PlayerPrefs.GetFloat("HunterPositionY_Birmingham", -4.28f), 0);
                 case "LevelMole": return new Vector3(-16.44f, -5.69f, 1);
                 default: return beforeMovement;
-        }
+            }
     }
+    public Vector3 LoadMovementAfterFish()
+    {
+        return new Vector3(4.44f, -3.846775f, 0);
+    }
+
     public void PlayerFell()
     {
         if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")

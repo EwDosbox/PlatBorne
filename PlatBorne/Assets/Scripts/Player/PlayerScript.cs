@@ -39,6 +39,9 @@ public class PlayerScript : MonoBehaviour
     public bool touchedFallHitbox = false;
     private bool playWalking = false;
     public VoiceLinesLevel voiceLines;
+    //FISH
+    public bool wasFishing = false;
+    public void SetFishing(bool wasFishing) { this.wasFishing = wasFishing; }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox"))
@@ -74,12 +77,15 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
         if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
     }
-
-    public void PlayerLoadCustomMovement(float x, float y) { rb.transform.position = new Vector2(x, y); }
-    public void PlayerLoadCustomMovement(float x, float y, float z) { rb.transform.position = new Vector3(x, y, z); }
     private void Start()
     {
-        rb.transform.position = save.LoadMovement(transform.position);
+        if (PlayerPrefs.HasKey("wasFishing"))
+        {
+            rb.transform.position = save.LoadMovementAfterFish();
+            PlayerPrefs.DeleteKey("wasFishing");
+            PlayerPrefs.Save();
+        }
+        else rb.transform.position = save.LoadMovement(transform.position);
     }
     void Update()
     {

@@ -28,7 +28,6 @@ public class PlayerFishingScript : MonoBehaviour
     //************* PUBLIC
     public GameObject fishPrefab;
     public GameObject fishRainbowPrefab;
-    public Saves save;
     public static Collider2D FishCatchArea
     {
         set
@@ -53,11 +52,6 @@ public class PlayerFishingScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            SceneManager.LoadScene("LevelBirmingham");
-            save.PositionSave(6.57f, -3.82f);
-        }
         //Movement
         if (shouldHookMoveLeft)
         {
@@ -139,6 +133,16 @@ public class PlayerFishingScript : MonoBehaviour
             holdTime = 0;
             shouldHookMoveLeft = false;
             shouldHookMoveRight = false;
+        }
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayerPrefs.SetInt("wasFishing", 1);
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("LevelBirmingham");
         }
     }
 }
