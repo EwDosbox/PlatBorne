@@ -162,4 +162,20 @@ public class Saves : MonoBehaviour
         }
         PlayerPrefs.Save();
     }
+
+    public void FishInventory(bool resetInventory)
+    {
+        if (resetInventory) PlayerPrefs.DeleteKey("FishInventory");
+        else
+        {
+            int temp = PlayerPrefs.GetInt("FishInventory", 0);
+            PlayerPrefs.SetInt("FishInventory", temp++);
+        }
+        PlayerPrefs.Save();
+    }
+
+    public int FishInventory()
+    {
+        return PlayerPrefs.GetInt("FishInventory", 0);
+    }
 }

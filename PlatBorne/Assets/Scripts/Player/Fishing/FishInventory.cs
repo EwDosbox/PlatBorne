@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 public class FishInventory
 {
     //********************* PRIVATE
@@ -13,6 +12,7 @@ public class FishInventory
     private List<Color> fishColors;
 
     //********************* PUBLIC
+    public Saves save;
 
     public int FishCatched
     {
@@ -20,6 +20,7 @@ public class FishInventory
         {
             return fishCatched;
         }
+        set { if (value >= 0 && value <= 6) fishCatched = value; else fishCatched = 0; }
     }
     public int Count
     {
@@ -34,14 +35,13 @@ public class FishInventory
 
     }
 
-    public FishInventory()
+    public FishInventory(int fishCatched)
     {
         fishInventory = Resources.FindObjectsOfTypeAll<GameObject>().Where(go => go.name.StartsWith("InventoryFish (")).ToList();
-        fishSpriteRenderer = new List<SpriteRenderer>();
-        //SAVE!!!!!!!!!!
+        fishSpriteRenderer = new List<SpriteRenderer>();        
         fishInventory.ForEach(fish => fishSpriteRenderer.Add(fish.GetComponent<SpriteRenderer>()));
         RandomizeColors();
-        fishCatched = 0;
+        FishCatched = fishCatched;
         for (int i = 0; i < fishSpriteRenderer.Count; i++)
         {
             fishSpriteRenderer[i].color = fishColors[i];
@@ -60,7 +60,6 @@ public class FishInventory
     //Catched Fish
     public void CatchedFish()
     {
-        //Save
         if (fishCatched < fishInventory.Count)
         {
             fishInventory[fishCatched].GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(sr => sr.name.Equals("Check")).enabled = true;

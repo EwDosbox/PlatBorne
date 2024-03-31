@@ -59,7 +59,7 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator SettingsLoad()
     {
-        if (PlayerPrefs.HasKey("HasASavedGame"))
+        if (PlayerPrefs.HasKey("Level"))
         {
             continueButton.interactable = true;
         }
@@ -136,7 +136,19 @@ public class MainMenu : MonoBehaviour
                     Debug.Log("Scene: LevelMole");
                     break;
                 }
+            case "fish":
+                {
+                    SceneManager.LoadScene("Fishing");
+                    break;
+                }
+            default:
+                {
+                    SceneManager.LoadScene("LevelLondon");
+                    Debug.Log("Couldnt load a Save");
+                    break;
+                }
         }
+        Debug.Log(PlayerPrefs.GetString("Level"));
     }
 
     public void Settings()
