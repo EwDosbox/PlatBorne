@@ -76,13 +76,13 @@ public class Saves : MonoBehaviour
 
     public void PlayerFell()
     {
-        if (PlayerPrefs.GetString("Level") == "london" || PlayerPrefs.GetString("Level") == "bricus")
+        if (PlayerPrefs.GetString("Level") == "london")
         {
             int xxx = PlayerPrefs.GetInt("NumberOfFalls_Act1");
             xxx++;
             PlayerPrefs.SetInt("NumberOfFalls_Act1", xxx);
         }
-        else
+        else if (PlayerPrefs.GetString("Level") == "birmingham")
         {
             int xxx = PlayerPrefs.GetInt("NumberOfFalls_Act2");
             xxx++;

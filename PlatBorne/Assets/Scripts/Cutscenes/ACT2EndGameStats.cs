@@ -32,7 +32,7 @@ class ACT2Cutscene_EndGameStats: MonoBehaviour
     void Start()
     {
         writerData = new string[numberOfStrings];
-        writerData[0] = PlayerPrefs.GetInt("NumberOfFalls_Birmingham").ToString();
+        writerData[0] = PlayerPrefs.GetInt("NumberOfFalls_Act2").ToString();
         writerData[1] = PlayerPrefs.GetInt("NumberOfJumps_Act2").ToString();
         writerData[2] = PlayerPrefs.GetInt("NumberOfDeath_Mole").ToString();
         writerData[3] = TimeConvertor(PlayerPrefs.GetFloat("Timer_Birmingham"));

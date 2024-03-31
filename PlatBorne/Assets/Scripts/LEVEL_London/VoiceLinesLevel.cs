@@ -8,12 +8,9 @@ public class VoiceLinesLevel : MonoBehaviour
 {
     public AudioSource[] voiceLines;
     private int[] randomNumbers;
-    private bool playVL;
     private int index = 0;
-    private int RNGnow;
+    private int RNGnow = 0;
     private int RNGsaved = 2;
-    public bool PlayVL
-    { set { playVL = value; } }
     System.Random rng = new System.Random();
     void Randomize()
     {
@@ -37,24 +34,19 @@ public class VoiceLinesLevel : MonoBehaviour
         }
         Randomize();
     }
-        // Update is called once per frame
-        void Update()
+    public void PlayVLFallen()
     {
-        if (playVL)
+        RNGnow++;
+        if (RNGnow == RNGsaved)
         {
-            playVL = false;
-            RNGnow++;
-            if (RNGnow == RNGsaved)
+            RNGsaved = rng.Next(2, 4 + 1);
+            RNGnow = 0;
+            voiceLines[randomNumbers[index]].Play();
+            index++;
+            if (index == voiceLines.Length - 1)
             {
-                RNGsaved = rng.Next(2, 4 + 1);
-                RNGnow = 0;
-                voiceLines[randomNumbers[index]].Play();
-                index++;
-                if (index == voiceLines.Length - 1)
-                {
-                    index = 0;
-                    Randomize();
-                }
+                index = 0;
+                Randomize();
             }
         }
     }

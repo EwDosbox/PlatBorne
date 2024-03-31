@@ -25,7 +25,6 @@ public class PlayerScript : MonoBehaviour
     float positionYIs;
     bool playerWasInAir = false;
     //*****
-    static public bool playVoiceLine = false;
     static public bool bossHitboxRight = false;
     static public bool bossHitboxLeft = false;
     static public bool bossHitboxUp = false;
@@ -62,7 +61,8 @@ public class PlayerScript : MonoBehaviour
         if (collision.gameObject.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
         if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;        
+        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
+        if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -95,10 +95,12 @@ public class PlayerScript : MonoBehaviour
         if (!PlayerInputScript.isPlayerInAir)
         {
             //fell
-            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (math.abs(positionYWas - positionYIs) > 2.5))
+            Debug.Log("touchedFallHitbox" + touchedFallHitbox);
+            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (Mathf.Abs(positionYWas - transform.position.y) > 2f))
             {
+                Debug.Log("Fallen");
                 hunterDrop.Play();
-                voiceLines.PlayVL = true;
+                voiceLines.PlayVLFallen();
                 playerWasInAir = false;
                 touchedFallHitbox = false;
                 save.PlayerFell();

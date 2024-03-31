@@ -11,8 +11,6 @@ public class Level_Move : MonoBehaviour
 
     private IEnumerator OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigget entered");
-
         if (other.tag == "Player" && leftTheZone)
         {
             Debug.Log("Switching scene");
@@ -22,7 +20,6 @@ public class Level_Move : MonoBehaviour
             SceneManager.LoadScene(sceneName);
         }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         leftTheZone = false;
