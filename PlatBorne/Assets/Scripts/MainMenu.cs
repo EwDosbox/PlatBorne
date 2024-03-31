@@ -153,7 +153,6 @@ public class MainMenu : MonoBehaviour
         IsInSettings = false;
         src.PlayOneShot(srcOne);
         settingsMenu.SetActive(false);
-        Debug.Log("womp womp");
     }
 
     public void Quit()

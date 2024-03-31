@@ -8,23 +8,29 @@ public class NewBehaviourScript : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingsMenu;
+    public bool turnOnMenu = false;
+    public bool startInLockedState = false;
+    public bool startInInvisibleState = false;
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (startInLockedState) Cursor.lockState = CursorLockMode.Locked;
+        if (startInInvisibleState) Cursor.visible = false;
     }
 
     private void Update()
     {
-        if (pauseMenu.active == false && settingsMenu.active == false)
+        if (turnOnMenu)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            if (pauseMenu.active == false && settingsMenu.active == false)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 }

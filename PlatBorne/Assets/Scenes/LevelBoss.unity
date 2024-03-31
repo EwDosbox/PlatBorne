@@ -2229,6 +2229,7 @@ RectTransform:
   - {fileID: 1921264129}
   - {fileID: 1262490204}
   - {fileID: 1558361833}
+  - {fileID: 2047964047}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -15240,7 +15241,7 @@ GameObject:
   - component: {fileID: 2047964047}
   - component: {fileID: 2047964046}
   m_Layer: 0
-  m_Name: Cursor
+  m_Name: MouseSettings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15260,6 +15261,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 20515760}
   settingsMenu: {fileID: 288843635}
+  turnOnMenu: 1
+  startInLockedState: 1
+  startInInvisibleState: 1
 --- !u!4 &2047964047
 Transform:
   m_ObjectHideFlags: 0
@@ -15268,12 +15272,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047964045}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.556206, y: -9.811193, z: -1.0372832}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -971.5562, y: -549.8112, z: -1.0372832}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 462530892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2072781359
 GameObject:
@@ -17216,7 +17220,6 @@ SceneRoots:
   - {fileID: 914732928}
   - {fileID: 1524745206}
   - {fileID: 275584823}
-  - {fileID: 2047964047}
   - {fileID: 2107925549}
   - {fileID: 441666084117698190}
   - {fileID: 447005115}

@@ -65,7 +65,6 @@ public class PlayerDeath : MonoBehaviour
             Debug.Log(PlayerPrefs.GetString("Level"));
             if (PlayerPrefs.GetString("Level") == "mole") SceneManager.LoadScene("LevelMole");
             else if (PlayerPrefs.GetString("Level") == "bricus") SceneManager.LoadScene("LevelBoss");
-            Debug.Log("A hunter has respawned");
         }              
         if (Input.GetKey(KeyCode.Space) && waitingTimer > 1)
         {
