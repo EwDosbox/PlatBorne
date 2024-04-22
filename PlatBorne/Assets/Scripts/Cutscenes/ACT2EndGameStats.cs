@@ -123,6 +123,5 @@ class ACT2Cutscene_EndGameStats: MonoBehaviour
         canvasGroup.alpha = 0f;
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("MainMenu");
-
     }
 }

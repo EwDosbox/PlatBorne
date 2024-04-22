@@ -7,16 +7,16 @@ using Debug = UnityEngine.Debug;
 
 public class Bossfight : MonoBehaviour
 {
-    [SerializeField] private AudioSource PreBossDialog;
-    [SerializeField] private AudioSource BossDamage01;
-    [SerializeField] private AudioSource BossDamage02;
-    [SerializeField] private AudioSource BossDamage03;
-    [SerializeField] private AudioSource BossDeath01;
-    [SerializeField] private AudioSource OSTLoop;
-    [SerializeField] private AudioSource SFXVunerability;
-    [SerializeField] private AudioSource OSTPhase4;
-    [SerializeField] private SpriteRenderer bossSprite;
-    [SerializeField] private GameObject DashOrb;
+    [SerializeField] AudioSource PreBossDialog;
+    [SerializeField] AudioSource BossDamage01;
+    [SerializeField] AudioSource BossDamage02;
+    [SerializeField] AudioSource BossDamage03;
+    [SerializeField] AudioSource BossDeath01;
+    [SerializeField] AudioSource OSTLoop;
+    [SerializeField] AudioSource SFXVunerability;
+    [SerializeField] AudioSource OSTPhase4;
+    [SerializeField] SpriteRenderer bossSprite;
+    [SerializeField] GameObject DashOrb;
 
     public BossFightVoiceLines voiceLines;
     public Animator bossAnimation;
@@ -26,7 +26,7 @@ public class Bossfight : MonoBehaviour
     public GameObject player;
     public GameObject levelMove;
     public GameObject boss;
-    private Rigidbody2D rb;
+    Rigidbody2D rb;
     public Text text;
     public Text pussyModeOn;
     public GameObject pauseMenu;
@@ -42,13 +42,13 @@ public class Bossfight : MonoBehaviour
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
     static bool playerInvincible = false;
-    private float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
-    //****************
+    float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
+    public UIFadeOutEffect fadeOut;
+    //BossAttacks
     static public bool bossfightStarted = false;
     static public bool playerPlayDamage = false;
     static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
-    private bool bossIsDead = false;
-    //****************
+    bool bossIsDead = false;    
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
     int attackNumberLeech = 0;
@@ -74,7 +74,8 @@ public class Bossfight : MonoBehaviour
         DashOrb.SetActive(true);
         text.text = "Boss Is Dead";
         bossHealthBar.SetHP(0);
-        bossHealthBar.enabled = false;      
+        bossHealthBar.enabled = false;
+        fadeOut.FadeOut = true; //UI Fade Out effect
     }
     public void PlayerDeath()
     {
@@ -104,7 +105,7 @@ public class Bossfight : MonoBehaviour
         if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
         if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
-        else text.text = "Boss Is Vunerable";        
+        else text.text = "Boss Is Vunerable";
         if (pauseMenu.active) timerOn = false;
         else if (bossfightStarted) timerOn = true;
         //Boss Sprite Flip
@@ -242,23 +243,23 @@ public class Bossfight : MonoBehaviour
                     {
                         if (timerBetweenAttacks > 6 - phase)
                         {
-                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                                {
+                            if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                            {
                                 attack.BossAttackFloorIsLava();
                                 attackNumberFloorIsLava = resetPromenych();
-                                }
-                                else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
-                                {
-                                    attack.BossAttackDagger();
-                                    attackNumberDagger = resetPromenych();
-                                }
-                                else 
-                                {
-                                    if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
-                                    else attack.BossAttackSwordRight();
-                                    attackNumberSword = resetPromenych();
-                                }
                             }
+                            else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
+                            {
+                                attack.BossAttackDagger();
+                                attackNumberDagger = resetPromenych();
+                            }
+                            else
+                            {
+                                if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
+                                else attack.BossAttackSwordRight();
+                                attackNumberSword = resetPromenych();
+                            }
+                        }
                         break;
                     }
                 case 4:
@@ -270,25 +271,25 @@ public class Bossfight : MonoBehaviour
                                 if (PlayerScript.bossHitboxRight) attack.BossAttackSwordBoth(false, false, 1f);
                                 else attack.BossAttackSwordBoth(false, true, 1f);
                                 attackNumberSword = resetPromenych();
-                                }
+                            }
                             else if (attackNumberLeech < 1)
-                                {
+                            {
                                 if (bossHealthBar.GetHP() <= 20) attack.BossAttackLeechBoth();
                                 else if (PlayerScript.bossHitboxRight) attack.BossAttackLeechRight();
                                 else attack.BossAttackLeechLeft();
                                 attackNumberLeech = resetPromenych();
-                                }
-                            else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                                {
-                                    attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava = resetPromenych();
-                                }
-                            else
-                                {
-                                    attack.BossAttackDagger();
-                                    attackNumberDagger = resetPromenych();
-                                }
                             }
+                            else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                            {
+                                attack.BossAttackFloorIsLava();
+                                attackNumberFloorIsLava = resetPromenych();
+                            }
+                            else
+                            {
+                                attack.BossAttackDagger();
+                                attackNumberDagger = resetPromenych();
+                            }
+                        }
                         break;
                     }
             }
@@ -304,8 +305,8 @@ public class Bossfight : MonoBehaviour
             if (playerHealth.PussyMode) pussyModeOn.text = "Pussy Mode Is Active";
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
-            PreBossDialog.Play();            
-            OSTLoop.enabled = true;            
-        }
+            PreBossDialog.Play();
+            OSTLoop.enabled = true;
+        }        
     }
 }
