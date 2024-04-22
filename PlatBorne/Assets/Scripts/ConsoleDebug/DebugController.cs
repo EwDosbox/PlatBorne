@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -21,12 +23,17 @@ public class DebugController : MonoBehaviour
     public static DebugCommand<bool> PUSSYMODE;
     public static DebugCommand<string> TELEPORT;
     public static DebugCommand RESET_PREFS;
+    public static DebugCommand<bool> DASH; 
     //commands }
-    public List<object> commandList;
+    public List<object> commandListLevel;
+    public List<object> commandListBoss;
     public PlayerHealth playerHealth;
+    public PlayerInputScript playerInputScript;
     public Bossfight bossfight;
     public Saves save;
     public Mole_Bossfight moleBossfight;
+    public float consoleLevelHeight = 95;
+    public float consoleBossHeight = 170;
     public void OnToggleConsole(InputValue value)
     {
         showConsole = !showConsole;
@@ -40,19 +47,39 @@ public class DebugController : MonoBehaviour
         float y = 0;
         if (showHelp)
         {
-            GUI.Box(new Rect(0, y, Screen.width, 150), "");
-            Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandList.Count);
-            scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 140), scroll, viewport);
-            for (int i = 0; i < commandList.Count; i++)
+            if (SceneManager.GetActiveScene().name == "LevelLondon" || SceneManager.GetActiveScene().name == "LevelBirmingham")
             {
-                DebugCommandBase command = commandList[i] as DebugCommandBase;
-                string label = $"{command.CommandFormat} - {command.CommandDescription}";
-                Rect labelRect = new Rect(5, 20 * i, viewport.width - 100, 20);
-                GUI.Label(labelRect, label);
+                GUI.Box(new Rect(0, y, Screen.width, consoleLevelHeight), "");
+                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListLevel.Count);
+                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 80), scroll, viewport);
+                for (int i = 0; i < commandListLevel.Count; i++)
+                {
+                    DebugCommandBase command = commandListLevel[i] as DebugCommandBase;
+                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
+                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 80, 20);
+                    GUI.Label(labelRect, label);
+                }
+                GUI.EndScrollView();
+                {
+                    y += consoleLevelHeight;
+                }
             }
-            GUI.EndScrollView();
+            else
             {
-                y += 150;
+                GUI.Box(new Rect(0, y, Screen.width, consoleBossHeight), "");
+                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListBoss.Count);
+                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 240), scroll, viewport);
+                for (int i = 0; i < commandListBoss.Count; i++)
+                {
+                    DebugCommandBase command = commandListBoss[i] as DebugCommandBase;
+                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
+                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 240, 20);
+                    GUI.Label(labelRect, label);
+                }
+                GUI.EndScrollView();
+                {
+                    y += consoleBossHeight;
+                }
             }
         }
         GUI.Box(new Rect(0, y, Screen.width, 30), "");
@@ -122,15 +149,29 @@ public class DebugController : MonoBehaviour
             if (save != null) save.NewGameSaveReset();
         });
 
-        commandList = new List<object>
+        DASH = new DebugCommand<bool>("dash", "Enables/Disables Dash Ability", "dash <value>", (x) =>
         {
-            ROSEBUD,
+            if (x) playerInputScript.AbilityToDash(true);
+            else playerInputScript.AbilityToDash(false);
+        });
+
+        commandListLevel = new List<object>
+        {
             HELP,
+            TELEPORT,
+            DASH,
+            RESET_PREFS
+        };
+        commandListBoss = new List<object>
+        {
+            HELP,
+            ROSEBUD,
             KILL_BOSS,
-            PLAYER_HEAL, 
+            PLAYER_HEAL,
+            DASH,
             PUSSYMODE,
             TELEPORT,
-            RESET_PREFS
+            RESET_PREFS,
         };
     }
 
@@ -145,26 +186,53 @@ public class DebugController : MonoBehaviour
 
     private void HandleInput()
     {
-        string[] properties = input.Split(' ');
-        for (int i = 0; i < commandList.Count; i++)
+        if (SceneManager.GetActiveScene().name == "LevelLondon" || SceneManager.GetActiveScene().name == "LevelBirmingham")
         {
-            DebugCommandBase commandBase = commandList[i] as DebugCommandBase;
-            if (input.Contains(commandBase.CommandID))
+            string[] properties = input.Split(' ');
+            for (int i = 0; i < commandListLevel.Count; i++)
             {
-                if (commandList[i] as DebugCommand != null)
+                DebugCommandBase commandBase = commandListLevel[i] as DebugCommandBase;
+                if (input.Contains(commandBase.CommandID))
                 {
-                    (commandList[i] as DebugCommand).Invoke();
+                    if (commandListLevel[i] as DebugCommand != null)
+                    {
+                        (commandListLevel[i] as DebugCommand).Invoke();
+                    }
+                    else if (commandListLevel[i] as DebugCommand<string> != null)
+                    {
+                        (commandListLevel[i] as DebugCommand<string>).Invoke(properties[1]);
+                    }
+                    else if (commandListLevel[i] as DebugCommand<bool> != null)
+                    {
+                        if (properties[1] == "true") (commandListLevel[i] as DebugCommand<bool>).Invoke(true);
+                        else if (properties[1] == "false") (commandListLevel[i] as DebugCommand<bool>).Invoke(false);
+                    }
                 }
-                else if (commandList[i] as DebugCommand<string> != null)
+            }
+        }
+        else
+        {
+            string[] properties = input.Split(' ');
+            for (int i = 0; i < commandListBoss.Count; i++)
+            {
+                DebugCommandBase commandBase = commandListBoss[i] as DebugCommandBase;
+                if (input.Contains(commandBase.CommandID))
                 {
-                    (commandList[i] as DebugCommand<string>).Invoke(properties[1]);
+                    if (commandListBoss[i] as DebugCommand != null)
+                    {
+                        (commandListBoss[i] as DebugCommand).Invoke();
+                    }
+                    else if (commandListBoss[i] as DebugCommand<string> != null)
+                    {
+                        (commandListBoss[i] as DebugCommand<string>).Invoke(properties[1]);
+                    }
+                    else if (commandListBoss[i] as DebugCommand<bool> != null)
+                    {
+                        if (properties[1] == "true") (commandListBoss[i] as DebugCommand<bool>).Invoke(true);
+                        else if (properties[1] == "false") (commandListBoss[i] as DebugCommand<bool>).Invoke(false);
+                    }
                 }
-                else if (commandList[i] as DebugCommand<bool> != null)
-                {
-                    if (properties[1] == "true") (commandList[i] as DebugCommand<bool>).Invoke(true);
-                    else if (properties[1] == "false") (commandList[i] as DebugCommand<bool>).Invoke(false);
-                }
-            }            
+            }
         }
     }
 }

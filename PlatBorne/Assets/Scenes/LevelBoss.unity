@@ -17060,6 +17060,10 @@ PrefabInstance:
       propertyPath: playerHealth
       value: 
       objectReference: {fileID: 1921264130}
+    - target: {fileID: 921375014852426790, guid: 2f1864a4894af884e91229b633df3d68, type: 3}
+      propertyPath: playerInputScript
+      value: 
+      objectReference: {fileID: 1320009169}
     - target: {fileID: 5875143852849072804, guid: 2f1864a4894af884e91229b633df3d68, type: 3}
       propertyPath: m_Name
       value: DebugConsole

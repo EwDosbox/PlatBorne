@@ -62,6 +62,12 @@ public class PlayerInputScript : MonoBehaviour
         CanMove = true;
         previousPosition = transform.position;
     }
+
+    public void AbilityToDash(bool Dash)
+    {
+        if (Dash) abilityToDash = true;
+        else abilityToDash = false;
+    }
     private void Update()
     {
         if (!isPlayerInAir && isMoving) walkSound.enabled = true;
