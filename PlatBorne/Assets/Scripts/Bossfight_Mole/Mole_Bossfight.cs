@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class Mole_Bossfight : MonoBehaviour
@@ -31,7 +32,6 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabShovelRain;
     [SerializeField] Rigidbody2D colliderCharge;
     //OTHER
-    [SerializeField] GameObject levelMove;
     //PUBLIC//
     //COLLIDERS//
     private bool colliderRight = false;
@@ -105,11 +105,11 @@ public class Mole_Bossfight : MonoBehaviour
     //PUBLIC
     private void Start()
     {
+        bossUI.FadeOutEffect();
         PlayerPrefs.SetString("Level", "mole");
         prefabPlatforms.SetActive(false);
         bossHealth.BossHealth = 100;   
         playerHealth.PlayerHP = 3;
-        levelMove.SetActive(false);
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
         StartBossFight();
@@ -135,10 +135,9 @@ public class Mole_Bossfight : MonoBehaviour
         }
         if (bossHealth.BossHealth == 0)
         {
-            BossDeath();
-            SFXbossDeath.Play();
+            StartCoroutine(BossDeath());
         }
-        else if (bossHealth.BossHealth < 50)
+        else if (bossHealth.BossHealth < 50 && phase == 1) //Change Phase
         {
             phase = 2;
             SFXswitchPhase.Play();
@@ -148,7 +147,6 @@ public class Mole_Bossfight : MonoBehaviour
             //sprites
         }
         if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2);
-        
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -173,10 +171,12 @@ public class Mole_Bossfight : MonoBehaviour
         playerHealth.StartHPUI();
     }
 
-    IEnumerator BossDeath()
+    public IEnumerator BossDeath()
     {
+        SFXbossDeath.Play();
         rb.angularVelocity = 0;
-        yield return new WaitForSeconds(2);
+        bossUI.FadeInEffect();
+        yield return new WaitForSeconds(4);
         bossUI.BossHPSliderDestroy();
         if (PlayerPrefs.HasKey("PussyMode"))
         {
@@ -188,8 +188,7 @@ public class Mole_Bossfight : MonoBehaviour
             PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
             PlayerPrefs.Save();
         }
-        Destroy(gameObject);
-        levelMove.SetActive(true);
+        EndingDecider();
     }
 
     //Attack variables
@@ -464,5 +463,14 @@ public class Mole_Bossfight : MonoBehaviour
             }
         }
         attackIsGoing = false;
+    }
+
+    private void EndingDecider()
+    {
+        if (PlayerPrefs.HasKey("BeatenWithAPussyMode_Brecus") || PlayerPrefs.HasKey("BeatenWithAPussyMode_Mole"))
+        {
+            SceneManager.LoadScene("Cutscene_BadEnding");
+        }
+        else SceneManager.LoadScene("Cutscene_GoodEnding");
     }
 }

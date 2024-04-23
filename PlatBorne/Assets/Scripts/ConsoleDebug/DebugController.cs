@@ -115,7 +115,7 @@ public class DebugController : MonoBehaviour
         KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss <value>", (x) =>
         {
             if (x == "brecus" && bossfight != null) StartCoroutine(bossfight.BossDeath());
-            if (x == "mole") StartCoroutine(bossfight.BossDeath());
+            if (x == "mole") StartCoroutine(moleBossfight.BossDeath());
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>

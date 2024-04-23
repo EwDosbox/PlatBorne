@@ -86,7 +86,6 @@ public class SettingsMenu : MonoBehaviour
     public void SetSFXVolume()
     {
         float volume = SFXVolSlider.value;
-        Debug.Log("SFX: " + volume);
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }

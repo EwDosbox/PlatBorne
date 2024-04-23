@@ -29,7 +29,7 @@ public class Mole_Health : MonoBehaviour
     }
     public bool BossInvincible
     {
-        get { return BossInvincible; }
+        get { return bossInvincible; }
         set { bossInvincible = value; }
     }
 
