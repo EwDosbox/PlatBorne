@@ -10,7 +10,7 @@ public class Mole_LevelMove : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            if (PlayerPrefs.HasKey("Brecus_BeatenWithPussy") || PlayerPrefs.HasKey("Mole_BeatenWithPussy"))
+            if (PlayerPrefs.HasKey("BeatenWithAPussyMode_Brecus") || PlayerPrefs.HasKey("BeatenWithAPussyMode_Mole"))
             {
                 SceneManager.LoadScene("Cutscene_BadEnding");
             }

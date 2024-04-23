@@ -58,16 +58,6 @@ public class PlayerHealth : MonoBehaviour
     }
     private void Start()
     {
-        if (PlayerPrefs.HasKey("PussyMode"))
-        {
-            int numberPussy = (PlayerPrefs.GetInt("PussyMode"));
-            if (numberPussy == 1)
-            {
-                pussyMode = true;
-            }
-            else pussyMode = false;
-        }
-
         if (PlayerPrefs.HasKey("GodMode"))
         {
             int numberGod = (PlayerPrefs.GetInt("GodMode"));

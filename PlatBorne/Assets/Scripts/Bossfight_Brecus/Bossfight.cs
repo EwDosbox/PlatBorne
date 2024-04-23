@@ -69,6 +69,16 @@ public class Bossfight : MonoBehaviour
         bossIsDead = true;
         BossDeath01.Play();
         bossAnimation.SetBool("Boss Death", true);
+        if (pussyModeOn)
+        {
+            PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
+            PlayerPrefs.Save();
+        }
         yield return new WaitForSeconds(1.78f);
         Destroy(boss);
         DashOrb.SetActive(true);

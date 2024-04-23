@@ -33,7 +33,6 @@ public class Mole_Bossfight : MonoBehaviour
     //OTHER
     [SerializeField] GameObject levelMove;
     //PUBLIC//
-
     //COLLIDERS//
     private bool colliderRight = false;
     private bool colliderLeft = false;
@@ -92,22 +91,20 @@ public class Mole_Bossfight : MonoBehaviour
             colliderGround = value;
         }
     }
-    //PRIVATE//
-    private float timer = 0;
-    private bool timerOn = false;
-    private bool bossStarted = false;
-    private bool attackIsGoing = false;
-    private int phase = 1;
-    private bool attackSpikesOn = false;
-    private float attackSpikesTimer = 0;
-    private float bossChargeTimer = 0;
-    private float bossChargeDelay = 15;
-    private bool bossCharge = false;
+    float timer = 0;
+    bool timerOn = false;
+    bool bossStarted = false;
+    bool attackIsGoing = false;
+    int phase = 1;
+    bool attackSpikesOn = false;
+    float attackSpikesTimer = 0;
+    float bossChargeTimer = 0;
+    float bossChargeDelay = 15;
+    bool bossCharge = false;
     Rigidbody2D rb;
+    //PUBLIC
     private void Start()
     {
-        //testing
-        Attack_Spikes();
         PlayerPrefs.SetString("Level", "mole");
         prefabPlatforms.SetActive(false);
         bossHealth.BossHealth = 100;   
@@ -119,7 +116,7 @@ public class Mole_Bossfight : MonoBehaviour
         phase = 1;
     }
     private void FixedUpdate()
-    {
+    {        
         if (attackSpikesOn) attackSpikesTimer += Time.deltaTime;
         if (bossStarted)
         {
@@ -147,7 +144,7 @@ public class Mole_Bossfight : MonoBehaviour
             SFXswitchPhase.Play();
             OSTPart1.Stop();
             OSTPart2.Play();
-            if (playerHealth.PussyMode) playerHealth.PlayerHP = 3;
+            if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
             //sprites
         }
         if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2);
@@ -181,6 +178,16 @@ public class Mole_Bossfight : MonoBehaviour
         rb.angularVelocity = 0;
         yield return new WaitForSeconds(2);
         bossUI.BossHPSliderDestroy();
+        if (PlayerPrefs.HasKey("PussyMode"))
+        {
+            PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
+            PlayerPrefs.Save();
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
+            PlayerPrefs.Save();
+        }
         Destroy(gameObject);
         levelMove.SetActive(true);
     }

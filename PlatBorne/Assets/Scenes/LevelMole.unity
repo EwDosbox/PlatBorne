@@ -976,7 +976,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &120485448
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10038,6 +10038,7 @@ MonoBehaviour:
   playerDamage: 10
   invincibilityTimer: 3
   bossDead: 0
+  pussyModeOn: 0
 --- !u!1 &1066185781
 GameObject:
   m_ObjectHideFlags: 0
@@ -13657,7 +13658,7 @@ MonoBehaviour:
   settingsMenu: {fileID: 2092359033}
   src: {fileID: 1836293513}
   srcOne: {fileID: 8300000, guid: 3843ea1cae7a8ad42ad8ce4aa86c2232, type: 3}
-  save: {fileID: 0}
+  save: {fileID: 1837068380}
 --- !u!114 &1461745940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13757,10 +13758,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08bb6504aaf1a14ab684c653ffeb9b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pussyMode: {fileID: 120485449}
+  pussyMode: {fileID: 120485447}
   hpSlider: {fileID: 1252351636}
   bossSlider: {fileID: 1252351633}
   health: {fileID: 1060101276}
+  playerHealth: {fileID: 1837068395}
 --- !u!1 &1470516366
 GameObject:
   m_ObjectHideFlags: 0

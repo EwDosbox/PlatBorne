@@ -97,11 +97,13 @@ public class DebugController : MonoBehaviour
             {
                 if (playerHealth != null) playerHealth.GodMode = true;
                 PlayerPrefs.SetInt("GodMode", 1);
+                PlayerPrefs.Save();
             }
             else
             {
                 if (playerHealth != null) playerHealth.GodMode = false;
                 PlayerPrefs.DeleteKey("GodMode");
+                PlayerPrefs.Save();
             }
         });
 
@@ -126,11 +128,13 @@ public class DebugController : MonoBehaviour
             if (x)
             {
                 PlayerPrefs.SetInt("PussyMode", 1);
+                PlayerPrefs.Save();
                 if (playerHealth != null) playerHealth.PussyMode = true;
             }
             else
             {
                 PlayerPrefs.DeleteKey("PussyMode");
+                PlayerPrefs.Save();
                 if (playerHealth != null) playerHealth.PussyMode = false;
             }
         });

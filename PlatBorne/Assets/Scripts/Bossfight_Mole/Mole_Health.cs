@@ -14,6 +14,7 @@ public class Mole_Health : MonoBehaviour
     [Tooltip("OBJECTS")]
     //PUBLIC//
     public bool bossDead = false;
+    public bool pussyModeOn = false;
     //PRIVATE//
     private int bossHealth = 100;
     private bool bossInvincible = false;
@@ -48,6 +49,8 @@ public class Mole_Health : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerPrefs.HasKey("PussyMode")) pussyModeOn = true;
+        else pussyModeOn = false;
         if (bossInvincible)
         {
             timer += Time.deltaTime;

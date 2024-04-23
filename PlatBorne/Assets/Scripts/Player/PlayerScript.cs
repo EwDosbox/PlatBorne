@@ -95,10 +95,8 @@ public class PlayerScript : MonoBehaviour
         if (!PlayerInputScript.isPlayerInAir)
         {
             //fell
-            Debug.Log("touchedFallHitbox" + touchedFallHitbox);
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (Mathf.Abs(positionYWas - transform.position.y) > 2f))
             {
-                Debug.Log("Fallen");
                 hunterDrop.Play();
                 voiceLines.PlayVLFallen();
                 playerWasInAir = false;

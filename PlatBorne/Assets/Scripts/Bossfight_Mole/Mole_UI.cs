@@ -7,23 +7,24 @@ using UnityEngine.UI;
 public class Mole_UI : MonoBehaviour
 {
     //UNITY
-    public Text pussyMode;
+    public GameObject pussyMode;
     public Slider hpSlider;
     [SerializeField] GameObject bossSlider;
     private bool takeBossHealth = false;
     //SCRIPTS   
     [SerializeField] Mole_Health health;
+    [SerializeField] PlayerHealth playerHealth;
     void Start()
-    {
-        if (PlayerPrefs.HasKey("PussyMode"))
-        {
-            pussyMode.text = "PussyMode Active";
-        }
-        else pussyMode.text = "";
+    {        
         hpSlider.value = hpSlider.minValue;
     }
     void Update()
     {
+        if (health.pussyModeOn)
+        {
+            pussyMode.SetActive(true);
+        }
+        else pussyMode.SetActive(false);
         if (hpSlider.enabled)
         {
             if (takeBossHealth) hpSlider.value = health.BossHealth;
