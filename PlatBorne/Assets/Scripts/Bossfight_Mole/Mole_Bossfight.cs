@@ -6,22 +6,20 @@ using UnityEngine.UIElements;
 
 public class Mole_Bossfight : MonoBehaviour
 {
-    //SCRIPTS//
+    [Header("Scipts")]
     public Mole_Health bossHealth;
     public PlayerHealth playerHealth;
     public Mole_WeakSpot weakSpot;
     public Mole_UI bossUI;
     public Saves save;
     //INSPECTOR//
-    [Tooltip("Audio")]
+    [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
     [SerializeField] AudioSource SFXswitchPhase;
     [SerializeField] AudioSource SFXbossDeath;
     [SerializeField] AudioSource OSTPart1;
     [SerializeField] AudioSource OSTPart2;
-    [Tooltip("GameObjects")]
-
-    //PREFABS//
+    [Header("Prefabs")]
     [SerializeField] GameObject prefabDrillGround;
     [SerializeField] GameObject prefabDrillRain;
     [SerializeField] GameObject prefabDrillSide;
@@ -31,9 +29,12 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
     [SerializeField] Rigidbody2D colliderCharge;
-    //OTHER
-    //PUBLIC//
-    //COLLIDERS//
+    [Header("Settings")]
+    public float timeToFirstAttack;
+    public float bossChargeDelay;
+    public float timeBetweenAttacksPhase1;
+    public float timeBetweenAttacksPhase2;
+
     private bool colliderRight = false;
     private bool colliderLeft = false;
     private bool colliderMiddleRight = false;
@@ -91,18 +92,21 @@ public class Mole_Bossfight : MonoBehaviour
             colliderGround = value;
         }
     }
+    //timers
     float timer = 0;
+    float timerWaitForNextAttack = 0;
+    float timerBossCharge = 0;
+    float timerAttackSpikes = 0;
+
     bool timerOn = false;
+    bool bossCanBossCharge = false;
     bool bossStarted = false;
     bool attackIsGoing = false;
-    int phase = 1;
+    int phase = 0;
     bool attackSpikesOn = false;
-    float attackSpikesTimer = 0;
-    float bossChargeTimer = 0;
-    float bossChargeDelay = 15;
     bool bossCharge = false;
+    bool nextAttack = false;
     Rigidbody2D rb;
-    //PUBLIC
     private void Start()
     {
         bossUI.FadeOutEffect();
@@ -112,27 +116,46 @@ public class Mole_Bossfight : MonoBehaviour
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
-        StartBossFight();
-        phase = 1;
+        StartCoroutine(StartBossFight());
     }
     private void FixedUpdate()
     {        
-        if (attackSpikesOn) attackSpikesTimer += Time.deltaTime;
+        if (attackSpikesOn) timerAttackSpikes += Time.deltaTime;
         if (bossStarted)
         {
-            if (bossCharge)
-                if (!attackIsGoing)
+            //DELAY BETWEEN ATTACKS
+            if (phase == 1 && !attackIsGoing)
+            {
+                if (timerWaitForNextAttack > timeBetweenAttacksPhase1) nextAttack = true;
+                else timerWaitForNextAttack += Time.deltaTime;
+            }
+            else if (phase == 2 && !attackIsGoing)
+            {
+                if (timerWaitForNextAttack > timeBetweenAttacksPhase2) nextAttack = true;
+                else timerWaitForNextAttack += Time.deltaTime;
+            }
+            //BOSS CHARGE
+            if (timerBossCharge > bossChargeDelay)
+            {
+                timerBossCharge = 0;
+                bossCharge = true;
+            }
+            else if (bossCanBossCharge) timerBossCharge += Time.deltaTime;
+            //ATTACK HANDLER
+            if (nextAttack)
+            {
+                timerWaitForNextAttack = 0;
+                nextAttack = false;
+                if (phase == 2 && bossCharge)
                 {
-                    if (bossChargeTimer > bossChargeDelay && phase == 2)
-                    {
-                        bossChargeTimer = 0;
-                        Attack_MoleCharge();
-                    }
-                    AttackChooser();
+                    Attack_MoleCharge();
                 }
+                else AttackChooser();
+            }         
             timer += Time.deltaTime;
             save.TimerSave(timer, 4);
         }
+        //BOSS HP 
         if (bossHealth.BossHealth == 0)
         {
             StartCoroutine(BossDeath());
@@ -146,7 +169,7 @@ public class Mole_Bossfight : MonoBehaviour
             if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
             //sprites
         }
-        if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2);
+        if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -163,12 +186,14 @@ public class Mole_Bossfight : MonoBehaviour
             }
         }
     }
-    public void StartBossFight()
-    {
-        bossStarted = true;        
+    public IEnumerator StartBossFight()
+    {      
         //OSTPart1.Play();
         bossUI.BossHPSliderStart();
         playerHealth.StartHPUI();
+        yield return new WaitForSeconds(timeToFirstAttack);
+        phase = 1;
+        bossStarted = true;
     }
 
     public IEnumerator BossDeath()
@@ -199,13 +224,12 @@ public class Mole_Bossfight : MonoBehaviour
     int attackNumberDrillRain = 0;
     int attackNumberRock = 0;
     string lastAttack = null;
-    IEnumerator AttackChooser()
+    void AttackChooser()
     {
+        Debug.Log("AttackChooser");
         attackIsGoing = true;
         if (phase == 1)
         {
-            yield
-            return new WaitForSeconds(6);
             //if same
             if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
             {
@@ -214,7 +238,7 @@ public class Mole_Bossfight : MonoBehaviour
                     case 1:
                         lastAttack = "MoleRain";
                         attackNumberMoleRain++;
-                        Attack_MoleRain();
+                        StartCoroutine(Attack_MoleRain());
                         break;
                     case 2:
                         lastAttack = "DrillRain";
@@ -222,10 +246,9 @@ public class Mole_Bossfight : MonoBehaviour
                         Attack_DrillRain();
                         break;
                     case 3:
-
                         lastAttack = "DrillGround";
                         attackNumberDrillGround++;
-                        Attack_GroundDrills();
+                        StartCoroutine(Attack_GroundDrills());
                         break;
                 }
             }
@@ -233,7 +256,7 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 lastAttack = "MoleRain";
                 attackNumberMoleRain++;
-                Attack_MoleRain();
+                StartCoroutine(Attack_MoleRain());
             }
             else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
             {
@@ -245,7 +268,7 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 lastAttack = "DrillGround";
                 attackNumberDrillGround++;
-                Attack_GroundDrills();
+                StartCoroutine(Attack_GroundDrills());
             }
             else //DrillSide
             {
@@ -256,25 +279,23 @@ public class Mole_Bossfight : MonoBehaviour
         }
         else if (phase == 2)
         {
-            yield
-            return new WaitForSeconds(4);
             if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
             {
                 lastAttack = "ShovelRain";
                 attackNumberShovelRain++;
-                Attack_ShovelRain();
+                StartCoroutine(Attack_ShovelRain());
             }
             else if (lastAttack != "Rock")
             {
                 lastAttack = "Rock";
                 attackNumberRock++;
-                Attack_Rock();
+                StartCoroutine(Attack_Rock());
             }
             else if (lastAttack != "ShovelRain" || lastAttack != "MoleRain")
             {
                 lastAttack = "MoleRain";
                 attackNumberMoleRain++;
-                Attack_MoleRain();
+                StartCoroutine(Attack_MoleRain());
             }
             else //drillSide
             {
@@ -282,9 +303,9 @@ public class Mole_Bossfight : MonoBehaviour
                 attackNumberDrillSide++;
                 Attack_SideDrills();
             }
-            if (attackSpikesTimer > 10)
+            if (timerAttackSpikes > 10)
             {
-                attackSpikesTimer = 0;
+                timerAttackSpikes = 0;
                 attackSpikesOn = true;
                 Attack_Spikes();
             }

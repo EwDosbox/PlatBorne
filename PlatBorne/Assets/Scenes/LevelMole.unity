@@ -4963,6 +4963,10 @@ MonoBehaviour:
   prefabROCK: {fileID: 6405731122107666860, guid: 5c91cef0cc5da3c45984005d19c51543, type: 3}
   prefabShovelRain: {fileID: 0}
   colliderCharge: {fileID: 0}
+  timeToFirstAttack: 4
+  bossChargeDelay: 15
+  timeBetweenAttacksPhase1: 2
+  timeBetweenAttacksPhase2: 2
 --- !u!4 &523258932
 Transform:
   m_ObjectHideFlags: 0
