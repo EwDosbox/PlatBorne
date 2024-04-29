@@ -15,12 +15,7 @@ public class Mole_Spikes : MonoBehaviour
     private float timer = 0;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            playerHealth.PlayerDamage();
-            Destroy(gameObject);
-        }
+        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
     }
     private void Awake()
     {

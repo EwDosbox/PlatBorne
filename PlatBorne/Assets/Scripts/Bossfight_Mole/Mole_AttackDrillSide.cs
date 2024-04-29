@@ -8,9 +8,9 @@ public class Mole_AttackDrillSide : MonoBehaviour
     [SerializeField] private float speed;
     private float timer = 0;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player") Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
     }
     void Start()
     {

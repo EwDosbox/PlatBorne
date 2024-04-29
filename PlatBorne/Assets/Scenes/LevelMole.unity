@@ -4967,6 +4967,12 @@ MonoBehaviour:
   bossChargeDelay: 15
   timeBetweenAttacksPhase1: 2
   timeBetweenAttacksPhase2: 2
+  moleRain_waitForNextWave: 2
+  groundDrills_waitForNextDrill: 0.5
+  shovelRain_waitForNextWave: 2
+  moleCharge_TimeBeforeCharge: 4
+  moleCharge_Velocity: 20
+  rock_ChargeTime: 2
 --- !u!4 &523258932
 Transform:
   m_ObjectHideFlags: 0
@@ -15956,6 +15962,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -1930123028944904493, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1631469603606533073, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: save
       value: 
@@ -15964,6 +15974,10 @@ PrefabInstance:
       propertyPath: health
       value: 
       objectReference: {fileID: 1837068395}
+    - target: {fileID: 3338149418787538915, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3338149418787538915, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
       value: 0.5
@@ -15991,6 +16005,10 @@ PrefabInstance:
     - target: {fileID: 3338149418787538915, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4160181815571881102, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5821441077154961247, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_LocalPosition.x

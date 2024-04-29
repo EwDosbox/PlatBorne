@@ -19,10 +19,10 @@ public class Mole_AttackShovelRain : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
     }
-    
-    void OnCollisionEnter2D(Collision2D colliders)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (colliders.gameObject == ground) isTouchingGround = true;
+        if (collision.gameObject.CompareTag("Ground")) isTouchingGround = true;
     }
     void Update()
     {

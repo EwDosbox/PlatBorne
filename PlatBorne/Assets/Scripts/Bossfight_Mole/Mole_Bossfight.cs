@@ -29,11 +29,17 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
     [SerializeField] Rigidbody2D colliderCharge;
-    [Header("Settings")]
+    [Header("SettingsMain")]
     public float timeToFirstAttack;
     public float bossChargeDelay;
     public float timeBetweenAttacksPhase1;
     public float timeBetweenAttacksPhase2;
+    public float moleRain_waitForNextWave;
+    public float groundDrills_waitForNextDrill;
+    public float shovelRain_waitForNextWave;
+    public float moleCharge_TimeBeforeCharge;
+    public float moleCharge_Velocity;
+    public float rock_ChargeTime;
 
     private bool colliderRight = false;
     private bool colliderLeft = false;
@@ -335,13 +341,13 @@ public class Mole_Bossfight : MonoBehaviour
                 Vector2 position = new Vector2(-16.68f + (j * 3), 11.40f);
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(moleRain_waitForNextWave);
             for (int j = 1; j < 12; j += 2)
             {
                 Vector2 position = new Vector2(-16.68f + (j * 3), 11.40f);
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(moleRain_waitForNextWave);
         }
         attackIsGoing = false;
     }
@@ -383,10 +389,10 @@ public class Mole_Bossfight : MonoBehaviour
     //PHASE II
     IEnumerator Attack_GroundDrills()
     {
-        attackNumberDrillSide++;
+        attackNumberDrillGround++;
         for (int i = 0; i < 10; i++)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(groundDrills_waitForNextDrill);
             if (colliderRight) Instantiate(prefabDrillGround, new Vector2(16.76f - (3 * i), -11), Quaternion.identity); //right
             else Instantiate(prefabDrillGround, new Vector2(-16.76f + (3 * i), -11), Quaternion.identity); //left
         }
@@ -405,7 +411,7 @@ public class Mole_Bossfight : MonoBehaviour
                 Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
                 Instantiate(prefabShovelRain, position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(shovelRain_waitForNextWave);
             for (int j = 1; j < 16; j += 2)
             {
                 Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
@@ -421,8 +427,8 @@ public class Mole_Bossfight : MonoBehaviour
         {
             rb.angularVelocity = 0;
             //animation
-            yield return new WaitForSeconds(2); //charge time
-            colliderCharge.velocity = Vector2.left * Time.deltaTime * 20;
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
+            colliderCharge.velocity = Vector2.left * Time.deltaTime * moleCharge_Velocity;
             rb.position = new Vector2(-15.55f, -3.8f);
             while (colliderCharge.position.x < -15.55f) yield return null;
             colliderCharge.position = new Vector2(-15.55f, colliderCharge.position.y);
@@ -431,8 +437,8 @@ public class Mole_Bossfight : MonoBehaviour
         {
             rb.angularVelocity = 0;
             //animation
-            yield return new WaitForSeconds(2); //charge time
-            colliderCharge.velocity = Vector2.left * Time.deltaTime * 20;
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
+            colliderCharge.velocity = Vector2.left * Time.deltaTime * moleCharge_Velocity;
             rb.position = new Vector2(15.55f, -3.8f);
             while (colliderCharge.position.x < 15.55f) yield return null;
             colliderCharge.position = new Vector2(15.55f, colliderCharge.position.y);
@@ -447,21 +453,21 @@ public class Mole_Bossfight : MonoBehaviour
         {
             position = new Vector2(-13.24f, y);
             //animation
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else if (colliderMiddleMiddle)
         {
             position = new Vector2(0, y);
             //animation
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else //Middle Right
         {
             position = new Vector2(13.24f, y);
             //animation
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
     }
