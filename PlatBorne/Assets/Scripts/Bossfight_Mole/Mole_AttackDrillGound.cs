@@ -11,12 +11,15 @@ public class Mole_AttackDrillGround : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
     void Awake()
     {
-        transform.rotation = Quaternion.Euler(0,0,0);
         rb = GetComponent<Rigidbody2D>();
+        transform.rotation = Quaternion.Euler(0,0,0);        
         rb.velocity = Vector2.up * speed;
     }
 

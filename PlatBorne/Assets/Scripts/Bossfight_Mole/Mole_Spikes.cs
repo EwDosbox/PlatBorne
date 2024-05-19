@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Mole_Spikes : MonoBehaviour
 {
-    public PlayerHealth playerHealth;
     Rigidbody2D rb;
     [SerializeField] private float timeToSelfDestruct;
     private float alpha = 0f;
@@ -15,7 +14,10 @@ public class Mole_Spikes : MonoBehaviour
     private float timer = 0;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
     private void Awake()
     {

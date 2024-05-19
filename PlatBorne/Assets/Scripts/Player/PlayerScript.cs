@@ -11,6 +11,7 @@ public class PlayerScript : MonoBehaviour
     public Saves save;
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop;
+    [SerializeField] PlayerHealth playerHealth;
 
     public Animator animator;
     public PlayerHealth health;
@@ -57,25 +58,25 @@ public class PlayerScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Boss Hitbox Right")) bossHitboxRight = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = true;
-        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = true;
-        if (collision.gameObject.CompareTag("Fall Hitbox")) touchedFallHitbox = true;
+        if (collision.CompareTag("Damage")) playerHealth.PlayerDamage();
+        if (collision.CompareTag("Boss Hitbox Right")) bossHitboxRight = true;
+        if (collision.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
+        if (collision.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
+        if (collision.CompareTag("Boss Hitbox")) bossHitbox = true;
+        if (collision.CompareTag("Fall Hitbox")) touchedFallHitbox = true;        
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Damage")) bossDamage = true;
+        if (collision.CompareTag("Damage")) bossDamage = true;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Boss Hitbox Right")) bossHitboxRight = false;
-        if (collision.gameObject.CompareTag("Boss Hitbox Left")) bossHitboxLeft = false;
-        if (collision.gameObject.CompareTag("Boss Hitbox Down")) bossHitboxDown = false;
-        if (collision.gameObject.CompareTag("Boss Hitbox Up")) bossHitboxUp = false;
-        if (collision.gameObject.CompareTag("Boss Hitbox")) bossHitbox = false;
-        if (collision.gameObject.CompareTag("Damage")) bossDamage = false;
+        if (collision.CompareTag("Boss Hitbox Right")) bossHitboxRight = false;
+        if (collision.CompareTag("Boss Hitbox Left")) bossHitboxLeft = false;
+        if (collision.CompareTag("Boss Hitbox Down")) bossHitboxDown = false;
+        if (collision.CompareTag("Boss Hitbox Up")) bossHitboxUp = false;
+        if (collision.CompareTag("Boss Hitbox")) bossHitbox = false;
+        if (collision.CompareTag("Damage")) bossDamage = false;
     }
     private void Start()
     {

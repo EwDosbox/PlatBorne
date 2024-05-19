@@ -22,7 +22,11 @@ public class Mole_AttackShovelRain : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground")) isTouchingGround = true;
+        if (collision.CompareTag("Ground")) isTouchingGround = true;
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
     void Update()
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class Mole_AttackGroundFuckingSomething : MonoBehaviour
@@ -21,7 +22,10 @@ public class Mole_AttackGroundFuckingSomething : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
     // Update is called once per frame
     void Update()

@@ -19,7 +19,10 @@ public class Mole_AttackMoleRain : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) Destroy(gameObject);
+        if (collision.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
     void Update()
     {

@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Mole_Health : MonoBehaviour
 {
     //INSPECTOR//
     [Tooltip("MAIN")]
     [SerializeField] private int playerDamage = 10;
-    [SerializeField] private float invincibilityTimer = 3;
+    [SerializeField] private float invincibilityTimer = 5;
     [Tooltip("OBJECTS")]
     //PUBLIC//
     public bool bossDead = false;
     public bool pussyModeOn = false;
     //PRIVATE//
     private int bossHealth = 100;
-    private bool bossInvincible = false;
+    private bool bossInvincible = true;
     private float timer = 0;
     public int BossHealth
     {
@@ -38,7 +39,7 @@ public class Mole_Health : MonoBehaviour
         if (!bossInvincible)
         {
             bossHealth -= playerDamage;
-            bossInvincible = true;
+            BossInvincible = true;
         }
         else
         {
@@ -49,9 +50,8 @@ public class Mole_Health : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerPrefs.HasKey("PussyMode")) pussyModeOn = true;
-        else pussyModeOn = false;
-        if (bossInvincible)
+        Debug.Log(BossInvincible);
+        if (BossInvincible)
         {
             timer += Time.deltaTime;
             if (timer > invincibilityTimer)
@@ -59,6 +59,7 @@ public class Mole_Health : MonoBehaviour
                 bossInvincible = false;
             }
         }
+        else timer = 0;
     }
 
     public void BossDeath()
