@@ -12,6 +12,7 @@ public class Mole_Bossfight : MonoBehaviour
     public Mole_WeakSpot weakSpot;
     public Mole_UI bossUI;
     public Saves save;
+    [SerializeField] SpriteRenderer spriteRenderer;
     //INSPECTOR//
     [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
@@ -154,7 +155,7 @@ public class Mole_Bossfight : MonoBehaviour
                 nextAttack = false;
                 if (phase == 2 && bossCharge)
                 {
-                    Attack_MoleCharge();
+                    StartCoroutine(Attack_MoleCharge());
                 }
                 else AttackChooser();
             }         
@@ -172,6 +173,7 @@ public class Mole_Bossfight : MonoBehaviour
             SFXswitchPhase.Play();
             OSTPart1.Stop();
             OSTPart2.Play();
+            bossCharge = true; //další útok je charge
             if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
             //sprites
         }
@@ -179,7 +181,7 @@ public class Mole_Bossfight : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && phase == 1)
         {
             if (!bossHealth.BossInvincible)
             {
@@ -191,6 +193,7 @@ public class Mole_Bossfight : MonoBehaviour
                 playerHealth.PlayerDamage();
             }
         }
+        if (phase == 2) playerHealth.PlayerDamage();
     }
     public IEnumerator StartBossFight()
     {      

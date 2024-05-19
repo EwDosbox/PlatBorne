@@ -4949,6 +4949,7 @@ MonoBehaviour:
   weakSpot: {fileID: 0}
   bossUI: {fileID: 1461745944}
   save: {fileID: 1837068380}
+  spriteRenderer: {fileID: 0}
   SFXbossHit: {fileID: 0}
   SFXswitchPhase: {fileID: 0}
   SFXbossDeath: {fileID: 0}

@@ -70,7 +70,4 @@ public class Mole_Health : MonoBehaviour
         bossHealth = 0;
         bossDead = true;
     }
-
-
-
 }
