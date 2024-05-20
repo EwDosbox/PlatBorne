@@ -114,8 +114,11 @@ public class Mole_Bossfight : MonoBehaviour
     bool bossCharge = false;
     bool nextAttack = false;
     Rigidbody2D rb;
+    //ANIMATOR
+    Animator animator;
     private void Start()
     {
+        animator = GetComponent<Animator>();
         bossUI.FadeOutEffect();
         PlayerPrefs.SetString("Level", "mole");
         prefabPlatforms.SetActive(false);
@@ -207,6 +210,8 @@ public class Mole_Bossfight : MonoBehaviour
 
     public IEnumerator BossDeath()
     {
+        if (transform.position.x <= 0) animator.SetBool("deathLeft", true);
+        else animator.SetBool("deathRight", true);
         SFXbossDeath.Play();
         rb.angularVelocity = 0;
         bossUI.FadeInEffect();

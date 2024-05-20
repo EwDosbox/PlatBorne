@@ -4925,6 +4925,7 @@ GameObject:
   - component: {fileID: 523258939}
   - component: {fileID: 523258938}
   - component: {fileID: 523258937}
+  - component: {fileID: 523258942}
   m_Layer: 0
   m_Name: Mole
   m_TagString: Untagged
@@ -4949,7 +4950,7 @@ MonoBehaviour:
   weakSpot: {fileID: 0}
   bossUI: {fileID: 1461745944}
   save: {fileID: 1837068380}
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 523258933}
   SFXbossHit: {fileID: 0}
   SFXswitchPhase: {fileID: 0}
   SFXbossDeath: {fileID: 0}
@@ -5595,6 +5596,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &523258942
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523258930}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b200a0ca42475af42a1c9ee1816c03f2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &537316693
 GameObject:
   m_ObjectHideFlags: 0
