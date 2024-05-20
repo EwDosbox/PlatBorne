@@ -4964,16 +4964,16 @@ MonoBehaviour:
   prefabPlatforms: {fileID: 940032533}
   prefabROCK: {fileID: 6405731122107666860, guid: 5c91cef0cc5da3c45984005d19c51543, type: 3}
   prefabShovelRain: {fileID: 0}
-  colliderCharge: {fileID: 0}
-  timeToFirstAttack: 4
+  timeToFirstAttack: 6
   bossChargeDelay: 15
   timeBetweenAttacksPhase1: 2
   timeBetweenAttacksPhase2: 2
   moleRain_waitForNextWave: 2
   groundDrills_waitForNextDrill: 0.5
   shovelRain_waitForNextWave: 2
-  moleCharge_TimeBeforeCharge: 4
-  moleCharge_Velocity: 20
+  moleCharge_TimeBeforeCharge: 3
+  moleCharge_TimeBeforeIdle: 5
+  moleCharge_Velocity: 50
   rock_ChargeTime: 2
 --- !u!4 &523258932
 Transform:
@@ -4986,7 +4986,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.8, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1036462350}
   - {fileID: 1060101275}
@@ -9902,8 +9902,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac6e2ee8a3e352449d6a470a630be9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDamage: 10
-  invincibilityTimer: 3
+  playerDamage: 25
+  invincibilityTimer: 0
   bossDead: 0
   pussyModeOn: 0
 --- !u!1 &1066185781

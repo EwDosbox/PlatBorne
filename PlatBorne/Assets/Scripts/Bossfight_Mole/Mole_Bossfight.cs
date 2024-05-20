@@ -29,7 +29,6 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabPlatforms;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
-    [SerializeField] Rigidbody2D colliderCharge;
     [Header("SettingsMain")]
     public float timeToFirstAttack;
     public float bossChargeDelay;
@@ -39,6 +38,7 @@ public class Mole_Bossfight : MonoBehaviour
     public float groundDrills_waitForNextDrill;
     public float shovelRain_waitForNextWave;
     public float moleCharge_TimeBeforeCharge;
+    public float moleCharge_TimeBeforeIdle;
     public float moleCharge_Velocity;
     public float rock_ChargeTime;
 
@@ -173,9 +173,9 @@ public class Mole_Bossfight : MonoBehaviour
         else if (bossHealth.BossHealth < 50 && phase == 1) //Change Phase
         {
             phase = 2;
-            SFXswitchPhase.Play();
-            OSTPart1.Stop();
-            OSTPart2.Play();
+            //SFXswitchPhase.Play();
+            //OSTPart1.Stop();
+            //OSTPart2.Play();
             bossCharge = true; //další útok je charge
             if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
             //sprites
@@ -189,7 +189,7 @@ public class Mole_Bossfight : MonoBehaviour
             if (!bossHealth.BossInvincible)
             {
                 bossHealth.BossHit();
-                SFXbossHit.Play();
+                //SFXbossHit.Play();
             }
             else
             {
@@ -433,23 +433,33 @@ public class Mole_Bossfight : MonoBehaviour
     {
         if (colliderLeft)
         {
-            rb.angularVelocity = 0;
-            //animation
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
-            colliderCharge.velocity = Vector2.left * Time.deltaTime * moleCharge_Velocity;
-            rb.position = new Vector2(-15.55f, -3.8f);
-            while (colliderCharge.position.x < -15.55f) yield return null;
-            colliderCharge.position = new Vector2(-15.55f, colliderCharge.position.y);
+            animator.SetBool("chargeRight", true); //ano je to prohozeny shut up
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
+            rb.velocity = Vector2.right * moleCharge_Velocity;
+            //charge anim.
+            while (rb.position.x < -15.55f)
+            {
+                yield return null;
+            }
+            rb.velocity = Vector2.zero;
+            rb.position = new Vector2(-15.55f, rb.position.y);
+            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
+            animator.SetBool("chargeRight", false);
         }
         else
         {
-            rb.angularVelocity = 0;
-            //animation
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
-            colliderCharge.velocity = Vector2.left * Time.deltaTime * moleCharge_Velocity;
-            rb.position = new Vector2(15.55f, -3.8f);
-            while (colliderCharge.position.x < 15.55f) yield return null;
-            colliderCharge.position = new Vector2(15.55f, colliderCharge.position.y);
+            animator.SetBool("chargeLeft", true); //ano je to prohozeny shut up
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
+            rb.velocity = Vector2.left * moleCharge_Velocity;
+            //charge anim.
+            while (rb.position.x < 15.55f)
+            {
+                yield return null;
+            }
+            rb.velocity = Vector2.zero;
+            rb.position = new Vector2(15.55f, rb.position.y);
+            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
+            animator.SetBool("chargeLeft", false);
         }
     }
 

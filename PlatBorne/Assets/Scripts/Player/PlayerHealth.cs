@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
         {             
             if (value == true)
             {
-                hunterGodMode.Play();
+                //hunterGodMode.Play();
             }
             godMode = value;
         }
