@@ -114,7 +114,7 @@ public class Mole_Bossfight : MonoBehaviour
     bool attackSpikesOn = false;
     bool bossCharge = false;
     bool nextAttack = false;
-    bool chargeIsMoving = true;
+    bool isPlayerCollidingWithBossDuringCharge = false;
     Rigidbody2D rb;
     BoxCollider2D boxCollider2D;
     //ANIMATOR
@@ -440,15 +440,14 @@ public class Mole_Bossfight : MonoBehaviour
             animator.SetBool("chargeRight", true); //ano je to prohozeny shut up
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
             rb.velocity = Vector2.right * moleCharge_Velocity;
-            //charge anim.
             boxCollider2D.isTrigger = true;
-            chargeIsMoving = true;
             while (rb.velocity != Vector2.zero)
             {
                 if (rb.position.x < 15.55f) rb.velocity = Vector2.zero;
                 else yield return null;
-            }            
-            chargeIsMoving = false;
+            }
+            bossCharge = false;
+            if (isPlayerCollidingWithBossDuringCharge) playerScript.MovePlayer(-5, 0); //hrac bude posunut aby nebyl v Mole
             boxCollider2D.isTrigger = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
             animator.SetBool("chargeRight", false);
@@ -458,15 +457,14 @@ public class Mole_Bossfight : MonoBehaviour
             animator.SetBool("chargeLeft", true); //ano je to prohozeny shut up
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
             rb.velocity = Vector2.left * moleCharge_Velocity;
-            //charge anim.
             boxCollider2D.isTrigger = true;
-            chargeIsMoving = true;
-            while (rb.velocity != Vector2.zero)
+            while (rb.velocity != Vector2.zero) //charge az do urcityho mista
             {
                 if (rb.position.x < -15.55f) rb.velocity = Vector2.zero;
                 else yield return null;
             }
-            chargeIsMoving = false; 
+            bossCharge = false;
+            if (isPlayerCollidingWithBossDuringCharge) playerScript.MovePlayer(5, 0); //hrac bude posunut aby nebyl v Mole
             boxCollider2D.isTrigger = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
             animator.SetBool("chargeLeft", false);
@@ -529,17 +527,20 @@ public class Mole_Bossfight : MonoBehaviour
         else SceneManager.LoadScene("Cutscene_GoodEnding");
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (!chargeIsMoving && collision.CompareTag("Player"))
-        {
-            if (colliderLeft) playerScript.MovePlayer(3, 0);
-            else playerScript.MovePlayer(-3, 0);
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) playerHealth.PlayerDamage();
+        if (collision.CompareTag("Player"))
+        {
+            playerHealth.PlayerDamage();
+            isPlayerCollidingWithBossDuringCharge = true;
+        }
+    }
+
+    public void BossHitWhileCharge()
+    {
+        bossCharge = false;
+        animator.SetBool("chargeRight", false);
+        animator.SetBool("chargeLeft" , false);
     }
 }
