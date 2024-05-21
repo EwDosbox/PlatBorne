@@ -30,6 +30,7 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabPlatforms;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
+    [SerializeField] GameObject prefabRockDirt;
     [Header("SettingsMain")]
     public float timeToFirstAttack;
     public float bossChargeDelay;
@@ -477,22 +478,22 @@ public class Mole_Bossfight : MonoBehaviour
         float y = -9;
         if (colliderMiddleLeft)
         {
-            position = new Vector2(-13.24f, y);
-            //animation
+            position = new Vector3(-13.24f, y, -1);
+            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else if (colliderMiddleMiddle)
         {
-            position = new Vector2(0, y);
-            //animation
+            position = new Vector3(0, y, -1);
+            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else //Middle Right
         {
-            position = new Vector2(13.24f, y);
-            //animation
+            position = new Vector3(13.24f, y, -1);
+            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }

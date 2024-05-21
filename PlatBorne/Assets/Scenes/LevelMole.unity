@@ -4965,6 +4965,7 @@ MonoBehaviour:
   prefabPlatforms: {fileID: 940032533}
   prefabROCK: {fileID: 6405731122107666860, guid: 5c91cef0cc5da3c45984005d19c51543, type: 3}
   prefabShovelRain: {fileID: 0}
+  prefabRockDirt: {fileID: 1874224432129532152, guid: 951e9238fa581d443a259211fe26c92f, type: 3}
   timeToFirstAttack: 6
   bossChargeDelay: 15
   timeBetweenAttacksPhase1: 2
