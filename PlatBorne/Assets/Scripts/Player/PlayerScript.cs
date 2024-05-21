@@ -123,4 +123,10 @@ public class PlayerScript : MonoBehaviour
         }
         save.PositionSave(transform.position.x, transform.position.y);
     }
+
+    //For Mole Bossfight
+    public void MovePlayer(float x, float y)
+    {
+        transform.position = new Vector2(transform.position.x + x, transform.position.y + y);
+    }
 }

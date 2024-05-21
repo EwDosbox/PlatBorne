@@ -4926,6 +4926,7 @@ GameObject:
   - component: {fileID: 523258938}
   - component: {fileID: 523258937}
   - component: {fileID: 523258942}
+  - component: {fileID: 523258943}
   m_Layer: 0
   m_Name: Mole
   m_TagString: Untagged
@@ -4951,6 +4952,7 @@ MonoBehaviour:
   bossUI: {fileID: 1461745944}
   save: {fileID: 1837068380}
   spriteRenderer: {fileID: 523258933}
+  playerScript: {fileID: 1837068404}
   SFXbossHit: {fileID: 0}
   SFXswitchPhase: {fileID: 0}
   SFXbossDeath: {fileID: 0}
@@ -5617,6 +5619,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!61 &523258943
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 523258930}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.4, y: 6.4}
+    newSize: {x: 6.4, y: 6.4}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 6.4, y: 6.4}
+  m_EdgeRadius: 0
 --- !u!1 &537316693
 GameObject:
   m_ObjectHideFlags: 0
@@ -16163,6 +16210,17 @@ MonoBehaviour:
   - {fileID: 1602435130}
   hunterGodMode: {fileID: 0}
   hunterDamage: {fileID: 0}
+--- !u!114 &1837068404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1631469603606533073, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
+  m_PrefabInstance: {fileID: 1837068378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837068379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fff21e11fe423409b8abe7791dc698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1865920651
 GameObject:
   m_ObjectHideFlags: 0

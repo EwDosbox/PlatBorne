@@ -13,6 +13,7 @@ public class Mole_Bossfight : MonoBehaviour
     public Mole_UI bossUI;
     public Saves save;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] PlayerScript playerScript;
     //INSPECTOR//
     [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
@@ -113,12 +114,15 @@ public class Mole_Bossfight : MonoBehaviour
     bool attackSpikesOn = false;
     bool bossCharge = false;
     bool nextAttack = false;
+    bool chargeIsMoving = true;
     Rigidbody2D rb;
+    BoxCollider2D boxCollider2D;
     //ANIMATOR
     Animator animator;
     private void Start()
     {
         animator = GetComponent<Animator>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
         bossUI.FadeOutEffect();
         PlayerPrefs.SetString("Level", "mole");
         prefabPlatforms.SetActive(false);
@@ -437,12 +441,15 @@ public class Mole_Bossfight : MonoBehaviour
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
             rb.velocity = Vector2.right * moleCharge_Velocity;
             //charge anim.
-            while (rb.position.x < -15.55f)
+            boxCollider2D.isTrigger = true;
+            chargeIsMoving = true;
+            while (rb.velocity != Vector2.zero)
             {
-                yield return null;
-            }
-            rb.velocity = Vector2.zero;
-            rb.position = new Vector2(-15.55f, rb.position.y);
+                if (rb.position.x < 15.55f) rb.velocity = Vector2.zero;
+                else yield return null;
+            }            
+            chargeIsMoving = false;
+            boxCollider2D.isTrigger = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
             animator.SetBool("chargeRight", false);
         }
@@ -452,12 +459,15 @@ public class Mole_Bossfight : MonoBehaviour
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
             rb.velocity = Vector2.left * moleCharge_Velocity;
             //charge anim.
-            while (rb.position.x < 15.55f)
+            boxCollider2D.isTrigger = true;
+            chargeIsMoving = true;
+            while (rb.velocity != Vector2.zero)
             {
-                yield return null;
+                if (rb.position.x < -15.55f) rb.velocity = Vector2.zero;
+                else yield return null;
             }
-            rb.velocity = Vector2.zero;
-            rb.position = new Vector2(15.55f, rb.position.y);
+            chargeIsMoving = false; 
+            boxCollider2D.isTrigger = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
             animator.SetBool("chargeLeft", false);
         }
@@ -517,5 +527,19 @@ public class Mole_Bossfight : MonoBehaviour
             SceneManager.LoadScene("Cutscene_BadEnding");
         }
         else SceneManager.LoadScene("Cutscene_GoodEnding");
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!chargeIsMoving && collision.CompareTag("Player"))
+        {
+            if (colliderLeft) playerScript.MovePlayer(3, 0);
+            else playerScript.MovePlayer(-3, 0);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) playerHealth.PlayerDamage();
     }
 }
