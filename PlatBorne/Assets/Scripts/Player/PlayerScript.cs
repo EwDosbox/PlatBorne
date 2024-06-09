@@ -42,6 +42,10 @@ public class PlayerScript : MonoBehaviour
     //FISH
     public bool wasFishing = false;
     public void SetFishing(bool wasFishing) { this.wasFishing = wasFishing; }
+    public Vector2 Position
+    {
+        get { return new Vector2(transform.position.x, transform.position.y); }
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Boss Hitbox"))

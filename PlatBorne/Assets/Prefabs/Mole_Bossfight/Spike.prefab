@@ -171,6 +171,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 175ecaa46ed763744ad1ba12e71ac4cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: {fileID: 0}
-  timeToSelfDestruct: 10
+  timeToSelfDestruct: 6
   fadeSpeed: 0.4

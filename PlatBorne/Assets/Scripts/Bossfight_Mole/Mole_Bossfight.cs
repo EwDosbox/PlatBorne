@@ -112,7 +112,7 @@ public class Mole_Bossfight : MonoBehaviour
     bool bossStarted = false;
     bool attackIsGoing = false;
     int phase = 0;
-    bool attackSpikesOn = false;
+    bool attackSpikesActivate = false;
     bool bossCharge = false;
     bool nextAttack = false;
     bool isPlayerCollidingWithBossDuringCharge = false;
@@ -135,7 +135,7 @@ public class Mole_Bossfight : MonoBehaviour
     }
     private void FixedUpdate()
     {        
-        if (attackSpikesOn) timerAttackSpikes += Time.deltaTime;
+        if (attackSpikesActivate) timerAttackSpikes += Time.deltaTime;
         if (bossStarted)
         {
             //DELAY BETWEEN ATTACKS
@@ -161,11 +161,7 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 timerWaitForNextAttack = 0;
                 nextAttack = false;
-                if (phase == 2 && bossCharge)
-                {
-                    StartCoroutine(Attack_MoleCharge());
-                }
-                else AttackChooser();
+                AttackChooser();
             }         
             timer += Time.deltaTime;
             save.TimerSave(timer, 4);
@@ -178,9 +174,11 @@ public class Mole_Bossfight : MonoBehaviour
         else if (bossHealth.BossHealth < 50 && phase == 1) //Change Phase
         {
             phase = 2;
+            attackSpikesActivate = true;
             //SFXswitchPhase.Play();
             //OSTPart1.Stop();
             //OSTPart2.Play();
+            prefabPlatforms.SetActive(true);
             bossCharge = true; //další útok je charge
             if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
             //sprites
@@ -245,7 +243,6 @@ public class Mole_Bossfight : MonoBehaviour
     string lastAttack = null;
     void AttackChooser()
     {
-        Debug.Log("AttackChooser");
         attackIsGoing = true;
         if (phase == 1)
         {
@@ -298,6 +295,16 @@ public class Mole_Bossfight : MonoBehaviour
         }
         else if (phase == 2)
         {
+            if (timerAttackSpikes > 16)
+            {
+                timerAttackSpikes = 0;
+                Attack_Spikes();
+                AttackChooser();
+            }
+            if (bossCharge)
+            {
+                StartCoroutine(Attack_MoleCharge());
+            }
             if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
             {
                 lastAttack = "ShovelRain";
@@ -321,13 +328,7 @@ public class Mole_Bossfight : MonoBehaviour
                 lastAttack = "DrillSide";
                 attackNumberDrillSide++;
                 Attack_SideDrills();
-            }
-            if (timerAttackSpikes > 10)
-            {
-                timerAttackSpikes = 0;
-                attackSpikesOn = true;
-                Attack_Spikes();
-            }
+            }            
         }
     }
 
@@ -362,6 +363,7 @@ public class Mole_Bossfight : MonoBehaviour
             }
             yield return new WaitForSeconds(moleRain_waitForNextWave);
         }
+        yield return new WaitForSeconds(2);
         attackIsGoing = false;
     }
 
@@ -436,67 +438,79 @@ public class Mole_Bossfight : MonoBehaviour
 
     IEnumerator Attack_MoleCharge()
     {
-        if (colliderLeft)
+        bossCanBossCharge = false;
+        if (playerScript.Position.x > transform.position.x) //right (player je vpravo od Bosse)
         {
-            animator.SetBool("chargeRight", true); //ano je to prohozeny shut up
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
+            animator.SetTrigger("readyChargeRight");
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
+            animator.SetBool("chargingRight", true);
             rb.velocity = Vector2.right * moleCharge_Velocity;
-            boxCollider2D.isTrigger = true;
             while (rb.velocity != Vector2.zero)
             {
-                if (rb.position.x < 15.55f) rb.velocity = Vector2.zero;
+                if (rb.position.x > 15.55f)
+                {
+                    rb.velocity = Vector2.zero;
+                    if (playerScript.Position.x > 14) playerScript.MovePlayer(-5, 0); //hrac bude posunut aby nebyl v Mole
+                }
                 else yield return null;
             }
-            bossCharge = false;
-            if (isPlayerCollidingWithBossDuringCharge) playerScript.MovePlayer(-5, 0); //hrac bude posunut aby nebyl v Mole
-            boxCollider2D.isTrigger = false;
-            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
-            animator.SetBool("chargeRight", false);
+            bossCharge = false;            
+            animator.SetBool("chargingRight", false);
+            attackIsGoing = false;
+            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
+            animator.SetTrigger("stopChargeRight"); //Pøes trigger, protože jsem ho chtìl vyzkoušet
         }
-        else
+        else //left
         {
-            animator.SetBool("chargeLeft", true); //ano je to prohozeny shut up
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time            
+            animator.SetTrigger("readyChargeLeft");
+            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
+            animator.SetBool("chargingLeft", true);                                                            
             rb.velocity = Vector2.left * moleCharge_Velocity;
-            boxCollider2D.isTrigger = true;
             while (rb.velocity != Vector2.zero) //charge az do urcityho mista
             {
-                if (rb.position.x < -15.55f) rb.velocity = Vector2.zero;
+                if (rb.position.x < -15.55f)
+                {
+                    rb.velocity = Vector2.zero;
+                    if (playerScript.Position.x < -14) playerScript.MovePlayer(5, 0);
+                }
                 else yield return null;
             }
-            bossCharge = false;
-            if (isPlayerCollidingWithBossDuringCharge) playerScript.MovePlayer(5, 0); //hrac bude posunut aby nebyl v Mole
-            boxCollider2D.isTrigger = false;
-            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
-            animator.SetBool("chargeLeft", false);
+            bossCharge = false;            
+            animator.SetBool("chargingLeft", false);
+            attackIsGoing = false;
+            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
+            animator.SetTrigger("stopChargeLeft");
         }
+        bossCanBossCharge = true; //Boss charge utok zapnut
     }
 
     IEnumerator Attack_Rock()
     {
         Vector2 position;
         float y = -9;
-        if (colliderMiddleLeft)
+        if (playerScript.Position.x < -6.67) //left
         {
             position = new Vector3(-13.24f, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
-        else if (colliderMiddleMiddle)
-        {
-            position = new Vector3(0, y, -1);
-            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
-            yield return new WaitForSeconds(rock_ChargeTime);
-            Instantiate(prefabROCK, position, Quaternion.identity);
-        }
-        else //Middle Right
+        else if (playerScript.Position.x > 6.67) //right
         {
             position = new Vector3(13.24f, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
+        else // middle
+        {
+            position = new Vector3(0, y, -1);
+            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
+            yield return new WaitForSeconds(rock_ChargeTime);
+            Instantiate(prefabROCK, position, Quaternion.identity);
+        }
+
+        attackIsGoing = false;
     }
 
     private void Attack_Spikes()
@@ -516,7 +530,6 @@ public class Mole_Bossfight : MonoBehaviour
                 Instantiate(prefabSpike, position[i], Quaternion.identity);
             }
         }
-        attackIsGoing = false;
     }
 
     private void EndingDecider()
@@ -534,7 +547,6 @@ public class Mole_Bossfight : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             playerHealth.PlayerDamage();
-            isPlayerCollidingWithBossDuringCharge = true;
         }
     }
 

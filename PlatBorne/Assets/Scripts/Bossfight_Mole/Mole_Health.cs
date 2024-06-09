@@ -50,7 +50,6 @@ public class Mole_Health : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(BossInvincible);
         if (BossInvincible)
         {
             timer += Time.deltaTime;

@@ -172,5 +172,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToSelfDestruct: 10
-  acceleration: 0.345
-  maxSpeed: 3
+  acceleration: 0.5
+  maxSpeed: 5
