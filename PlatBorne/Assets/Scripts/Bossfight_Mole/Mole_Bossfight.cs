@@ -493,7 +493,7 @@ public class Mole_Bossfight : MonoBehaviour
             position = new Vector3(-13.24f, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
-            PlayerPrefs.SetString("rockAttack", "left");
+            PlayerPrefs.SetString("rockAttack", "left"); //Im not sorry
             PlayerPrefs.Save();
             Instantiate(prefabROCK, position, Quaternion.identity);            
         }
@@ -521,20 +521,18 @@ public class Mole_Bossfight : MonoBehaviour
 
     private void Attack_Spikes()
     {
-        if (colliderMiddleRight || colliderMiddleLeft)
+        Debug.Log("SPikes");
+        Vector2[] position = new Vector2[6];
+        float y = -2.62f;
+        position[0] = new Vector2(-8.2544f, y);
+        position[1] = new Vector2(8.2544f, y);
+        position[2] = new Vector2(-6.4772f, y);
+        position[3] = new Vector2(6.4772f, y);
+        position[4] = new Vector2(-4.701f, y);
+        position[5] = new Vector2(4.701f, y);
+        for (int i = 0; i < 6; i++)
         {
-            Vector2[] position = new Vector2[6];
-            float y = -2.62f;
-            position[0] = new Vector2(-8.2544f, y);
-            position[1] = new Vector2(8.2544f, y);
-            position[2] = new Vector2(-6.4772f, y);
-            position[3] = new Vector2(6.4772f, y);
-            position[4] = new Vector2(-4.701f, y);
-            position[5] = new Vector2(4.701f, y);
-            for (int i = 0; i < 6; i++)
-            {
-                Instantiate(prefabSpike, position[i], Quaternion.identity);
-            }
+            Instantiate(prefabSpike, position[i], Quaternion.identity);
         }
     }
 
