@@ -493,13 +493,17 @@ public class Mole_Bossfight : MonoBehaviour
             position = new Vector3(-13.24f, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
-            Instantiate(prefabROCK, position, Quaternion.identity);
+            PlayerPrefs.SetString("rockAttack", "left");
+            PlayerPrefs.Save();
+            Instantiate(prefabROCK, position, Quaternion.identity);            
         }
         else if (playerScript.Position.x > 6.67) //right
         {
             position = new Vector3(13.24f, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
+            PlayerPrefs.SetString("rockAttack", "right");
+            PlayerPrefs.Save();
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
         else // middle
@@ -507,6 +511,8 @@ public class Mole_Bossfight : MonoBehaviour
             position = new Vector3(0, y, -1);
             Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
+            PlayerPrefs.SetString("rockAttack", "middle");
+            PlayerPrefs.Save();
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
 
