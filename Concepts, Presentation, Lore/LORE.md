@@ -35,7 +35,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 - Grass grows, Birds Fly, Sun Shines and Hunter…The End Is Coming, Coming for you
 - Your incompetence is making my blood boil
 - Is this an Undertale reference?
-- Idiot…
+- Sing with me, sing for the year. Sing for the laughter and sing for the tear (dream on meme)
 ## BOSS BRECUS
 - So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.
 - Nothing but scratch! (damage 01)
@@ -57,7 +57,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 - You are not My Little Pogchamp
 - You need to kill me, Muppet, not yourself
 - Skill issue
-- The only thing I know for real You are dead again , how 
+- The only thing I know for real You are dead again , how???
 - zzz
 ### EPILOG
 You have killed that nasty insect that was stopping your way to achieving your ultimate goal. Now, leaving London, you feel fresh wind blowing on your hat. You look at the sky, your heart and blood boiling. The moon is still red. Yet that doesn't stop you. You feel determined to kill every, single, monster that crosses your path. You step outside of London's border...
@@ -74,33 +74,38 @@ CONTINUES IN ACT II
 ## **[St Martin in the Bull Ring](https://en.wikipedia.org/wiki/St_Martin_in_the_Bull_Ring)**
 ### **Hunter has fallen**
 1. Things go up, things go down
-1. Imagine there is a man with a knife chasing you!
-1. Hurry up old man!
-1. Jump, Dash, Jump, Dash is it really that hard to do?
-1. The sun will be up when you get here, which will be...never!
-1. Did it hurt? I hope it did
-1. Not even a God could watch this...
-1. And then God said "Let there be light!", too bad he said that, now everybody must watch your performance.
-1. Don't you wanna shove a rocket up your arse?
-1. You would be terrible guy to hike with
-1. Don't worry, another species killing asteroid will come in around 65,000 years. You have enough time
-1. The snail is coming! The snail is coming! The snail is coming!
-1. You are based? Based on what? Number of falls?
-1. It's taking you so long it would make her bored
-1. They said touch grass not kamikaze into it
+2. Imagine there is a man with a knife chasing you!
+3. Hurry up old man!
+4. Jump, Dash, Jump, Dash is it really that hard to do?
+5. The sun will be up when you get here, which will be...never!
+6. Did it hurt? I hope it did
+7. Not even a God can watch this...
+8. And then God said "Let there be light!", too bad he said that, now everybody must watch your performance.
+9. Don't you wanna shove a rocket up your arse?
+10. You would be terrible guy to hike with
+11. Don't worry, another species killing asteroid will come in around 65,000 years. You have enough time
+12. The snail is coming! The snail is coming! The snail is coming!
+13. You are based? Based on what? Number of falls?
+14. It's taking you so long it would be faster to just climb up here.
+15. They said touch grass not kamikaze into it
+16. Hunter 0, the ground 1
+17. Youre destroying the church, dumbass
 ### **hunter has fallen too much**
 1. I felt the ground shake even from here!
-1. Maybe you would be better miner, because you should stay on the ground.
-1. Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than that.
-1. I would have more chance to win a russian roulette with a machine gun than you ever coming here.
-1. It's not always about the jumping or falling, Hunter, sometimes it's about the Mets
-1. The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus!
-1. You have a lot of determination...and probably few broken legs, sucks to be you!
-1. Somebody didn't skip leg day
+2. Youre supposed to be the chosen one? That's sad
+3. Maybe you would be better miner, because you should stay on the ground.
+4. Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than that.
+5. I would have more chance to win a russian roulette with a machine gun than you ever coming here.
+6. It's not always about the jumping or falling, Hunter, sometimes it's about the Mets
+7. The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus!
+8. You have a lot of determination...and probably few broken legs, sucks to be you!
+9. Somebody didn't skip leg day
+10. If I said that I am currently oiled up up here, would it make you come here fucking faster?
 ## **Fishing**
 ### **Hunter comes to the water**
 1. Yeah sure, go fishing, we have all the time in the world...
-1. What makes you think a little fishing could help you?
+2. What makes you think a little fishing could help you?
+3. Youre so desperate that you go fishing?
 ### FISH ENDING
 - **When you fish out all the fishes (bruh why)**
 1. The lake is comforting. You stay and fall to slumber.
@@ -122,11 +127,18 @@ CONTINUES IN ACT II
 5. Diggy Diggy Hole Right Into Your Skull!
 6. They are going to glue you back together...IN HELL!!!
 7. El Stupido
-8. Welcome to the Shadow Realm Jimbo
+8. Welcome to the Shadow Realm, Jimbo
 9. Did it hurt? Good
 10. Dying must be your expertise
 11. May your falls be many, and your days few
 12. Another one for the books
+13. You cannot kill even a fucking mole!
+14. Even a fly would hurt me more
+15. The caucasity of this bitch
+16. I am out of words...
+17. Do you want a baby difficulty?
+18. YOU PLAY LIKE AN NPC
+19. womp womp
 ### NEUTRAL ENDING
 - **Player has slayed bosses with pussy mode ON**
 1. The everlasting slaughterer lies on the cold moist ground, yet you feel..
@@ -143,11 +155,11 @@ CONTINUES IN ACT II
 1. Only now you feel the true loneliness
 ### GOOD ENDING
 - **Player has slayed bosses with pussy mode OFF**
-1. The everlasting slaughterer lies on the cold moist ground, you feel it..
-1. The ever-escaping euphoria of another day, for once it stayed here.
-1. You achieved the unachievable..
-2. "I did it, The dawn is nigh!"
-1. The Moon is cleanses itself off the horrible, appalling, cruel crimson color.
-1. Indescribable joy, your heart is about to rupture. It is here.
-2. "Will I be the one to free it?"
-1. The quest of cleansing The Great Kingdoms of Britain has been achieved by the Foolish Hoonter.
+ The everlasting slaughterer lies on the cold moist ground, you feel it..
+ The ever-escaping euphoria of another day, for once it stayed here.
+ You achieved the unachievable.. 
+ "I did it, The dawn is nigh!"
+ The Moon is cleanses itself off the horrible, appalling, cruel crimson color.
+ Indescribable joy, your heart is about to rupture. It is here.
+ "Will I be the one to free it?"
+ The quest of cleansing The Great Kingdoms of Britain has been achieved by the Foolish Hoonter.
