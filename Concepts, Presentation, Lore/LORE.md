@@ -38,7 +38,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 - Sing with me, sing for the year. Sing for the laughter and sing for the tear (dream on meme)
 ## BOSS BRECUS
 - So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.
-- Nothing but scratch! (damage 01)
+- Tis But A Scratch! (damage 01)
 - Youre starting to annoy me, Hunter! (damage02)
 - I‘m gonna sink you like Americans have sank our bloody delicious tea! (damage 03)
 ### PLAYER DEATH
@@ -79,33 +79,33 @@ CONTINUES IN ACT II
 4. Jump, Dash, Jump, Dash is it really that hard to do?
 5. The sun will be up when you get here, which will be...never!
 6. Did it hurt? I hope it did
-7. Not even a God can watch this...
+7. Micolash are you seeing this?
 8. And then God said "Let there be light!", too bad he said that, now everybody must watch your performance.
 9. Don't you wanna shove a rocket up your arse?
-10. You would be terrible guy to hike with
+10. MotherFucker aint a hiker, hes a faller
 11. Don't worry, another species killing asteroid will come in around 65,000 years. You have enough time
-12. The snail is coming! The snail is coming! The snail is coming!
+12. The snail is coming! The snail is coming! The snail is coming! The snail is coming!
 13. You are based? Based on what? Number of falls?
 14. It's taking you so long it would be faster to just climb up here.
-15. They said touch grass not kamikaze into it
+15. They said touch some grass not kamikaze into it
 16. Hunter 0, the ground 1
 17. Youre destroying the church, dumbass
 ### **hunter has fallen too much**
-1. I felt the ground shake even from here!
-2. Youre supposed to be the chosen one? That's sad
-3. Maybe you would be better miner, because you should stay on the ground.
-4. Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than that.
-5. I would have more chance to win a russian roulette with a machine gun than you ever coming here.
-6. It's not always about the jumping or falling, Hunter, sometimes it's about the Mets
-7. The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus!
+1. I felt the ground shake even from up here!
+2. Youre supposed to be the chosen one? That's kinda sad
+3. Maybe you would be better miner, because you're still on the ground.
+4. Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than a Mini Cooper.
+5. I have a bigger chance to win a russian roulette with a machine gun than you ever coming up up here.
+6. It's not always about the jumping or falling, Hunter, sometimes it's about the Mets. Lets go Mets I love the Mets
+7. The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus! ...Please hurry the fuck up.
 8. You have a lot of determination...and probably few broken legs, sucks to be you!
-9. Somebody didn't skip leg day
+9. IM STILL JUMPING BETTER THAN I EVER DID
 10. If I said that I am currently oiled up up here, would it make you come here fucking faster?
 ## **Fishing**
 ### **Hunter comes to the water**
 1. Yeah sure, go fishing, we have all the time in the world...
 2. What makes you think a little fishing could help you?
-3. Youre so desperate that you go fishing?
+3. Youre so desperate that you go fishing? That's kinda fishy
 ### FISH ENDING
 - **When you fish out all the fishes (bruh why)**
 1. The lake is comforting. You stay and fall to slumber.
@@ -127,7 +127,7 @@ CONTINUES IN ACT II
 5. Diggy Diggy Hole Right Into Your Skull!
 6. They are going to glue you back together...IN HELL!!!
 7. El Stupido
-8. Welcome to the Shadow Realm, Jimbo
+8. Welcome to the Shadow realm, Hunta
 9. Did it hurt? Good
 10. Dying must be your expertise
 11. May your falls be many, and your days few
@@ -135,7 +135,7 @@ CONTINUES IN ACT II
 13. You cannot kill even a fucking mole!
 14. Even a fly would hurt me more
 15. The caucasity of this bitch
-16. I am out of words...
+16. I am simply out of words...
 17. Do you want a baby difficulty?
 18. YOU PLAY LIKE AN NPC
 19. womp womp
