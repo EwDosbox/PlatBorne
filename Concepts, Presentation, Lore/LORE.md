@@ -26,7 +26,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 -	The Original Bloodborne is gonna be released on PC faster than you get your crispy ass hat here
 -	Im gonna watch tiktok, tell me if you get up
 -	You know what would be cool? Making bloodborne as a 2D platformer. Even better would be if it had a really cool ending, but you wont be able to see it with your bloddy tempo
-### HUNTER HAS FALLEN TOO MUCH
+### HUNTER HAS FALLEN TOO HARD
 - H…Hunter are you fokking alright?
 - Get the Fuck Up
 - No rest for the wicked
