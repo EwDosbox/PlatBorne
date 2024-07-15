@@ -31,7 +31,10 @@ public class NeutralEnding : MonoBehaviour
         StartCoroutine(TypeWriter("The everlasting slaughterer lies on the cold moist ground, yet you feel...", SFXTypewriter, 0.1f, 2, 0, mainText));
         while (!isFinished) yield return null;
         isFinished = false;
-        StartCoroutine(TypeWriter("\nNothing. Void still fills your heart and soul...", SFXTypewriter, 0.1f, 1, 0, mainText));
+        StartCoroutine(TypeWriter("\nNothing.", SFXTypewriter, 0.1f, 1, 0, mainText));
+        while (!isFinished) yield return null;
+        isFinished = false;
+        StartCoroutine(TypeWriter("\nVoid still fills your heart and soul...", SFXTypewriter, 0.1f, 2, 0, mainText));
         while (!isFinished) yield return null;
         isFinished = false;
         StartCoroutine(TypeWriter("\n\"Where is the bliss, the delight of the new Moon?\"", SFXTypewriter, 0.1f, 2, 0, mainText));
