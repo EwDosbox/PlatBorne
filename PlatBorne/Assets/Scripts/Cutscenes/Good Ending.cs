@@ -8,6 +8,7 @@ public class GoodEnding : MonoBehaviour
 {
     public AudioSource SFXTypewriter;
     public AudioSource music;
+    public AudioSource endingSFX;
     public CanvasGroup canvasGroup;
     public Text mainText;
     public GameObject endingText;
@@ -56,6 +57,7 @@ public class GoodEnding : MonoBehaviour
         StartCoroutine(FadeOutCanvas(canvasGroup, 1));
         yield return new WaitForSeconds(2);
         endingText.SetActive(true);
+        endingSFX.Play();
         yield return new WaitForSeconds(3);
         StartCoroutine(FadeOutCanvas(canvasGroupEnding, 1));
         yield return new WaitForSeconds(2);
