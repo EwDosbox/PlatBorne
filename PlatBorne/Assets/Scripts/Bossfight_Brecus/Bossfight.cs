@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,13 +13,13 @@ public class Bossfight : MonoBehaviour
     [SerializeField] AudioSource BossDamage02;
     [SerializeField] AudioSource BossDamage03;
     [SerializeField] AudioSource BossDeath01;
-    [SerializeField] AudioSource OSTLoop;
     [SerializeField] AudioSource SFXVunerability;
-    [SerializeField] AudioSource OSTPhase4;
     [SerializeField] SpriteRenderer bossSprite;
     [SerializeField] GameObject DashOrb;
+    [SerializeField] AudioSource OSTPhase0;
+    [SerializeField] AudioSource[] OST;
+    [SerializeField] AudioSource[] OSTIntermezzo;
 
-    public BossFightVoiceLines voiceLines;
     public Animator bossAnimation;
     public BossHealthBar bossHealthBar;
     public PlayerHealth playerHealth;
@@ -66,6 +67,7 @@ public class Bossfight : MonoBehaviour
     }
     public IEnumerator BossDeath()
     {
+        MusicManagerTurnOffMusic();
         bossIsDead = true;
         BossDeath01.Play();
         bossAnimation.SetBool("Boss Death", true);
@@ -95,14 +97,13 @@ public class Bossfight : MonoBehaviour
         SceneManager.LoadScene("PlayerDeath");
     }
 
-
     private void Start()
     {
         timer = save.TimerLoad(2);
         levelMove.SetActive(false);
         bounds.isTrigger = true;
-        UI_BossHP.active = false;
-        UI_PlayerHP.active = false;
+        UI_BossHP.SetActive(false);
+        UI_PlayerHP.SetActive(false);
         PlayerPrefs.SetString("Level", "bricus");
         PlayerPrefs.Save();
         bossfightStarted = false;
@@ -116,7 +117,7 @@ public class Bossfight : MonoBehaviour
         if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
-        if (pauseMenu.active) timerOn = false;
+        if (pauseMenu.activeInHierarchy) timerOn = false;
         else if (bossfightStarted) timerOn = true;
         //Boss Sprite Flip
         if (player.transform.position.x > 1.5) bossSprite.flipX = true;
@@ -164,6 +165,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(40);
                             phase = 2;
                             BossDamage01.Play();
+                            StartCoroutine(MusicManager(1));
                             break;
                         }
                     case 40:
@@ -171,6 +173,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(20);
                             phase = 3;
                             BossDamage02.Play();
+                            StartCoroutine(MusicManager(2));
                             break;
                         }
                     case 20:
@@ -182,8 +185,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.LastPhase();
                             phase = 4;
                             text.text = "Survive";
-                            OSTLoop.enabled = false;
-                            OSTPhase4.enabled = true;
+                            StartCoroutine(MusicManager(3));
                             break;
                         }
                 }
@@ -307,16 +309,55 @@ public class Bossfight : MonoBehaviour
         //start of bossfight
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {
-            UI_BossHP.active = true;
-            UI_PlayerHP.active = true;
+            UI_BossHP.SetActive(true);
+            UI_PlayerHP.SetActive(true);
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
             if (playerHealth.PussyMode) pussyModeOn.text = "Pussy Mode Is Active";
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
-            PreBossDialog.Play();
-            OSTLoop.enabled = true;
+            StartCoroutine(DIALOGWaitingLine("preboss"));
         }        
+    }
+
+    //DIALOG doesnt overlap with Music
+    IEnumerator DIALOGWaitingLine(string name) 
+    {
+        switch(name)
+        {
+            case "preboss":
+                {
+                    MusicManagerTurnOffMusic();
+                    PreBossDialog.Play();
+                    yield return new WaitForSeconds(PreBossDialog.clip.length);
+                    StartCoroutine(MusicManager(0));
+                    break;
+                }
+        }        
+    }
+
+    //MUSIC
+    IEnumerator MusicManager(int phase) //Phase 0 Starts automatically
+    {        
+        if (phase != 0) //There are 4 phase OST but only 3 Intermezzos starting at phase 2
+        {
+            OSTIntermezzo[phase].Play();
+            yield return new WaitForSeconds(OSTIntermezzo[phase - 1].clip.length); 
+        }
+        OST[phase].Play();
+    }
+
+    void MusicManagerTurnOffMusic()
+    {
+        OSTPhase0.Stop();
+        foreach (AudioSource ost in OST)
+        {
+            ost.Stop();
+        }
+        foreach (AudioSource ost in OSTIntermezzo)
+        {
+            ost.Stop();
+        }
     }
 }

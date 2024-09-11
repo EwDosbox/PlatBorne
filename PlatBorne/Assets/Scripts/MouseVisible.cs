@@ -21,7 +21,7 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (turnOnMenu)
         {
-            if (pauseMenu.active == false && settingsMenu.active == false)
+            if (pauseMenu.activeInHierarchy == false && settingsMenu.activeInHierarchy == false)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;

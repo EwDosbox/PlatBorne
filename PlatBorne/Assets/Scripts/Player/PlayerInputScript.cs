@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Composites;
@@ -33,8 +34,6 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldJump;
     private bool jumpIsPressed;
     public AudioSource jumpSound;
-    public AudioSource walkSound;// placeholder in Inspector; so it doesnt throw errors
-    public AudioSource dashSound;// placeholder in Inspector; so it doesnt throw errors
     private bool isPlaying;
     private float time;
     public DebugController console;
@@ -49,6 +48,7 @@ public class PlayerInputScript : MonoBehaviour
     private bool dashing;
     private float dashStarted;
     private bool isMoving = false;
+    [SerializeField] AudioSource walkSound;
     [SerializeField] private float dashTimeLength;
     [SerializeField] private float dashVelocity;
     private Vector3 previousPosition;
@@ -70,8 +70,8 @@ public class PlayerInputScript : MonoBehaviour
     }
     private void Update()
     {
-        if (!isPlayerInAir && isMoving) walkSound.enabled = true;
-        else walkSound.enabled = false;
+        if (!isPlayerInAir && isMoving) walkSound.Play();
+        else walkSound.Stop();
         if (console.ShowConsole)
         {
             CanMove = false;

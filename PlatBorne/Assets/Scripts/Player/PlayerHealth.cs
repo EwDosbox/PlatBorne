@@ -11,7 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public GameObject[] hp;
     public GameObject[] hpGodMode;
     public AudioSource hunterGodMode;
-    public AudioSource hunterDamage;
+    public AudioSource hunterDamage01;
     private bool godMode;
     private bool pussyMode;
     private bool playerInvincible;
@@ -81,7 +81,7 @@ public class PlayerHealth : MonoBehaviour
         if (!playerInvincible && !godMode)
         {
             playerHP--;
-            hunterDamage.Play();
+            HunterFallDamage();
             PlayerInvincible = true;
         }
     }
@@ -177,5 +177,10 @@ public class PlayerHealth : MonoBehaviour
                 hp[2].SetActive(false);
             }
         }
+    }
+
+    void HunterFallDamage()
+    {
+        hunterDamage01.Play(); //dont ask
     }
 }

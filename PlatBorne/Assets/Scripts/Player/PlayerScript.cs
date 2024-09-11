@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Unity.Mathematics;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
@@ -10,7 +11,8 @@ public class PlayerScript : MonoBehaviour
 {
     public Saves save;
     [SerializeField] private AudioSource hunterDamage;
-    [SerializeField] private AudioSource hunterDrop;
+    [SerializeField] private AudioSource hunterDrop01;
+    [SerializeField] private AudioSource hunterDrop02;
     [SerializeField] PlayerHealth playerHealth;
 
     public Animator animator;
@@ -102,7 +104,8 @@ public class PlayerScript : MonoBehaviour
             //fell
             if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (Mathf.Abs(positionYWas - transform.position.y) > 2f))
             {
-                hunterDrop.Play();
+                if (UnityEngine.Random.Range(0,1) < 0.5) hunterDrop01.Play();
+                else hunterDrop02.Play();
                 voiceLines.PlayVLFallen();
                 playerWasInAir = false;
                 touchedFallHitbox = false;
