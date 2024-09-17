@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     float positionYWas;
     float positionYIs;
     bool playerWasInAir = false;
+    float distanceOfFall = 0;
     //*****
     static public bool bossHitboxRight = false;
     static public bool bossHitboxLeft = false;
@@ -102,11 +103,18 @@ public class PlayerScript : MonoBehaviour
         if (!PlayerInputScript.isPlayerInAir)
         {
             //fell
-            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && (Mathf.Abs(positionYWas - transform.position.y) > 2f))
+            distanceOfFall = Mathf.Abs(positionYWas - transform.position.y);
+            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && distanceOfFall > 2f)
             {
+                Debug.Log("PlayerHasFallen");
                 if (UnityEngine.Random.Range(0,1) < 0.5) hunterDrop01.Play();
                 else hunterDrop02.Play();
-                voiceLines.PlayVLFallen();
+                if (distanceOfFall >= 10) 
+                {
+                    voiceLines.PlayVLBigFall();
+                    animator.SetTrigger("bigFall");
+                }
+                else voiceLines.PlayVLFallen();
                 playerWasInAir = false;
                 touchedFallHitbox = false;
                 save.PlayerFell();
