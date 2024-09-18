@@ -25,7 +25,6 @@ public class PlayerScript : MonoBehaviour
     //Movement Variables
 
     float positionYWas;
-    float positionYIs;
     bool playerWasInAir = false;
     float distanceOfFall = 0;
     //*****
@@ -41,6 +40,7 @@ public class PlayerScript : MonoBehaviour
     private bool isPlaying = false;
     public bool touchedFallHitbox = false;
     private bool playWalking = false;
+    bool hunterIsDown = false;
     public VoiceLinesLevel voiceLines;
     //FISH
     public bool wasFishing = false;
@@ -87,6 +87,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
+        positionYWas = transform.position.y;
         if (PlayerPrefs.HasKey("wasFishing"))
         {
             rb.transform.position = save.LoadMovementAfterFish();
@@ -97,39 +98,64 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
+        if (hunterIsDown && Input.anyKey)
+        {
+            hunterIsDown = false;
+            animator.SetBool("bigFall", false);
+        }
         //stairs will now push!
         if(Physics2D.IsTouchingLayers(hunterFeet, pushRightLayer)) rb.position = new Vector2(rb.position.x + 0.01f, rb.position.y);
-        //inputs
-        if (!PlayerInputScript.isPlayerInAir)
+
+        // Check if the player is on the ground
+        if (!PlayerInputScript.isPlayerInAir) // IsOnGround
         {
-            //fell
-            distanceOfFall = Mathf.Abs(positionYWas - transform.position.y);
-            if (playerWasInAir && touchedFallHitbox && (positionYWas > transform.position.y) && distanceOfFall > 2f)
+            // Handle transition from air to ground
+            if (playerWasInAir)
             {
-                Debug.Log("PlayerHasFallen");
-                if (UnityEngine.Random.Range(0,1) < 0.5) hunterDrop01.Play();
-                else hunterDrop02.Play();
-                if (distanceOfFall >= 10) 
+                playerWasInAir = false;
+
+                // Calculate fall distance
+                float distanceOfFall = Mathf.Abs(positionYWas - transform.position.y);
+                Debug.Log("Distance of fall: " + distanceOfFall);
+
+                // Check if the fall qualifies for special actions
+                if (touchedFallHitbox && (positionYWas > transform.position.y) && distanceOfFall > 1f)
                 {
-                    voiceLines.PlayVLBigFall();
-                    animator.SetTrigger("bigFall");
+                    Debug.Log("Player touched fall hitbox.");
+
+                    // Play drop sound randomly
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.5f)
+                        hunterDrop01.Play();
+                    else
+                        hunterDrop02.Play();
+
+                    // Check for big fall and trigger actions
+                    if (distanceOfFall >= 10f)
+                    {
+                        voiceLines.PlayVLBigFall();
+                        animator.SetBool("bigFall", true);
+                        hunterIsDown = true;
+                    }
+                    else
+                    {
+                        voiceLines.PlayVLFallen();
+                    }
+
+                    // Save player fall state
+                    save.PlayerFell();
                 }
-                else voiceLines.PlayVLFallen();
-                playerWasInAir = false;
-                touchedFallHitbox = false;
-                save.PlayerFell();
-            }
-            else
-            {
-                positionYWas = transform.position.y;
-                playerWasInAir = false;
+
+                // Reset touched fall hitbox
                 touchedFallHitbox = false;
             }
+            else positionYWas = transform.position.y;
         }
         else
         {
             playerWasInAir = true;
         }
+
+
         //damage
         if (Bossfight.playerPlayDamage && !health.GodMode)
         {
