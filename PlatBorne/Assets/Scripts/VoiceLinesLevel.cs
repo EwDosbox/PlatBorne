@@ -7,16 +7,21 @@ using UnityEngine;
 public class VoiceLinesLevel : MonoBehaviour
 {
     //VoiceLines
-    public AudioSource[] voiceLines;    
+    public string[] subtitles;
+    public bool voiceLinesBig;
+    public string[] subtitlesBig;
+    AudioSource[] voiceLines;    
     private int[] randomNumbers;
     private int index = 0;
     private int RNGnow = 0;
     private int RNGsaved = 2;
     System.Random rng = new System.Random();
     //VoiceLinesBigFall
-    public AudioSource[] voiceLinesBigFall;
+    AudioSource[] voiceLinesBigFall;
     private int[] randomNumbersBig;
     int indexBig = 0;
+
+    SubtitlesManager subtitlesManager;
     void Randomize()
     {
         int random1, random2, bucket;
@@ -45,18 +50,24 @@ public class VoiceLinesLevel : MonoBehaviour
     
     void Start()
     {
+        subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
+        voiceLines = GetComponents<AudioSource>();
         randomNumbers = new int[voiceLines.Length];
-        randomNumbersBig = new int[voiceLinesBigFall.Length];
-        for (int i = 0; i < voiceLines.Length;i++)
+        for (int i = 0; i < voiceLines.Length; i++)
         {
             randomNumbers[i] = i;
         }
-        for (int i = 0; i < voiceLinesBigFall.Length; i++)
-        {
-            randomNumbersBig[i] = i;
-        }
         Randomize();
-        RandomizeBig();
+        if (voiceLinesBig)
+        {
+            voiceLinesBigFall = GetComponentsInChildren<AudioSource>();            
+            randomNumbersBig = new int[voiceLinesBigFall.Length];
+            for (int i = 0; i < voiceLinesBigFall.Length; i++)
+            {
+                randomNumbersBig[i] = i;
+            }
+            RandomizeBig();
+        }        
     }
     public void PlayVLFallen()
     {
@@ -66,6 +77,7 @@ public class VoiceLinesLevel : MonoBehaviour
             Debug.Log("PlayFall");
             RNGsaved = rng.Next(2, 4 + 1);
             RNGnow = 0;
+            subtitlesManager.Write(subtitles[randomNumbers[index]], voiceLines[randomNumbers[index]].clip.length);
             voiceLines[randomNumbers[index]].Play();
             index++;
             if (index == voiceLines.Length - 1)
@@ -78,7 +90,8 @@ public class VoiceLinesLevel : MonoBehaviour
 
     public void PlayVLBigFall()
     {
-        Debug.Log("PlayBigFall");
+        Debug.Log(indexBig);
+        subtitlesManager.Write(subtitlesBig[randomNumbersBig[indexBig]], voiceLinesBigFall[randomNumbersBig[indexBig]].clip.length);
         voiceLinesBigFall[randomNumbersBig[indexBig]].Play();
         indexBig++;
         if (indexBig == voiceLinesBigFall.Length - 1)

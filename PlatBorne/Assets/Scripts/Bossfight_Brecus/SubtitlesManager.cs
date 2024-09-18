@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class BossFightVoiceLines : MonoBehaviour
+public class SubtitlesManager : MonoBehaviour
 {
     public GameObject smallBlackBox;
     public RectTransform smallBlackBoxRect;
