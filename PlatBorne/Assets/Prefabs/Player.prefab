@@ -629,8 +629,8 @@ MonoBehaviour:
   feet: {fileID: 3338149418787538915}
   save: {fileID: 0}
   maxJumpHeight: 10
-  minJumpHeight: 5
-  jumpModifier: 4
+  minJumpHeight: 7
+  jumpModifier: 8
   movementSpeed: 4
   jumpSound: {fileID: 6935579868319366984}
   console: {fileID: 0}
