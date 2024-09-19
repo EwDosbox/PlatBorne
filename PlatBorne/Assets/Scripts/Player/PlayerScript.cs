@@ -116,18 +116,13 @@ public class PlayerScript : MonoBehaviour
 
                 // Calculate fall distance
                 float distanceOfFall = Mathf.Abs(positionYWas - transform.position.y);
-                Debug.Log("Distance of fall: " + distanceOfFall);
 
                 // Check if the fall qualifies for special actions
                 if (touchedFallHitbox && (positionYWas > transform.position.y) && distanceOfFall > 1f)
                 {
-                    Debug.Log("Player touched fall hitbox.");
-
                     // Play drop sound randomly
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.5f)
-                        hunterDrop01.Play();
-                    else
-                        hunterDrop02.Play();
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.5f) hunterDrop01.Play();
+                    else hunterDrop02.Play();
 
                     // Check for big fall and trigger actions
                     if (distanceOfFall >= 10f)

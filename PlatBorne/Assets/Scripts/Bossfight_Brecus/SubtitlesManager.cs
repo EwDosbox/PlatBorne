@@ -20,7 +20,7 @@ public class SubtitlesManager : MonoBehaviour
 
     public void Write(string subtitles, float audioDuration)
     {
-        //if (PlayerPrefs.HasKey("Subtitles"))
+        if (PlayerPrefs.HasKey("Subtitles"))
         {
             if (currentlyWriting)
             {

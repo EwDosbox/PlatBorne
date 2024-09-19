@@ -12,14 +12,13 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 -	The Hunter has Fallen and He can’t get up
 -	You are not very good at jumping are you
 -	It’s a simple game, hunter, just jump up Bloke (dude)
--	Get up here or Im gonna go Bonkers (crazy)
 -	Don’t you want a cuppa with your falling?
 -	Its falling season, innit?
 -	Getting pissed off?
 -	Feeling tired?
 -	What is this Fall guys?
 -	You know, I love London. It’s a place of pain, suffering and everyday stabbing that makes this the best place on earth.
--	Im a goddamn onion, Hunter
+-	I’m a goddamn onion, Hunter
 -	God save the queen
 -	Even Luigi can jump better
 -	I have seen VTubers play games better
@@ -96,7 +95,7 @@ CONTINUES IN ACT II
 3. Maybe you would be better miner, because you're still on the ground.
 4. Did you know that a Mini Cooper was manufactured here? That's funny, because you are even slower than a Mini Cooper.
 5. I have a bigger chance to win a russian roulette with a machine gun than you ever coming up up here.
-6. It's not always about the jumping or falling, Hunter, sometimes it's about the Mets. Lets go Mets I love the Mets
+6. It's not always about the jumping or falling, Hunter... sometimes it's about the Mets. Lets go Mets I love the Mets
 7. The other day my teacher was teaching us Greek Mythology and he mentioned a pegasus and I immediately thought 'Pegasus? more like Mega Sus! ...Please hurry the fuck up.
 8. You have a lot of determination...and probably few broken legs, sucks to be you!
 9. IM STILL JUMPING BETTER THAN I EVER DID
