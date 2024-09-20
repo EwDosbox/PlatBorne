@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.Mathematics;
@@ -12,7 +13,7 @@ public class PlayerInputScript : MonoBehaviour
     private Animator animator;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D feet;
-    public Saves save;
+    Saves save;
 
     static public bool CanMove
     {
@@ -36,7 +37,7 @@ public class PlayerInputScript : MonoBehaviour
     public AudioSource jumpSound;
     private bool isPlaying;
     private float time;
-    public DebugController console;
+    DebugController console;
 
     //Dash
     [SerializeField] public bool abilityToDash;
@@ -55,6 +56,8 @@ public class PlayerInputScript : MonoBehaviour
 
     private void Awake()
     {
+        save = FindFirstObjectByType<Saves>();
+        console = FindFirstObjectByType<DebugController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         jumpHeight = minJumpHeight;
@@ -70,8 +73,7 @@ public class PlayerInputScript : MonoBehaviour
     }
     private void Update()
     {
-        if (!isPlayerInAir && isMoving) walkSound.Play();
-        else walkSound.Stop();
+        walkSound.enabled = (!isPlayerInAir && isMoving);
         if (console.ShowConsole)
         {
             CanMove = false;

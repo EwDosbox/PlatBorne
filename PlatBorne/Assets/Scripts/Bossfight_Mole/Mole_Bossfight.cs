@@ -11,14 +11,17 @@ public class Mole_Bossfight : MonoBehaviour
     public PlayerHealth playerHealth;
     public Mole_WeakSpot weakSpot;
     public Mole_UI bossUI;
-    public Saves save;
+    Saves save;
+    SubtitlesManager subtitlesManager;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] PlayerScript playerScript;
     //INSPECTOR//
     [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
+    [SerializeField] AudioSource PreBoss;
     [SerializeField] AudioSource SFXswitchPhase;
     [SerializeField] AudioSource SFXbossDeath;
+    [SerializeField] AudioSource SFXbossDeathPussyMode;
     [SerializeField] AudioSource OSTPart1;
     [SerializeField] AudioSource OSTPart2;
     [Header("Prefabs")]
@@ -122,6 +125,8 @@ public class Mole_Bossfight : MonoBehaviour
     Animator animator;
     private void Start()
     {
+        subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
+        save = FindFirstObjectByType<Saves>();
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
         bossUI.FadeOutEffect();

@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public static bool IsInSettings = false;
 
-    public Saves save;
+    Saves save;
 
     void Update()
     {
@@ -96,5 +96,10 @@ public class PauseMenu : MonoBehaviour
     {
         Debug.Log("Application has quit");
         Application.Quit();
+    }
+
+    private void Start()
+    {
+        save = FindFirstObjectByType<Saves>();     
     }
 }

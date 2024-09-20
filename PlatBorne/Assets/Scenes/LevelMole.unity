@@ -1488,7 +1488,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Le Mole
+  m_Text: Guis Lunae
 --- !u!222 &175411058
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4844,12 +4844,13 @@ MonoBehaviour:
   playerHealth: {fileID: 1837068395}
   weakSpot: {fileID: 0}
   bossUI: {fileID: 1461745944}
-  save: {fileID: 1837068380}
   spriteRenderer: {fileID: 523258933}
   playerScript: {fileID: 1837068404}
   SFXbossHit: {fileID: 0}
-  SFXswitchPhase: {fileID: 0}
-  SFXbossDeath: {fileID: 0}
+  PreBoss: {fileID: 523258938}
+  SFXswitchPhase: {fileID: 523258941}
+  SFXbossDeath: {fileID: 523258940}
+  SFXbossDeathPussyMode: {fileID: 523258939}
   OSTPart1: {fileID: 0}
   OSTPart2: {fileID: 0}
   prefabDrillGround: {fileID: 600573318186101669, guid: 4e908b1c802f622499296b03f48e5eee, type: 3}
@@ -5118,9 +5119,9 @@ AudioSource:
   m_GameObject: {fileID: 523258930}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  m_audioClip: {fileID: 8300000, guid: d2f2fb8cbd8c90d46879f614947b808d, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5214,9 +5215,9 @@ AudioSource:
   m_GameObject: {fileID: 523258930}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 0fbe10b7b21637446b5fe5b8773cb3a9, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5310,9 +5311,9 @@ AudioSource:
   m_GameObject: {fileID: 523258930}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 72fbb3179e6bd454b9cb9ce77dfb4e63, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5406,9 +5407,9 @@ AudioSource:
   m_GameObject: {fileID: 523258930}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
+  m_audioClip: {fileID: 8300000, guid: aa67872205c6b064eac791238633f875, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
