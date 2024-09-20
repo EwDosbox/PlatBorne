@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,18 +7,27 @@ using UnityEngine.UI;
 
 public class PlayerDeath : MonoBehaviour
 {
-    [SerializeField] private AudioSource[] VLBrecusDeath;
-    [SerializeField] private AudioSource[] VLMoleDeath;
-    [SerializeField] private string[] textBrecus;
-    [SerializeField] private string[] textMole;
+    private AudioSource[] VLBrecusDeath;
+    private AudioSource[] VLMoleDeath;
+    [SerializeField]  string[] textBrecus;
+    [SerializeField]  string[] textMole;
     public Text dialogueText;
     public Text pussyModeText;
     bool pussyModeActive = false;
     int bossDeathCount;
     float waitingTimer = 0;
+    
 
     private void Start()
     {
+        VLBrecusDeath = GetComponentsInChildren<AudioSource>(true)
+                                .Where(v => v.gameObject.name  == "Brecus")  // Exclude parent
+                                .OrderBy(v => v.gameObject.name)  // Sort by name
+                                .ToArray();
+        VLMoleDeath = GetComponentsInChildren<AudioSource>(true)
+                                .Where(v => v.gameObject.name == "Mole")  // Exclude parent
+                                .OrderBy(v => v.gameObject.name)  // Sort by name
+                                .ToArray();
         if (PlayerPrefs.HasKey("PussyMode")) 
         {
             int numberPussy = (PlayerPrefs.GetInt("PussyMode"));

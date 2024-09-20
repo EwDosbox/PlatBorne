@@ -24,11 +24,13 @@ public class PlayerFishingScript : MonoBehaviour
 
     private FishSpawnScript fish;
     private FishInventory inventory;
+    SubtitlesManager subtitlesManager;
 
     //************* PUBLIC
     public GameObject fishPrefab;
     public GameObject fishRainbowPrefab;
     public Saves save;
+    public AudioSource[] fishVoiceLine;
     public static Collider2D FishCatchArea
     {
         set
@@ -39,6 +41,7 @@ public class PlayerFishingScript : MonoBehaviour
 
     private void Awake()
     {
+        subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
         hookRB = GetComponent<Rigidbody2D>();
         Collider2D[] colliders = FindObjectsOfType<Collider2D>();
         hookCatchArea = colliders.FirstOrDefault(collider => collider.name == "HookCatchArea");
@@ -50,6 +53,22 @@ public class PlayerFishingScript : MonoBehaviour
         fish = new FishSpawnScript(fishPrefab);
         inventory = new FishInventory(save.FishInventory());
         fish.SpawnFish(inventory.NextFishColor);
+        int temp = Random.Range(0, 3);
+        switch (temp)
+        {
+            case 1: 
+                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("Yeah sure, go fishing, we have all the time in the world...", fishVoiceLine[0].clip.length);
+                fishVoiceLine[0].Play();
+                break;
+            case 2:
+                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("What makes you think a little fishing could help you?", fishVoiceLine[1].clip.length);
+                fishVoiceLine[1].Play();
+                break;
+            case 3:
+                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("You're so desperate that you go fishing? That's kinda fishy", fishVoiceLine[2].clip.length);
+                fishVoiceLine[2].Play();
+                break;
+        }
     }
     private void FixedUpdate()
     {

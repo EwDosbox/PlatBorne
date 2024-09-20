@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -56,7 +57,7 @@ public class Bossfight : MonoBehaviour
     int attackNumberSword = 0;
     //****************
     public BoxCollider2D bounds;
-
+    SubtitlesManager subtitlesManager;
     private int resetPromenych()
     {
         attackNumberDagger = 0;
@@ -99,6 +100,8 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
+        if (subtitlesManager == null) Debug.LogError("Could Not Find subtitles Manager in Brecus Bossfight");
         timer = save.TimerLoad(2);
         levelMove.SetActive(false);
         bounds.isTrigger = true;
@@ -165,6 +168,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(40);
                             phase = 2;
                             BossDamage01.Play();
+                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("Tis But A Scratch!", BossDamage01.clip.length);
                             StartCoroutine(MusicManager(1));
                             break;
                         }
@@ -173,6 +177,7 @@ public class Bossfight : MonoBehaviour
                             bossHealthBar.SetHP(20);
                             phase = 3;
                             BossDamage02.Play();
+                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("You‘re starting to annoy me, Hunter!", BossDamage02.clip.length);
                             StartCoroutine(MusicManager(2));
                             break;
                         }
@@ -180,6 +185,7 @@ public class Bossfight : MonoBehaviour
                         {
                             bossHealthBar.SetHP(1);
                             BossDamage03.Play();
+                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("I‘m gonna sink you like Americans have sank our bloody delicious tea!", BossDamage03.clip.length);
                             bossHealthBar.Slider();
                             bossHealthBar.SetHP(60);
                             bossHealthBar.LastPhase();
@@ -330,6 +336,7 @@ public class Bossfight : MonoBehaviour
                 {
                     MusicManagerTurnOffMusic();
                     PreBossDialog.Play();
+                    if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.", PreBossDialog.clip.length);
                     yield return new WaitForSeconds(PreBossDialog.clip.length);
                     StartCoroutine(MusicManager(0));
                     break;
