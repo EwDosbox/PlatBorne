@@ -27,7 +27,7 @@ public class PlayerHealth : MonoBehaviour
         {             
             if (value == true)
             {
-                //hunterGodMode.Play();
+                hunterGodMode.Play();
             }
             godMode = value;
         }
@@ -58,22 +58,26 @@ public class PlayerHealth : MonoBehaviour
     }
     private void Start()
     {
-        if (PlayerPrefs.HasKey("GodMode"))
+        if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 7)
         {
-            int numberGod = (PlayerPrefs.GetInt("GodMode"));
-            if (numberGod == 1)
+
+            if (PlayerPrefs.HasKey("GodMode"))
             {
-                godMode = true;
+                int numberGod = (PlayerPrefs.GetInt("GodMode"));
+                if (numberGod == 1)
+                {
+                    godMode = true;
+                }
+                else godMode = false;
             }
-            else godMode = false;
-        }
-        foreach(GameObject temp in hp)
-        {
-            temp.SetActive(false);
-        }
-        foreach (GameObject temp in hpGodMode)
-        {
-            temp.SetActive(false);
+            foreach (GameObject temp in hp)
+            {
+                temp.SetActive(false);
+            }
+            foreach (GameObject temp in hpGodMode)
+            {
+                temp.SetActive(false);
+            }
         }
     }
     public void PlayerDamage()
@@ -81,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
         if (!playerInvincible && !godMode)
         {
             playerHP--;
-            HunterFallDamage();
+            HunterDamageVL();
             PlayerInvincible = true;
         }
     }
@@ -179,7 +183,7 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void HunterFallDamage()
+    void HunterDamageVL()
     {
         hunterDamage01.Play(); //dont ask
     }

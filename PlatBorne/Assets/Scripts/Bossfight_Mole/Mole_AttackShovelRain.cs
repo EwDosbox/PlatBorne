@@ -1,41 +1,59 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mole_AttackShovelRain : MonoBehaviour
 {
     bool fadeOut = false;
-    float alpha = 1f;
-    float timer = 0;
+    public float timeToStartFadeOut;
     bool isTouchingGround = false;
-    [SerializeField]  float timeToSelfDestruct;
-    [SerializeField] Collider ground;
-    [SerializeField] float fadeSpeed = 0.3f;
+    [SerializeField] float timeToSelfDestruct;
+    [SerializeField] float fadeSpeed;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
+    [SerializeField] BoxCollider2D boxCollider;
 
     void Awake()
     {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("ground"))
+        {
+            if (!fadeOut) // Prevent starting the coroutine multiple times
+            {
+                fadeOut = true;
+                StartCoroutine(FadeOutCoroutine());
+                rb.velocity = Vector2.zero;
+                rb.gravityScale = 0f;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground")) isTouchingGround = true;
         if (collision.CompareTag("Player"))
         {
+            PlayerHealth hp = FindAnyObjectByType<PlayerHealth>();
+            hp.PlayerDamage();
             Destroy(gameObject);
         }
     }
-    void Update()
+
+    private IEnumerator FadeOutCoroutine()
     {
-        if (isTouchingGround) timer += Time.deltaTime;
-        if (fadeOut)
-        {            
+        yield return new WaitForSeconds(timeToStartFadeOut);
+        float alpha = 1f;
+        while (alpha > 0)
+        {
             alpha -= fadeSpeed * Time.deltaTime;
-            spriteRenderer.color = new Color(1f, 1f, 1f, alpha);
-            if (alpha <= 0) Destroy(gameObject);
-        }    
+            spriteRenderer.color = new Color(1f, 1f, 1f, Mathf.Clamp01(alpha));
+            yield return null;
+        }
+
+        Destroy(gameObject);
     }
 }

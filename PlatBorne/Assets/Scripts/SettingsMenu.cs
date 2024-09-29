@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -14,7 +15,6 @@ public class SettingsMenu : MonoBehaviour
     public TMPro.TMP_Dropdown resolutionDropdown;
 
     public AudioSource src;
-    public AudioClip srcOne;
 
     Resolution[] resolutions;
 
@@ -42,25 +42,28 @@ public class SettingsMenu : MonoBehaviour
 
         resolutions = Screen.resolutions;
 
-        resolutionDropdown.ClearOptions();
-
-        List<string> options = new List<string>();
-
-        int currentResolutionIndex = 0;
-        for (int i = 0; i < resolutions.Length; i++) 
+        if (resolutionDropdown != null)
         {
-            string option = resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRate + "hz";
-            options.Add(option);
+            resolutionDropdown.ClearOptions();
 
-            if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+            List<string> options = new List<string>();
+
+            int currentResolutionIndex = 0;
+            for (int i = 0; i < resolutions.Length; i++)
             {
-                currentResolutionIndex = i;
-            }
-        }
+                string option = resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRateRatio + "hz";
+                options.Add(option);
 
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = currentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
+                if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
+                {
+                    currentResolutionIndex = i;
+                }
+            }
+
+            resolutionDropdown.AddOptions(options);
+            resolutionDropdown.value = currentResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
+        }
     }
 
     public void SetResolution(int resolutionIndex)
@@ -76,11 +79,16 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
+    }
+
     public void LoadMusicVolume()
     {
-        musicVolSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-
-        SetMusicVolume();
+        float volume = PlayerPrefs.GetFloat("MusicVolume");
+        SetMusicVolume(volume);
     }
 
     public void SetSFXVolume()
@@ -90,11 +98,16 @@ public class SettingsMenu : MonoBehaviour
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
 
+    public void SetSFXVolume(float volume)
+    {
+        audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        PlayerPrefs.SetFloat("SFXvolume", volume);
+    }
+
     public void LoadSFXvolume()
     {
-        SFXVolSlider.value = PlayerPrefs.GetFloat("SFXvolume");
-
-        SetSFXVolume();
+        float volume = PlayerPrefs.GetFloat("SFXvolume");
+        SetSFXVolume(volume);
     }
 
     public void SetFullscreen (bool isFullscreen)
@@ -104,7 +117,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void MMenu()
     {
-        src.PlayOneShot(srcOne);
+        src.Play();
         StartCoroutine(_MMenu());
     }
 

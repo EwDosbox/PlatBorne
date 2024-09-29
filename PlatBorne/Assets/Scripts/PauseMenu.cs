@@ -6,9 +6,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject settingsMenu;
 
-    public AudioSource src;
-    public AudioClip srcOne;
-
+    public AudioSource buttonClick;
     public static bool GameIsPaused = false;
     public static bool IsInSettings = false;
 
@@ -38,7 +36,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        src.PlayOneShot(srcOne);
+        buttonClick.Play();
         _Pause();
     }
 
@@ -50,7 +48,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        src.PlayOneShot(srcOne);
+        buttonClick.Play();
         _Resume();
     }
 
@@ -62,7 +60,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Settings()
     {
-        src.PlayOneShot(srcOne);
+        buttonClick.Play();
         _Settings();
     }
 
@@ -75,7 +73,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ReturnFromSettings()
     {
-        src.PlayOneShot(srcOne);
+        buttonClick.Play();
         _ReturnFromSettings();
     }
 
@@ -88,7 +86,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Quit()
     {
-        src.PlayOneShot(srcOne);
+        buttonClick.Play();
         _Quit();
     }
 

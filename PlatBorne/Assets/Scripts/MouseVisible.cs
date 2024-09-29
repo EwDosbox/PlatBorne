@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class MouseVisibilty : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingsMenu;
