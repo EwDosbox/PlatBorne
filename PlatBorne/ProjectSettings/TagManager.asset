@@ -28,8 +28,8 @@ TagManager:
   - UI
   - ground
   - pushRight
-  - 
-  - 
+  - Mole
+  - NotCollideWithMole
   - post
   - 
   - 

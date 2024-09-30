@@ -21,6 +21,8 @@ public class Mole_AttackMoleRain : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            PlayerHealth ph = FindAnyObjectByType<PlayerHealth>();
+            ph.PlayerDamage();
             Destroy(gameObject);
         }
     }

@@ -23,6 +23,8 @@ public class Mole_AttackGroundFuckingSomething : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            PlayerHealth ph = FindAnyObjectByType<PlayerHealth>();
+            ph.PlayerDamage();
             Destroy(gameObject);
         }
     }

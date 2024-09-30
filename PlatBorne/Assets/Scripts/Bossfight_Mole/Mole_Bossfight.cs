@@ -30,7 +30,8 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabDrillSide;
     [SerializeField] GameObject prefabMoleRain;
     [SerializeField] GameObject prefabSpike;
-    [SerializeField] GameObject prefabPlatforms;
+    [SerializeField] GameObject platforms;
+    [SerializeField] CanvasGroup platformsCanvasGroup;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
     [SerializeField] GameObject prefabRockDirt;
@@ -131,7 +132,7 @@ public class Mole_Bossfight : MonoBehaviour
         boxCollider2D = GetComponent<BoxCollider2D>();
         bossUI.FadeOutEffect();
         PlayerPrefs.SetString("Level", "mole");
-        prefabPlatforms.SetActive(false);
+        platforms.SetActive(false);
         bossHealth.BossHealth = 100;   
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
@@ -176,17 +177,8 @@ public class Mole_Bossfight : MonoBehaviour
         {
             StartCoroutine(BossDeath());
         }
-        else if (bossHealth.BossHealth < 50 && phase == 1) //Change Phase
+        else if (bossHealth.BossHealth < 50 && phase == 1) ChangePhase();
         {
-            phase = 2;
-            attackSpikesActivate = true;
-            //SFXswitchPhase.Play();
-            //OSTPart1.Stop();
-            //OSTPart2.Play();
-            prefabPlatforms.SetActive(true);
-            bossCharge = true; //další útok je charge
-            if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
-            //sprites
         }
         if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
     }
@@ -208,12 +200,26 @@ public class Mole_Bossfight : MonoBehaviour
     }
     public IEnumerator StartBossFight()
     {      
-        //OSTPart1.Play();
         bossUI.BossHPSliderStart();
         playerHealth.StartHPUI();
-        yield return new WaitForSeconds(timeToFirstAttack);
+        PreBoss.Play();
+        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("lul", PreBoss.clip.length);
+        yield return new WaitForSeconds(PreBoss.clip.length);
+        OSTPart1.Play();
         phase = 1;
         bossStarted = true;
+    }
+
+    public void ChangePhase()
+    {
+        SFXswitchPhase.Play();
+        OSTPart1.Stop();
+        OSTPart2.Play();
+        phase = 2;
+        PlatformFadeIn();
+        attackSpikesActivate = true;
+        bossCharge = true; //další útok je charge
+        if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
     }
 
     public IEnumerator BossDeath()
@@ -221,20 +227,27 @@ public class Mole_Bossfight : MonoBehaviour
         if (transform.position.x <= 0) animator.SetBool("deathLeft", true);
         else animator.SetBool("deathRight", true);
         SFXbossDeath.Play();
+        PlatformFadeOut();
         rb.angularVelocity = 0;
-        bossUI.FadeInEffect();
-        yield return new WaitForSeconds(4);
-        bossUI.BossHPSliderDestroy();
+        bossUI.FadeOutEffect();
+        float waitTime = 0;
         if (PlayerPrefs.HasKey("PussyMode"))
         {
+            SFXbossDeath.Play();
+            waitTime = SFXbossDeath.clip.length;
+            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("elmao", waitTime);
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
-            PlayerPrefs.Save();
         }
         else
         {
+            SFXbossDeathPussyMode.Play();
+            waitTime = SFXbossDeathPussyMode.clip.length;
+            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("elmao", waitTime);
             PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
-            PlayerPrefs.Save();
         }
+        PlayerPrefs.Save();
+        yield return new WaitForSeconds(waitTime);
+        bossUI.BossHPSliderDestroy();        
         EndingDecider();
     }
 
@@ -248,92 +261,92 @@ public class Mole_Bossfight : MonoBehaviour
     string lastAttack = null;
     void AttackChooser()
     {
-        attackIsGoing = true;
-        if (phase == 1)
-        {
-            //if same
-            if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
+            attackIsGoing = true;
+            if (phase == 1)
             {
-                switch (UnityEngine.Random.Range(1, 4))
+                //if same
+                if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
                 {
-                    case 1:
-                        lastAttack = "MoleRain";
-                        attackNumberMoleRain++;
-                        StartCoroutine(Attack_MoleRain());
-                        break;
-                    case 2:
-                        lastAttack = "DrillRain";
-                        attackNumberDrillRain++;
-                        Attack_DrillRain();
-                        break;
-                    case 3:
-                        lastAttack = "DrillGround";
-                        attackNumberDrillGround++;
-                        StartCoroutine(Attack_GroundDrills());
-                        break;
+                    switch (UnityEngine.Random.Range(1, 4))
+                    {
+                        case 1:
+                            lastAttack = "MoleRain";
+                            attackNumberMoleRain++;
+                            StartCoroutine(Attack_MoleRain());
+                            break;
+                        case 2:
+                            lastAttack = "DrillRain";
+                            attackNumberDrillRain++;
+                            Attack_DrillRain();
+                            break;
+                        case 3:
+                            lastAttack = "DrillGround";
+                            attackNumberDrillGround++;
+                            StartCoroutine(Attack_GroundDrills());
+                            break;
+                    }
+                }
+                else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain")
+                {
+                    lastAttack = "MoleRain";
+                    attackNumberMoleRain++;
+                    StartCoroutine(Attack_MoleRain());
+                }
+                else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
+                {
+                    lastAttack = "DrillRain";
+                    attackNumberDrillRain++;
+                    Attack_DrillRain();
+                }
+                else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
+                {
+                    lastAttack = "DrillGround";
+                    attackNumberDrillGround++;
+                    StartCoroutine(Attack_GroundDrills());
+                }
+                else //DrillSide
+                {
+                    lastAttack = "DrillSide";
+                    attackNumberDrillSide++;
+                    Attack_SideDrills();
                 }
             }
-            else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain")
+            else if (phase == 2)
             {
-                lastAttack = "MoleRain";
-                attackNumberMoleRain++;
-                StartCoroutine(Attack_MoleRain());
-            }
-            else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
-            {
-                lastAttack = "DrillRain";
-                attackNumberDrillRain++;
-                Attack_DrillRain();
-            }
-            else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
-            {
-                lastAttack = "DrillGround";
-                attackNumberDrillGround++;
-                StartCoroutine(Attack_GroundDrills());
-            }
-            else //DrillSide
-            {
-                lastAttack = "DrillSide";
-                attackNumberDrillSide++;
-                Attack_SideDrills();
-            }
-        }
-        else if (phase == 2)
-        {
-            if (timerAttackSpikes > 16)
-            {
-                timerAttackSpikes = 0;
-                Attack_Spikes();
-                AttackChooser();
-            }
-            if (bossCharge)
-            {
-                StartCoroutine(Attack_MoleCharge());
-            }
-            if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
-            {
-                lastAttack = "ShovelRain";
-                attackNumberShovelRain++;
-                StartCoroutine(Attack_ShovelRain());
-            }
-            else if (lastAttack != "Rock")
-            {
-                lastAttack = "Rock";
-                attackNumberRock++;
-                StartCoroutine(Attack_Rock());
-            }
-            else if (lastAttack != "ShovelRain" || lastAttack != "MoleRain")
-            {
-                lastAttack = "MoleRain";
-                attackNumberMoleRain++;
-                StartCoroutine(Attack_MoleRain());
-            }
-            else //drillSide
-            {
-                lastAttack = "DrillSide";
-                attackNumberDrillSide++;
-                Attack_SideDrills();
-            }            
+                if (timerAttackSpikes > 16)
+                {
+                    timerAttackSpikes = 0;
+                    Attack_Spikes();
+                    AttackChooser();
+                }
+                if (bossCharge)
+                {
+                    StartCoroutine(Attack_MoleCharge());
+                }
+                if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
+                {
+                    lastAttack = "ShovelRain";
+                    attackNumberShovelRain++;
+                    StartCoroutine(Attack_ShovelRain());
+                }
+                else if (lastAttack != "Rock")
+                {
+                    lastAttack = "Rock";
+                    attackNumberRock++;
+                    StartCoroutine(Attack_Rock());
+                }
+                else if (lastAttack != "ShovelRain" || lastAttack != "MoleRain")
+                {
+                    lastAttack = "MoleRain";
+                    attackNumberMoleRain++;
+                    StartCoroutine(Attack_MoleRain());
+                }
+                else //drillSide
+                {
+                    lastAttack = "DrillSide";
+                    attackNumberDrillSide++;
+                    Attack_SideDrills();
+                }
         }
     }
 
@@ -422,22 +435,24 @@ public class Mole_Bossfight : MonoBehaviour
     IEnumerator Attack_ShovelRain()
     {
         attackNumberShovelRain++;
-        for (int i = 0; i < 16; i++)
+        float attackMoleRainShift = 1.7f;
+        float x = -17f;
+        float y = 12.78f;
+        for (int j = 0; j < 22; j += 2)
         {
-            int attackMoleRainShift = 2;
-            float x = -16.68f;
-            for (int j = 0; j < 16; j += 2)
-            {
-                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
-                Instantiate(prefabShovelRain, position, Quaternion.identity);
-            }
-            yield return new WaitForSeconds(shovelRain_waitForNextWave);
-            for (int j = 1; j < 16; j += 2)
-            {
-                Vector2 position = new Vector2(x, -16.68f + (j * attackMoleRainShift));
-                Instantiate(prefabShovelRain, position, Quaternion.identity);
-            }
+            Vector2 position = new Vector2(x + (j * attackMoleRainShift), y);
+            Instantiate(prefabShovelRain, position, Quaternion.identity);
+            yield return new WaitForSeconds(0.25f);
         }
+        yield return new WaitForSeconds(4);
+        x = 18.7f;
+        for (int j = 1; j < 23; j += 2)
+        {
+            Vector2 position = new Vector2(x - (j * attackMoleRainShift), y);
+            Instantiate(prefabShovelRain, position, Quaternion.identity);
+            yield return new WaitForSeconds(0.25f);
+        }
+        yield return new WaitForSeconds(2);
         attackIsGoing = false;
     }
 
@@ -520,7 +535,6 @@ public class Mole_Bossfight : MonoBehaviour
             PlayerPrefs.Save();
             Instantiate(prefabROCK, position, Quaternion.identity);
         }
-
         attackIsGoing = false;
     }
 
@@ -564,5 +578,30 @@ public class Mole_Bossfight : MonoBehaviour
         bossCharge = false;
         animator.SetBool("chargeRight", false);
         animator.SetBool("chargeLeft" , false);
+    }
+
+    IEnumerator PlatformFadeIn()
+    {
+        platformsCanvasGroup.alpha = 0f;
+        platforms.SetActive(true);
+        while (platformsCanvasGroup.alpha < 1f)
+        {
+            platformsCanvasGroup.alpha += 0.01f;
+            yield return new WaitForSeconds(0.01f / 1);
+        }
+        platformsCanvasGroup.alpha = 1f;
+    }
+
+    IEnumerator PlatformFadeOut()
+    {
+        platformsCanvasGroup.alpha = 1f;
+        platforms.SetActive(true);
+        while (platformsCanvasGroup.alpha < 1f)
+        {
+            platformsCanvasGroup.alpha += 0.01f;
+            yield return new WaitForSeconds(0.01f / 1);
+        }
+        platforms.SetActive(false);
+        platformsCanvasGroup.alpha = 0f;
     }
 }

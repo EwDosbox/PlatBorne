@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 348793545833578689}
   - component: {fileID: 8526653315720568668}
   - component: {fileID: 850037188270142433}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Shovel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ MonoBehaviour:
   timeToStartFadeOut: 2
   timeToSelfDestruct: 10
   fadeSpeed: 2
-  boxCollider: {fileID: 0}
+  boxCollider: {fileID: 850037188270142433}
 --- !u!50 &348793545833578689
 Rigidbody2D:
   serializedVersion: 4
@@ -119,14 +119,14 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.25
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1

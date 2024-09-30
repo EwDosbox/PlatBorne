@@ -58,7 +58,7 @@ public class PlayerHealth : MonoBehaviour
     }
     private void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 7)
+        if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 7) //bossfights
         {
 
             if (PlayerPrefs.HasKey("GodMode"))
