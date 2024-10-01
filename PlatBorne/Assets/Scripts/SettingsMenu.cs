@@ -12,6 +12,10 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private Slider musicVolSlider;
     [SerializeField] private Slider SFXVolSlider;
 
+    [SerializeField] Toggle subtitlesToggle;
+    [SerializeField] Toggle vsyncToggle;
+    [SerializeField] Toggle fullscreenToggle;
+
     public TMPro.TMP_Dropdown resolutionDropdown;
 
     public AudioSource src;
@@ -39,6 +43,24 @@ public class SettingsMenu : MonoBehaviour
         {
             SetSFXVolume();
         }
+        //Toggles
+        if (PlayerPrefs.HasKey("Subtitles"))
+        {
+            subtitlesToggle.isOn = true;
+        }
+        else subtitlesToggle.isOn = false;
+
+        if (PlayerPrefs.HasKey("Vsync"))
+        {
+            vsyncToggle.isOn = true;
+        }
+        else vsyncToggle.isOn = false;
+
+        if (PlayerPrefs.HasKey("FullScreen"))
+        {
+            fullscreenToggle.isOn = true;
+        }
+        else fullscreenToggle.isOn = false;
 
         resolutions = Screen.resolutions;
 
@@ -66,8 +88,15 @@ public class SettingsMenu : MonoBehaviour
         }
     }
 
+    public void GoBack()
+    {
+        PauseMenu menu = FindAnyObjectByType<PauseMenu>();
+        menu.ReturnFromSettings();
+    }
+
     public void SetResolution(int resolutionIndex)
     {
+        src.Play();
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
@@ -110,10 +139,23 @@ public class SettingsMenu : MonoBehaviour
         SetSFXVolume(volume);
     }
 
-    public void SetFullscreen (bool isFullscreen)
+    public void SetFullscreen()
     {
-        Screen.fullScreen = isFullscreen;
+        src.Play();
+        Screen.fullScreen = fullscreenToggle.isOn;
+
+        if (fullscreenToggle.isOn)
+        {
+            PlayerPrefs.SetInt("FullScreen", 1);
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey("FullScreen");
+        }
+
+        PlayerPrefs.Save();
     }
+
 
     public void MMenu()
     {
@@ -128,4 +170,35 @@ public class SettingsMenu : MonoBehaviour
         yield return new WaitForSeconds(0.99f);
         SceneManager.LoadScene("MainMenu");
     }
+
+    public void SetVsync()
+    {
+        src.Play();
+        if (vsyncToggle.isOn)
+        {
+            QualitySettings.vSyncCount = 1;
+            PlayerPrefs.SetInt("Vsync", 1);
+        }
+        else
+        {
+            QualitySettings.vSyncCount = 0;
+            PlayerPrefs.DeleteKey("Vsync");
+        }
+        PlayerPrefs.Save();
+    }
+
+    public void SetSubtitles()
+    {
+        src.Play();
+        if (subtitlesToggle.isOn)
+        {
+            PlayerPrefs.SetInt("Subtitles", 1);
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey("Subtitles");
+        }
+        PlayerPrefs.Save();
+    }
+
 }

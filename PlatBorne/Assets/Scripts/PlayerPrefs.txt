@@ -30,4 +30,8 @@ Level
 GodMode
 PussyMode
 FishInventory
+--------------
+//Settings//
 Subtitles
+FullScreen
+Vsync

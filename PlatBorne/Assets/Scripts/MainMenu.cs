@@ -59,6 +59,12 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator SettingsLoad()
     {
+        if (PlayerPrefs.HasKey("Vsync")) QualitySettings.vSyncCount = 1;
+        else QualitySettings.vSyncCount = 0;
+
+        if (PlayerPrefs.HasKey("FullScreen")) Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        else Screen.fullScreenMode = FullScreenMode.Windowed;
+
         if (PlayerPrefs.HasKey("Level"))
         {
             continueButton.interactable = true;
