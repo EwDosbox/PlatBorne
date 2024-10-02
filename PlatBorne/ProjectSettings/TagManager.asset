@@ -31,8 +31,8 @@ TagManager:
   - Mole
   - NotCollideWithMole
   - post
-  - 
-  - 
+  - boundaries
+  - player
   - 
   - 
   - 

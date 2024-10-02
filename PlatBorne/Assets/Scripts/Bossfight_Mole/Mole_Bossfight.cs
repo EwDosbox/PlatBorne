@@ -47,6 +47,9 @@ public class Mole_Bossfight : MonoBehaviour
     public float moleCharge_TimeBeforeIdle;
     public float moleCharge_Velocity;
     public float rock_ChargeTime;
+    public GameObject doorsEnd;
+    public GameObject UI_Player;
+    public GameObject UI_Boss;
 
     private bool colliderRight = false;
     private bool colliderLeft = false;
@@ -121,23 +124,22 @@ public class Mole_Bossfight : MonoBehaviour
     bool nextAttack = false;
     bool isPlayerCollidingWithBossDuringCharge = false;
     Rigidbody2D rb;
-    BoxCollider2D boxCollider2D;
     //ANIMATOR
     Animator animator;
     private void Start()
     {
+        UI_Boss.SetActive(false);
+        UI_Player.SetActive(false);
+        doorsEnd.SetActive(false);
         subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
         save = FindFirstObjectByType<Saves>();
-        animator = GetComponent<Animator>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
-        bossUI.FadeOutEffect();
+        animator = GetComponent<Animator>();   
         PlayerPrefs.SetString("Level", "mole");
         platforms.SetActive(false);
-        bossHealth.BossHealth = 100;   
+        bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
         rb = GetComponent<Rigidbody2D>();
-        StartCoroutine(StartBossFight());
     }
     private void FixedUpdate()
     {        
@@ -199,7 +201,9 @@ public class Mole_Bossfight : MonoBehaviour
         if (phase == 2) playerHealth.PlayerDamage();
     }
     public IEnumerator StartBossFight()
-    {      
+    {
+        UI_Boss.SetActive(true);
+        UI_Player.SetActive(true);
         bossUI.BossHPSliderStart();
         playerHealth.StartHPUI();
         PreBoss.Play();
@@ -247,8 +251,8 @@ public class Mole_Bossfight : MonoBehaviour
         }
         PlayerPrefs.Save();
         yield return new WaitForSeconds(waitTime);
-        bossUI.BossHPSliderDestroy();        
-        EndingDecider();
+        bossUI.BossHPSliderDestroy();
+        doorsEnd.SetActive(true);
     }
 
     //Attack variables
@@ -552,24 +556,6 @@ public class Mole_Bossfight : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             Instantiate(prefabSpike, position[i], Quaternion.identity);
-        }
-    }
-
-    private void EndingDecider()
-    {
-        if (PlayerPrefs.HasKey("BeatenWithAPussyMode_Brecus") || PlayerPrefs.HasKey("BeatenWithAPussyMode_Mole"))
-        {
-            SceneManager.LoadScene("Cutscene_BadEnding");
-        }
-        else SceneManager.LoadScene("Cutscene_GoodEnding");
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            playerHealth.PlayerDamage();
         }
     }
 

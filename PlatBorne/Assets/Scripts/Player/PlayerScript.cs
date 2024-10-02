@@ -64,7 +64,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Damage")) playerHealth.PlayerDamage();
+        if (collision.CompareTag("Damage") && SceneManager.GetActiveScene().name != "MoleBossfight") playerHealth.PlayerDamage();
         if (collision.CompareTag("Boss Hitbox Right")) bossHitboxRight = true;
         if (collision.CompareTag("Boss Hitbox Left")) bossHitboxLeft = true;
         if (collision.CompareTag("Boss Hitbox Down")) bossHitboxDown = true;
