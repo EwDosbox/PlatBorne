@@ -18,6 +18,7 @@ public class Mole_Bossfight : MonoBehaviour
     //INSPECTOR//
     [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
+    [SerializeField] AudioSource SFXbossHit02;
     [SerializeField] AudioSource PreBoss;
     [SerializeField] AudioSource SFXswitchPhase;
     [SerializeField] AudioSource SFXbossDeath;
@@ -70,9 +71,6 @@ public class Mole_Bossfight : MonoBehaviour
     Animator animator;
     private void Start()
     {
-        //DEBUG
-        StartCoroutine(Attack_MoleCharge());
-        /*
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
         doorsEnd.SetActive(false);
@@ -84,7 +82,6 @@ public class Mole_Bossfight : MonoBehaviour
         bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
-        */
         rb = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
@@ -143,7 +140,8 @@ public class Mole_Bossfight : MonoBehaviour
             if (!bossHealth.BossInvincible)
             {
                 bossHealth.BossHit();
-                //SFXbossHit.Play();
+                if (Random.value < 0.5f) SFXbossHit.Play();
+                else SFXbossHit02.Play();
             }
             else
             {

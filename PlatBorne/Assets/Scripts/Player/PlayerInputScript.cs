@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Composites;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputScript : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class PlayerInputScript : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D feet;
     Saves save;
+    bool bossMovement = false;
 
     static public bool CanMove
     {
@@ -38,12 +40,14 @@ public class PlayerInputScript : MonoBehaviour
     private bool isPlaying;
     private float time;
     DebugController console;
+    float dashTimeWait = 1;
+    float dashTime = 0;
 
     //Dash
     [SerializeField] public bool abilityToDash;
+    [SerializeField] AudioSource dashSFX;
     private bool canDash;
-    private float timeOfLastDash;
-    [SerializeField] public float dashCooldown;
+    bool groundDashReset = true; //Can Dash once before touching the ground
     private Vector2 velocityBeforeDash;
     private bool shouldDash;
     private bool dashing;
@@ -60,8 +64,12 @@ public class PlayerInputScript : MonoBehaviour
         console = FindFirstObjectByType<DebugController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        if (SceneManager.GetActiveScene().name == "LevelBoss" || SceneManager.GetActiveScene().name == "LevelMole") //BossMovement
+        {
+            maxJumpHeight *= 1.2f;
+            jumpModifier *= 1.2f;
+        }
         jumpHeight = minJumpHeight;
-        timeOfLastDash = 0;
         CanMove = true;
         previousPosition = transform.position;
     }
@@ -85,6 +93,7 @@ public class PlayerInputScript : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        dashTime += Time.deltaTime;
         animator.SetBool("isJumpPreparing", jumpIsPressed);
         animator.SetBool("isPlayerInAir", isPlayerInAir);
         animator.SetBool("isHorizontalSpeedZero", rb.velocity.x != 0);
@@ -206,14 +215,20 @@ public class PlayerInputScript : MonoBehaviour
         if (!console.ShowConsole)
         {
             if (context.performed)
-            {
-                if (abilityToDash && ((Time.time - timeOfLastDash) >= dashCooldown))
+            {                
+                if (abilityToDash && groundDashReset && dashTime > dashTimeWait)
                 {
-                    timeOfLastDash = Time.time;
-                    //dashSound.Play();
+                    dashTime = 0;
+                    groundDashReset = false;
+                    dashSFX.Play();
                     shouldDash = true;
                 }
             }
         }
+    }
+
+    public void GroundDashReset()
+    {
+        groundDashReset = true;
     }
 }

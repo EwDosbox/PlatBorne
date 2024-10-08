@@ -16,6 +16,7 @@ public class PlayerScript : MonoBehaviour
 
     public Animator animator;
     public PlayerHealth health;
+    PlayerInputScript playerInputScript;
 
     //Movement Variables
     [SerializeField] private Rigidbody2D rb;
@@ -86,6 +87,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
+        playerInputScript = GetComponent<PlayerInputScript>();
         positionYWas = transform.position.y;
         if (PlayerPrefs.HasKey("wasFishing"))
         {
@@ -106,24 +108,19 @@ public class PlayerScript : MonoBehaviour
         if(Physics2D.IsTouchingLayers(hunterFeet, pushRightLayer)) rb.position = new Vector2(rb.position.x + 0.01f, rb.position.y);
 
         // Check if the player is on the ground
-        if (!PlayerInputScript.isPlayerInAir) // IsOnGround
+        if (!PlayerInputScript.isPlayerInAir)
         {
+            playerInputScript.GroundDashReset();
             // Handle transition from air to ground
             if (playerWasInAir)
             {
                 playerWasInAir = false;
-
                 // Calculate fall distance
                 float distanceOfFall = Mathf.Abs(positionYWas - transform.position.y);
-
-                // Check if the fall qualifies for special actions
                 if (touchedFallHitbox && (positionYWas > transform.position.y) && distanceOfFall > 1f)
                 {
-                    // Play drop sound randomly
                     if (UnityEngine.Random.Range(0f, 1f) < 0.5f) hunterDrop01.Play();
                     else hunterDrop02.Play();
-
-                    // Check for big fall and trigger actions
                     if (distanceOfFall >= 10f)
                     {
                         voiceLines.PlayVLBigFall();
@@ -134,12 +131,8 @@ public class PlayerScript : MonoBehaviour
                     {
                         voiceLines.PlayVLFallen();
                     }
-
-                    // Save player fall state
                     save.PlayerFell();
                 }
-
-                // Reset touched fall hitbox
                 touchedFallHitbox = false;
             }
             else positionYWas = transform.position.y;
