@@ -172,5 +172,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToSelfDestruct: 10
-  speed: 3
-  playerHealth: {fileID: 0}
+  speed: 6

@@ -50,64 +50,6 @@ public class Mole_Bossfight : MonoBehaviour
     public GameObject doorsEnd;
     public GameObject UI_Player;
     public GameObject UI_Boss;
-
-    private bool colliderRight = false;
-    private bool colliderLeft = false;
-    private bool colliderMiddleRight = false;
-    private bool colliderMiddleLeft = false;
-    private bool colliderMiddleMiddle = false;
-    private bool colliderPlatform = false;
-    private bool colliderGround = false;
-
-    public bool ColliderRight
-    {
-        set
-        {
-            colliderRight = value;
-        }
-    }
-    public bool ColliderLeft
-    {
-        set
-        {
-            colliderLeft = value;
-        }
-    }
-    public bool ColliderMiddleRight
-    {
-        set
-        {
-            colliderMiddleRight = value;
-        }
-    }
-    public bool ColliderMiddleLeft
-    {
-        set
-        {
-            colliderMiddleLeft = value;
-        }
-    }
-    public bool ColliderMiddleMiddle
-    {
-        set
-        {
-            colliderMiddleMiddle = value;
-        }
-    }
-    public bool ColliderPlatform
-    {
-        set
-        {
-            colliderPlatform = value;
-        }
-    }
-    public bool ColliderGround
-    {
-        set
-        {
-            colliderGround = value;
-        }
-    }
     //timers
     float timer = 0;
     float timerWaitForNextAttack = 0;
@@ -128,6 +70,9 @@ public class Mole_Bossfight : MonoBehaviour
     Animator animator;
     private void Start()
     {
+        //DEBUG
+        StartCoroutine(Attack_MoleCharge());
+        /*
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
         doorsEnd.SetActive(false);
@@ -139,6 +84,7 @@ public class Mole_Bossfight : MonoBehaviour
         bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
+        */
         rb = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
@@ -156,6 +102,12 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 if (timerWaitForNextAttack > timeBetweenAttacksPhase2) nextAttack = true;
                 else timerWaitForNextAttack += Time.deltaTime;
+            }
+            //SPIKES
+            if (timerAttackSpikes > 16 && phase == 2)
+            {
+                timerAttackSpikes = 0;
+                Attack_Spikes();
             }
             //BOSS CHARGE
             if (timerBossCharge > bossChargeDelay)
@@ -202,6 +154,7 @@ public class Mole_Bossfight : MonoBehaviour
     }
     public IEnumerator StartBossFight()
     {
+        Attack_SideDrills();
         UI_Boss.SetActive(true);
         UI_Player.SetActive(true);
         bossUI.BossHPSliderStart();
@@ -209,7 +162,7 @@ public class Mole_Bossfight : MonoBehaviour
         PreBoss.Play();
         if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("lul", PreBoss.clip.length);
         yield return new WaitForSeconds(PreBoss.clip.length);
-        OSTPart1.Play();
+        //OSTPart1.Play();
         phase = 1;
         bossStarted = true;
     }
@@ -217,8 +170,8 @@ public class Mole_Bossfight : MonoBehaviour
     public void ChangePhase()
     {
         SFXswitchPhase.Play();
-        OSTPart1.Stop();
-        OSTPart2.Play();
+        //OSTPart1.Stop();
+        //OSTPart2.Play();
         phase = 2;
         PlatformFadeIn();
         attackSpikesActivate = true;
@@ -316,18 +269,12 @@ public class Mole_Bossfight : MonoBehaviour
                 }
             }
             else if (phase == 2)
-            {
-                if (timerAttackSpikes > 16)
-                {
-                    timerAttackSpikes = 0;
-                    Attack_Spikes();
-                    AttackChooser();
-                }
+            {                
                 if (bossCharge)
                 {
                     StartCoroutine(Attack_MoleCharge());
                 }
-                if (colliderMiddleLeft && colliderMiddleRight && lastAttack != "ShovelRain")
+                if (playerScript.Position.x < 6 && lastAttack != "ShovelRain")
                 {
                     lastAttack = "ShovelRain";
                     attackNumberShovelRain++;
@@ -359,9 +306,9 @@ public class Mole_Bossfight : MonoBehaviour
     public void Attack_DrillRain()
     {
         attackNumberDrillRain++;
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < 8; i++)
         {
-            Vector2 position = new Vector2(-16.50f + (i * 3.30f), 11);
+            Vector2 position = new Vector2(-16.50f + (i * 4.75f), 11);
             Instantiate(prefabDrillRain, position, Quaternion.identity);
         }
         attackIsGoing = false;
@@ -389,49 +336,71 @@ public class Mole_Bossfight : MonoBehaviour
         attackIsGoing = false;
     }
 
-    private void Attack_SideDrills()
+    void Attack_SideDrills()
     {
+        StartCoroutine(Attack_GroundDrillsIE());       
+    }
+
+    IEnumerator Attack_GroundDrillsIE()
+    {
+        Debug.Log("Attack_SideDrills");
         attackNumberDrillSide++;
         Vector2[] position = new Vector2[6];
+        // left wall
         position[0] = new Vector2(-19.5f, -5.72f);
         position[1] = new Vector2(-19.5f, -3.4f);
         position[2] = new Vector2(-19.5f, -1.08f);
-        //right wall
+        // right wall
         position[3] = new Vector2(19.5f, -5.72f);
         position[4] = new Vector2(19.5f, -3.4f);
         position[5] = new Vector2(19.5f, -1.08f);
-        if (colliderMiddleMiddle)
+
+        if (playerScript.Position.x > -6 && playerScript.Position.x < 6) // Middle
         {
-            for (int i = 0; i > 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+                yield return new WaitForSeconds(1);
             }
         }
-        else if (colliderMiddleRight)
+        else if (playerScript.Position.x > 6) // Right
         {
-            for (int i = 0; i > 3; i++)
+            for (int i = 3; i < 6; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+                yield return new WaitForSeconds(1);
             }
         }
-        else
+        else // Left
         {
-            for (int i = 3; i > 6; i++)
+            for (int i = 0; i < 3; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
+                yield return new WaitForSeconds(1);
             }
-        }                
+        }
         attackIsGoing = false;
     }
+
     //PHASE II
     IEnumerator Attack_GroundDrills()
     {
         attackNumberDrillGround++;
-        for (int i = 0; i < 10; i++)
+        if (playerScript.Position.x >= 0)
         {
-            yield return new WaitForSeconds(groundDrills_waitForNextDrill);
-            if (colliderRight) Instantiate(prefabDrillGround, new Vector2(16.76f - (3 * i), -11), Quaternion.identity); //right
-            else Instantiate(prefabDrillGround, new Vector2(-16.76f + (3 * i), -11), Quaternion.identity); //left
+            for (int i = 0; i < 8; i++)
+            {
+                yield return new WaitForSeconds(groundDrills_waitForNextDrill);
+                Instantiate(prefabDrillGround, new Vector2(16.76f - (4.75f * i), -11), Quaternion.identity); //right            
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                yield return new WaitForSeconds(groundDrills_waitForNextDrill);
+                Instantiate(prefabDrillGround, new Vector2(-16.76f + (4.75f * i), -11), Quaternion.identity); //left        
+            }            
         }
         attackIsGoing = false;
     }
@@ -515,7 +484,7 @@ public class Mole_Bossfight : MonoBehaviour
         if (playerScript.Position.x < -6.67) //left
         {
             position = new Vector3(-13.24f, y, -1);
-            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
+            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             PlayerPrefs.SetString("rockAttack", "left"); //Im not sorry
             PlayerPrefs.Save();
@@ -524,7 +493,7 @@ public class Mole_Bossfight : MonoBehaviour
         else if (playerScript.Position.x > 6.67) //right
         {
             position = new Vector3(13.24f, y, -1);
-            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
+            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             PlayerPrefs.SetString("rockAttack", "right");
             PlayerPrefs.Save();
@@ -533,7 +502,7 @@ public class Mole_Bossfight : MonoBehaviour
         else // middle
         {
             position = new Vector3(0, y, -1);
-            Instantiate(prefabRockDirt, new Vector2(position.x, -4.62f), Quaternion.identity);
+            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
             yield return new WaitForSeconds(rock_ChargeTime);
             PlayerPrefs.SetString("rockAttack", "middle");
             PlayerPrefs.Save();
@@ -544,7 +513,7 @@ public class Mole_Bossfight : MonoBehaviour
 
     private void Attack_Spikes()
     {
-        Debug.Log("SPikes");
+        Debug.Log("Spikes");
         Vector2[] position = new Vector2[6];
         float y = -2.62f;
         position[0] = new Vector2(-8.2544f, y);
