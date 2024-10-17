@@ -103,7 +103,7 @@ RectTransform:
   m_GameObject: {fileID: 4032850609567170520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5.2631583, y: 5.2631583, z: 5.2631583}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5271274506597126141}
@@ -141,7 +141,7 @@ MonoBehaviour:
   - {fileID: 8323495239783839128}
   - {fileID: 8475608627561012252}
   hunterGodMode: {fileID: 3512104964116575805}
-  hunterDamage: {fileID: 5493685771621199997}
+  hunterDamage01: {fileID: 5493685771621199997}
 --- !u!82 &3512104964116575805
 AudioSource:
   m_ObjectHideFlags: 0
@@ -152,7 +152,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 69db74e56333c4c41bb5f37a57fe971f, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 11245afe52da2a74095a95cb8a3bf19c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -248,7 +248,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 7c1f24babd728f94db9b9aaac3159492, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 215738b67cdac9145974da21f55dd53f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

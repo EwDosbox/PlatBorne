@@ -13,6 +13,7 @@ public class MouseVisibilty : MonoBehaviour
     public bool startInInvisibleState = false;
     private void Start()
     {
+
         if (startInLockedState) Cursor.lockState = CursorLockMode.Locked;
         if (startInInvisibleState) Cursor.visible = false;
     }

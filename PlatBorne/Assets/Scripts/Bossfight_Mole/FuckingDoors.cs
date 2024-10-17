@@ -1,17 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FuckingDoors : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    bool playerHasMoved = false;
+    private void OnColliderEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (!playerHasMoved)
         {
-            CameraMoleScript cam = FindAnyObjectByType<CameraMoleScript>();
-            Collider2D collider2D = GetComponent<Collider2D>();
-            collider2D.isTrigger = false;
-            cam.ChangeCamPosition();
+            playerHasMoved = true;
+            if (collision.tag == "Player")
+            {
+                if (SceneManager.GetActiveScene().name == "LevelBrecus")
+                {
+                    CameraMoleScript cam = FindAnyObjectByType<CameraMoleScript>();
+                    Collider2D collider2D = GetComponent<Collider2D>();
+                    collider2D.isTrigger = false;
+                    cam.ChangeCamPosition();
+                }
+                if (SceneManager.GetActiveScene().name == "LevelMole")
+                {
+                    PlayerScript playerScript = FindAnyObjectByType<PlayerScript>();
+                    playerScript.MovePlayer(2f, 0f);
+                }
+            }
         }
     }
 }
