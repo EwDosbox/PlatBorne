@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public class FishInventory
+
+public class FishInventory : MonoBehaviour
 {
     //********************* PRIVATE
     private List<GameObject> fishInventory;
@@ -12,57 +12,63 @@ public class FishInventory
     private List<Color> fishColors;
 
     //********************* PUBLIC
-    public Saves save;
 
     public int FishCatched
     {
-        get
+        get => fishCatched;
+        set
         {
-            return fishCatched;
-        }
-        set { if (value >= 0 && value <= 6) fishCatched = value; else fishCatched = 0; }
-    }
-    public int Count
-    {
-        get
-        {
-            return fishInventory.Count;
+            if (value >= 0 && value <= 6)
+                fishCatched = value;
+            else
+                fishCatched = 0;
         }
     }
-    public Color NextFishColor
-    {
-        get { return fishColors[fishCatched]; }
 
-    }
+    public int Count => fishInventory.Count;
 
-    public FishInventory(int fishCatched)
+    public Color NextFishColor => fishColors[fishCatched];
+
+    private void Awake()
     {
-        fishInventory = Resources.FindObjectsOfTypeAll<GameObject>().Where(go => go.name.StartsWith("InventoryFish (")).ToList();
-        fishSpriteRenderer = new List<SpriteRenderer>();        
+        fishInventory = Resources.FindObjectsOfTypeAll<GameObject>()
+            .Where(go => go.name.StartsWith("InventoryFish ("))
+            .ToList();
+
+        fishSpriteRenderer = new List<SpriteRenderer>();
         fishInventory.ForEach(fish => fishSpriteRenderer.Add(fish.GetComponent<SpriteRenderer>()));
         RandomizeColors();
-        FishCatched = fishCatched;
+
+        // Initialize the colors for each fish
         for (int i = 0; i < fishSpriteRenderer.Count; i++)
         {
             fishSpriteRenderer[i].color = fishColors[i];
         }
     }
 
-    // Random Color
+    // Random Color Generation
     private void RandomizeColors()
     {
         fishColors = new List<Color>();
-        for (int i = 0; i <= 7; i++)
+        for (int i = 0; i < 8; i++) // Generate 8 random colors
         {
             fishColors.Add(new Color(Random.value, Random.value, Random.value));
         }
     }
-    //Catched Fish
+
+    // Method to catch fish
     public void CatchedFish()
     {
         if (fishCatched < fishInventory.Count)
         {
-            fishInventory[fishCatched].GetComponentsInChildren<SpriteRenderer>().FirstOrDefault(sr => sr.name.Equals("Check")).enabled = true;
+            var checkSpriteRenderer = fishInventory[fishCatched]
+                .GetComponentsInChildren<SpriteRenderer>()
+                .FirstOrDefault(sr => sr.name.Equals("Check"));
+
+            if (checkSpriteRenderer != null)
+            {
+                checkSpriteRenderer.enabled = true;
+            }
         }
         fishCatched++;
     }

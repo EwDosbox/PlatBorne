@@ -23,8 +23,8 @@ public class PlayerFishingScript : MonoBehaviour
     private float catchingTimeNeeded;
 
     private FishSpawnScript fish;
-    private FishInventory inventory;
-    SubtitlesManager subtitlesManager;
+    private FishInventory inventory; // Reference to FishInventory
+    private SubtitlesManager subtitlesManager;
 
     //************* PUBLIC
     public GameObject fishPrefab;
@@ -49,26 +49,44 @@ public class PlayerFishingScript : MonoBehaviour
         holdTime = 0;
         isAlreadyCatching = false;
         catchingTimeNeeded = 1.5f;
-        fish = new FishSpawnScript(fishPrefab);
-        inventory = new FishInventory();
-        fish.SpawnFish(inventory.NextFishColor);
-        int temp = Random.Range(0, 3);
-        switch (temp)
+
+        // Find the existing FishInventory in the scene
+        inventory = FindObjectOfType<FishInventory>();
+
+        // Check if inventory was found
+        if (inventory == null)
         {
-            case 1: 
-                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("Yeah sure, go fishing, we have all the time in the world...", fishVoiceLine[0].clip.length);
-                fishVoiceLine[0].Play();
-                break;
-            case 2:
-                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("What makes you think a little fishing could help you?", fishVoiceLine[1].clip.length);
-                fishVoiceLine[1].Play();
-                break;
-            case 3:
-                if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("You're so desperate that you go fishing? That's kinda fishy", fishVoiceLine[2].clip.length);
-                fishVoiceLine[2].Play();
-                break;
+            Debug.LogError("FishInventory not found in the scene!");
+            return; // Exit if no inventory is found to avoid further errors
+        }
+
+        fish = new FishSpawnScript(fishPrefab);
+        fish.SpawnFish(inventory.NextFishColor);
+
+        // Random voice line
+        if (PlayerPrefs.GetInt("wasFishing") == 1)
+        {
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    if (PlayerPrefs.HasKey("Subtitles"))
+                        subtitlesManager.Write("Yeah sure, go fishing, we have all the time in the world...", fishVoiceLine[0].clip.length);
+                    fishVoiceLine[0].Play();
+                    break;
+                case 1:
+                    if (PlayerPrefs.HasKey("Subtitles"))
+                        subtitlesManager.Write("What makes you think a little fishing could help you?", fishVoiceLine[1].clip.length);
+                    fishVoiceLine[1].Play();
+                    break;
+                case 2:
+                    if (PlayerPrefs.HasKey("Subtitles"))
+                        subtitlesManager.Write("You're so desperate that you go fishing? That's kinda fishy", fishVoiceLine[2].clip.length);
+                    fishVoiceLine[2].Play();
+                    break;
+            }
         }
     }
+
     private void FixedUpdate()
     {
         //Movement
@@ -80,20 +98,21 @@ public class PlayerFishingScript : MonoBehaviour
         {
             hookRB.AddRelativeForce(new Vector2(+(float)Equation(Time.time - holdTime), 0));
         }
-        //fish Catching logic
+
+        // Fish Catching logic
         if (Physics2D.IsTouching(hookCatchArea, fishCatchArea))
         {
             if (isAlreadyCatching)
             {
                 if (Time.time - catchingTime > catchingTimeNeeded)
                 {
-                    //nespawnuje se rainbow fish
+                    // Handle catching logic
                     if (inventory.FishCatched == inventory.Count - 1)
                     {
                         inventory.CatchedFish();
                         Destroy(fish);
                         fish = new FishSpawnScript(fishRainbowPrefab);
-                        fish.SpawnFish();// spawns rainbow one
+                        fish.SpawnFish(); // Spawns rainbow fish
                     }
                     else if (inventory.FishCatched == inventory.Count)
                     {
@@ -104,7 +123,7 @@ public class PlayerFishingScript : MonoBehaviour
                         inventory.CatchedFish();
                         Destroy(fish);
                         fish = new FishSpawnScript(fishPrefab);
-                        fish.SpawnFish(inventory.NextFishColor);//haze chybu
+                        fish.SpawnFish(inventory.NextFishColor);
                     }
                     isAlreadyCatching = false;
                     catchingTime = Time.time;
@@ -117,12 +136,17 @@ public class PlayerFishingScript : MonoBehaviour
                 isAlreadyCatching = true;
             }
         }
-        else isAlreadyCatching = false;
+        else
+        {
+            isAlreadyCatching = false;
+        }
     }
+
     private double Equation(float time)
     {
         return 4 + (1 - 4) / (1 + Mathf.Pow(time / 0.5f, 26));
     }
+
     // Input Actions
     public void HookL(InputAction.CallbackContext context)
     {
@@ -139,6 +163,7 @@ public class PlayerFishingScript : MonoBehaviour
             shouldHookMoveRight = false;
         }
     }
+
     public void HookR(InputAction.CallbackContext context)
     {
         if (context.performed)

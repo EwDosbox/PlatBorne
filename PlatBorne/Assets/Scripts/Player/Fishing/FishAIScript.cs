@@ -10,12 +10,14 @@ public class FishAIScript : MonoBehaviour
     public Collider2D fishRCollider;
     public Collider2D waterLCollider;
     public Collider2D waterRCollider;
+    private SpriteRenderer sprite;
 
     private float nextFishMovementChange;
     private bool isTimeToChangeMovement;
 
     private void Awake()
     {
+        sprite = GetComponent<SpriteRenderer>();
         fishRB = GetComponent<Rigidbody2D>();
         Collider2D[] colliders = FindObjectsOfType<Collider2D>();
         fishLCollider = colliders.FirstOrDefault(x => x.name == "LeftSide");
@@ -30,15 +32,31 @@ public class FishAIScript : MonoBehaviour
         if (isTimeToChangeMovement)
         {
             nextFishMovementChange = RandomTime();
-            if (fishRB.velocity.x > 0)
+            if (fishRB.velocity.x > 0) //70% že ryba bude pokraèovat ve stranì plutí BRUH
             {
-                if (Random.value > 0.3) fishRB.velocity += RandomVector();
-                else fishRB.velocity -= RandomVector();
+                if (Random.value > 0.3)
+                {
+                    fishRB.velocity += RandomVector();
+                    sprite.flipX = true;
+                }
+                else
+                {
+                    fishRB.velocity -= RandomVector();
+                    sprite.flipX = false;
+                }
             }
             else
             {
-                if (Random.value > 0.3) fishRB.velocity -= RandomVector();
-                else fishRB.velocity += RandomVector();
+                if (Random.value > 0.3)
+                {
+                    fishRB.velocity -= RandomVector();
+                    sprite.flipX = false;
+                }
+                else
+                {
+                    fishRB.velocity += RandomVector();
+                    sprite.flipX = true;
+                }
             }
 
         }
