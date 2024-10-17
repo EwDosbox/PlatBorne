@@ -29,7 +29,6 @@ public class PlayerFishingScript : MonoBehaviour
     //************* PUBLIC
     public GameObject fishPrefab;
     public GameObject fishRainbowPrefab;
-    public Saves save;
     public AudioSource[] fishVoiceLine;
     public static Collider2D FishCatchArea
     {
@@ -51,7 +50,7 @@ public class PlayerFishingScript : MonoBehaviour
         isAlreadyCatching = false;
         catchingTimeNeeded = 1.5f;
         fish = new FishSpawnScript(fishPrefab);
-        inventory = new FishInventory(save.FishInventory());
+        inventory = new FishInventory();
         fish.SpawnFish(inventory.NextFishColor);
         int temp = Random.Range(0, 3);
         switch (temp)
@@ -98,13 +97,11 @@ public class PlayerFishingScript : MonoBehaviour
                     }
                     else if (inventory.FishCatched == inventory.Count)
                     {
-                        save.FishInventory(true);
                         SceneManager.LoadScene("Cutscene_Ending Fish");
                     }
                     else
                     {
                         inventory.CatchedFish();
-                        save.FishInventory(false);
                         Destroy(fish);
                         fish = new FishSpawnScript(fishPrefab);
                         fish.SpawnFish(inventory.NextFishColor);//haze chybu
