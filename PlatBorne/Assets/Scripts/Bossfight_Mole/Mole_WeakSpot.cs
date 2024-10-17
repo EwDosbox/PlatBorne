@@ -14,7 +14,7 @@ public class Mole_WeakSpot : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             health.BossHit();
-            bossfight.BossHitWhileCharge();
+            //bossfight.BossHitWhileCharge();
         }
     }
 

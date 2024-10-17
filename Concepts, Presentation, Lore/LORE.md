@@ -38,7 +38,7 @@ Hunters are special warriors that kill and destroy all the beasts that lie in th
 ## BOSS BRECUS
 - So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.
 - Tis But A Scratch! (damage 01)
-- Youre starting to annoy me, Hunter! (damage02)
+- You‘re starting to annoy me, Hunter! (damage02)
 - I‘m gonna sink you like Americans have sank our bloody delicious tea! (damage 03)
 ### PLAYER DEATH
 - First death is always best one

@@ -214,88 +214,72 @@ public class Mole_Bossfight : MonoBehaviour
     int attackNumberDrillRain = 0;
     int attackNumberRock = 0;
     string lastAttack = null;
+
     void AttackChooser()
     {
-            attackIsGoing = true;
-            if (phase == 1)
-            {
-                //if same
-                if ((attackNumberMoleRain == attackNumberDrillRain) && (attackNumberMoleRain == attackNumberDrillGround) || ((attackNumberDrillGround + attackNumberDrillRain + attackNumberMoleRain) / 3) < attackNumberDrillSide + 2)
-                {
-                    switch (UnityEngine.Random.Range(1, 4))
-                    {
-                        case 1:
-                            lastAttack = "MoleRain";
-                            attackNumberMoleRain++;
-                            StartCoroutine(Attack_MoleRain());
-                            break;
-                        case 2:
-                            lastAttack = "DrillRain";
-                            attackNumberDrillRain++;
-                            Attack_DrillRain();
-                            break;
-                        case 3:
-                            lastAttack = "DrillGround";
-                            attackNumberDrillGround++;
-                            StartCoroutine(Attack_GroundDrills());
-                            break;
-                    }
-                }
-                else if (((attackNumberDrillRain + attackNumberDrillGround) / 2) > attackNumberMoleRain && lastAttack != "MoleRain")
-                {
-                    lastAttack = "MoleRain";
-                    attackNumberMoleRain++;
-                    StartCoroutine(Attack_MoleRain());
-                }
-                else if ((attackNumberMoleRain + attackNumberDrillGround / 2) > attackNumberDrillRain && (lastAttack != "MoleRain" || lastAttack != "DrillRain"))
-                {
-                    lastAttack = "DrillRain";
-                    attackNumberDrillRain++;
-                    Attack_DrillRain();
-                }
-                else if (((attackNumberDrillRain + attackNumberDrillSide) / 2) > attackNumberDrillGround && lastAttack != "DrillGround")
-                {
-                    lastAttack = "DrillGround";
-                    attackNumberDrillGround++;
-                    StartCoroutine(Attack_GroundDrills());
-                }
-                else //DrillSide
-                {
-                    lastAttack = "DrillSide";
-                    attackNumberDrillSide++;
-                    Attack_SideDrills();
-                }
-            }
-            else if (phase == 2)
-            {                
-                if (bossCharge)
-                {
-                    StartCoroutine(Attack_MoleCharge());
-                }
-                if (playerScript.Position.x < 6 && lastAttack != "ShovelRain")
-                {
-                    lastAttack = "ShovelRain";
-                    attackNumberShovelRain++;
-                    StartCoroutine(Attack_ShovelRain());
-                }
-                else if (lastAttack != "Rock")
-                {
-                    lastAttack = "Rock";
-                    attackNumberRock++;
-                    StartCoroutine(Attack_Rock());
-                }
-                else if (lastAttack != "ShovelRain" || lastAttack != "MoleRain")
-                {
-                    lastAttack = "MoleRain";
-                    attackNumberMoleRain++;
-                    StartCoroutine(Attack_MoleRain());
-                }
-                else //drillSide
-                {
-                    lastAttack = "DrillSide";
-                    attackNumberDrillSide++;
-                    Attack_SideDrills();
-                }
+        attackIsGoing = true;
+        if (phase == 1)
+        {
+            ChooseAttackPhase1();
+        }
+        else if (phase == 2)
+        {
+            ChooseAttackPhase2();
+        }
+    }
+
+    private void ChooseAttackPhase1()
+    {
+        List<string> possibleAttacks = new List<string> { "MoleRain", "DrillRain", "DrillGround", "DrillSide" };
+
+        // Remove the last attack to avoid repeating it
+        if (possibleAttacks.Contains(lastAttack))
+            possibleAttacks.Remove(lastAttack);
+
+        int rng = Random.Range(0, possibleAttacks.Count);
+        lastAttack = possibleAttacks[rng];
+
+        switch (lastAttack)
+        {
+            case "MoleRain":
+                StartCoroutine(Attack_MoleRain());
+                break;
+            case "DrillRain":
+                Attack_DrillRain();
+                break;
+            case "DrillGround":
+                StartCoroutine(Attack_GroundDrills());
+                break;
+            case "DrillSide":
+                StartCoroutine(Attack_SideDrills());
+                break;
+        }
+    }
+
+    private void ChooseAttackPhase2()
+    {
+        List<string> possibleAttacks = new List<string> { "DrillSide", "MoleRain", "ShovelRain", "Rock" };
+
+        if (possibleAttacks.Contains(lastAttack))
+            possibleAttacks.Remove(lastAttack);
+
+        int rng = Random.Range(0, possibleAttacks.Count);
+        lastAttack = possibleAttacks[rng];
+
+        switch (lastAttack)
+        {
+            case "DrillSide":
+                StartCoroutine(Attack_SideDrills());
+                break;
+            case "Rock":
+                StartCoroutine(Attack_Rock());
+                break;
+            case "ShovelRain":
+                StartCoroutine(Attack_ShovelRain());
+                break;
+            case "MoleRain":
+                StartCoroutine(Attack_MoleRain());
+                break;
         }
     }
 
@@ -334,15 +318,33 @@ public class Mole_Bossfight : MonoBehaviour
         attackIsGoing = false;
     }
 
-    void Attack_SideDrills()
+    IEnumerator Attack_ShovelRain()
     {
-        StartCoroutine(Attack_GroundDrillsIE());       
+        attackNumberShovelRain++;
+        float attackMoleRainShift = 1.7f;
+        float x = -17f;
+        float y = 12.78f;
+        for (int j = 0; j < 22; j += 2)
+        {
+            Vector2 position = new Vector2(x + (j * attackMoleRainShift), y);
+            Instantiate(prefabShovelRain, position, Quaternion.identity);
+            yield return new WaitForSeconds(0.25f);
+        }
+        yield return new WaitForSeconds(4);
+        x = 18.7f;
+        for (int j = 1; j < 23; j += 2)
+        {
+            Vector2 position = new Vector2(x - (j * attackMoleRainShift), y);
+            Instantiate(prefabShovelRain, position, Quaternion.identity);
+            yield return new WaitForSeconds(0.25f);
+        }
+        yield return new WaitForSeconds(2);
+        attackIsGoing = false;
     }
 
-    IEnumerator Attack_GroundDrillsIE()
+    IEnumerator Attack_SideDrills()
     {
         Debug.Log("Attack_SideDrills");
-        attackNumberDrillSide++;
         Vector2[] position = new Vector2[6];
         // left wall
         position[0] = new Vector2(-19.5f, -5.72f);
@@ -403,29 +405,6 @@ public class Mole_Bossfight : MonoBehaviour
         attackIsGoing = false;
     }
 
-    IEnumerator Attack_ShovelRain()
-    {
-        attackNumberShovelRain++;
-        float attackMoleRainShift = 1.7f;
-        float x = -17f;
-        float y = 12.78f;
-        for (int j = 0; j < 22; j += 2)
-        {
-            Vector2 position = new Vector2(x + (j * attackMoleRainShift), y);
-            Instantiate(prefabShovelRain, position, Quaternion.identity);
-            yield return new WaitForSeconds(0.25f);
-        }
-        yield return new WaitForSeconds(4);
-        x = 18.7f;
-        for (int j = 1; j < 23; j += 2)
-        {
-            Vector2 position = new Vector2(x - (j * attackMoleRainShift), y);
-            Instantiate(prefabShovelRain, position, Quaternion.identity);
-            yield return new WaitForSeconds(0.25f);
-        }
-        yield return new WaitForSeconds(2);
-        attackIsGoing = false;
-    }
 
     IEnumerator Attack_MoleCharge()
     {
