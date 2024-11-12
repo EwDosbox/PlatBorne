@@ -23,8 +23,11 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] AudioSource SFXswitchPhase;
     [SerializeField] AudioSource SFXbossDeath;
     [SerializeField] AudioSource SFXbossDeathPussyMode;
+    [Header("OST")]
+    [SerializeField] AudioSource OSTPart0;
     [SerializeField] AudioSource OSTPart1;
     [SerializeField] AudioSource OSTPart2;
+    [SerializeField] AudioSource OSTPartEND;
     [Header("Prefabs")]
     [SerializeField] GameObject prefabDrillGround;
     [SerializeField] GameObject prefabDrillRain;
@@ -160,7 +163,8 @@ public class Mole_Bossfight : MonoBehaviour
         PreBoss.Play();
         if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("lul", PreBoss.clip.length);
         yield return new WaitForSeconds(PreBoss.clip.length);
-        //OSTPart1.Play();
+        OSTPart0.Stop();
+        OSTPart1.Play();
         phase = 1;
         bossStarted = true;
     }
@@ -168,8 +172,8 @@ public class Mole_Bossfight : MonoBehaviour
     public void ChangePhase()
     {
         SFXswitchPhase.Play();
-        //OSTPart1.Stop();
-        //OSTPart2.Play();
+        OSTPart1.Stop();
+        OSTPart2.Play();
         phase = 2;
         PlatformFadeIn();
         attackSpikesActivate = true;
@@ -179,6 +183,8 @@ public class Mole_Bossfight : MonoBehaviour
 
     public IEnumerator BossDeath()
     {
+        OSTPart2.Stop();
+        OSTPartEND.Play();
         if (transform.position.x <= 0) animator.SetBool("deathLeft", true);
         else animator.SetBool("deathRight", true);
         SFXbossDeath.Play();

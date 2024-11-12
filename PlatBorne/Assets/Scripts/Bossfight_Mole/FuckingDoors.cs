@@ -13,14 +13,14 @@ public class FuckingDoors : MonoBehaviour
             playerHasMoved = true;
             if (collision.tag == "Player")
             {
-                if (SceneManager.GetActiveScene().name == "LevelBrecus")
+                if (SceneManager.GetActiveScene().name == "LevelMole")
                 {
                     CameraMoleScript cam = FindAnyObjectByType<CameraMoleScript>();
                     Collider2D collider2D = GetComponent<Collider2D>();
                     collider2D.isTrigger = false;
                     cam.ChangeCamPosition();
                 }
-                if (SceneManager.GetActiveScene().name == "LevelMole")
+                if (SceneManager.GetActiveScene().name == "LevelBrecus")
                 {
                     PlayerScript playerScript = FindAnyObjectByType<PlayerScript>();
                     playerScript.MovePlayer(2f, 0f);
