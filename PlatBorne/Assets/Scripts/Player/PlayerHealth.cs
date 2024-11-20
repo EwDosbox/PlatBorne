@@ -60,7 +60,6 @@ public class PlayerHealth : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().buildIndex == 3 || SceneManager.GetActiveScene().buildIndex == 7) //bossfights
         {
-
             if (PlayerPrefs.HasKey("GodMode"))
             {
                 int numberGod = (PlayerPrefs.GetInt("GodMode"));

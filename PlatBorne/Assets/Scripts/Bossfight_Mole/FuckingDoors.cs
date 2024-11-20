@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 public class FuckingDoors : MonoBehaviour
 {
     bool playerHasMoved = false;
-    private void OnColliderEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!playerHasMoved)
         {
-            playerHasMoved = true;
             if (collision.tag == "Player")
             {
+                playerHasMoved = true;
                 if (SceneManager.GetActiveScene().name == "LevelMole")
                 {
                     CameraMoleScript cam = FindAnyObjectByType<CameraMoleScript>();
@@ -20,11 +20,8 @@ public class FuckingDoors : MonoBehaviour
                     collider2D.isTrigger = false;
                     cam.ChangeCamPosition();
                 }
-                if (SceneManager.GetActiveScene().name == "LevelBrecus")
-                {
-                    PlayerScript playerScript = FindAnyObjectByType<PlayerScript>();
-                    playerScript.MovePlayer(2f, 0f);
-                }
+                PlayerScript playerScript = FindAnyObjectByType<PlayerScript>();
+                playerScript.MovePlayer(2f, 0f);
             }
         }
     }

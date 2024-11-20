@@ -87,6 +87,7 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
+        health = FindAnyObjectByType<PlayerHealth>();
         playerInputScript = GetComponent<PlayerInputScript>();
         positionYWas = transform.position.y;
         if (PlayerPrefs.HasKey("wasFishing"))
@@ -155,6 +156,6 @@ public class PlayerScript : MonoBehaviour
     //For Mole Bossfight
     public void MovePlayer(float x, float y)
     {
-        transform.position = new Vector2(transform.position.x + x, transform.position.y + y);
+        transform.position = new Vector3(transform.position.x + x, transform.position.y + y, 1);
     }
 }

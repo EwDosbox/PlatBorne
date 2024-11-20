@@ -23,7 +23,7 @@ public class Bossfight : MonoBehaviour
 
     public Animator bossAnimation;
     public BossHealthBar bossHealthBar;
-    public PlayerHealth playerHealth;
+    PlayerHealth playerHealth;
     public BossAttacks attack;
     public GameObject player;
     public GameObject levelMove;
@@ -100,6 +100,7 @@ public class Bossfight : MonoBehaviour
 
     private void Start()
     {
+        playerHealth = FindFirstObjectByType<PlayerHealth>();
         subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
         if (subtitlesManager == null) Debug.LogError("Could Not Find subtitles Manager in Brecus Bossfight");
         timer = save.TimerLoad(2);
@@ -116,8 +117,6 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
-        if (bossfightStarted && phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
-        if (playerHealth.PlayerHP == 0 && bossfightStarted) PlayerDeath();
         if (bossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
         if (pauseMenu.activeInHierarchy) timerOn = false;
@@ -126,8 +125,10 @@ public class Bossfight : MonoBehaviour
         if (player.transform.position.x > 1.5) bossSprite.flipX = true;
         else if (player.transform.position.x < -1.5) bossSprite.flipX = false;
         //****//
+        #region BossFightMain
         if (bossfightStarted)
         {
+            #region Timers
             bounds.isTrigger = false;
             //ÈASOVAÈ
             if (timerOn)
@@ -155,7 +156,9 @@ public class Bossfight : MonoBehaviour
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
             }
-            //Boss Damage
+            #endregion
+            #region BossDamage
+            if (phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());            
             if (!bossInvincible && PlayerScript.bossHitbox)
             {
                 bossInvincible = true;
@@ -200,7 +203,9 @@ public class Bossfight : MonoBehaviour
             {
                 StartCoroutine(BossDeath());
             }
-            //Player Damage
+            #endregion
+            #region PlayerDamage
+            if (playerHealth.PlayerHP == 0) PlayerDeath();
             if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
             {
                 playerHealth.PlayerDamage();
@@ -208,6 +213,7 @@ public class Bossfight : MonoBehaviour
                 PlayerScript.bossHitbox = false;
                 PlayerScript.bossDamage = false;
             }
+            #endregion
             switch (phase)
             {
                 case 1:
@@ -312,7 +318,8 @@ public class Bossfight : MonoBehaviour
                     }
             }
         }
-        //start of bossfight
+        #endregion
+        #region Start UI
         else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
         {
             UI_BossHP.SetActive(true);
@@ -324,7 +331,8 @@ public class Bossfight : MonoBehaviour
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
             StartCoroutine(DIALOGWaitingLine("preboss"));
-        }        
+        }
+        #endregion
     }
 
     //DIALOG doesnt overlap with Music
