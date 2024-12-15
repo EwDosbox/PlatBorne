@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -7,9 +9,9 @@ using UnityEngine.UIElements;
 public class Mole_Bossfight : MonoBehaviour
 {
     [Header("Scipts")]
-    public Mole_Health bossHealth;
-    public PlayerHealth playerHealth;
-    public Mole_WeakSpot weakSpot;
+    Mole_Health bossHealth;
+    PlayerHealth playerHealth;
+    Mole_WeakSpot weakSpot;
     public Mole_UI bossUI;
     Saves save;
     SubtitlesManager subtitlesManager;
@@ -61,19 +63,24 @@ public class Mole_Bossfight : MonoBehaviour
     float timerAttackSpikes = 0;
 
     bool timerOn = false;
+    //boss attacks
     bool bossCanBossCharge = false;
     bool bossStarted = false;
     bool attackIsGoing = false;
     int phase = 0;
     bool attackSpikesActivate = false;
-    bool bossCharge = false;
+    bool bossNextAttackIsCharge = false;
     bool nextAttack = false;
-    bool isPlayerCollidingWithBossDuringCharge = false;
     Rigidbody2D rb;
     //ANIMATOR
     Animator animator;
     private void Start()
     {
+        //Initialize Components
+        weakSpot = GetComponentInChildren<Mole_WeakSpot>();
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
+        bossHealth = FindAnyObjectByType<Mole_Health>();
+        //UI
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
         doorsEnd.SetActive(false);
@@ -113,7 +120,7 @@ public class Mole_Bossfight : MonoBehaviour
             if (timerBossCharge > bossChargeDelay)
             {
                 timerBossCharge = 0;
-                bossCharge = true;
+                bossNextAttackIsCharge = true;
             }
             else if (bossCanBossCharge) timerBossCharge += Time.deltaTime;
             //ATTACK HANDLER
@@ -131,12 +138,12 @@ public class Mole_Bossfight : MonoBehaviour
         {
             StartCoroutine(BossDeath());
         }
-        else if (bossHealth.BossHealth < 50 && phase == 1) ChangePhase();
+        else if (bossHealth.BossHealth < 50 && phase == 1) StartCoroutine(ChangePhase());
         {
         }
         if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && phase == 1)
         {
@@ -151,7 +158,19 @@ public class Mole_Bossfight : MonoBehaviour
                 playerHealth.PlayerDamage();
             }
         }
-        if (phase == 2) playerHealth.PlayerDamage();
+        if (phase == 2)
+        {
+            playerHealth.PlayerDamage();
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) //The Player has collided with boss while the boss if Charging (moving to the side)
+        {
+                Debug.Log("Player Collided with boss during a charge");
+                if (playerScript.Position.x < rb.position.x) playerScript.MovePlayer(5, 0); //Move Right
+                else playerScript.MovePlayer(-5, 0); //Move Left
+            }
     }
     public IEnumerator StartBossFight()
     {
@@ -160,24 +179,26 @@ public class Mole_Bossfight : MonoBehaviour
         UI_Player.SetActive(true);
         bossUI.BossHPSliderStart();
         playerHealth.StartHPUI();
-        PreBoss.Play();
-        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("lul", PreBoss.clip.length);
-        yield return new WaitForSeconds(PreBoss.clip.length);
         OSTPart0.Stop();
+        PreBoss.Play();
+        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("At Last, you did it...took you long enough, now get your ass ready for a real fight!", PreBoss.clip.length);
+        yield return new WaitForSeconds(PreBoss.clip.length);        
         OSTPart1.Play();
         phase = 1;
         bossStarted = true;
     }
 
-    public void ChangePhase()
+    public IEnumerator ChangePhase()
     {
-        SFXswitchPhase.Play();
         OSTPart1.Stop();
+        SFXswitchPhase.Play();
+        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("You wanna play? I will show you how we play with visitors in Birmingham!", SFXswitchPhase.clip.length);
+        yield return new WaitForSeconds(SFXswitchPhase.clip.length);
         OSTPart2.Play();
         phase = 2;
         PlatformFadeIn();
         attackSpikesActivate = true;
-        bossCharge = true; //další útok je charge
+        bossNextAttackIsCharge = true; //další útok je charge
         if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
     }
 
@@ -196,14 +217,14 @@ public class Mole_Bossfight : MonoBehaviour
         {
             SFXbossDeath.Play();
             waitTime = SFXbossDeath.clip.length;
-            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("elmao", waitTime);
+            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("YOU CANNOT CHANGE WHAT HAS BEEN DONE! *screaming*", waitTime);
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
         }
         else
         {
             SFXbossDeathPussyMode.Play();
             waitTime = SFXbossDeathPussyMode.clip.length;
-            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("elmao", waitTime);
+            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("THE NIGHT WILL ALWAYS PERSIST! *screaming*", waitTime);
             PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
         }
         PlayerPrefs.Save();
@@ -211,16 +232,8 @@ public class Mole_Bossfight : MonoBehaviour
         bossUI.BossHPSliderDestroy();
         doorsEnd.SetActive(true);
     }
-
-    //Attack variables
-    int attackNumberShovelRain = 0;
-    int attackNumberMoleRain = 0;
-    int attackNumberDrillSide = 0;
-    int attackNumberDrillGround = 0;
-    int attackNumberDrillRain = 0;
-    int attackNumberRock = 0;
+    #region AttacksLogic
     string lastAttack = null;
-
     void AttackChooser()
     {
         attackIsGoing = true;
@@ -234,10 +247,9 @@ public class Mole_Bossfight : MonoBehaviour
         }
     }
 
-    private void ChooseAttackPhase1()
+    private void ChooseAttackPhase1() //RNG, but one attack cannot be played twice in a row (Also works for phase2)
     {
         List<string> possibleAttacks = new List<string> { "MoleRain", "DrillRain", "DrillGround", "DrillSide" };
-
         // Remove the last attack to avoid repeating it
         if (possibleAttacks.Contains(lastAttack))
             possibleAttacks.Remove(lastAttack);
@@ -265,35 +277,33 @@ public class Mole_Bossfight : MonoBehaviour
     private void ChooseAttackPhase2()
     {
         List<string> possibleAttacks = new List<string> { "DrillSide", "MoleRain", "ShovelRain", "Rock" };
-
-        if (possibleAttacks.Contains(lastAttack))
-            possibleAttacks.Remove(lastAttack);
-
-        int rng = Random.Range(0, possibleAttacks.Count);
-        lastAttack = possibleAttacks[rng];
-
-        switch (lastAttack)
+        if (bossNextAttackIsCharge) StartCoroutine(Attack_MoleCharge());
+        else
         {
-            case "DrillSide":
-                StartCoroutine(Attack_SideDrills());
-                break;
-            case "Rock":
-                StartCoroutine(Attack_Rock());
-                break;
-            case "ShovelRain":
-                StartCoroutine(Attack_ShovelRain());
-                break;
-            case "MoleRain":
-                StartCoroutine(Attack_MoleRain());
-                break;
+            int rng = Random.Range(0, possibleAttacks.Count);
+            lastAttack = possibleAttacks[rng];
+            if (possibleAttacks.Contains(lastAttack)) possibleAttacks.Remove(lastAttack);
+            switch (lastAttack)
+            {
+                case "DrillSide":
+                    StartCoroutine(Attack_SideDrills());
+                    break;
+                case "Rock":
+                    StartCoroutine(Attack_Rock());
+                    break;
+                case "ShovelRain":
+                    StartCoroutine(Attack_ShovelRain());
+                    break;
+                case "MoleRain":
+                    StartCoroutine(Attack_MoleRain());
+                    break;
+            }
         }
     }
-
-    //ATTACKS//
-    //PHASE I
+    #endregion
+    #region Phase1Attacks
     public void Attack_DrillRain()
     {
-        attackNumberDrillRain++;
         for (int i = 0; i < 8; i++)
         {
             Vector2 position = new Vector2(-16.50f + (i * 4.75f), 11);
@@ -304,7 +314,6 @@ public class Mole_Bossfight : MonoBehaviour
 
     IEnumerator Attack_MoleRain()
     {
-        attackNumberMoleRain++;
         for (int i = 0; i < 2; i++)
         {
             for (int j = 0; j < 12; j += 2)
@@ -326,7 +335,6 @@ public class Mole_Bossfight : MonoBehaviour
 
     IEnumerator Attack_ShovelRain()
     {
-        attackNumberShovelRain++;
         float attackMoleRainShift = 1.7f;
         float x = -17f;
         float y = 12.78f;
@@ -387,11 +395,10 @@ public class Mole_Bossfight : MonoBehaviour
         }
         attackIsGoing = false;
     }
-
-    //PHASE II
+    #endregion
+    #region Phase2Attacks
     IEnumerator Attack_GroundDrills()
     {
-        attackNumberDrillGround++;
         if (playerScript.Position.x >= 0)
         {
             for (int i = 0; i < 8; i++)
@@ -410,10 +417,10 @@ public class Mole_Bossfight : MonoBehaviour
         }
         attackIsGoing = false;
     }
-
-
     IEnumerator Attack_MoleCharge()
     {
+        bossNextAttackIsCharge = false;
+        Debug.Log("Attack: MoleCharge");
         bossCanBossCharge = false;
         if (playerScript.Position.x > transform.position.x) //right (player je vpravo od Bosse)
         {
@@ -426,11 +433,9 @@ public class Mole_Bossfight : MonoBehaviour
                 if (rb.position.x > 15.55f)
                 {
                     rb.velocity = Vector2.zero;
-                    if (playerScript.Position.x > 14) playerScript.MovePlayer(-5, 0); //hrac bude posunut aby nebyl v Mole
                 }
                 else yield return null;
-            }
-            bossCharge = false;            
+            }       
             animator.SetBool("chargingRight", false);
             attackIsGoing = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
@@ -446,12 +451,11 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 if (rb.position.x < -15.55f)
                 {
-                    rb.velocity = Vector2.zero;
-                    if (playerScript.Position.x < -14) playerScript.MovePlayer(5, 0);
+                    rb.velocity = Vector2.zero;                    
                 }
                 else yield return null;
             }
-            bossCharge = false;            
+            bossNextAttackIsCharge = false;            
             animator.SetBool("chargingLeft", false);
             attackIsGoing = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
@@ -511,13 +515,6 @@ public class Mole_Bossfight : MonoBehaviour
         }
     }
 
-    public void BossHitWhileCharge()
-    {
-        bossCharge = false;
-        animator.SetBool("chargeRight", false);
-        animator.SetBool("chargeLeft" , false);
-    }
-
     IEnumerator PlatformFadeIn()
     {
         platformsCanvasGroup.alpha = 0f;
@@ -541,5 +538,13 @@ public class Mole_Bossfight : MonoBehaviour
         }
         platforms.SetActive(false);
         platformsCanvasGroup.alpha = 0f;
+    }
+    #endregion
+    public void BossHitBeforeCharge()
+    {
+        bossHealth.BossHit();
+        bossNextAttackIsCharge = false;
+        animator.SetBool("chargeRight", false);
+        animator.SetBool("chargeLeft", false);
     }
 }

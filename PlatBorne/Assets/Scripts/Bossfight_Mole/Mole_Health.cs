@@ -13,6 +13,7 @@ public class Mole_Health : MonoBehaviour
     [SerializeField] private int playerDamage = 10;
     [SerializeField] private float invincibilityTimer = 5;
     [Tooltip("OBJECTS")]
+    PlayerHealth playerHealth;
     //PUBLIC//
     public bool bossDead = false;
     public bool pussyModeOn = false;
@@ -40,10 +41,10 @@ public class Mole_Health : MonoBehaviour
         {
             bossHealth -= playerDamage;
             BossInvincible = true;
+            playerHealth.PlayerInvincible = true;
         }
         else
         {
-            PlayerHealth playerHealth = new PlayerHealth();
             playerHealth.PlayerDamage();
         }
     }
@@ -68,5 +69,10 @@ public class Mole_Health : MonoBehaviour
         bossInvincible = false;
         bossHealth = 0;
         bossDead = true;
+    }
+
+    private void Awake()
+    {
+        playerHealth = FindAnyObjectByType<PlayerHealth>();
     }
 }

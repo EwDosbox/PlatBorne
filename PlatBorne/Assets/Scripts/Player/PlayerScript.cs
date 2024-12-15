@@ -8,14 +8,13 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerScript : MonoBehaviour
 {
-    public Saves save;
+    Saves save;
     [SerializeField] private AudioSource hunterDamage;
     [SerializeField] private AudioSource hunterDrop01;
     [SerializeField] private AudioSource hunterDrop02;
-    [SerializeField] PlayerHealth playerHealth;
+    PlayerHealth playerHealth;
 
     public Animator animator;
-    public PlayerHealth health;
     PlayerInputScript playerInputScript;
 
     //Movement Variables
@@ -87,8 +86,14 @@ public class PlayerScript : MonoBehaviour
     }
     private void Start()
     {
-        health = FindAnyObjectByType<PlayerHealth>();
+        //Components
+        save = FindAnyObjectByType<Saves>();
+        if (save == null) Debug.LogError("ERROR: Save is Null");
+        playerHealth = FindAnyObjectByType<PlayerHealth>(FindObjectsInactive.Include);
+        if (playerHealth == null) Debug.LogError("ERROR: PlayerHealth is Null");
         playerInputScript = GetComponent<PlayerInputScript>();
+        if (playerInputScript == null) Debug.LogError("ERROR: PlayerInputScript is Null");
+
         positionYWas = transform.position.y;
         if (PlayerPrefs.HasKey("wasFishing"))
         {
@@ -145,7 +150,7 @@ public class PlayerScript : MonoBehaviour
 
 
         //damage
-        if (Bossfight.playerPlayDamage && !health.GodMode)
+        if (Bossfight.playerPlayDamage && !playerHealth.GodMode)
         {
             hunterDamage.Play();
             Bossfight.playerPlayDamage = false;
