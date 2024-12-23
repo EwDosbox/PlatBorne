@@ -21,10 +21,10 @@ public class Mole_Bossfight : MonoBehaviour
     [Header("Audio")]
     [SerializeField] AudioSource SFXbossHit;
     [SerializeField] AudioSource SFXbossHit02;
-    [SerializeField] AudioSource PreBoss;
-    [SerializeField] AudioSource SFXswitchPhase;
-    [SerializeField] AudioSource SFXbossDeath;
-    [SerializeField] AudioSource SFXbossDeathPussyMode;
+    [SerializeField] AudioSource vlPreBoss;
+    [SerializeField] AudioSource vlSwitchPhase;
+    [SerializeField] AudioSource vlBossDeathNormal;
+    [SerializeField] AudioSource vlBossDeathPussy;
     [Header("OST")]
     [SerializeField] AudioSource OSTPart0;
     [SerializeField] AudioSource OSTPart1;
@@ -63,7 +63,7 @@ public class Mole_Bossfight : MonoBehaviour
     float timerWaitForNextAttack = 0;
     float timerBossCharge = 0;
     float timerAttackSpikes = 0;
-
+    bool playerHasTakenDamageInCharge = false;
     bool timerOn = false;
     //boss attacks
     bool bossCanBossCharge = false;
@@ -74,6 +74,7 @@ public class Mole_Bossfight : MonoBehaviour
     bool bossNextAttackIsCharge = false;
     bool isNextAttackReady = false;
     bool canAttack = true;
+    private AudioSource currentVoiceLine = null;
     Rigidbody2D rb;
     //ANIMATOR
     Animator animator;
@@ -83,23 +84,25 @@ public class Mole_Bossfight : MonoBehaviour
         weakSpot = GetComponentInChildren<Mole_WeakSpot>();
         playerHealth = FindAnyObjectByType<PlayerHealth>();
         bossHealth = FindAnyObjectByType<Mole_Health>();
+        subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
+        save = FindFirstObjectByType<Saves>();
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
         //UI
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
-        subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
-        save = FindFirstObjectByType<Saves>();
-        animator = GetComponent<Animator>();   
         PlayerPrefs.SetString("Level", "mole");
         platforms.SetActive(false);
         bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
-        rb = GetComponent<Rigidbody2D>();
+        MusicManager(MusicEnum.OSTPart0);
     }
     private void FixedUpdate()
     {
         //DEBUG
         Debug.Log("CanAttack" + canAttack);
+        Debug.Log("Animator chargingLeft " + animator.GetBool("chargingLeft")); 
         if (bossfightIsRunning)
         {
             #region DelayBetweenAttacks
@@ -184,6 +187,99 @@ public class Mole_Bossfight : MonoBehaviour
             playerHealth.PlayerDamage();
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") && !playerHasTakenDamageInCharge)
+        {
+            playerHealth.PlayerDamage();
+            playerHasTakenDamageInCharge = true;
+        }
+    }
+
+    #region AudioManagement
+
+    enum VoiceLinesEnum
+    {
+        voiceLinePreBoss,
+        voiceLinesSwitchPhase,
+        voiceLineDeathNormal,
+        voiceLineDeathPussyMode
+    }
+
+    enum MusicEnum
+    {
+        OSTPart0,
+        OSTPart1,
+        OSTPart2,
+        OSTPartEnd,
+        StopAll
+    }
+
+    private void VoiceLinesManager(VoiceLinesEnum voiceLine)
+    {
+        AudioSource clipToPlay = null;
+        string subtitleText = "";
+        if (currentVoiceLine != null && currentVoiceLine.isPlaying) //Stops currently playing VL
+        {
+            currentVoiceLine.Stop();
+        }
+        switch (voiceLine)
+        {
+            case VoiceLinesEnum.voiceLinePreBoss:
+                clipToPlay = vlPreBoss;
+                subtitleText = "At Last, you did it...took you long enough, now get your ass ready for a real fight!";
+                break;
+            case VoiceLinesEnum.voiceLinesSwitchPhase:
+                clipToPlay = vlSwitchPhase;
+                subtitleText = "You wanna play? I will show you how we play with visitors in Birmingham!";
+                break;
+            case VoiceLinesEnum.voiceLineDeathNormal:
+                clipToPlay = vlBossDeathNormal;
+                subtitleText = "YOU CANNOT CHANGE WHAT HAS BEEN DONE! *screaming*";
+                break;
+            case VoiceLinesEnum.voiceLineDeathPussyMode:
+                clipToPlay = vlBossDeathPussy;
+                subtitleText = "THE NIGHT WILL ALWAYS PERSIST! *screaming*";
+                break;
+        }
+        if (clipToPlay != null)
+        {
+            clipToPlay.Play();
+            currentVoiceLine = clipToPlay; 
+        }
+        //Substitles
+        if (PlayerPrefs.HasKey("subtitles") && !string.IsNullOrEmpty(subtitleText))
+        {
+            subtitlesManager.Write(subtitleText, clipToPlay.clip.length);
+        }
+    }
+
+    private void MusicManager(MusicEnum music)
+    {
+        OSTPart0.Stop();
+        OSTPart1.Stop();
+        OSTPart2.Stop();
+        OSTPartEnd.Stop();
+        if (music == MusicEnum.StopAll) return;
+        switch (music)
+        {
+            case MusicEnum.OSTPart0:
+                OSTPart0.Play();
+                break;
+            case MusicEnum.OSTPart1:
+                OSTPart1.Play();
+                break;
+            case MusicEnum.OSTPart2:
+                OSTPart2.Play();
+                break;
+            case MusicEnum.OSTPartEnd:
+                OSTPartEnd.Play();
+                break;
+        }
+    }
+    #endregion
+    #region BossfightStates
     public IEnumerator StartBossFight()
     {
         Debug.Log("Attack: StartBossFight");
@@ -193,9 +289,8 @@ public class Mole_Bossfight : MonoBehaviour
         bossUI.BossHPSliderStart();
         playerHealth.StartHPUI();
         MusicManager(MusicEnum.StopAll);
-        PreBoss.Play();
-        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("At Last, you did it...took you long enough, now get your ass ready for a real fight!", PreBoss.clip.length);
-        yield return new WaitForSeconds(PreBoss.clip.length);
+        VoiceLinesManager(VoiceLinesEnum.voiceLinePreBoss);
+        yield return new WaitForSeconds(vlPreBoss.clip.length + 1);
         MusicManager(MusicEnum.OSTPart1);
         phase = 1;
         bossfightIsRunning = true;
@@ -203,14 +298,17 @@ public class Mole_Bossfight : MonoBehaviour
 
     public IEnumerator ChangePhase()
     {
+        bossHealth.BossInvincible = true;
+        playerHealth.PlayerInvincible = true;
         canAttack = false;
         Debug.Log("Attack: ChangePhase");
-        OSTPart1.Stop();
-        SFXswitchPhase.Play();
-        if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("You wanna play? I will show you how we play with visitors in Birmingham!", SFXswitchPhase.clip.length);
-        yield return new WaitForSeconds(SFXswitchPhase.clip.length);
+        MusicManager(MusicEnum.StopAll);
+        VoiceLinesManager(VoiceLinesEnum.voiceLinesSwitchPhase);
+        VoiceLinesManager(VoiceLinesEnum.voiceLinesSwitchPhase);
+        yield return new WaitForSeconds(vlSwitchPhase.clip.length);
         MusicManager(MusicEnum.OSTPart2);
         phase = 2;
+        playerHealth.PlayerInvincible = false;
         StartCoroutine(PlatformFadeIn());
         attackSpikesActivate = true;
         StartCoroutine(Attack_MoleCharge());
@@ -233,16 +331,16 @@ public class Mole_Bossfight : MonoBehaviour
         float waitTime = 0;
         if (PlayerPrefs.HasKey("PussyMode"))
         {
-            SFXbossDeathPussyMode.Play();
-            waitTime = SFXbossDeathPussyMode.clip.length;
-            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("THE NIGHT WILL ALWAYS PERSIST! *screaming*", waitTime);
+            VoiceLinesManager(VoiceLinesEnum.voiceLineDeathPussyMode);
+            waitTime = vlBossDeathPussy.clip.length;
+            VoiceLinesManager(VoiceLinesEnum.voiceLineDeathPussyMode);
             PlayerPrefs.DeleteKey("BeatenWithAPussyMode_Brecus");
         }
-        else 
+        else
         {
-            SFXbossDeath.Play();
-            waitTime = SFXbossDeath.clip.length;
-            if (PlayerPrefs.HasKey("subtitles")) subtitlesManager.Write("YOU CANNOT CHANGE WHAT HAS BEEN DONE! *screaming*", waitTime);
+            VoiceLinesManager(VoiceLinesEnum.voiceLineDeathNormal);
+            waitTime = vlBossDeathNormal.clip.length;
+            VoiceLinesManager(VoiceLinesEnum.voiceLineDeathNormal);
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
         }
         bossUI.FadeOutEffect(waitTimeToTransitionToCutscene - waitTime);
@@ -256,6 +354,8 @@ public class Mole_Bossfight : MonoBehaviour
         }
         else SceneManager.LoadScene(10);
     }
+    #endregion
+
     #region AttacksLogic
     string lastAttack = null;
     void AttackChooser()
@@ -466,6 +566,7 @@ public class Mole_Bossfight : MonoBehaviour
             }
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
             MovePlayerIfInsideOfMole();
+            playerHasTakenDamageInCharge = false; //reset
             animator.SetBool("chargingRight", false);
             attackIsGoing = false;
             yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
@@ -553,32 +654,38 @@ public class Mole_Bossfight : MonoBehaviour
     }
 
 
-    IEnumerator PlatformFadeIn()
+    IEnumerator PlatformFadeIn(float fadeDuration = 1f)
     {
         Debug.Log("PlatformFadeIn");
         platformsCanvasGroup.alpha = 0f;
         platforms.SetActive(true);
+        float fadeSpeed = 1f / fadeDuration;
         while (platformsCanvasGroup.alpha < 1f)
         {
-            platformsCanvasGroup.alpha += 0.01f;
-            yield return new WaitForSeconds(0.01f / 1);
+            platformsCanvasGroup.alpha += fadeSpeed * Time.deltaTime;
+            yield return null; 
         }
         platformsCanvasGroup.alpha = 1f;
     }
 
-    IEnumerator PlatformFadeOut()
+
+    IEnumerator PlatformFadeOut(float fadeDuration = 1f)
     {
-        Debug.Log("PlatformFadeOut");
-        platformsCanvasGroup.alpha = 1f;
-        platforms.SetActive(true);
-        while (platformsCanvasGroup.alpha < 1f)
+        if (platforms.activeInHierarchy)
         {
-            platformsCanvasGroup.alpha += 0.01f;
-            yield return new WaitForSeconds(0.01f / 1);
+            Debug.Log("PlatformFadeOut");
+            platformsCanvasGroup.alpha = 1f;
+            float fadeSpeed = 1f / fadeDuration;
+            while (platformsCanvasGroup.alpha > 0f)
+            {
+                platformsCanvasGroup.alpha -= fadeSpeed * Time.deltaTime;
+                yield return null;
+            }
+            platformsCanvasGroup.alpha = 0f;
+            platforms.SetActive(false);
         }
-        platforms.SetActive(false);
-        platformsCanvasGroup.alpha = 0f;
     }
+
     #endregion
     public void BossHitBeforeCharge()
     {
@@ -587,67 +694,19 @@ public class Mole_Bossfight : MonoBehaviour
         animator.SetBool("chargingRight", false);
         animator.SetBool("chargingLeft", false);
     }
-
     private void  MovePlayerIfInsideOfMole()
     {
         if (playerScript.transform.position.x < -14) //PlayerOnLeft
         {
             playerScript.MovePlayer(5, 0); //Move Right
+            if (!playerHasTakenDamageInCharge) playerHealth.PlayerDamage();
             Debug.Log("CheckIfPlayerIsInMole Move Right");
         }
         if (playerScript.transform.position.x > 14) //PlayerOnRight
         {
             playerScript.MovePlayer(-5, 0); //Move Left
+            if (!playerHasTakenDamageInCharge) playerHealth.PlayerDamage();
             Debug.Log("CheckIfPlayerIsInMole Move Left");
         }
     }
-
-    #region AudioManagement
-
-    enum VoiceLinesEnum
-    {
-        voiceLinePreBoss,
-        voiceLinesSwitchPhase,
-        voiceLineDeathNormal,
-        voiceLineDeathPussyMode
-    }
-
-    enum MusicEnum
-    {
-        OSTPart0,
-        OSTPart1,
-        OSTPart2,
-        OSTPartEnd,
-        StopAll
-    }
-
-    private void VoiceLinesManager()
-    {        
-
-    }
-
-    private void MusicManager(MusicEnum music)
-    {
-        OSTPart0.Stop();
-        OSTPart1.Stop();
-        OSTPart2.Stop();
-        OSTPartEnd.Stop();
-        if (music == MusicEnum.StopAll) return;
-        switch (music)
-        {
-            case MusicEnum.OSTPart0:
-                OSTPart0.Play();
-                break;
-            case MusicEnum.OSTPart1:
-                OSTPart1.Play();
-                break;
-            case MusicEnum.OSTPart2:
-                OSTPart2.Play();
-                break;
-            case MusicEnum.OSTPartEnd:
-                OSTPartEnd.Play();
-                break;
-        }
-    }
-    #endregion
 }

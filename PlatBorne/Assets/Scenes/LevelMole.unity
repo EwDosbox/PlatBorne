@@ -1826,7 +1826,6 @@ GameObject:
   - component: {fileID: 523258940}
   - component: {fileID: 523258939}
   - component: {fileID: 523258938}
-  - component: {fileID: 523258937}
   - component: {fileID: 523258942}
   - component: {fileID: 523258944}
   - component: {fileID: 523258943}
@@ -1854,14 +1853,14 @@ MonoBehaviour:
   playerScript: {fileID: 1837068404}
   SFXbossHit: {fileID: 523258944}
   SFXbossHit02: {fileID: 523258943}
-  PreBoss: {fileID: 523258938}
-  SFXswitchPhase: {fileID: 523258941}
-  SFXbossDeath: {fileID: 523258940}
-  SFXbossDeathPussyMode: {fileID: 523258939}
+  vlPreBoss: {fileID: 523258938}
+  vlSwitchPhase: {fileID: 523258941}
+  vlBossDeathNormal: {fileID: 523258940}
+  vlBossDeathPussy: {fileID: 523258939}
   OSTPart0: {fileID: 2083518173}
   OSTPart1: {fileID: 1609265824}
   OSTPart2: {fileID: 1531586942}
-  OSTPartEND: {fileID: 957812603}
+  OSTPartEnd: {fileID: 957812603}
   prefabDrillGround: {fileID: 600573318186101669, guid: 4e908b1c802f622499296b03f48e5eee, type: 3}
   prefabDrillRain: {fileID: 5573192864336604650, guid: 2f124698284b37c469ae84ba1630644c, type: 3}
   prefabDrillSide: {fileID: 1663558952744578279, guid: c4a3172cb265f2c4d9e1f3fdf5840d0e, type: 3}
@@ -2027,102 +2026,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.388452, y: 6.2512817}
   m_EdgeRadius: 0
---- !u!82 &523258937
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523258930}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!82 &523258938
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3778,7 +3681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac6e2ee8a3e352449d6a470a630be9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDamage: 20
+  playerDamage: 15
   invincibilityTimer: 0
   bossDead: 0
   pussyModeOn: 0
@@ -4875,7 +4778,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -6479473805308726035, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   m_audioClip: {fileID: 8300000, guid: d54a25be08cc5584482afbd06950224b, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
