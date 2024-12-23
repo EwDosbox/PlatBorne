@@ -190,7 +190,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a746b764b41622745a1d681ec9a1306d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b5739602b1fa92443a779471b08def40, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -213,13 +213,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fff21e11fe423409b8abe7791dc698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  save: {fileID: 0}
   hunterDamage: {fileID: 2867845862149728934}
   hunterDrop01: {fileID: 6935579868319366984}
   hunterDrop02: {fileID: 4858677654214485520}
-  playerHealth: {fileID: 0}
   animator: {fileID: 166162755306215924}
-  health: {fileID: 0}
   rb: {fileID: 4160181815571881102}
   pushRightLayer:
     serializedVersion: 2
@@ -1178,11 +1175,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2976262492976023793, guid: 1e75c7b51eea9974aa6cc6f3b9adddcc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -752.44714
+      value: -713.7
       objectReference: {fileID: 0}
     - target: {fileID: 2976262492976023793, guid: 1e75c7b51eea9974aa6cc6f3b9adddcc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 265.99976
+      value: 276.4
       objectReference: {fileID: 0}
     - target: {fileID: 2976262492976023793, guid: 1e75c7b51eea9974aa6cc6f3b9adddcc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

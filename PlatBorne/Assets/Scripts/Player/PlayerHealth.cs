@@ -78,6 +78,7 @@ public class PlayerHealth : MonoBehaviour
                 temp.SetActive(false);
             }
         }
+        else this.gameObject.SetActive(false);
     }
     public void PlayerDamage()
     {
