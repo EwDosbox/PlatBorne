@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class Mole_Bossfight : MonoBehaviour
@@ -37,7 +38,7 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject prefabMoleRain;
     [SerializeField] GameObject prefabSpike;
     [SerializeField] GameObject platforms;
-    [SerializeField] CanvasGroup platformsCanvasGroup;
+    [SerializeField] TilemapRenderer platformsTileMapRenderer;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
     [SerializeField] GameObject prefabRockDirt;
@@ -309,7 +310,7 @@ public class Mole_Bossfight : MonoBehaviour
         MusicManager(MusicEnum.OSTPart2);
         phase = 2;
         playerHealth.PlayerInvincible = false;
-        StartCoroutine(PlatformFadeIn());
+        StartCoroutine(PlatformFadeIn(5)); //DEBUG
         attackSpikesActivate = true;
         StartCoroutine(Attack_MoleCharge());
         if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
@@ -326,7 +327,7 @@ public class Mole_Bossfight : MonoBehaviour
         if (transform.position.x <= 0) animator.SetBool("deathLeft", true);
         else animator.SetBool("deathRight", true);
         #endregion
-        PlatformFadeOut();
+        PlatformFadeOut(5); //DEBUG
         rb.angularVelocity = 0;
         float waitTime = 0;
         if (PlayerPrefs.HasKey("PussyMode"))
@@ -636,54 +637,68 @@ public class Mole_Bossfight : MonoBehaviour
     private void Attack_Spikes()
     {
         Debug.Log("AttackSpikesStart");
-        Vector2[] positions = new Vector2[6];
         float y = -2.62f;
+        float offset = 2.45f;
 
-        positions[0] = new Vector2(-8.2544f, y);
-        positions[1] = new Vector2(8.2544f, y);
-        positions[2] = new Vector2(-6.4772f, y);
-        positions[3] = new Vector2(6.4772f, y);
-        positions[4] = new Vector2(-4.701f, y);
-        positions[5] = new Vector2(4.701f, y);
-
-        for (int i = 0; i < positions.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            Instantiate(prefabSpike, positions[i], Quaternion.identity);
+            float temp = -10.94f + i * offset;
+            Instantiate(prefabSpike, new Vector2(temp, y) , Quaternion.identity);
+            Instantiate(prefabSpike, new Vector2(Mathf.Abs(temp), y), Quaternion.identity);
         }
         attackSpikesActivate = false;
     }
 
 
-    IEnumerator PlatformFadeIn(float fadeDuration = 1f)
+    IEnumerator PlatformFadeIn(float fadeDuration = 2)
     {
         Debug.Log("PlatformFadeIn");
-        platformsCanvasGroup.alpha = 0f;
-        platforms.SetActive(true);
-        float fadeSpeed = 1f / fadeDuration;
-        while (platformsCanvasGroup.alpha < 1f)
+        if (platformsTileMapRenderer == null)
         {
-            platformsCanvasGroup.alpha += fadeSpeed * Time.deltaTime;
-            yield return null; 
+            Debug.LogError("TilemapRenderer is not assigned!");
+            yield break;
         }
-        platformsCanvasGroup.alpha = 1f;
+        platforms.SetActive(true);
+        float elapsedTime = 0f;
+        Color startColor = platformsTileMapRenderer.material.color;
+        startColor.a = 0f; //a == alpha
+        platformsTileMapRenderer.material.color = startColor;
+        Color targetColor = startColor;
+        targetColor.a = 1f;
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / fadeDuration);
+            platformsTileMapRenderer.material.color = Color.Lerp(startColor, targetColor, t);
+            yield return null;
+        }
+        platformsTileMapRenderer.material.color = targetColor; //just to make sure
     }
 
 
-    IEnumerator PlatformFadeOut(float fadeDuration = 1f)
+    IEnumerator PlatformFadeOut(float fadeDuration = 2)
     {
-        if (platforms.activeInHierarchy)
+        Debug.Log("PlatformFadeOutn");
+        if (platformsTileMapRenderer == null)
         {
-            Debug.Log("PlatformFadeOut");
-            platformsCanvasGroup.alpha = 1f;
-            float fadeSpeed = 1f / fadeDuration;
-            while (platformsCanvasGroup.alpha > 0f)
-            {
-                platformsCanvasGroup.alpha -= fadeSpeed * Time.deltaTime;
-                yield return null;
-            }
-            platformsCanvasGroup.alpha = 0f;
-            platforms.SetActive(false);
+            Debug.LogError("TilemapRenderer is not assigned!");
+            yield break;
         }
+        platforms.SetActive(true);
+        float elapsedTime = 0f;
+        Color startColor = platformsTileMapRenderer.material.color;
+        startColor.a = 1f; //a == alpha
+        platformsTileMapRenderer.material.color = startColor;
+        Color targetColor = startColor;
+        targetColor.a = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / fadeDuration);
+            platformsTileMapRenderer.material.color = Color.Lerp(startColor, targetColor, t);
+            yield return null;
+        }
+        platformsTileMapRenderer.material.color = targetColor; //just to make sure
     }
 
     #endregion

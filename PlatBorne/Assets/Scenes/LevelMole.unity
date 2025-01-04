@@ -1867,7 +1867,7 @@ MonoBehaviour:
   prefabMoleRain: {fileID: 5052359552768213474, guid: abba726c30b88614a93b90c409ee3336, type: 3}
   prefabSpike: {fileID: 1079730216622355036, guid: 42fc5c69d7ef7214fb4096ee4f9573c8, type: 3}
   platforms: {fileID: 940032533}
-  platformsCanvasGroup: {fileID: 940032538}
+  platformsTileMapRenderer: {fileID: 940032535}
   prefabROCK: {fileID: 4298796234376706703, guid: b6321589a3bebcf4dbd5e500c3113505, type: 3}
   prefabShovelRain: {fileID: 6098093470622872932, guid: b8a27f4befb39d548a55125df826142e, type: 3}
   prefabRockDirt: {fileID: 1874224432129532152, guid: 951e9238fa581d443a259211fe26c92f, type: 3}
