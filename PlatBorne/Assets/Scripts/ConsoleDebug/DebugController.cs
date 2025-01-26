@@ -171,14 +171,19 @@ public class DebugController : MonoBehaviour
                 PlayerPrefs.SetInt("PussyMode", 1);
                 PlayerPrefs.Save();
                 CommandCorrectAnswer();
-                if (playerHealth != null) playerHealth.PussyMode = true;
+                if (SceneManager.GetActiveScene().name == "LevelBoss") bossfight.SetPussyMode(true);
+                else if (SceneManager.GetActiveScene().name == "LevelMole") moleBossfight.SetPussyMode(true);
+                else return;
+                CommandCorrectAnswer();
             }
             else
             {
-                PlayerPrefs.DeleteKey("PussyMode");
+                PlayerPrefs.SetInt("PussyMode", 0);
                 PlayerPrefs.Save();
+                if (SceneManager.GetActiveScene().name == "LevelBoss") bossfight.SetPussyMode(true);
+                else if (SceneManager.GetActiveScene().name == "LevelMole") moleBossfight.SetPussyMode(true);
+                else return;
                 CommandCorrectAnswer();
-                if (playerHealth != null) playerHealth.PussyMode = false;
             }
         });
 

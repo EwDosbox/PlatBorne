@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class Mole_Bossfight : MonoBehaviour
@@ -54,11 +55,10 @@ public class Mole_Bossfight : MonoBehaviour
     public float moleCharge_TimeBeforeIdle;
     public float moleCharge_Velocity;
     public float rock_ChargeTime;
-    public GameObject UI_Player;
-    public GameObject UI_Boss;
     public float waitTimeToTransitionToCutscene;
     private bool changePhaseHasPlayed = false;
     private bool bossDeathHasPlayed = false;
+    private bool pussyModeActive = false;
     //timers
     float timer = 0;
     float timerWaitForNextAttack = 0;
@@ -79,6 +79,10 @@ public class Mole_Bossfight : MonoBehaviour
     Rigidbody2D rb;
     //ANIMATOR
     Animator animator;
+    [Header("GameObjects")]
+    [SerializeField] GameObject pussyModeGameObject;
+    [SerializeField] GameObject UI_Player;
+    [SerializeField] GameObject UI_Boss;
     private void Start()
     {
         //Initialize Components
@@ -90,16 +94,18 @@ public class Mole_Bossfight : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         //UI
+        PussyModeManager();
+        PlayerPrefs.SetString("Level", "mole");
+        PlayerPrefs.Save();
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
-        PlayerPrefs.SetString("Level", "mole");
         platforms.SetActive(false);
         bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
         timer = save.TimerLoad(4);
         MusicManager(MusicEnum.OSTPart0);
     }
-    private void FixedUpdate()
+    private void Update()
     {
         //DEBUG
         Debug.Log("CanAttack" + canAttack);
@@ -166,6 +172,7 @@ public class Mole_Bossfight : MonoBehaviour
             #endregion
             timer += Time.deltaTime;
             save.TimerSave(timer, 4);
+            pussyModeGameObject.SetActive(pussyModeActive);
         }
     }
     void OnCollisionEnter2D(Collision2D collision)
@@ -280,16 +287,16 @@ public class Mole_Bossfight : MonoBehaviour
         }
     }
     #endregion
+
     #region BossfightStates
     public IEnumerator StartBossFight()
-    {
-        Debug.Log("Attack: StartBossFight");
-        Attack_SideDrills();
+    {        
         UI_Boss.SetActive(true);
         UI_Player.SetActive(true);
         bossUI.BossHPSliderStart();
+        pussyModeGameObject.SetActive(pussyModeActive);
         playerHealth.StartHPUI();
-        MusicManager(MusicEnum.StopAll);
+        MusicManager(MusicEnum.StopAll);        
         VoiceLinesManager(VoiceLinesEnum.voiceLinePreBoss);
         yield return new WaitForSeconds(vlPreBoss.clip.length + 1);
         MusicManager(MusicEnum.OSTPart1);
@@ -310,10 +317,10 @@ public class Mole_Bossfight : MonoBehaviour
         MusicManager(MusicEnum.OSTPart2);
         phase = 2;
         playerHealth.PlayerInvincible = false;
-        StartCoroutine(PlatformFadeIn(5)); //DEBUG
+        StartCoroutine(PlatformFadeIn(1));
         attackSpikesActivate = true;
         StartCoroutine(Attack_MoleCharge());
-        if (bossHealth.pussyModeOn) playerHealth.PlayerHP = 3;
+        if (pussyModeActive) playerHealth.PlayerHP = 3;
     }
 
     public IEnumerator BossDeath()
@@ -327,7 +334,7 @@ public class Mole_Bossfight : MonoBehaviour
         if (transform.position.x <= 0) animator.SetBool("deathLeft", true);
         else animator.SetBool("deathRight", true);
         #endregion
-        PlatformFadeOut(5); //DEBUG
+        StartCoroutine(PlatformFadeOut(1));
         rb.angularVelocity = 0;
         float waitTime = 0;
         if (PlayerPrefs.HasKey("PussyMode"))
@@ -709,7 +716,7 @@ public class Mole_Bossfight : MonoBehaviour
         animator.SetBool("chargingRight", false);
         animator.SetBool("chargingLeft", false);
     }
-    private void  MovePlayerIfInsideOfMole()
+    private void MovePlayerIfInsideOfMole()
     {
         if (playerScript.transform.position.x < -14) //PlayerOnLeft
         {
@@ -723,5 +730,32 @@ public class Mole_Bossfight : MonoBehaviour
             if (!playerHasTakenDamageInCharge) playerHealth.PlayerDamage();
             Debug.Log("CheckIfPlayerIsInMole Move Left");
         }
+    }
+
+    private void FirstTimeBossChecker()
+    {
+        if (!PlayerPrefs.HasKey("MoleFirstTime") || PlayerPrefs.GetInt("MoleFirstTime") == 0) //Boss will be set on normal difficulty the first time
+        {
+            PlayerPrefs.SetInt("MoleFirstTime", 1);
+            if (PlayerPrefs.HasKey("PussyMode")) PlayerPrefs.SetInt("PussyMode", 0);
+            PlayerPrefs.Save();
+            Debug.Log("PussyMode Reset");
+        }
+    }
+
+    private void PussyModeManager()
+    {
+        if (pussyModeGameObject == null) Debug.LogError("Could not find PussyModeText");
+        else
+        {
+            FirstTimeBossChecker();
+            if (PlayerPrefs.HasKey("PussyMode") && PlayerPrefs.GetInt("PussyMode") != 0) pussyModeActive = true;
+            else pussyModeActive = false;
+        }
+    }
+
+    public void SetPussyMode(bool state)
+    {
+        pussyModeActive = state;
     }
 }

@@ -97,15 +97,15 @@ public class PlayerHealth : MonoBehaviour
             int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
             ded++;
             PlayerPrefs.SetInt("NumberOfDeath", ded);
-            SceneManager.LoadScene("PlayerDeath");
         }
         else if (boss == 2)
         {
             int ded = PlayerPrefs.GetInt("NumberOfDeath_Mole", 0);
             ded++;
             PlayerPrefs.SetInt("NumberOfDeath_Mole", ded);
-            SceneManager.LoadScene("PlayerDeath");
         }
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("PlayerDeath");
     }
 
     public void StartHPUI()

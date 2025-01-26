@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using Unity.VisualScripting;
@@ -14,58 +15,63 @@ public class PlayerDeath : MonoBehaviour
     public Text dialogueText;
     public Text pussyModeText;
     bool pussyModeActive = false;
-    int bossDeathCount;
+    int bossDeathCount = 0;
     float waitingTimer = 0;
-    
+    private Coroutine currentCoroutine;
 
     private void Start()
     {
-        VLBrecusDeath = GetComponentsInChildren<AudioSource>(true)
-                                .Where(v => v.gameObject.name  == "Brecus")  // Exclude parent
-                                .OrderBy(v => v.gameObject.name)  // Sort by name
-                                .ToArray();
-        VLMoleDeath = GetComponentsInChildren<AudioSource>(true)
-                                .Where(v => v.gameObject.name == "Mole")  // Exclude parent
-                                .OrderBy(v => v.gameObject.name)  // Sort by name
-                                .ToArray();
-        if (PlayerPrefs.HasKey("PussyMode")) 
+        try
         {
-            int numberPussy = (PlayerPrefs.GetInt("PussyMode"));
-            if (numberPussy == 1)
+            VLBrecusDeath = transform.Find("Brecus").GetComponentsInChildren<AudioSource>();
+            VLMoleDeath = transform.Find("Mole").GetComponentsInChildren<AudioSource>();
+            if (VLBrecusDeath == null || VLMoleDeath == null) throw new NotImplementedException();
+            if (PlayerPrefs.HasKey("PussyMode"))
             {
-                pussyModeActive = true;
-                pussyModeText.text = "Press 'Space' to deactivate Pussy Mode\n(heal after each phase)";
+                int numberPussy = (PlayerPrefs.GetInt("PussyMode"));
+                if (numberPussy == 1)
+                {
+                    pussyModeActive = true;
+                    pussyModeText.text = "Press 'Space' to deactivate Pussy Mode\n(heal after each phase)";
+                }
             }
+            string level = PlayerPrefs.GetString("Level");
+            if (level == "bricus")
+            {
+                bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
+                Debug.Log("bossDeathCount: " + bossDeathCount);
+                if (bossDeathCount != 0 && bossDeathCount < VLBrecusDeath.Length)
+                {
+                    VLBrecusDeath[bossDeathCount - 1].Play();
+                    TypeWriterText(textBrecus[bossDeathCount - 1], 0.1f, dialogueText);
+                }
+                else
+                {
+                    VLBrecusDeath.Last().Play();
+                    TypeWriterText(textBrecus.Last(), 0.1f, dialogueText);
+                }
+            }
+            else if (level == "mole")
+            {
+                bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath_Mole");
+                Debug.Log("bossDeathCount: " + bossDeathCount);
+                if (bossDeathCount != 0 && bossDeathCount < VLMoleDeath.Length)
+                {
+                    VLMoleDeath[bossDeathCount - 1].Play();
+                    TypeWriterText(textMole[bossDeathCount - 1], 0.1f, dialogueText);
+                }
+                else
+                {
+                    VLMoleDeath.Last().Play();
+                    TypeWriterText(textMole.Last(), 0.1f, dialogueText);
+                }
+            }
+            else throw new NotImplementedException();
         }
-        if (PlayerPrefs.GetString("Level") == "bricus")
+        catch (NotImplementedException) //Gotta use this beacuse I aint doing my own exception
         {
-            int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
-            if (bossDeathCount == 0 || bossDeathCount == VLBrecusDeath.Length)
-            {
-                VLBrecusDeath[VLBrecusDeath.Length - 1].Play();
-                StartCoroutine(TypeWriterText(textBrecus[VLBrecusDeath.Length - 1], 0.1f, dialogueText));
-            }
-            else
-            {
-                VLBrecusDeath[bossDeathCount - 1].Play();
-                StartCoroutine(TypeWriterText(textBrecus[bossDeathCount - 1], 0.1f, dialogueText));
-            }
+            TypeWriterText("Damn Mike Wazowski You Broke My Code...How Did you Do That?", 0.1f, dialogueText);
         }
-        else if (PlayerPrefs.GetString("Level") == "mole")
-        {
-            int bossDeathCount = PlayerPrefs.GetInt("NumberOfDeath");
-            if (bossDeathCount == 0 || bossDeathCount == VLBrecusDeath.Length)
-            {
-                VLBrecusDeath[VLBrecusDeath.Length - 1].Play();
-                StartCoroutine(TypeWriterText(textBrecus[VLBrecusDeath.Length - 1], 0.1f, dialogueText));
-            }
-            else
-            {
-                VLBrecusDeath[bossDeathCount - 1].Play();
-                StartCoroutine(TypeWriterText(textBrecus[bossDeathCount - 1], 0.1f, dialogueText));
-            }
-        }
-        else StartCoroutine(TypeWriterText("Damn Mike Wazowski You Broke My Code...How Did you Do That?", 0.1f, dialogueText));
     }
     private void Update()
     {
@@ -95,7 +101,7 @@ public class PlayerDeath : MonoBehaviour
             waitingTimer = 0;
         }
     }
-    private IEnumerator TypeWriterText(string writerText, float timeBtwChars, Text UIMainText)
+    private IEnumerator TypeWriter(string writerText, float timeBtwChars, Text UIMainText)
     {
         foreach (char c in writerText)
         {
@@ -103,4 +109,21 @@ public class PlayerDeath : MonoBehaviour
             yield return new WaitForSeconds(timeBtwChars);
         }
     }
+
+    private void TypeWriterText(string writerText, float timeBtwChars, Text UIMainText)
+    {
+        if (currentCoroutine == null)
+        {
+            currentCoroutine = StartCoroutine(TypeWriter(writerText, timeBtwChars, UIMainText));
+            Debug.Log("Playing Message");
+        }
+        else
+        {
+            StopCoroutine(currentCoroutine);
+            currentCoroutine = null;
+            UIMainText.text = ""; // Reset the text
+        }        
+    }
+
+    
 }

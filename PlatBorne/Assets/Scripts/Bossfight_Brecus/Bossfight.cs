@@ -57,6 +57,7 @@ public class Bossfight : MonoBehaviour
     int attackNumberSword = 0;
     //****************
     public BoxCollider2D bounds;
+    public bool pussyModeActive = false;
     SubtitlesManager subtitlesManager;
     private int resetPromenych()
     {
@@ -72,7 +73,7 @@ public class Bossfight : MonoBehaviour
         bossIsDead = true;
         BossDeath01.Play();
         bossAnimation.SetBool("Boss Death", true);
-        if (pussyModeOn)
+        if (pussyModeActive)
         {
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
             PlayerPrefs.Save();
@@ -117,6 +118,7 @@ public class Bossfight : MonoBehaviour
     }
     private void Update()
     {
+        pussyModeOn.gameObject.SetActive(pussyModeActive);
         if (bossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
         if (pauseMenu.activeInHierarchy) timerOn = false;
@@ -319,15 +321,16 @@ public class Bossfight : MonoBehaviour
             }
         }
         #endregion
-        #region Start UI
-        else if (PlayerScript.bossHitboxLeft && !bossfightStarted) //Start of Bossfight - UI inicialization
+
+        #region Start of Bossfight - UI inicialization (once)
+        else if (PlayerScript.bossHitboxLeft && !bossfightStarted)
         {
             UI_BossHP.SetActive(true);
             UI_PlayerHP.SetActive(true);
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
-            if (playerHealth.PussyMode) pussyModeOn.text = "Pussy Mode Is Active";
+            PussyModeManager();
             bossHealthBar.Slider();
             playerHealth.StartHPUI();
             StartCoroutine(DIALOGWaitingLine("preboss"));
@@ -374,5 +377,23 @@ public class Bossfight : MonoBehaviour
         {
             ost.Stop();
         }
+    }
+
+    private void PussyModeManager()
+    {
+        if (!PlayerPrefs.HasKey("BrecusFirstTime")) //Boss will be set on normal difficulty the first time
+        {
+            PlayerPrefs.SetInt("BrecusFirstTime", 1);
+            if (PlayerPrefs.HasKey("PussyMode")) PlayerPrefs.SetInt("PussyMode", 0);
+            PlayerPrefs.Save();
+        }
+
+        if (PlayerPrefs.HasKey("PussyMode") && PlayerPrefs.GetInt("PussyMode") != 0) pussyModeActive = true;
+        else pussyModeActive = false;
+    }
+
+    public void SetPussyMode(bool state)
+    {
+        pussyModeActive = state;
     }
 }

@@ -150,11 +150,10 @@ public class MainMenu : MonoBehaviour
             default:
                 {
                     SceneManager.LoadScene("LevelLondon");
-                    Debug.Log("Couldnt load a Save");
+                    Debug.LogError("Could not load a Save");
                     break;
                 }
         }
-        Debug.Log(PlayerPrefs.GetString("Level"));
     }
 
     public void Settings()
@@ -281,22 +280,22 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("LevelBirmingham");
     }
 
-    //public void Mole()
-    //{
-    //    src.PlayOneShot(srcOne);
-    //    StartCoroutine(_Mole());
-    //}
+    public void Mole()
+    {
+        src.PlayOneShot(srcOne);
+        StartCoroutine(_Mole());
+    }
 
-    //public IEnumerator _Mole()
-    //{
-    //    NewGameSaveReset();
-    //    PlayerPrefs.SetString("Level", "mole");
-    //    PlayerPrefs.Save();
-    //    InGame = true;
-    //    transitionAnim.SetTrigger("Fade_End");
-    //    yield return new WaitForSeconds(0.9f);
-    //    SceneManager.LoadScene("LevelMole");
-    //}
+    public IEnumerator _Mole()
+    {
+        NewGameSaveReset();
+        PlayerPrefs.SetString("Level", "mole");
+        PlayerPrefs.Save();
+        InGame = true;
+        transitionAnim.SetTrigger("Fade_End");
+        yield return new WaitForSeconds(0.9f);
+        SceneManager.LoadScene("LevelMole");
+    }
 
     public void OpenActMenu()
     {

@@ -6,7 +6,6 @@ public class Mole_UI : MonoBehaviour
 {
     // UNITY
     public CanvasGroup whiteScreen;
-    public GameObject pussyMode;
     public Slider hpSlider;
     bool hpSliderOn = false;
     [SerializeField] GameObject bossSlider;
@@ -25,15 +24,6 @@ public class Mole_UI : MonoBehaviour
 
     void Update()
     {
-        if (health.pussyModeOn)
-        {
-            pussyMode.SetActive(true);
-        }
-        else
-        {
-            pussyMode.SetActive(false);
-        }
-
         if (hpSliderOn)
         {
             if (hpSlider.enabled)

@@ -135,12 +135,12 @@ GameObject:
   - component: {fileID: 120485450}
   - component: {fileID: 120485449}
   m_Layer: 5
-  m_Name: Pussy Mode
+  m_Name: PussyModeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &120485448
 RectTransform:
   m_ObjectHideFlags: 0
@@ -149,7 +149,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 120485447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 7.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1882,9 +1882,10 @@ MonoBehaviour:
   moleCharge_TimeBeforeIdle: 5
   moleCharge_Velocity: 50
   rock_ChargeTime: 2
+  waitTimeToTransitionToCutscene: 5
+  pussyModeGameObject: {fileID: 120485447}
   UI_Player: {fileID: 1505998208}
   UI_Boss: {fileID: 1252351633}
-  waitTimeToTransitionToCutscene: 5
 --- !u!4 &523258932
 Transform:
   m_ObjectHideFlags: 0
@@ -3684,7 +3685,6 @@ MonoBehaviour:
   playerDamage: 15
   invincibilityTimer: 0
   bossDead: 0
-  pussyModeOn: 0
 --- !u!1 &1252351633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3967,7 +3967,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   whiteScreen: {fileID: 1695185520}
-  pussyMode: {fileID: 120485447}
   hpSlider: {fileID: 1252351636}
   bossSlider: {fileID: 1252351633}
   health: {fileID: 1060101276}

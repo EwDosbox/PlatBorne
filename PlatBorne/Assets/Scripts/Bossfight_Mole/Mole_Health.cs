@@ -16,7 +16,6 @@ public class Mole_Health : MonoBehaviour
     PlayerHealth playerHealth;
     //PUBLIC//
     public bool bossDead = false;
-    public bool pussyModeOn = false;
     //PRIVATE//
     private int bossHealth = 100;
     private bool bossInvincible = true;

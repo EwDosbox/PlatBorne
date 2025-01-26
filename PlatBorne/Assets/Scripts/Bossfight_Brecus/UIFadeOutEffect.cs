@@ -26,7 +26,7 @@ public class UIFadeOutEffect : MonoBehaviour
             else
             {
                 uiCanvas.alpha = 0f;
-                fadeOut = false; //Optimalization
+                fadeOut = false; //Optimalization and shit
             }
         }        
     }
