@@ -105,6 +105,7 @@ public class PlayerScript : MonoBehaviour
     }
     void Update()
     {
+        //Big Fall
         if (hunterIsDown && Input.anyKey)
         {
             hunterIsDown = false;
