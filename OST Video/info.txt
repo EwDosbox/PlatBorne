@@ -1,7 +1,7 @@
 In the folder "Platborne OST Beta [DAVINCI RESOLVE]" is a timeline for video-editor DaVinci Resolve 19
 If, for whatever the reason, you want to play with this, use DaVinci Resolve version 19 or higher. If you use higher version, it will ask you to convert the folder to that version. Just agree.
 The full video version is on YT
-Full version: https://youtu.be/qznDGWOeGQA (Private for now)
+Full version: https://youtu.be/qznDGWOeGQA
 Kokorotko YT Channel: https://www.youtube.com/@Dev-Kokorotko
 Have fun :3
 -Kokorotko
