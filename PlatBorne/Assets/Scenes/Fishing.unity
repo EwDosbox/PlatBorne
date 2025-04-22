@@ -277,22 +277,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6698113
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.30849138
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.13585795
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -335,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (0)
+      value: Fish 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -752,18 +736,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.107422575
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.16205642
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.3207547
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7
@@ -806,7 +778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (2)
+      value: Fish 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -870,18 +842,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.33449566
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8901961
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.24705878
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5
@@ -924,7 +884,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (1)
+      value: Fish 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1049,7 +1009,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6738ddc92791c4946809413561346a78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  save: {fileID: 0}
 --- !u!1001 &723380031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1058,18 +1017,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6698113
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.30849138
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.13585795
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -1112,7 +1059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (3)
+      value: Fish 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1520,9 +1467,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9432ee742211f947865436a5fb9ed24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeNeededToCatch: 1.5
   fishPrefab: {fileID: 6348202001293769175, guid: a211623b20199e44c93d0b04423011ec, type: 3}
   fishRainbowPrefab: {fileID: 6348202001293769175, guid: ad10606798120ab4cbbb14464ef54dd5, type: 3}
-  save: {fileID: 863463852}
   fishVoiceLine:
   - {fileID: 863463855}
   - {fileID: 863463854}
@@ -2612,18 +2559,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6698113
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.30849138
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.13585795
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.02
@@ -2666,7 +2601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (5)
+      value: Fish 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2707,6 +2642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd6b4c2d213c324fb1181be9e157327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 0}
 --- !u!4 &1526555776
 Transform:
   m_ObjectHideFlags: 0
@@ -3033,18 +2969,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 634276202}
     m_Modifications:
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.b
-      value: 0.6698113
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.30849138
-      objectReference: {fileID: 0}
-    - target: {fileID: 3169625863019185263, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
-      propertyPath: m_Color.r
-      value: 0.13585795
-      objectReference: {fileID: 0}
     - target: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5
@@ -3087,7 +3011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
       propertyPath: m_Name
-      value: InventoryFish (4)
+      value: Fish 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

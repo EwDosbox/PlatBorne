@@ -4,72 +4,70 @@ using UnityEngine;
 
 public class FishInventory : MonoBehaviour
 {
-    //********************* PRIVATE
+    #region Private
     private List<GameObject> fishInventory;
-    private List<SpriteRenderer> fishSpriteRenderer;
 
-    private int fishCatched;
+    private int noOfFishCatched;
     private List<Color> fishColors;
 
-    //********************* PUBLIC
+    #endregion
+    #region Public
 
-    public int FishCatched
+    public int NoOfFishCatched
     {
-        get => fishCatched;
+        get => noOfFishCatched;
         set
         {
             if (value >= 0 && value <= 6)
-                fishCatched = value;
+                noOfFishCatched = value;
             else
-                fishCatched = 0;
+                noOfFishCatched = 0;
         }
     }
 
-    public int Count => fishInventory.Count;
-
-    public Color NextFishColor => fishColors[fishCatched];
+    public Color NextFishColor => fishColors[noOfFishCatched];
+    #endregion
 
     private void Awake()
     {
-        fishInventory = Resources.FindObjectsOfTypeAll<GameObject>()
-            .Where(go => go.name.StartsWith("InventoryFish ("))
-            .ToList();
+        fishInventory = GameObject.FindGameObjectsWithTag("Fish").ToList();
 
-        fishSpriteRenderer = new List<SpriteRenderer>();
-        fishInventory.ForEach(fish => fishSpriteRenderer.Add(fish.GetComponent<SpriteRenderer>()));
         RandomizeColors();
 
-        // Initialize the colors for each fish
-        for (int i = 0; i < fishSpriteRenderer.Count; i++)
+        for (int i = 0; i < fishInventory.Count; i++)
         {
-            fishSpriteRenderer[i].color = fishColors[i];
+            fishInventory[i].GetComponent<SpriteRenderer>().color = fishColors[i];
         }
     }
 
-    // Random Color Generation
     private void RandomizeColors()
     {
         fishColors = new List<Color>();
-        for (int i = 0; i < 8; i++) // Generate 8 random colors
+        BetterRandom random = new BetterRandom($"FishInventory at {Time.time}");
+        for (int i = 0; i < 8; i++)
         {
-            fishColors.Add(new Color(Random.value, Random.value, Random.value));
+            fishColors.Add(RandomColor(random));
         }
+    }
+    private Color RandomColor(BetterRandom random)
+    {
+        return new Color(random.Random(1f), random.Random(1f), random.Random(1f));
     }
 
     // Method to catch fish
     public void CatchedFish()
     {
-        if (fishCatched < fishInventory.Count)
+        if (noOfFishCatched < 6)
         {
-            var checkSpriteRenderer = fishInventory[fishCatched]
+            fishInventory[noOfFishCatched].SetActive(false);
+
+            SpriteRenderer checkSpriteRenderer = fishInventory[noOfFishCatched]
                 .GetComponentsInChildren<SpriteRenderer>()
                 .FirstOrDefault(sr => sr.name.Equals("Check"));
 
-            if (checkSpriteRenderer != null)
-            {
-                checkSpriteRenderer.enabled = true;
-            }
+            checkSpriteRenderer.enabled = true;
+
         }
-        fishCatched++;
+        noOfFishCatched++;
     }
 }

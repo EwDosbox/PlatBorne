@@ -5,71 +5,57 @@ using UnityEngine;
 
 public class FishAIScript : MonoBehaviour
 {
-    private Rigidbody2D fishRB;
-    public Collider2D fishLCollider;
-    public Collider2D fishRCollider;
-    public Collider2D waterLCollider;
-    public Collider2D waterRCollider;
-    private SpriteRenderer sprite;
+    [Header("Fish AI Settings")]
+    [SerializeField] private float maxSpeed = 4f;
 
+    public (Collider2D, Collider2D) fishColliders;
+    public (Collider2D, Collider2D) waterColliders;
+
+    private SpriteRenderer sprite;
+    private Rigidbody2D fishRB;
     private float nextFishMovementChange;
     private bool isTimeToChangeMovement;
+    private BetterRandom random = new BetterRandom("FishAIScript");
 
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
         fishRB = GetComponent<Rigidbody2D>();
         Collider2D[] colliders = FindObjectsOfType<Collider2D>();
-        fishLCollider = colliders.FirstOrDefault(x => x.name == "LeftSide");
-        fishRCollider = colliders.FirstOrDefault(x => x.name == "RightSide");
-        waterRCollider = colliders.FirstOrDefault(x => x.name == "WaterRightSide");
-        waterLCollider = colliders.FirstOrDefault(x => x.name == "WaterLeftSide");
+        foreach (var collider in colliders)
+        {
+            Debug.Log(collider.name);
+        }
+        fishColliders = (colliders.FirstOrDefault(x => x.name == "FishLeftSide"), colliders.FirstOrDefault(x => x.name == "FishRightSide"));
+        waterColliders = (colliders.FirstOrDefault(x => x.name == "WaterLeftSide"), colliders.FirstOrDefault(x => x.name == "WaterRightSide"));
     }
 
     private void FixedUpdate()
     {
         isTimeToChangeMovement = Time.time > nextFishMovementChange;
-        if (isTimeToChangeMovement)
-        {
-            nextFishMovementChange = RandomTime();
-            if (fishRB.velocity.x > 0) //70% že ryba bude pokraèovat ve stranì plutí BRUH
-            {
-                if (Random.value > 0.3)
-                {
-                    fishRB.velocity += RandomVector();
-                    sprite.flipX = true;
-                }
-                else
-                {
-                    fishRB.velocity -= RandomVector();
-                    sprite.flipX = false;
-                }
-            }
-            else
-            {
-                if (Random.value > 0.3)
-                {
-                    fishRB.velocity -= RandomVector();
-                    sprite.flipX = false;
-                }
-                else
-                {
-                    fishRB.velocity += RandomVector();
-                    sprite.flipX = true;
-                }
-            }
+        if (!isTimeToChangeMovement) return;
 
-        }
+        nextFishMovementChange = RandomTime();
+        bool movingRight = fishRB.velocity.x > 0;
+        bool shouldAdd = random.Random(1f) > 0.3f;
+
+        Vector2 newVelocity = shouldAdd ? RandomVector() : -RandomVector();
+        fishRB.velocity += movingRight ? newVelocity : -newVelocity;
+        sprite.flipX = movingRight ? shouldAdd : !shouldAdd;
+
+        fishRB.velocity += new Vector2(newVelocity.x, 0);
+
+        fishRB.velocity = new Vector2(Mathf.Clamp(fishRB.velocity.x, -maxSpeed, maxSpeed), fishRB.velocity.y);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.otherCollider == waterLCollider)
+        if (collision.otherCollider == waterColliders.Item1)
         {
             nextFishMovementChange = RandomTime();
-            fishRB.velocity = RandomVector();
+            fishRB.velocity = -RandomVector();
         }
-        else if (collision.otherCollider == waterRCollider)
+        else if (collision.otherCollider == waterColliders.Item2)
         {
             nextFishMovementChange = RandomTime();
             fishRB.velocity = -RandomVector();
@@ -78,8 +64,7 @@ public class FishAIScript : MonoBehaviour
 
     private Vector2 RandomVector()
     {
-        float x = 3;
-        return new Vector2(+Equation(Random.Range(0, x)), 0);
+        return new Vector2(+Equation(random.Range(0, 3)), 0);
     }
     private float Equation(double x)
     {
@@ -88,7 +73,6 @@ public class FishAIScript : MonoBehaviour
 
     private float RandomTime()
     {
-        float x = 3;
-        return Time.time + Random.Range(0, x);
+        return Time.time + random.Range(0.5f, 1.5f);
     }
 }
