@@ -19,6 +19,7 @@ TagManager:
   - DashOrb
   - BossStop
   - CameraCollider
+  - Fish
   layers:
   - Default
   - TransparentFX
