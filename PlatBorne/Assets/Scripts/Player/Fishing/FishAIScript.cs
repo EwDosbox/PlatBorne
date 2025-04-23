@@ -22,10 +22,6 @@ public class FishAIScript : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         fishRB = GetComponent<Rigidbody2D>();
         Collider2D[] colliders = FindObjectsOfType<Collider2D>();
-        foreach (var collider in colliders)
-        {
-            Debug.Log(collider.name);
-        }
         fishColliders = (colliders.FirstOrDefault(x => x.name == "FishLeftSide"), colliders.FirstOrDefault(x => x.name == "FishRightSide"));
         waterColliders = (colliders.FirstOrDefault(x => x.name == "WaterLeftSide"), colliders.FirstOrDefault(x => x.name == "WaterRightSide"));
     }
