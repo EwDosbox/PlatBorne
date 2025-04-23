@@ -22,20 +22,19 @@ public class PlayerFishingScript : MonoBehaviour
     private SubtitlesManager subtitlesManager;
     private bool isCatching = false;
     #endregion
-    #region Public
+    #region SerializeField
     [Header("Fish Settings")]
     [SerializeField] private float timeNeededToCatch = 1.5f;
 
-    public GameObject fishPrefab;
-    public GameObject fishRainbowPrefab;
-    public AudioSource[] fishVoiceLine;
-    public static Collider2D FishCatchArea
-    {
-        set
-        {
-            fishCatchArea = value;
-        }
-    }
+    [Header("Fish Prefabs")]
+    [SerializeField] private GameObject fishPrefab;
+    [SerializeField] private GameObject fishRainbowPrefab;
+    [SerializeField] private AudioSource[] fishVoiceLine;
+    #endregion
+    #region Public
+    public float HoldTime { get => holdTime; set => holdTime = value; }
+    public bool ShouldHookMoveLeft { get => shouldHookMoveLeft; set => shouldHookMoveLeft = value; }
+    public bool ShouldHookMoveRight { get => shouldHookMoveRight; set => shouldHookMoveRight = value; }
     #endregion
 
     private void Awake()
@@ -134,49 +133,6 @@ public class PlayerFishingScript : MonoBehaviour
         return 4 + (1 - 4) / (1 + Mathf.Pow(time / 0.5f, 26));
     }
 
-    // Input Actions
-    public void HookL(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            holdTime = Time.time;
-            shouldHookMoveLeft = true;
-            shouldHookMoveRight = false;
-        }
-        if (context.canceled)
-        {
-            holdTime = 0;
-            shouldHookMoveLeft = false;
-            shouldHookMoveRight = false;
-        }
-    }
-
-    public void HookR(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            holdTime = Time.time;
-            shouldHookMoveLeft = false;
-            shouldHookMoveRight = true;
-        }
-        if (context.canceled)
-        {
-            holdTime = 0;
-            shouldHookMoveLeft = false;
-            shouldHookMoveRight = false;
-        }
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlayerPrefs.SetInt("wasFishing", 1);
-            PlayerPrefs.Save();
-            SceneManager.LoadScene("LevelBirmingham");
-        }
-    }
-
     private Vector3 RandomFishLocation()
     {
         return new Vector3(Random.Range(-4f, 8.25f), -4.4f, 0);
@@ -188,7 +144,7 @@ public class PlayerFishingScript : MonoBehaviour
 
         fishPrefab.GetComponent<SpriteRenderer>().color = color;
         Instantiate(fishPrefab, RandomFishLocation(), new Quaternion());
-        FishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
+        fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
     private void SpawnFish()// spawn rainbow one
     {
@@ -196,6 +152,6 @@ public class PlayerFishingScript : MonoBehaviour
         isCatching = false;
 
         Instantiate(fishRainbowPrefab, RandomFishLocation(), new Quaternion());
-        FishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
+        fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
 }

@@ -1246,6 +1246,7 @@ GameObject:
   - component: {fileID: 863463855}
   - component: {fileID: 863463854}
   - component: {fileID: 863463853}
+  - component: {fileID: 863463856}
   m_Layer: 0
   m_Name: Hook
   m_TagString: Untagged
@@ -1420,8 +1421,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 863463851}
-        m_TargetAssemblyTypeName: PlayerFishingScript, Assembly-CSharp
+      - m_Target: {fileID: 863463856}
+        m_TargetAssemblyTypeName: FishInputScript, Assembly-CSharp
         m_MethodName: HookL
         m_Mode: 0
         m_Arguments:
@@ -1436,8 +1437,8 @@ MonoBehaviour:
     m_ActionName: Fishing/HookL[/Keyboard/n]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 863463851}
-        m_TargetAssemblyTypeName: PlayerFishingScript, Assembly-CSharp
+      - m_Target: {fileID: 863463856}
+        m_TargetAssemblyTypeName: FishInputScript, Assembly-CSharp
         m_MethodName: HookR
         m_Mode: 0
         m_Arguments:
@@ -1450,6 +1451,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5030fd4e-b7b4-4c5e-8c77-d836c7c19807
     m_ActionName: Fishing/HookR[/Keyboard/m]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 863463856}
+        m_TargetAssemblyTypeName: FishInputScript, Assembly-CSharp
+        m_MethodName: Back
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1fbcd7e3-051f-4d87-ad1d-b4b496fce1f7
+    m_ActionName: Fishing/Back[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Fishing
@@ -1774,6 +1791,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &863463856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863463844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9235b616f312ad941be0d136083f8301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerFishingScript: {fileID: 863463851}
 --- !u!1 &956361684
 GameObject:
   m_ObjectHideFlags: 0
@@ -2642,7 +2672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd6b4c2d213c324fb1181be9e157327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishPrefab: {fileID: 0}
 --- !u!4 &1526555776
 Transform:
   m_ObjectHideFlags: 0
