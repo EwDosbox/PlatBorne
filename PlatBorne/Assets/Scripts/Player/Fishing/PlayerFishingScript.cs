@@ -26,6 +26,7 @@ public class PlayerFishingScript : MonoBehaviour
     private int noOfFishCatched = 0;
     private GameObject fishInScene;
     private BetterRandom random = new BetterRandom($"FishInventory at {System.DateTime.Now}");
+    private GameObject goFishParent;
     #endregion
     #region SerializeField
     [Header("Fish Settings")]
@@ -53,6 +54,7 @@ public class PlayerFishingScript : MonoBehaviour
         hookCatchArea = colliders.FirstOrDefault(collider => collider.name == "HookCatchArea");
         startOfCatch = Time.time;
         fishInventory = GameObject.FindGameObjectsWithTag("Fish").ToList();
+        goFishParent = GameObject.Find("Inventory");
 
         RandomizeColors();
 
@@ -103,7 +105,7 @@ public class PlayerFishingScript : MonoBehaviour
                 if (timeElapsed > timeNeededToCatch)
                 {
                     CatchedFish();
-                    // Handle catching logic
+
                     switch (noOfFishCatched)
                     {
                         case 6:
@@ -146,6 +148,7 @@ public class PlayerFishingScript : MonoBehaviour
     private void SpawnFish(Color color)// spawn colored one
     {
         fishPrefab.GetComponent<SpriteRenderer>().color = color;
+        //Add parent goFishParent
         fishInScene = Instantiate(fishPrefab, RandomFishLocation(), Quaternion.identity);
         fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
@@ -154,6 +157,7 @@ public class PlayerFishingScript : MonoBehaviour
         fishInScene = Instantiate(fishRainbowPrefab, RandomFishLocation(), Quaternion.identity);
         fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
     }
+
     private void RandomizeColors()
     {
         fishColors = new List<Color>();

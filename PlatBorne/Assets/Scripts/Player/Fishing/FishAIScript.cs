@@ -60,7 +60,7 @@ public class FishAIScript : MonoBehaviour
 
     private Vector2 RandomVector()
     {
-        return new Vector2(+Equation(random.Range(0, 3)), 0);
+        return new Vector2(+Equation(random.Range(0f,1f)), 0);
     }
     private float Equation(double x)
     {
