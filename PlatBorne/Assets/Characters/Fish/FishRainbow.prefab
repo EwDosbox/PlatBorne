@@ -360,10 +360,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ddf5f4051ef3b74d9c6490ed12fd80b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishLCollider: {fileID: 0}
-  fishRCollider: {fileID: 0}
-  waterLCollider: {fileID: 0}
-  waterRCollider: {fileID: 0}
+  maxSpeed: 4
+  forceMultiplier: 2
+  movementIntervalMin: 1
+  movementIntervalMax: 2
 --- !u!61 &2284588137224558187
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,74 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class FishAIScript : MonoBehaviour
 {
     [Header("Fish AI Settings")]
-    [SerializeField] private float maxSpeed = 4f;
+    [SerializeField] private float maxSpeed = 5f;
+    [SerializeField] private float forceMultiplier = 150f;
+    [SerializeField] private float movementIntervalMin = 0.5f;
+    [SerializeField] private float movementIntervalMax = 1.5f;
 
-    public (Collider2D, Collider2D) fishColliders;
-    public (Collider2D, Collider2D) waterColliders;
-
+    public (Collider2D left, Collider2D right) waterColliders;
     private SpriteRenderer sprite;
     private Rigidbody2D fishRB;
     private float nextFishMovementChange;
-    private bool isTimeToChangeMovement;
-    private BetterRandom random = new BetterRandom("FishAIScript");
+    private BetterRandom random = new BetterRandom($"FishAIScript at {System.DateTime.Now}");
 
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
         fishRB = GetComponent<Rigidbody2D>();
-        Collider2D[] colliders = FindObjectsOfType<Collider2D>();
-        fishColliders = (colliders.FirstOrDefault(x => x.name == "FishLeftSide"), colliders.FirstOrDefault(x => x.name == "FishRightSide"));
-        waterColliders = (colliders.FirstOrDefault(x => x.name == "WaterLeftSide"), colliders.FirstOrDefault(x => x.name == "WaterRightSide"));
+        waterColliders = (
+            GameObject.Find("WaterLeftSide").GetComponent<Collider2D>(),
+            GameObject.Find("WaterRightSide").GetComponent<Collider2D>()
+        );
     }
 
     private void FixedUpdate()
     {
-        isTimeToChangeMovement = Time.time > nextFishMovementChange;
-        if (!isTimeToChangeMovement) return;
+        float currentTime = Time.time;
 
-        nextFishMovementChange = RandomTime();
-        bool movingRight = fishRB.velocity.x > 0;
-        bool shouldAdd = random.Random(1f) > 0.3f;
+        if (currentTime > nextFishMovementChange)
+        {
+            nextFishMovementChange = currentTime + RandomTime();
 
-        Vector2 newVelocity = shouldAdd ? RandomVector() : -RandomVector();
-        fishRB.velocity += movingRight ? newVelocity : -newVelocity;
-        sprite.flipX = movingRight ? shouldAdd : !shouldAdd;
+            Vector2 force = RandomVector();
+            bool addForce = random.Random(1f) > 0.4f;
 
-        fishRB.velocity += new Vector2(newVelocity.x, 0);
+            fishRB.AddForce((addForce ? force : -force) * forceMultiplier, ForceMode2D.Impulse);
+        }
 
-        fishRB.velocity = new Vector2(Mathf.Clamp(fishRB.velocity.x, -maxSpeed, maxSpeed), fishRB.velocity.y);
+        fishRB.velocity = Vector2.ClampMagnitude(fishRB.velocity, maxSpeed);
+        sprite.flipX = !(fishRB.velocity.x < 0);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.otherCollider == waterColliders.Item1)
+        if (collider == waterColliders.left)
         {
-            nextFishMovementChange = RandomTime();
-            fishRB.velocity = -RandomVector();
+            fishRB.velocity = new Vector2(1f, 0);
+            nextFishMovementChange = Time.time + random.Range(0.2f, 0.5f);
         }
-        else if (collision.otherCollider == waterColliders.Item2)
+        else if (collider == waterColliders.right)
         {
-            nextFishMovementChange = RandomTime();
-            fishRB.velocity = -RandomVector();
+            fishRB.velocity = new Vector2(-1f, 0);
+            nextFishMovementChange = Time.time + random.Range(0.2f, 0.5f);
         }
     }
 
     private Vector2 RandomVector()
     {
-        return new Vector2(+Equation(random.Range(0f,1f)), 0);
-    }
-    private float Equation(double x)
-    {
-        return 3 + (0.5f - 3) / Mathf.Pow((1f + (float)x / 2.6f), 6);
+        return new Vector2(random.Range(0.5f, 1.5f), random.Range(-0.3f, 0.3f));
     }
 
     private float RandomTime()
     {
-        return Time.time + random.Range(0.5f, 1.5f);
+        return random.Range(movementIntervalMin, movementIntervalMax);
     }
 }
