@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class Mole_Bossfight : MonoBehaviour
 {
@@ -67,6 +69,7 @@ public class Mole_Bossfight : MonoBehaviour
     bool playerHasTakenDamageInCharge = false;
     bool timerOn = false;
     //boss attacks
+    bool bossIsCharging = false;
     bool bossCanBossCharge = false;
     bool bossfightIsRunning = false;
     bool attackIsGoing = false;
@@ -109,7 +112,9 @@ public class Mole_Bossfight : MonoBehaviour
     {
         //DEBUG
         Debug.Log("CanAttack" + canAttack);
-        Debug.Log("Animator chargingLeft " + animator.GetBool("chargingLeft")); 
+        Debug.Log("Animator chargingLeft " + animator.GetBool("chargingLeft"));
+        Debug.Log("phase: " + phase.ToString());
+        Debug.Log("Boss Invincible: " + bossHealth.BossInvincible);
         if (bossfightIsRunning)
         {
             #region DelayBetweenAttacks
@@ -177,13 +182,14 @@ public class Mole_Bossfight : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!bossfightIsRunning) return; //Do not damage anybody until the boss is finished talking
         if (collision.gameObject.CompareTag("Player") && phase == 1)
-        {
-            if (!bossHealth.BossInvincible)
+        {            
+            if (!bossHealth.BossInvincible) //Yes it does the check twice because of the SFX
             {
-                bossHealth.BossHit();
                 if (Random.value < 0.5f) SFXbossHit.Play();
                 else SFXbossHit02.Play();
+                bossHealth.BossHit();                   
             }
             else
             {
@@ -198,8 +204,9 @@ public class Mole_Bossfight : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") && !playerHasTakenDamageInCharge)
+        if (collision.CompareTag("Player") && !playerHasTakenDamageInCharge && bossIsCharging)
         {
+            Debug.Log("The player was damaged from charge");
             playerHealth.PlayerDamage();
             playerHasTakenDamageInCharge = true;
         }
@@ -306,7 +313,7 @@ public class Mole_Bossfight : MonoBehaviour
 
     public IEnumerator ChangePhase()
     {
-        bossHealth.BossInvincible = true;
+        bossHealth.BossStayInvincible = true;
         playerHealth.PlayerInvincible = true;
         canAttack = false;
         Debug.Log("Attack: ChangePhase");
@@ -558,13 +565,14 @@ public class Mole_Bossfight : MonoBehaviour
         bossNextAttackIsCharge = false;
         Debug.Log("Attack: MoleCharge");
         bossCanBossCharge = false;
-        if (playerScript.Position.x > transform.position.x) //right (player je vpravo od Bosse)
+        if (playerScript.Position.x > transform.position.x) //player is right away from boss
         {
             animator.SetTrigger("readyChargeRight");
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
             animator.SetBool("chargingRight", true);
             rb.velocity = Vector2.right * moleCharge_Velocity;
-            while (rb.velocity != Vector2.zero)
+            bossIsCharging = true;
+            while (rb.velocity != Vector2.zero) //Charge to the right side of the screen
             {
                 if (rb.position.x > 15.55f)
                 {
@@ -572,13 +580,14 @@ public class Mole_Bossfight : MonoBehaviour
                 }
                 else yield return null;
             }
+            bossIsCharging = false;
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
-            MovePlayerIfInsideOfMole();
             playerHasTakenDamageInCharge = false; //reset
+            MovePlayerIfInsideOfMole();            
             animator.SetBool("chargingRight", false);
             attackIsGoing = false;
-            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
-            animator.SetTrigger("stopChargeRight"); //Pøes trigger, protože jsem ho chtìl vyzkoušet
+            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
+            animator.SetTrigger("stopChargeRight"); 
         }
         else //left
         {
@@ -586,7 +595,8 @@ public class Mole_Bossfight : MonoBehaviour
             yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
             animator.SetBool("chargingLeft", true);                                                            
             rb.velocity = Vector2.left * moleCharge_Velocity;
-            while (rb.velocity != Vector2.zero) //charge az do urcityho mista
+            bossIsCharging = true;
+            while (rb.velocity != Vector2.zero) //Charge to the left side of the screen
             {
                 if (rb.position.x < -15.55f)
                 {
@@ -595,6 +605,8 @@ public class Mole_Bossfight : MonoBehaviour
                 else yield return null;
             }
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
+            bossIsCharging = false;
+            playerHasTakenDamageInCharge = false; //reset
             MovePlayerIfInsideOfMole();
             animator.SetBool("chargingLeft", false);
             attackIsGoing = false;

@@ -84,7 +84,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (!playerInvincible && !godMode)
         {
-            playerHP--;
+            PlayerHP--;
             HunterDamageVL();
             PlayerInvincible = true;
         }
@@ -111,7 +111,7 @@ public class PlayerHealth : MonoBehaviour
     public void StartHPUI()
     {
         uiStart = true;
-    }
+    }    
 
     private void Update()
     {

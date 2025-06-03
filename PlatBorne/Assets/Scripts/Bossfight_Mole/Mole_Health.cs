@@ -17,6 +17,7 @@ public class Mole_Health : MonoBehaviour
     //PUBLIC//
     public bool bossDead = false;
     //PRIVATE//
+    private bool bossStayInvincible = false;
     private int bossHealth = 100;
     private bool bossInvincible = true;
     private float timer = 0;
@@ -33,24 +34,31 @@ public class Mole_Health : MonoBehaviour
         get { return bossInvincible; }
         set { bossInvincible = value; }
     }
+    public bool BossStayInvincible //for changing phase
+    {
+        get { return bossStayInvincible; }
+        set { bossStayInvincible = value; }
+    }
 
     public void BossHit()
     {
-        if (!bossInvincible)
-        {
+        if (!BossInvincible)
+        {            
+            Debug.Log("Boss has taken a damage from player");      
             bossHealth -= playerDamage;
             BossInvincible = true;
             playerHealth.PlayerInvincible = true;
         }
         else
         {
+            Debug.Log("Player has taken a damage from boss");
             playerHealth.PlayerDamage();
         }
     }
 
     private void Update()
     {
-        if (BossInvincible)
+        if (!BossStayInvincible && BossInvincible)
         {
             timer += Time.deltaTime;
             if (timer > invincibilityTimer)
