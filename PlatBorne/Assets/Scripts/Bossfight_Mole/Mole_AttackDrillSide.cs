@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Mole_AttackDrillSide : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    private GameObject player;
-    [SerializeField] private float timeToSelfDestruct;
-    [SerializeField] private float speed;
-    private float timer = 0;
+    Rigidbody2D rb;
+    [SerializeField] float speed;
+    [SerializeField] AudioSource sfx;
+    [SerializeField] float maxDistance = 8f; // max distance at which sound is audible
+    GameObject player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -17,27 +17,20 @@ public class Mole_AttackDrillSide : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        if (rb.position.x >= 0)
-        {
-            rb.velocity = Vector2.left * speed;
-            transform.rotation = Quaternion.Euler(0,0, 270);
-        }
-        else
-        {
-            rb.velocity = Vector2.right * speed;
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-        }
-
+        player = FindAnyObjectByType<PlayerHealth>().gameObject;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        rb.velocity = Vector2.up * speed;
     }
+
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > timeToSelfDestruct)
-        {
-            Destroy(gameObject);
-        }
+        if (Mathf.Abs(transform.position.x) > 18f) Destroy(gameObject);
+        //change volume        
+        float distance = Vector2.Distance(transform.position, player.transform.position);
+        float volume = Mathf.Clamp01(1f - (distance / maxDistance)) * 0.1f;
+        sfx.volume = volume;
     }
 }

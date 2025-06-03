@@ -40,9 +40,9 @@ public class Mole_Health : MonoBehaviour
         set { bossStayInvincible = value; }
     }
 
-    public void BossHit()
+    public void BossHit(bool weakspotDamage)
     {
-        if (!BossInvincible)
+        if (!BossInvincible || weakspotDamage)
         {            
             Debug.Log("Boss has taken a damage from player");      
             bossHealth -= playerDamage;

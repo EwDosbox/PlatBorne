@@ -31,6 +31,7 @@ public class PlayerInputScript : MonoBehaviour
 
     private bool isPlayerFacingLeft;
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float movementSpeedBoss;
     static public bool isPlayerInAir;
     private bool shouldWalkL = false;
     private bool shouldWalkR = false;
@@ -46,10 +47,9 @@ public class PlayerInputScript : MonoBehaviour
     //Dash
     [SerializeField] public bool abilityToDash;
     [SerializeField] AudioSource dashSFX;
-    private bool canDash;
     bool groundDashReset = true; //Can Dash once before touching the ground
     private Vector2 velocityBeforeDash;
-    private bool shouldDash;
+    private bool canDash;
     private bool dashing;
     private float dashStarted;
     private bool isMoving = false;
@@ -60,23 +60,25 @@ public class PlayerInputScript : MonoBehaviour
 
     private void Awake()
     {
+        canDash = abilityToDash;
         save = FindFirstObjectByType<Saves>();
         console = FindFirstObjectByType<DebugController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         if (SceneManager.GetActiveScene().name == "LevelBoss" || SceneManager.GetActiveScene().name == "LevelMole") //BossMovement
         {
-            maxJumpHeight *= 1.2f;
-            jumpModifier *= 1.2f;
+            maxJumpHeight *= 1.3f;
+            jumpModifier *= 1.3f;
+            movementSpeed = movementSpeedBoss;
         }
         jumpHeight = minJumpHeight;
         CanMove = true;
         previousPosition = transform.position;
     }
 
-    public void AbilityToDash(bool Dash)
+    public void AbilityToDash(bool dash)
     {
-        if (Dash) abilityToDash = true;
+        if (dash) abilityToDash = true;
         else abilityToDash = false;
     }
     private void Update()
@@ -102,11 +104,11 @@ public class PlayerInputScript : MonoBehaviour
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
         if (CanMove)
         {
-            if (shouldDash)
+            if (canDash)
             {
                 dashStarted = Time.time;
                 velocityBeforeDash = rb.velocity;
-                shouldDash = false;
+                canDash = false;
                 dashing = true;
             }
             else if (dashing)
@@ -221,7 +223,7 @@ public class PlayerInputScript : MonoBehaviour
                     dashTime = 0;
                     groundDashReset = false;
                     dashSFX.Play();
-                    shouldDash = true;
+                    canDash = true;
                 }
             }
         }

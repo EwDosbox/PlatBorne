@@ -191,7 +191,7 @@ public class Mole_Bossfight : MonoBehaviour
             {
                 if (Random.value < 0.5f) sfxBossHit01.Play();
                 else sfxBossHit02.Play();
-                bossHealth.BossHit();                   
+                bossHealth.BossHit(false);                   
             }
             else
             {
@@ -479,7 +479,7 @@ public class Mole_Bossfight : MonoBehaviour
     IEnumerator Attack_ShovelRain()
     {
         Debug.Log("Attack: ShovelRain");
-        float attackMoleRainShift = 1.7f;
+        float attackMoleRainShift = 1.2f;
         float x = -17f;
         float y = 12.78f;
         for (int j = 0; j < 22; j += 2)
@@ -729,9 +729,10 @@ public class Mole_Bossfight : MonoBehaviour
     }
 
     #endregion
-    public void BossHitBeforeCharge()
+    public void BossHitWeakspot()
     {
-        bossHealth.BossHit();
+        bossHealth.BossHit(true);
+        playerHealth.SetInvincibleTimer(3f);
         bossNextAttackIsCharge = false;
         animator.SetBool("chargingRight", false);
         animator.SetBool("chargingLeft", false);

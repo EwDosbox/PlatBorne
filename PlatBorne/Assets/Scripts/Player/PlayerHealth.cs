@@ -20,6 +20,7 @@ public class PlayerHealth : MonoBehaviour
     private float timer = 0;
     private int playerHP = 3;
     private float timerInvincibility = 0;
+    private float timeToUnInvincible = 1f;
 
     public bool GodMode
     {
@@ -90,6 +91,12 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void SetInvincibleTimer(float time)
+    {
+        timeToUnInvincible = time;
+        playerInvincible = true;
+    }
+
     public void PlayerDeath(int boss)
     {
         if (boss == 1)
@@ -118,9 +125,10 @@ public class PlayerHealth : MonoBehaviour
         if (PlayerInvincible)
         {
             timerInvincibility += Time.deltaTime;
-            if (timerInvincibility > 1f)
+            if (timerInvincibility > timeToUnInvincible)
             {
                 PlayerInvincible = false;
+                timeToUnInvincible = 1f;
             }
         }
         else timerInvincibility = 0;

@@ -631,6 +631,7 @@ MonoBehaviour:
   minJumpHeight: 7
   jumpModifier: 8
   movementSpeed: 4
+  movementSpeedBoss: 6
   jumpSound: {fileID: 694863748517304626}
   abilityToDash: 1
   dashSFX: {fileID: 1217162204836274117}

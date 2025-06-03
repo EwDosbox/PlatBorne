@@ -7,13 +7,12 @@ public class Mole_WeakSpot : MonoBehaviour
     //Components
     Rigidbody2D rb;
     Mole_Bossfight bossfight;
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("BossHitBeforeCharge damage");
-            bossfight.BossHitBeforeCharge();
+            bossfight.BossHitWeakspot();
             this.enabled = false;
         }
     }

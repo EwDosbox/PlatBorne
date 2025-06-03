@@ -173,8 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c1629558f8eac45bf3447a38a1ef88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToSelfDestruct: 5
-  speed: 6.5
+  speed: 6
+  sfx: {fileID: 233199103929149404}
+  maxDistance: 8
 --- !u!95 &4411711748644686259
 Animator:
   serializedVersion: 5
@@ -208,7 +209,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 7166029820732308635, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   m_audioClip: {fileID: 8300000, guid: 2d3b0816df7d44b41a78df7d37f7ef23, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.3
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
