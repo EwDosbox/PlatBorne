@@ -23,8 +23,10 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] PlayerScript playerScript;
     //INSPECTOR//
     [Header("Audio")]
-    [SerializeField] AudioSource SFXbossHit;
-    [SerializeField] AudioSource SFXbossHit02;
+    [SerializeField] AudioSource sfxBossHit01;
+    [SerializeField] AudioSource sfxBossHit02;
+    [SerializeField] AudioSource sfxdrillStartUp;
+    [SerializeField] AudioSource sfxdrillCharge;
     [SerializeField] AudioSource vlPreBoss;
     [SerializeField] AudioSource vlSwitchPhase;
     [SerializeField] AudioSource vlBossDeathNormal;
@@ -187,8 +189,8 @@ public class Mole_Bossfight : MonoBehaviour
         {            
             if (!bossHealth.BossInvincible) //Yes it does the check twice because of the SFX
             {
-                if (Random.value < 0.5f) SFXbossHit.Play();
-                else SFXbossHit02.Play();
+                if (Random.value < 0.5f) sfxBossHit01.Play();
+                else sfxBossHit02.Play();
                 bossHealth.BossHit();                   
             }
             else
@@ -568,8 +570,10 @@ public class Mole_Bossfight : MonoBehaviour
         if (playerScript.Position.x > transform.position.x) //player is right away from boss
         {
             animator.SetTrigger("readyChargeRight");
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
-            animator.SetBool("chargingRight", true);
+            sfxdrillStartUp.Play();
+            yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
+            sfxdrillCharge.Play();
+            animator.SetBool("chargingRight", true);            
             rb.velocity = Vector2.right * moleCharge_Velocity;
             bossIsCharging = true;
             while (rb.velocity != Vector2.zero) //Charge to the right side of the screen
@@ -580,6 +584,7 @@ public class Mole_Bossfight : MonoBehaviour
                 }
                 else yield return null;
             }
+            sfxdrillCharge.Stop();
             bossIsCharging = false;
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
             playerHasTakenDamageInCharge = false; //reset
@@ -592,8 +597,10 @@ public class Mole_Bossfight : MonoBehaviour
         else //left
         {
             animator.SetTrigger("readyChargeLeft");
-            yield return new WaitForSeconds(moleCharge_TimeBeforeCharge); //charge time
-            animator.SetBool("chargingLeft", true);                                                            
+            sfxdrillStartUp.Play();
+            yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
+            sfxdrillCharge.Play();
+            animator.SetBool("chargingLeft", true);            
             rb.velocity = Vector2.left * moleCharge_Velocity;
             bossIsCharging = true;
             while (rb.velocity != Vector2.zero) //Charge to the left side of the screen
@@ -604,6 +611,7 @@ public class Mole_Bossfight : MonoBehaviour
                 }
                 else yield return null;
             }
+            sfxdrillCharge.Stop();
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
             bossIsCharging = false;
             playerHasTakenDamageInCharge = false; //reset
