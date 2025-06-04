@@ -56,23 +56,27 @@ public class Mole_Bossfight : MonoBehaviour
     public float groundDrills_waitForNextDrill;
     public float shovelRain_waitForNextWave;
     public float moleCharge_TimeBeforeCharge;
-    public float moleCharge_TimeBeforeIdle;
     public float moleCharge_Velocity;
     public float rock_ChargeTime;
     public float waitTimeToTransitionToCutscene;
     private bool changePhaseHasPlayed = false;
     private bool bossDeathHasPlayed = false;
     private bool pussyModeActive = false;
+    private bool bossWaitingForDamageWeakspot = false;
+    public bool BossWaitingForDamageWeakspot
+    {
+        get {  return bossWaitingForDamageWeakspot; }
+    }
+    private bool bossWaitingForDamageWeakspotOnRight = false;
     //timers
     float timer = 0;
     float timerWaitForNextAttack = 0;
     float timerBossCharge = 0;
     float timerAttackSpikes = 0;
     bool playerHasTakenDamageInCharge = false;
-    bool timerOn = false;
     //boss attacks
     bool bossIsCharging = false;
-    bool bossCanBossCharge = false;
+    bool bossCanChargeTimer = false;
     bool bossfightIsRunning = false;
     bool attackIsGoing = false;
     int phase = 0;
@@ -145,7 +149,7 @@ public class Mole_Bossfight : MonoBehaviour
                 timerBossCharge = 0;
                 bossNextAttackIsCharge = true;
             }
-            else if (bossCanBossCharge) timerBossCharge += Time.deltaTime;
+            else if (bossCanChargeTimer) timerBossCharge += Time.deltaTime;
             #endregion
             #region ATTACK HANDLER
             if (canAttack)
@@ -472,31 +476,22 @@ public class Mole_Bossfight : MonoBehaviour
             }
             yield return new WaitForSeconds(moleRain_waitForNextWave);
         }
-        yield return new WaitForSeconds(2);
         attackIsGoing = false;
     }
 
     IEnumerator Attack_ShovelRain()
     {
         Debug.Log("Attack: ShovelRain");
-        float attackMoleRainShift = 1.2f;
-        float x = -17f;
+        float attackMoleRainShift = 2.4f;
+        float fromX = -17f;
         float y = 12.78f;
-        for (int j = 0; j < 22; j += 2)
+        for (float currentX = fromX; currentX < Mathf.Abs(fromX); currentX += attackMoleRainShift)
         {
-            Vector2 position = new Vector2(x + (j * attackMoleRainShift), y);
+            Vector2 position = new Vector2(currentX,  y);
             Instantiate(prefabShovelRain, position, Quaternion.identity);
             yield return new WaitForSeconds(0.25f);
         }
-        yield return new WaitForSeconds(4);
-        x = 18.7f;
-        for (int j = 1; j < 23; j += 2)
-        {
-            Vector2 position = new Vector2(x - (j * attackMoleRainShift), y);
-            Instantiate(prefabShovelRain, position, Quaternion.identity);
-            yield return new WaitForSeconds(0.25f);
-        }
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2);       
         attackIsGoing = false;
     }
 
@@ -566,7 +561,7 @@ public class Mole_Bossfight : MonoBehaviour
     {
         bossNextAttackIsCharge = false;
         Debug.Log("Attack: MoleCharge");
-        bossCanBossCharge = false;
+        bossCanChargeTimer = false;
         if (playerScript.Position.x > transform.position.x) //player is right away from boss
         {
             animator.SetTrigger("readyChargeRight");
@@ -591,8 +586,8 @@ public class Mole_Bossfight : MonoBehaviour
             MovePlayerIfInsideOfMole();            
             animator.SetBool("chargingRight", false);
             attackIsGoing = false;
-            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle);
-            animator.SetTrigger("stopChargeRight"); 
+            bossWaitingForDamageWeakspot = true;
+            bossWaitingForDamageWeakspotOnRight = true;
         }
         else //left
         {
@@ -618,10 +613,9 @@ public class Mole_Bossfight : MonoBehaviour
             MovePlayerIfInsideOfMole();
             animator.SetBool("chargingLeft", false);
             attackIsGoing = false;
-            yield return new WaitForSeconds(moleCharge_TimeBeforeIdle); //V cyklu, protoze mi mrdalo s MovePlayer
-            animator.SetTrigger("stopChargeLeft");
-        }
-        bossCanBossCharge = true; //Turn on the timer
+            bossWaitingForDamageWeakspot = true;
+            bossWaitingForDamageWeakspotOnRight = false;
+        }        
     }
 
     IEnumerator Attack_Rock()
@@ -731,9 +725,13 @@ public class Mole_Bossfight : MonoBehaviour
     #endregion
     public void BossHitWeakspot()
     {
-        bossHealth.BossHit(true);
+        bossWaitingForDamageWeakspot = false;
+        bossHealth.BossHit(true);        
         playerHealth.SetInvincibleTimer(3f);
         bossNextAttackIsCharge = false;
+        bossCanChargeTimer = true; //Turn on the timer
+        if (bossWaitingForDamageWeakspotOnRight) animator.SetTrigger("stopChargeRight");
+        else animator.SetTrigger("stopChargeLeft");
         animator.SetBool("chargingRight", false);
         animator.SetBool("chargingLeft", false);
     }

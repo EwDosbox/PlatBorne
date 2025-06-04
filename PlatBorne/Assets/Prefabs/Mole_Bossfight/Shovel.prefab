@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeToStartFadeOut: 2
   timeToSelfDestruct: 10
-  fadeSpeed: 2
+  fadeSpeed: 1
   boxCollider: {fileID: 850037188270142433}
 --- !u!50 &348793545833578689
 Rigidbody2D:
@@ -183,7 +183,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6098093470622872932}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

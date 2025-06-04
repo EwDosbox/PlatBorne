@@ -23,9 +23,9 @@ public class Mole_Spikes : MonoBehaviour
     }
     private void Awake()
     {
+        collider2D = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        collider2D = GetComponent<BoxCollider2D>();
         fadeIn = true;
     }
 

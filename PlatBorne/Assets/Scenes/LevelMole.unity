@@ -2028,13 +2028,12 @@ MonoBehaviour:
   timeToFirstAttack: 6
   bossChargeDelay: 15
   timeBetweenAttacksPhase1: 4
-  timeBetweenAttacksPhase2: 4
-  moleRain_waitForNextWave: 2
+  timeBetweenAttacksPhase2: 3
+  moleRain_waitForNextWave: 1
   groundDrills_waitForNextDrill: 0.5
-  shovelRain_waitForNextWave: 2
+  shovelRain_waitForNextWave: 0
   moleCharge_TimeBeforeCharge: 3
-  moleCharge_TimeBeforeIdle: 5
-  moleCharge_Velocity: 50
+  moleCharge_Velocity: 30
   rock_ChargeTime: 2
   waitTimeToTransitionToCutscene: 5
   pussyModeGameObject: {fileID: 120485447}

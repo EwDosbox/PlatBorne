@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6
   sfx: {fileID: 233199103929149404}
-  maxDistance: 8
+  maxDistance: 15
 --- !u!95 &4411711748644686259
 Animator:
   serializedVersion: 5

@@ -1,20 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mole_AttackMoleRain : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private GameObject player;
     [SerializeField] private float timeToSelfDestruct;
-    [SerializeField] private float acceleration;
     [SerializeField] private float maxSpeed;
 
     private float timer = 0;
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();        
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.down * maxSpeed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -32,10 +28,7 @@ public class Mole_AttackMoleRain : MonoBehaviour
         if (timer > timeToSelfDestruct)
         {
             Destroy(gameObject);
-        }
-        rb = GetComponent<Rigidbody2D>();
-        if (rb.velocity.magnitude < maxSpeed) rb.velocity += Vector2.down * acceleration;
-        else rb.velocity = Vector2.down * maxSpeed;
+        }                
     }
 }
 

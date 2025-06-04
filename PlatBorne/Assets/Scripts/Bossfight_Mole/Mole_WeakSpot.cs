@@ -9,7 +9,7 @@ public class Mole_WeakSpot : MonoBehaviour
     Mole_Bossfight bossfight;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (bossfight.BossWaitingForDamageWeakspot && collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("BossHitBeforeCharge damage");
             bossfight.BossHitWeakspot();

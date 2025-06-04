@@ -42,14 +42,14 @@ public class PlayerInputScript : MonoBehaviour
     private float time;
     DebugController console;
     float dashTimeWait = 1;
-    float dashTime = 0;
+    float dashTime = 1;
 
     //Dash
     [SerializeField] public bool abilityToDash;
     [SerializeField] AudioSource dashSFX;
     bool groundDashReset = true; //Can Dash once before touching the ground
     private Vector2 velocityBeforeDash;
-    private bool canDash;
+    private bool canDash = false;
     private bool dashing;
     private float dashStarted;
     private bool isMoving = false;
@@ -60,7 +60,6 @@ public class PlayerInputScript : MonoBehaviour
 
     private void Awake()
     {
-        canDash = abilityToDash;
         save = FindFirstObjectByType<Saves>();
         console = FindFirstObjectByType<DebugController>();
         rb = GetComponent<Rigidbody2D>();

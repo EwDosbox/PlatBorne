@@ -11,6 +11,7 @@ public class Mole_AttackShovelRain : MonoBehaviour
     SpriteRenderer spriteRenderer;
     Rigidbody2D rb;
     [SerializeField] BoxCollider2D boxCollider;
+    bool canDamage = true;
 
     void Awake()
     {
@@ -35,7 +36,7 @@ public class Mole_AttackShovelRain : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (canDamage && collision.CompareTag("Player"))
         {
             PlayerHealth hp = FindAnyObjectByType<PlayerHealth>();
             hp.PlayerDamage();
@@ -46,6 +47,9 @@ public class Mole_AttackShovelRain : MonoBehaviour
     private IEnumerator FadeOutCoroutine()
     {
         yield return new WaitForSeconds(timeToStartFadeOut);
+        canDamage = false;
+        rb.bodyType = RigidbodyType2D.Static;
+        boxCollider.enabled = false;
         float alpha = 1f;
         while (alpha > 0)
         {
@@ -53,7 +57,6 @@ public class Mole_AttackShovelRain : MonoBehaviour
             spriteRenderer.color = new Color(1f, 1f, 1f, Mathf.Clamp01(alpha));
             yield return null;
         }
-
         Destroy(gameObject);
     }
 }
