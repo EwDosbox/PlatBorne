@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Diagnostics;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class PlayerHealth : MonoBehaviour
@@ -15,9 +12,6 @@ public class PlayerHealth : MonoBehaviour
     private bool godMode;
     private bool pussyMode;
     private bool playerInvincible;
-    private bool uiStart = false;
-    private bool uiEnd = false;
-    private float timer = 0;
     private int playerHP = 3;
     private float timerInvincibility = 0;
     private float timeToUnInvincible = 1f;
@@ -26,11 +20,19 @@ public class PlayerHealth : MonoBehaviour
     {
         set 
         {             
-            if (value == true)
+            if (value == true && !godMode) //do not play sound when GodMode is already on
             {
+                PlayerPrefs.SetInt("GodMode", 69);
+                godMode = true;
                 hunterGodMode.Play();
             }
-            godMode = value;
+            else
+            {
+                PlayerPrefs.SetInt("GodMode", 0);
+                godMode = false;
+            }                
+            PlayerPrefs.Save();
+            UpdateHearts();
         }
         get { return godMode; }
     }
@@ -48,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
             {
                 playerHP = value;
             }
+            UpdateHearts();
         }
         get { return playerHP; }
     }
@@ -64,20 +67,10 @@ public class PlayerHealth : MonoBehaviour
             if (PlayerPrefs.HasKey("GodMode"))
             {
                 int numberGod = (PlayerPrefs.GetInt("GodMode"));
-                if (numberGod == 1)
-                {
-                    godMode = true;
-                }
-                else godMode = false;
+                if (numberGod == 0) GodMode = false;
+                else GodMode = true;
             }
-            foreach (GameObject temp in hp)
-            {
-                temp.SetActive(false);
-            }
-            foreach (GameObject temp in hpGodMode)
-            {
-                temp.SetActive(false);
-            }
+            ResetHearts();
         }
         else this.gameObject.SetActive(false);
     }
@@ -115,11 +108,6 @@ public class PlayerHealth : MonoBehaviour
         SceneManager.LoadScene("PlayerDeath");
     }
 
-    public void StartHPUI()
-    {
-        uiStart = true;
-    }    
-
     private void Update()
     {
         if (PlayerInvincible)
@@ -131,68 +119,72 @@ public class PlayerHealth : MonoBehaviour
                 timeToUnInvincible = 1f;
             }
         }
-        else timerInvincibility = 0;
-        if (uiStart && !uiEnd)
-        {
-            timer += Time.deltaTime;
-            if (timer > 2 && playerHP >= 1)
-            {
-                if (godMode) hpGodMode[0].SetActive(true);
-                hp[0].SetActive(true);
-            }
-            if (timer > 4 && playerHP >= 2)
-            {
-                if (godMode) hpGodMode[1].SetActive(true);
-                hp[1].SetActive(true);
-            }
-            if (timer > 6 && playerHP == 3)
-            {                
-                if (godMode) hpGodMode[2].SetActive(true);
-                hp[2].SetActive(true);
-                uiEnd = true;
-            }            
-            else if (timer > 6) uiEnd = true;
-        }
-        else if (uiEnd)
-        {
-            if (playerHP >= 1)
-            {
-                if (godMode) hpGodMode[0].SetActive(true);
-                else hpGodMode[0].SetActive(false);
-                hp[0].SetActive(true);
-            }
-            else
-            {
-                if (godMode) hpGodMode[0].SetActive(false);
-                hp[0].SetActive(false);
-            }
-            if (playerHP >= 2)
-            {
-                if (godMode) hpGodMode[1].SetActive(true);
-                else hpGodMode[1].SetActive(false);
-                hp[1].SetActive(true);
-            }
-            else
-            {
-                if (godMode) hpGodMode[1].SetActive(false);
-                hp[1].SetActive(false);
-            }
-            if (playerHP >= 3)
-            {
-                if (godMode) hpGodMode[2].SetActive(true);
-                else hpGodMode[2].SetActive(false);
-                hp[2].SetActive(true);
-            }
-            else
-            {
-                if (godMode) hpGodMode[2].SetActive(false);
-                hp[2].SetActive(false);
-            }
-        }
+        else timerInvincibility = 0;        
     }
 
     void HunterDamageVL()
     {
         hunterDamage01.Play(); //dont ask
+    }
+
+    public void StartHPUI()
+    {
+        StartCoroutine(HPStart());
+    }
+
+    IEnumerator HPStart()
+    {
+        yield return new WaitForSeconds(2f);
+        if (playerHP >= 1)
+        {
+            if (godMode) hpGodMode[0].SetActive(true);
+            hp[0].SetActive(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+        if (playerHP >= 2)
+        {
+            if (godMode) hpGodMode[1].SetActive(true);
+            hp[1].SetActive(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+        if (playerHP >= 3)
+        {
+            if (godMode) hpGodMode[2].SetActive(true);
+            hp[2].SetActive(true);
+        }
+    }
+
+    private void UpdateHearts()
+    {
+        ResetHearts();
+        if (playerHP >= 1)
+        {
+            if (godMode) hpGodMode[0].SetActive(true);
+            hp[0].SetActive(true);
+        }
+        if (playerHP >= 2)
+        {
+            if (godMode) hpGodMode[1].SetActive(true);
+            hp[1].SetActive(true);
+        }
+        if (playerHP >= 3)
+        {
+            if (godMode) hpGodMode[2].SetActive(true);
+            hp[2].SetActive(true);
+        }
+    }
+
+    private void ResetHearts()
+    {
+        foreach (GameObject temp in hp)
+        {
+            temp.SetActive(false);
+        }
+        foreach (GameObject temp in hpGodMode)
+        {
+            temp.SetActive(false);
+        }
     }
 }

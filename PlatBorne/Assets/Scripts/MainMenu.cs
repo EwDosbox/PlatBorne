@@ -12,6 +12,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject mainMenuBackground;
     [SerializeField] GameObject settingsMenu;
     [SerializeField] GameObject actSelectorMenu;
+    [SerializeField] Slider musicSlider;
+    [SerializeField] Slider sfxSlider;
 
     public AudioSource src;
     public AudioClip srcOne;
@@ -24,7 +26,7 @@ public class MainMenu : MonoBehaviour
     public Button continueButton;
     public Button newGameButton;
 
-    public TMP_Text text;
+    public TMP_Text text;    
     
     public bool InGame = false;
     public bool PreGameCutscene = false;
@@ -47,7 +49,7 @@ public class MainMenu : MonoBehaviour
     }
 
     private IEnumerator Start()
-    {    
+    {
         StartCoroutine(SettingsLoad());
         yield return new WaitForSeconds(1.1f);
         panel.SetActive(true);
@@ -190,6 +192,7 @@ public class MainMenu : MonoBehaviour
         float volume = PlayerPrefs.GetFloat("MusicVolume");
         Debug.Log("Music: " + volume);
         audioMixer.SetFloat("Music", Mathf.Log10(volume) * 20);
+        musicSlider.value = volume;
         PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
@@ -199,6 +202,7 @@ public class MainMenu : MonoBehaviour
         float volume = PlayerPrefs.GetFloat("SFXvolume");
         Debug.Log("SFX: " + volume);
         audioMixer.SetFloat("SFX", Mathf.Log10(volume) * 20);
+        sfxSlider.value = volume;
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
 

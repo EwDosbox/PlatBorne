@@ -5136,8 +5136,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
-  musicVolSlider: {fileID: 8460653289133297373}
-  SFXVolSlider: {fileID: 7600636617369635682}
+  musicSlider: {fileID: 8460653289133297373}
+  sfxSlider: {fileID: 7600636617369635682}
   subtitlesToggle: {fileID: 3290552648489890328}
   vsyncToggle: {fileID: 1754877014790764778}
   fullscreenToggle: {fileID: 2156197833589115352}
@@ -6574,7 +6574,7 @@ RectTransform:
   m_GameObject: {fileID: 7849557471384282409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7450628782343451278}
@@ -6664,6 +6664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 2882908739181213395}
   settingsMenu: {fileID: 6243200284485050360}
+  audioMixer: {fileID: 24100000, guid: cafce117d09bdcd429a0da95652a683b, type: 2}
   buttonClick: {fileID: 8669226177924984612}
 --- !u!82 &8669226177924984612
 AudioSource:

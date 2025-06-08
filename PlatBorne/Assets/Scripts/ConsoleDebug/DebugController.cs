@@ -30,9 +30,7 @@ public class DebugController : MonoBehaviour
     // Scripts
     PlayerHealth playerHealth;
     PlayerInputScript playerInputScript;
-    Bossfight bossfight;
     Saves save;
-    Mole_Bossfight moleBossfight;
 
     // Other
     string feedbackMessage = "";
@@ -105,18 +103,6 @@ public class DebugController : MonoBehaviour
 
     private void Awake()
     {
-        // Find scripts
-        if (SceneManager.GetActiveScene().name == "MoleBoss")
-        {
-            moleBossfight = FindObjectOfType<Mole_Bossfight>();
-            playerHealth = FindObjectOfType<PlayerHealth>();
-        }
-        else if (SceneManager.GetActiveScene().name == "LevelBoss")
-        {
-            bossfight = FindObjectOfType<Bossfight>();
-            playerHealth = FindObjectOfType<PlayerHealth>();
-        }
-
         playerInputScript = FindObjectOfType<PlayerInputScript>();
         save = FindObjectOfType<Saves>();
 
@@ -124,11 +110,13 @@ public class DebugController : MonoBehaviour
         {
             if (x)
             {
+                playerHealth = FindObjectOfType<PlayerHealth>();
                 if (playerHealth != null) playerHealth.GodMode = true;
                 PlayerPrefs.SetInt("GodMode", 69);
             }
             else
             {
+                playerHealth = FindObjectOfType<PlayerHealth>();
                 if (playerHealth != null) playerHealth.GodMode = false;
                 PlayerPrefs.DeleteKey("GodMode");
             }
@@ -143,13 +131,15 @@ public class DebugController : MonoBehaviour
 
         KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss", (x) =>
         {
-            if (SceneManager.GetActiveScene().name == "LevelBoss" && bossfight != null)
+            if (SceneManager.GetActiveScene().buildIndex == 3)
             {
+                Bossfight bossfight = FindObjectOfType<Bossfight>();
                 StartCoroutine(bossfight.BossDeath());
                 CommandCorrectAnswer();
             }
-            if (SceneManager.GetActiveScene().name == "LevelMole" && moleBossfight != null)
+            if (SceneManager.GetActiveScene().buildIndex == 7)
             {
+                Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
                 StartCoroutine(moleBossfight.BossDeath());
                 CommandCorrectAnswer();
             }
@@ -170,20 +160,37 @@ public class DebugController : MonoBehaviour
             {
                 PlayerPrefs.SetInt("PussyMode", 1);
                 PlayerPrefs.Save();
-                CommandCorrectAnswer();
-                if (SceneManager.GetActiveScene().name == "LevelBoss") bossfight.SetPussyMode(true);
-                else if (SceneManager.GetActiveScene().name == "LevelMole") moleBossfight.SetPussyMode(true);
-                else return;
-                CommandCorrectAnswer();
+                if (SceneManager.GetActiveScene().buildIndex == 3)
+                {
+                    Bossfight bossfight = FindObjectOfType<Bossfight>();
+                    bossfight.SetPussyMode(true);
+                    CommandCorrectAnswer();
+                }
+                else if (SceneManager.GetActiveScene().buildIndex == 7)
+                {
+                    Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
+                    moleBossfight.SetPussyMode(true);
+                    CommandCorrectAnswer();
+                }
+                else return;               
             }
             else
             {
                 PlayerPrefs.SetInt("PussyMode", 0);
                 PlayerPrefs.Save();
-                if (SceneManager.GetActiveScene().name == "LevelBoss") bossfight.SetPussyMode(true);
-                else if (SceneManager.GetActiveScene().name == "LevelMole") moleBossfight.SetPussyMode(true);
+                if (SceneManager.GetActiveScene().buildIndex == 3)
+                {
+                    Bossfight bossfight = FindObjectOfType<Bossfight>();
+                    bossfight.SetPussyMode(false);
+                    CommandCorrectAnswer();
+                }
+                else if (SceneManager.GetActiveScene().buildIndex == 7)
+                {
+                    Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
+                    moleBossfight.SetPussyMode(false);
+                    CommandCorrectAnswer();
+                }
                 else return;
-                CommandCorrectAnswer();
             }
         });
 
@@ -252,7 +259,7 @@ public class DebugController : MonoBehaviour
     {
         string[] properties = input.Split(' ');
 
-        if (SceneManager.GetActiveScene().name == "LevelLondon" || SceneManager.GetActiveScene().name == "LevelBirmingham")
+        if (SceneManager.GetActiveScene().buildIndex == 2 || SceneManager.GetActiveScene().buildIndex == 12) //Check if Level
         {
             for (int i = 0; i < commandListLevel.Count; i++)
             {
@@ -275,7 +282,7 @@ public class DebugController : MonoBehaviour
                 }
             }
         }
-        else
+        else //For Boss
         {
             for (int i = 0; i < commandListBoss.Count; i++)
             {

@@ -1,10 +1,12 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject settingsMenu;
+    [SerializeField] private AudioMixer audioMixer;
 
     public AudioSource buttonClick;
     public static bool GameIsPaused = false;
@@ -98,6 +100,14 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        save = FindFirstObjectByType<Saves>();     
+        save = FindFirstObjectByType<Saves>();
+        float volume = 0.5f; //default volume
+        if (PlayerPrefs.HasKey("MusicVolume")) volume = PlayerPrefs.GetFloat("MusicVolume");
+        audioMixer.SetFloat("Music", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f);
+
+
+        volume = 0.5f; //default volume
+        if (PlayerPrefs.HasKey("SFXvolume")) volume = PlayerPrefs.GetFloat("SFXvolume");
+        audioMixer.SetFloat("SFX", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f);
     }
 }

@@ -1097,6 +1097,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 662815416687254097, guid: 820ace1b9115777458f65b810925b3eb, type: 3}
   m_PrefabInstance: {fileID: 9219057635019194152}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &402547069 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9139282841645615561, guid: 820ace1b9115777458f65b810925b3eb, type: 3}
+  m_PrefabInstance: {fileID: 9219057635019194152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &411466802
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,6 +1363,8 @@ MonoBehaviour:
   mainMenuBackground: {fileID: 1972375398}
   settingsMenu: {fileID: 358900341}
   actSelectorMenu: {fileID: 1438650307}
+  musicSlider: {fileID: 402547069}
+  sfxSlider: {fileID: 1904433246}
   src: {fileID: 2101661423}
   srcOne: {fileID: 8300000, guid: 1f1181a8ed39a3949a489c1fa403620c, type: 3}
   srcTwo: {fileID: 8300000, guid: 829b37f3de5c75841afd939b3e3c8c8a, type: 3}
@@ -5629,6 +5642,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896539159}
   m_CullTransparentMesh: 1
+--- !u!114 &1904433246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7655831911017465066, guid: 820ace1b9115777458f65b810925b3eb, type: 3}
+  m_PrefabInstance: {fileID: 9219057635019194152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932628811
 GameObject:
   m_ObjectHideFlags: 0
@@ -6350,6 +6374,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 500350840}
+    - target: {fileID: 2711852180867901416, guid: 820ace1b9115777458f65b810925b3eb, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7ad476902d908734297258e70cd494a1, type: 3}
     - target: {fileID: 3574506154158681075, guid: 820ace1b9115777458f65b810925b3eb, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
