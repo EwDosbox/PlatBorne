@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470292aa7324c0742873d8a21cdb81aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToStartFadeOut: 2
+  timeToStartFadeOut: 0.5
   timeToSelfDestruct: 10
-  fadeSpeed: 1
+  fadeSpeed: 0.5
   boxCollider: {fileID: 850037188270142433}
 --- !u!50 &348793545833578689
 Rigidbody2D:

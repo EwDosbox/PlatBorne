@@ -27,7 +27,7 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.4484135}
       - serializedVersion: 3
-        time: 3.05
+        time: 2.0833333
         value: {x: 0, y: 0, z: 1080}
         inSlope: {x: 0, y: 0, z: 564.4697}
         outSlope: {x: 0, y: 0, z: 0}
@@ -62,18 +62,18 @@ AnimationClip:
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 1.8666667
+        time: 1.25
         value: {x: 13.24, y: -3.36, z: 0}
         inSlope: {x: 0, y: -0, z: 0}
-        outSlope: {x: 0, y: -6.134329, z: 0}
+        outSlope: {x: 0, y: -9.133334, z: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
       - serializedVersion: 3
-        time: 2.9833333
+        time: 2
         value: {x: 13.24, y: -10.21, z: 0}
-        inSlope: {x: 0, y: -6.134329, z: 0}
+        inSlope: {x: 0, y: -9.133334, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
         weightedMode: 0
@@ -117,7 +117,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 3.05
+    m_StopTime: 2.0833333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -156,18 +156,18 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1.8666667
+        time: 1.25
         value: -3.36
         inSlope: -0
-        outSlope: -6.134329
+        outSlope: -9.133334
         tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 2.9833333
+        time: 2
         value: -10.21
-        inSlope: -6.134329
+        inSlope: -9.133334
         outSlope: 0
         tangentMode: 69
         weightedMode: 0
@@ -195,7 +195,7 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.4484135
       - serializedVersion: 3
-        time: 3.05
+        time: 2.0833333
         value: 1080
         inSlope: 564.4697
         outSlope: 0

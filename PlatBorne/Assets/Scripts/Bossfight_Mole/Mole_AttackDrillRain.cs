@@ -24,12 +24,12 @@ public class Mole_AttackDrillRain : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         player = FindAnyObjectByType<PlayerScript>().gameObject;
         transform.rotation = Quaternion.Euler(0, 0, 0);
-        rb.velocity = Vector2.up * speed;
+        rb.velocity = Vector2.down * speed;
     }
 
     void Update()
     {
-        if (Mathf.Abs(transform.position.y) > 10f) Destroy(gameObject);
+        if (transform.position.y < -11f) Destroy(gameObject);
         //change volume        
         float distance = Vector2.Distance(transform.position, player.transform.position);
         float rawRatio = 1f - (distance / maxDistance);

@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mole_DirtSuicide : MonoBehaviour
 {
-    float timer = 0;
-    void Update()
+    public void AnimationEnd()
     {
-        timer += Time.deltaTime;
-        if (timer >= 4) Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

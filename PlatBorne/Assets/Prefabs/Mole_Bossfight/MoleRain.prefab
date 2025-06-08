@@ -171,5 +171,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e08e4fafb9d8dd4cb4ad9bdc9804e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToSelfDestruct: 10
+  timeToSelfDestruct: 5
   maxSpeed: 8

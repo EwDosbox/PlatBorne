@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -52,12 +54,12 @@ public class Mole_Bossfight : MonoBehaviour
     public float bossChargeDelay;
     public float timeBetweenAttacksPhase1;
     public float timeBetweenAttacksPhase2;
-    public float moleRain_waitForNextWave;
-    public float groundDrills_waitForNextDrill;
-    public float shovelRain_waitForNextWave;
-    public float moleCharge_TimeBeforeCharge;
-    public float moleCharge_Velocity;
-    public float rock_ChargeTime;
+    public float moleRainWaitForNextWave;
+    public float groundDrillWaitForNextDrill;
+    public float moleChargeTimeBeforeCharge;
+    public float moleChargeVelocity;
+    public float rockChargeTime;
+    public float drillSideWaitForAnotherTimer;
     public float waitTimeToTransitionToCutscene;
     private bool changePhaseHasPlayed = false;
     private bool bossDeathHasPlayed = false;
@@ -378,8 +380,9 @@ public class Mole_Bossfight : MonoBehaviour
     #endregion
 
     #region AttacksLogic
-    string lastAttack = null;
-    void AttackChooser()
+    private BossAttack lastAttack = BossAttack.MoleRain;
+
+    void AttackChooser() //very useful
     {
         attackIsGoing = true;
         if (phase == 1)
@@ -392,60 +395,86 @@ public class Mole_Bossfight : MonoBehaviour
         }
     }
 
-    private void ChooseAttackPhase1() //RNG, but one attack cannot be played twice in a row (Also works for phase2)
+    private enum BossAttack
     {
-        List<string> possibleAttacks = new List<string> { "MoleRain", "DrillRain", "DrillGround", "DrillSide" };
-        // Remove the last attack to avoid repeating it
-        if (possibleAttacks.Contains(lastAttack))
-            possibleAttacks.Remove(lastAttack);
-
-        int rng = Random.Range(0, possibleAttacks.Count);
-        lastAttack = possibleAttacks[rng];
-
-        switch (lastAttack)
-        {
-            case "MoleRain":
-                StartCoroutine(Attack_MoleRain());
-                break;
-            case "DrillRain":
-                Attack_DrillRain();
-                break;
-            case "DrillGround":
-                StartCoroutine(Attack_GroundDrills());
-                break;
-            case "DrillSide":
-                StartCoroutine(Attack_SideDrills());
-                break;
-        }
+        MoleRain,
+        DrillRain,
+        DrillGround,
+        DrillSide,
+        ShovelRain,
+        Rock
     }
+
+
+    private void ChooseAttackPhase1()
+{
+    List<BossAttack> possibleAttacks = new List<BossAttack> {
+        BossAttack.MoleRain,
+        BossAttack.DrillRain,
+        BossAttack.DrillGround,
+        BossAttack.DrillSide
+    };
+
+    possibleAttacks.Remove(lastAttack);
+
+    lastAttack = possibleAttacks[Random.Range(0, possibleAttacks.Count)];
+
+    switch (lastAttack)
+    {
+        case BossAttack.MoleRain:
+            StartCoroutine(Attack_MoleRain());
+            break;
+        case BossAttack.DrillRain:
+            Attack_DrillRain();
+            break;
+        case BossAttack.DrillGround:
+            StartCoroutine(Attack_GroundDrills());
+            break;
+        case BossAttack.DrillSide:
+            StartCoroutine(Attack_SideDrills());
+            break;
+    }
+}
+
 
     private void ChooseAttackPhase2()
     {
-        List<string> possibleAttacks = new List<string> { "DrillSide", "MoleRain", "ShovelRain", "Rock" };
-        if (bossNextAttackIsCharge) StartCoroutine(Attack_MoleCharge());
-        else
+        if (bossNextAttackIsCharge)
         {
-            int rng = Random.Range(0, possibleAttacks.Count);
-            lastAttack = possibleAttacks[rng];
-            if (possibleAttacks.Contains(lastAttack)) possibleAttacks.Remove(lastAttack);
-            switch (lastAttack)
-            {
-                case "DrillSide":
-                    StartCoroutine(Attack_SideDrills());
-                    break;
-                case "Rock":
-                    StartCoroutine(Attack_Rock());
-                    break;
-                case "ShovelRain":
-                    StartCoroutine(Attack_ShovelRain());
-                    break;
-                case "MoleRain":
-                    StartCoroutine(Attack_MoleRain());
-                    break;
-            }
+            StartCoroutine(Attack_MoleCharge());
+            return;
+        }
+
+        List<BossAttack> possibleAttacks = new List<BossAttack> {
+        BossAttack.DrillSide,
+        BossAttack.MoleRain,
+        BossAttack.ShovelRain,
+        BossAttack.Rock
+    };
+
+        possibleAttacks.Remove(lastAttack);
+        lastAttack = possibleAttacks[Random.Range(0, possibleAttacks.Count)];
+
+        switch (lastAttack)
+        {
+            case BossAttack.DrillSide:
+                StartCoroutine(Attack_SideDrills());
+                break;
+            case BossAttack.Rock:
+                MainRockAttack();
+                break;
+            case BossAttack.ShovelRain:
+                StartCoroutine(Attack_ShovelRain());
+                break;
+            case BossAttack.MoleRain:
+                StartCoroutine(Attack_MoleRain());
+                break;
         }
     }
+
+
     #endregion
+
     #region Phase1Attacks
     public void Attack_DrillRain()
     {
@@ -461,20 +490,20 @@ public class Mole_Bossfight : MonoBehaviour
     IEnumerator Attack_MoleRain()
     {
         Debug.Log("Attack: MoleRain");
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 12; j += 2)
             {
                 Vector2 position = new Vector2(-16.68f + (j * 3), 11.40f);
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(moleRain_waitForNextWave);
+            yield return new WaitForSeconds(moleRainWaitForNextWave);
             for (int j = 1; j < 12; j += 2)
             {
                 Vector2 position = new Vector2(-16.68f + (j * 3), 11.40f);
                 Instantiate(prefabMoleRain, position, Quaternion.identity);
             }
-            yield return new WaitForSeconds(moleRain_waitForNextWave);
+            yield return new WaitForSeconds(moleRainWaitForNextWave);
         }
         attackIsGoing = false;
     }
@@ -513,7 +542,7 @@ public class Mole_Bossfight : MonoBehaviour
             for (int i = 0; i < 6; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(drillSideWaitForAnotherTimer);
             }
         }
         else if (playerScript.Position.x > 6) // Right
@@ -521,7 +550,7 @@ public class Mole_Bossfight : MonoBehaviour
             for (int i = 3; i < 6; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(drillSideWaitForAnotherTimer);
             }
         }
         else // Left
@@ -529,12 +558,13 @@ public class Mole_Bossfight : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 Instantiate(prefabDrillSide, position[i], Quaternion.identity);
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(drillSideWaitForAnotherTimer);
             }
         }
         attackIsGoing = false;
     }
     #endregion
+
     #region Phase2Attacks
     IEnumerator Attack_GroundDrills()
     {
@@ -543,7 +573,7 @@ public class Mole_Bossfight : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                yield return new WaitForSeconds(groundDrills_waitForNextDrill);
+                yield return new WaitForSeconds(groundDrillWaitForNextDrill);
                 Instantiate(prefabDrillGround, new Vector2(16.76f - (4.75f * i), -11), Quaternion.identity); //right            
             }
         }
@@ -551,7 +581,7 @@ public class Mole_Bossfight : MonoBehaviour
         {
             for (int i = 0; i < 8; i++)
             {
-                yield return new WaitForSeconds(groundDrills_waitForNextDrill);
+                yield return new WaitForSeconds(groundDrillWaitForNextDrill);
                 Instantiate(prefabDrillGround, new Vector2(-16.76f + (4.75f * i), -11), Quaternion.identity); //left        
             }            
         }
@@ -569,7 +599,7 @@ public class Mole_Bossfight : MonoBehaviour
             yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
             sfxdrillCharge.Play();
             animator.SetBool("chargingRight", true);            
-            rb.velocity = Vector2.right * moleCharge_Velocity;
+            rb.velocity = Vector2.right * moleChargeVelocity;
             bossIsCharging = true;
             while (rb.velocity != Vector2.zero) //Charge to the right side of the screen
             {
@@ -596,7 +626,7 @@ public class Mole_Bossfight : MonoBehaviour
             yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
             sfxdrillCharge.Play();
             animator.SetBool("chargingLeft", true);            
-            rb.velocity = Vector2.left * moleCharge_Velocity;
+            rb.velocity = Vector2.left * moleChargeVelocity;
             bossIsCharging = true;
             while (rb.velocity != Vector2.zero) //Charge to the left side of the screen
             {
@@ -618,40 +648,45 @@ public class Mole_Bossfight : MonoBehaviour
         }        
     }
 
-    IEnumerator Attack_Rock()
+    public void MainRockAttack()
+    {
+        if (playerScript.Position.x > -6.67f && playerScript.Position.x < 6.67f) // middle
+        {
+            if (Random.Range(0, 2) == 1) // 50/50 chance
+            {
+                StartCoroutine(RockAttack(0));
+                StartCoroutine(RockAttack(1));
+            }
+            else
+            {
+                StartCoroutine(RockAttack(1));
+                StartCoroutine(RockAttack(2));
+            }
+        }
+        else //left and right
+        {
+            StartCoroutine(RockAttack(0));
+            StartCoroutine(RockAttack(2));
+        }
+    }
+
+    /// <summary>
+    /// 0 = left; 1 = middle; 2 = right
+    /// </summary>
+    /// <param name="where">Basic input is  1</param>
+    /// <returns></returns>
+    IEnumerator RockAttack(int where)
     {
         Vector2 position;
         float y = -9;
-        if (playerScript.Position.x < -6.67) //left
-        {
-            Debug.Log("Attack Rock Left");
-            position = new Vector3(-13.24f, y, -1);
-            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
-            yield return new WaitForSeconds(rock_ChargeTime);
-            PlayerPrefs.SetString("rockAttack", "left"); //Im not sorry
-            PlayerPrefs.Save();
-            Instantiate(prefabROCK, position, Quaternion.identity);            
-        }
-        else if (playerScript.Position.x > 6.67) //right
-        {
-            Debug.Log("Attack Rock Right");
-            position = new Vector3(13.24f, y, -1);
-            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
-            yield return new WaitForSeconds(rock_ChargeTime);
-            PlayerPrefs.SetString("rockAttack", "right");
-            PlayerPrefs.Save();
-            Instantiate(prefabROCK, position, Quaternion.identity);
-        }
-        else // middle
-        {
-            Debug.Log("Attack Rock Middle");
-            position = new Vector3(0, y, -1);
-            Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
-            yield return new WaitForSeconds(rock_ChargeTime);
-            PlayerPrefs.SetString("rockAttack", "middle");
-            PlayerPrefs.Save();
-            Instantiate(prefabROCK, position, Quaternion.identity);
-        }
+        if (where == 0) position = new Vector3(-13.24f, y, -1);
+        else if (where == 2) position = new Vector3(13.24f, y, -1);
+        else position = new Vector3(0, y, -1);
+
+        Instantiate(prefabRockDirt, new Vector3(position.x, -4.62f, 15), Quaternion.identity);
+        yield return new WaitForSeconds(rockChargeTime);
+        Instantiate(prefabROCK, position, Quaternion.identity);
+
         attackIsGoing = false;
     }
 

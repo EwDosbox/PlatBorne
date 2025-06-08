@@ -2025,16 +2025,16 @@ MonoBehaviour:
   prefabROCK: {fileID: 4298796234376706703, guid: b6321589a3bebcf4dbd5e500c3113505, type: 3}
   prefabShovelRain: {fileID: 6098093470622872932, guid: b8a27f4befb39d548a55125df826142e, type: 3}
   prefabRockDirt: {fileID: 1874224432129532152, guid: 951e9238fa581d443a259211fe26c92f, type: 3}
-  timeToFirstAttack: 6
+  timeToFirstAttack: 3
   bossChargeDelay: 15
   timeBetweenAttacksPhase1: 4
   timeBetweenAttacksPhase2: 3
-  moleRain_waitForNextWave: 1
-  groundDrills_waitForNextDrill: 0.5
-  shovelRain_waitForNextWave: 0
-  moleCharge_TimeBeforeCharge: 3
-  moleCharge_Velocity: 30
-  rock_ChargeTime: 2
+  moleRainWaitForNextWave: 0.75
+  groundDrillWaitForNextDrill: 0.5
+  moleChargeTimeBeforeCharge: 20
+  moleChargeVelocity: 20
+  rockChargeTime: 1
+  drillSideWaitForAnotherTimer: 1.5
   waitTimeToTransitionToCutscene: 5
   pussyModeGameObject: {fileID: 120485447}
   UI_Player: {fileID: 1505998208}
@@ -4954,7 +4954,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5821441077154961247, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9
+      value: 8.82
       objectReference: {fileID: 0}
     - target: {fileID: 5821441077154961247, guid: a5eda2ec965729b40a696ac7874c5812, type: 3}
       propertyPath: m_LocalPosition.z

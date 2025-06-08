@@ -27,7 +27,7 @@ public class Mole_AttackDrillGround : MonoBehaviour
 
     void Update()
     {
-        if (Mathf.Abs(transform.position.x) > 18f) Destroy(gameObject);
+        if (transform.position.y > 8f) Destroy(gameObject);
         //change volume        
         float distance = Vector2.Distance(transform.position, player.transform.position);
         float rawRatio = 1f - (distance / maxDistance);

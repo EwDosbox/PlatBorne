@@ -173,9 +173,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5467fe53d88af2d4fa6bb93c7185363d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
+  speed: 8
   sfx: {fileID: 6165039479470395946}
-  maxDistance: 8
+  maxDistance: 15
 --- !u!95 &133077183599318009
 Animator:
   serializedVersion: 5
