@@ -1,113 +1,91 @@
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject settingsMenu;
-    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] AudioMixer audioMixer;
+    [SerializeField] AudioSource buttonClick;
 
-    public AudioSource buttonClick;
-    public static bool GameIsPaused = false;
-    public static bool IsInSettings = false;
+    public static bool GameIsPaused { get; private set; } = false;
+    public static bool IsInSettings { get; private set; } = false;
 
-    Saves save;
+    void Start()
+    {
+        ApplySavedAudioSettings();
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
-            {
-                if (!IsInSettings)
-                {
-                    Resume();
-                }
-                else
-                {
-                    ReturnFromSettings();
-                }
-            }
-            else
-            {
-                Pause();
-            }
+            if (!GameIsPaused) ShowPauseMenu();
+            else if (IsInSettings) CloseSettingsMenu();
+            else ResumeGame();
         }
     }
 
-    public void Pause()
+    void ApplySavedAudioSettings()
     {
-        buttonClick.Play();
-        _Pause();
+        float musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        audioMixer.SetFloat("Music", Mathf.Log10(Mathf.Clamp(musicVolume, 0.0001f, 1f)) * 20f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXvolume", 0.5f);
+        audioMixer.SetFloat("SFX", Mathf.Log10(Mathf.Clamp(sfxVolume, 0.0001f, 1f)) * 20f);
     }
 
-    private void _Pause()
+    public void ShowPauseMenu()
     {
+        PlayClick();
         pauseMenu.SetActive(true);
+        settingsMenu.SetActive(false);
         GameIsPaused = true;
+        IsInSettings = false;
     }
 
-    public void Resume()
+    public void ResumeGame()
     {
-        buttonClick.Play();
-        _Resume();
-    }
-
-    private void _Resume()
-    {
+        PlayClick();
         pauseMenu.SetActive(false);
+        settingsMenu.SetActive(false);
         GameIsPaused = false;
+        IsInSettings = false;
     }
 
-    public void Settings()
+    public void OpenSettingsMenu()
     {
-        buttonClick.Play();
-        _Settings();
-    }
-
-    public void _Settings()
-    {
-        IsInSettings = true;
+        PlayClick();
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(true);
+        IsInSettings = true;
     }
 
-    public void ReturnFromSettings()
+    public void CloseSettingsMenu()
     {
-        buttonClick.Play();
-        _ReturnFromSettings();
-    }
-
-    private void _ReturnFromSettings()
-    {
-        IsInSettings = false;
-        settingsMenu.SetActive(false);
+        PlayClick();
         pauseMenu.SetActive(true);
+        settingsMenu.SetActive(false);
+        IsInSettings = false;
     }
 
-    public void Quit()
+    public void ReturnToMainMenu()
     {
-        buttonClick.Play();
-        _Quit();
+        PlayClick();
+        GameIsPaused = false;
+        IsInSettings = false;
+        SceneManager.LoadScene(0);
     }
 
-    private void _Quit()
+    public void QuitGame()
     {
+        PlayClick();
         Debug.Log("Application has quit");
         Application.Quit();
     }
 
-    private void Start()
+    void PlayClick()
     {
-        save = FindFirstObjectByType<Saves>();
-        float volume = 0.5f; //default volume
-        if (PlayerPrefs.HasKey("MusicVolume")) volume = PlayerPrefs.GetFloat("MusicVolume");
-        audioMixer.SetFloat("Music", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f);
-
-
-        volume = 0.5f; //default volume
-        if (PlayerPrefs.HasKey("SFXvolume")) volume = PlayerPrefs.GetFloat("SFXvolume");
-        audioMixer.SetFloat("SFX", Mathf.Log10(Mathf.Clamp(volume, 0.0001f, 1f)) * 20f);
+        if (buttonClick != null && !buttonClick.isPlaying) buttonClick.Play();
     }
 }

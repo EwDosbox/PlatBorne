@@ -2,7 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Mole_UI : MonoBehaviour
+//The fuck is even this script man, I must have been high while  writing a new script just for this
+
+public class Mole_UI : MonoBehaviour 
 {
     // UNITY
     public CanvasGroup whiteScreen;
@@ -20,11 +22,12 @@ public class Mole_UI : MonoBehaviour
     void Start()
     {
         hpSlider.value = hpSlider.minValue;
+        StartCoroutine(AnimateBossHpSlider());
     }
 
-    void Update()
+    IEnumerator AnimateBossHpSlider()
     {
-        if (hpSliderOn)
+        while (hpSliderOn)
         {
             if (hpSlider.enabled)
             {
@@ -35,11 +38,17 @@ public class Mole_UI : MonoBehaviour
                 else
                 {
                     hpSlider.value += Time.deltaTime * 16.667f;
-                    if (hpSlider.value >= hpSlider.maxValue) takeBossHealth = true;
+                    if (hpSlider.value >= hpSlider.maxValue)
+                    {
+                        hpSlider.value = hpSlider.maxValue;
+                        takeBossHealth = true;
+                    }
                 }
             }
+            yield return null;
         }
     }
+
 
     public void BossHPSliderStart()
     {

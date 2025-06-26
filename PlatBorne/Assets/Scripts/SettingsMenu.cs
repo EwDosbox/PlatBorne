@@ -63,7 +63,7 @@ public class SettingsMenu : MonoBehaviour
     public void GoBack()
     {
         PauseMenu menu = FindAnyObjectByType<PauseMenu>();
-        menu.ReturnFromSettings();
+        menu.CloseSettingsMenu();
     }
 
     public void SetResolution(int resolutionIndex)
