@@ -69,7 +69,8 @@ public class Saves : MonoBehaviour
             default: return beforeMovement;
         }
     }
-    public Vector3 LoadMovementAfterFish()
+
+    public Vector3 LoadMovementAfterFish() //pain
     {
         return new Vector3(4.44f, -3.846775f, 0);
     }
@@ -118,7 +119,6 @@ public class Saves : MonoBehaviour
                         break;
                     }
             }
-            PlayerPrefs.Save();
         }
     }
 

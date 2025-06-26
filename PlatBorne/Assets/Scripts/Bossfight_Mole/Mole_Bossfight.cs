@@ -77,6 +77,8 @@ public class Mole_Bossfight : MonoBehaviour
     float timerAttackSpikes = 0;
     bool playerHasTakenDamageInCharge = false;
     //boss attacks
+    float spikesTimeNext = 0;
+    int numberOfDrillAttacks = 1;
     bool bossIsCharging = false;
     bool bossCanChargeTimer = false;
     bool bossfightIsRunning = false;
@@ -104,6 +106,7 @@ public class Mole_Bossfight : MonoBehaviour
         save = FindFirstObjectByType<Saves>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        spikesTimeNext = Random.Range(15, 30);
         //UI
         PussyModeManager();
         PlayerPrefs.SetString("Level", "mole");
@@ -118,11 +121,6 @@ public class Mole_Bossfight : MonoBehaviour
     }
     private void Update()
     {
-        //DEBUG
-        Debug.Log("CanAttack" + canAttack);
-        Debug.Log("Animator chargingLeft " + animator.GetBool("chargingLeft"));
-        Debug.Log("phase: " + phase.ToString());
-        Debug.Log("Boss Invincible: " + bossHealth.BossInvincible);
         if (bossfightIsRunning)
         {
             #region DelayBetweenAttacks
@@ -137,14 +135,20 @@ public class Mole_Bossfight : MonoBehaviour
                 else timerWaitForNextAttack += Time.deltaTime;
             }
             #endregion
+
             #region Spikes
-            if (attackSpikesActivate) timerAttackSpikes += Time.deltaTime;
-            if (timerAttackSpikes > 16 && phase == 2)
+            if (attackSpikesActivate)
             {
-                timerAttackSpikes = 0;
-                Attack_Spikes();
+                timerAttackSpikes += Time.deltaTime;
+                if (timerAttackSpikes > spikesTimeNext && phase == 2)
+                {
+                    timerAttackSpikes = 0;
+                    spikesTimeNext = Random.Range(15, 30);
+                    Attack_Spikes();
+                }
             }
             #endregion
+
             #region BOSSCHARGE
             if (timerBossCharge > bossChargeDelay)
             {
@@ -153,6 +157,7 @@ public class Mole_Bossfight : MonoBehaviour
             }
             else if (bossCanChargeTimer) timerBossCharge += Time.deltaTime;
             #endregion
+
             #region ATTACK HANDLER
             if (canAttack)
             {
@@ -160,7 +165,7 @@ public class Mole_Bossfight : MonoBehaviour
                 {
                     timerWaitForNextAttack = 0;
                     isNextAttackReady = false;
-                    AttackChooser();
+                    ChooseAttack(phase);
                 }
             }
             else
@@ -169,6 +174,7 @@ public class Mole_Bossfight : MonoBehaviour
                 isNextAttackReady = false;
             }
             #endregion
+
             #region Health Manager
             if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
             if (bossHealth.BossHealth <= 0 && !bossDeathHasPlayed)  //One Time Thing
@@ -183,6 +189,7 @@ public class Mole_Bossfight : MonoBehaviour
                 StartCoroutine(ChangePhase());
             }
             #endregion
+
             timer += Time.deltaTime;
             save.TimerSave(timer, 4);
             pussyModeGameObject.SetActive(pussyModeActive);
@@ -394,19 +401,6 @@ public class Mole_Bossfight : MonoBehaviour
     #region AttacksLogic
     private BossAttack lastAttack = BossAttack.MoleRain;
 
-    void AttackChooser() //very useful
-    {
-        attackIsGoing = true;
-        if (phase == 1)
-        {
-            ChooseAttackPhase1();
-        }
-        else if (phase == 2)
-        {
-            ChooseAttackPhase2();
-        }
-    }
-
     private enum BossAttack
     {
         MoleRain,
@@ -418,84 +412,87 @@ public class Mole_Bossfight : MonoBehaviour
     }
 
 
-    private void ChooseAttackPhase1()
-{
-    List<BossAttack> possibleAttacks = new List<BossAttack> {
-        BossAttack.MoleRain,
-        BossAttack.DrillRain,
-        BossAttack.DrillGround,
-        BossAttack.DrillSide
-    };
-
-    possibleAttacks.Remove(lastAttack);
-
-    lastAttack = possibleAttacks[Random.Range(0, possibleAttacks.Count)];
-
-    switch (lastAttack)
+    private void ChooseAttack(int phase)
     {
-        case BossAttack.MoleRain:
-            StartCoroutine(Attack_MoleRain());
-            break;
-        case BossAttack.DrillRain:
-            Attack_DrillRain();
-            break;
-        case BossAttack.DrillGround:
-            StartCoroutine(Attack_GroundDrills());
-            break;
-        case BossAttack.DrillSide:
-            StartCoroutine(Attack_SideDrills());
-            break;
-    }
-}
+        attackIsGoing = true;
+        List<BossAttack> possibleAttacks;
 
-
-    private void ChooseAttackPhase2()
-    {
-        if (bossNextAttackIsCharge)
+        if (phase == 1)
         {
-            StartCoroutine(Attack_MoleCharge());
+            possibleAttacks = new List<BossAttack> {
+            BossAttack.MoleRain,
+            BossAttack.DrillRain,
+            BossAttack.DrillGround,
+            BossAttack.DrillSide
+        };
+        }
+        else if (phase == 2)
+        {
+            if (bossNextAttackIsCharge)
+            {
+                StartCoroutine(Attack_MoleCharge());
+                return;
+            }
+
+            possibleAttacks = new List<BossAttack> {
+            BossAttack.DrillSide,
+            BossAttack.MoleRain,
+            BossAttack.ShovelRain,
+            BossAttack.Rock
+        };
+        }
+        else
+        {
+            Debug.LogWarning("Unknown boss phase: " + phase);
             return;
         }
 
-        List<BossAttack> possibleAttacks = new List<BossAttack> {
-        BossAttack.DrillSide,
-        BossAttack.MoleRain,
-        BossAttack.ShovelRain,
-        BossAttack.Rock
-    };
-
         possibleAttacks.Remove(lastAttack);
+        if (possibleAttacks.Count == 0) possibleAttacks.Add(lastAttack);
+
         lastAttack = possibleAttacks[Random.Range(0, possibleAttacks.Count)];
 
         switch (lastAttack)
         {
-            case BossAttack.DrillSide:
-                StartCoroutine(Attack_SideDrills());
-                break;
-            case BossAttack.Rock:
-                MainRockAttack();
-                break;
-            case BossAttack.ShovelRain:
-                StartCoroutine(Attack_ShovelRain());
-                break;
-            case BossAttack.MoleRain:
-                StartCoroutine(Attack_MoleRain());
-                break;
+            case BossAttack.MoleRain: StartCoroutine(Attack_MoleRain()); break;
+            case BossAttack.DrillRain: StartCoroutine(Attack_DrillRain()); break;
+            case BossAttack.DrillGround: StartCoroutine(Attack_GroundDrills()); break;
+            case BossAttack.DrillSide: StartCoroutine(Attack_SideDrills()); break;
+            case BossAttack.ShovelRain: StartCoroutine(Attack_ShovelRain()); break;
+            case BossAttack.Rock: MainRockAttack(); break;
+            default: Debug.LogWarning("Unhandled attack: " + lastAttack); break;
         }
     }
+
 
 
     #endregion
 
     #region Phase1Attacks
-    public void Attack_DrillRain()
+    IEnumerator Attack_DrillRain()
     {
         Debug.Log("Attack: Drill Rain");
-        for (int i = 0; i < 8; i++)
+        for (int j = 0; j < numberOfDrillAttacks; j++)
         {
-            Vector2 position = new Vector2(-16.50f + (i * 4.75f), 11);
-            Instantiate(prefabDrillRain, position, Quaternion.identity);
+            if (j % 2 == 0)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 position = new Vector2(-16.50f + (i * 4.75f), 11);
+                    Instantiate(prefabDrillRain, position, Quaternion.identity);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 position = new Vector2(-16.50f + (i * 2.375f), 11);
+                    Instantiate(prefabDrillRain, position, Quaternion.identity);
+                }
+            }
+            yield return new WaitForSeconds(1f);
         }
+        numberOfDrillAttacks++;
         attackIsGoing = false;
     }
 
