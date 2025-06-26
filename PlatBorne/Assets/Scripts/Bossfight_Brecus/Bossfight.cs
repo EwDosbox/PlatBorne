@@ -59,7 +59,7 @@ public class Bossfight : MonoBehaviour
     public BoxCollider2D bounds;
     public bool pussyModeActive = false;
     SubtitlesManager subtitlesManager;
-    private int resetPromenych()
+    private int ResetVariables()
     {
         attackNumberDagger = 0;
         attackNumberFloorIsLava = 0;
@@ -160,7 +160,7 @@ public class Bossfight : MonoBehaviour
             }
             #endregion
             #region BossDamage
-            if (phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());            
+            if (phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
             if (!bossInvincible && PlayerScript.bossHitbox)
             {
                 bossInvincible = true;
@@ -225,12 +225,12 @@ public class Bossfight : MonoBehaviour
                             if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = resetPromenych();
+                                attackNumberFloorIsLava = ResetVariables();
                             }
                             else
                             {
                                 attack.BossAttackDagger();
-                                attackNumberDagger = resetPromenych();
+                                attackNumberDagger = ResetVariables();
                             }
                         }
                     }
@@ -243,23 +243,23 @@ public class Bossfight : MonoBehaviour
                                 if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                                 {
                                     attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava = resetPromenych();
+                                    attackNumberFloorIsLava = ResetVariables();
                                 }
                                 else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
                                 {
                                     attack.BossAttackDagger();
-                                    attackNumberDagger = resetPromenych();
+                                    attackNumberDagger = ResetVariables();
                                 }
                                 else if (attackNumberLeech < 1)
                                 {
                                     if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
                                     else attack.BossAttackLeechRight();
-                                    attackNumberLeech = resetPromenych();
+                                    attackNumberLeech = ResetVariables();
                                 }
                                 else
                                 {
                                     attack.BossAttackDagger();
-                                    attackNumberDagger = resetPromenych();
+                                    attackNumberDagger = ResetVariables();
                                 }
                             }
                         }
@@ -272,18 +272,18 @@ public class Bossfight : MonoBehaviour
                             if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = resetPromenych();
+                                attackNumberFloorIsLava = ResetVariables();
                             }
                             else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
                             {
                                 attack.BossAttackDagger();
-                                attackNumberDagger = resetPromenych();
+                                attackNumberDagger = ResetVariables();
                             }
                             else
                             {
                                 if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
                                 else attack.BossAttackSwordRight();
-                                attackNumberSword = resetPromenych();
+                                attackNumberSword = ResetVariables();
                             }
                         }
                         break;
@@ -296,24 +296,24 @@ public class Bossfight : MonoBehaviour
                             {
                                 if (PlayerScript.bossHitboxRight) attack.BossAttackSwordBoth(false, false, 1f);
                                 else attack.BossAttackSwordBoth(false, true, 1f);
-                                attackNumberSword = resetPromenych();
+                                attackNumberSword = ResetVariables();
                             }
                             else if (attackNumberLeech < 1)
                             {
                                 if (bossHealthBar.GetHP() <= 20) attack.BossAttackLeechBoth();
                                 else if (PlayerScript.bossHitboxRight) attack.BossAttackLeechRight();
                                 else attack.BossAttackLeechLeft();
-                                attackNumberLeech = resetPromenych();
+                                attackNumberLeech = ResetVariables();
                             }
                             else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                             {
                                 attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = resetPromenych();
+                                attackNumberFloorIsLava = ResetVariables();
                             }
                             else
                             {
                                 attack.BossAttackDagger();
-                                attackNumberDagger = resetPromenych();
+                                attackNumberDagger = ResetVariables();
                             }
                         }
                         break;
@@ -323,36 +323,39 @@ public class Bossfight : MonoBehaviour
         #endregion
 
         #region Start of Bossfight - UI inicialization (once)
-        else if (PlayerScript.bossHitboxLeft && !bossfightStarted)
+        StartCoroutine(StartBossfight());
+    }
+
+    IEnumerator StartBossfight()
+    {       
+        UI_BossHP.SetActive(true);
+        UI_PlayerHP.SetActive(true);
+        PussyModeManager();
+        bossHealthBar.Slider();
+        playerHealth.StartHPUI();
+        if (PlayerPrefs.HasKey("brecusStart"))
         {
-            UI_BossHP.SetActive(true);
-            UI_PlayerHP.SetActive(true);
+            if (PlayerPrefs.GetInt("brecusStart") != 0)
+            {
+                phase = 1;
+                bossfightStarted = true;
+                attackIsGoingOn = false;
+            }
+        }
+        else //first time hearing fighting boss
+        {
+            MusicManagerTurnOffMusic();
+            PreBossDialog.Play();
+            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.", PreBossDialog.clip.length);
+            yield return new WaitForSeconds(PreBossDialog.clip.length + 0.5f);
+            StartCoroutine(MusicManager(0));
             phase = 1;
             bossfightStarted = true;
             attackIsGoingOn = false;
-            PussyModeManager();
-            bossHealthBar.Slider();
-            playerHealth.StartHPUI();
-            StartCoroutine(DIALOGWaitingLine("preboss"));
+            PlayerPrefs.SetInt("brecusStart", 1);
+            PlayerPrefs.Save();
         }
         #endregion
-    }
-
-    //DIALOG doesnt overlap with Music
-    IEnumerator DIALOGWaitingLine(string name) 
-    {
-        switch(name)
-        {
-            case "preboss":
-                {
-                    MusicManagerTurnOffMusic();
-                    PreBossDialog.Play();
-                    if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.", PreBossDialog.clip.length);
-                    yield return new WaitForSeconds(PreBossDialog.clip.length);
-                    StartCoroutine(MusicManager(0));
-                    break;
-                }
-        }        
     }
 
     //MUSIC

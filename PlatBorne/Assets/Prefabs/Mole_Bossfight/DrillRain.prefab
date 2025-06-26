@@ -173,7 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73c1629558f8eac45bf3447a38a1ef88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
+  acceleration: 0.15
+  maxSpeed: 30
   sfx: {fileID: 233199103929149404}
   maxDistance: 15
 --- !u!95 &4411711748644686259

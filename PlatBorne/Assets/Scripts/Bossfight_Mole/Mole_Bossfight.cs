@@ -311,12 +311,25 @@ public class Mole_Bossfight : MonoBehaviour
         bossUI.BossHPSliderStart();
         pussyModeGameObject.SetActive(pussyModeActive);
         playerHealth.StartHPUI();
-        MusicManager(MusicEnum.StopAll);        
-        VoiceLinesManager(VoiceLinesEnum.voiceLinePreBoss);
-        yield return new WaitForSeconds(vlPreBoss.clip.length + 1);
-        MusicManager(MusicEnum.OSTPart1);
-        phase = 1;
-        bossfightIsRunning = true;
+        if (PlayerPrefs.HasKey("moleStart"))
+        {
+            if (PlayerPrefs.GetInt("moleStart") != 0)
+            {
+                MusicManager(MusicEnum.OSTPart1);
+                phase = 1;
+                bossfightIsRunning = true;
+            }
+        }
+        else //first time hearing fighting boss
+        {
+            MusicManager(MusicEnum.StopAll);
+            VoiceLinesManager(VoiceLinesEnum.voiceLinePreBoss);
+            yield return new WaitForSeconds(vlPreBoss.clip.length + 0.5f);
+            MusicManager(MusicEnum.OSTPart1);
+            phase = 1;
+            bossfightIsRunning = true;
+            PlayerPrefs.SetInt("moleStart", 1);
+        }
     }
 
     public IEnumerator ChangePhase()
@@ -326,7 +339,6 @@ public class Mole_Bossfight : MonoBehaviour
         canAttack = false;
         Debug.Log("Attack: ChangePhase");
         MusicManager(MusicEnum.StopAll);
-        VoiceLinesManager(VoiceLinesEnum.voiceLinesSwitchPhase);
         VoiceLinesManager(VoiceLinesEnum.voiceLinesSwitchPhase);
         yield return new WaitForSeconds(vlSwitchPhase.clip.length);
         MusicManager(MusicEnum.OSTPart2);
