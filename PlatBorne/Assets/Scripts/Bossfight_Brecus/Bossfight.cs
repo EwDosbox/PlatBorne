@@ -20,14 +20,12 @@ public class Bossfight : MonoBehaviour
     [SerializeField] AudioSource[] OSTIntermezzo;
 
     public Animator animator;
-    public BossHealthBar bossHealthBar;
     PlayerHealth playerHealth;
     public BossAttacks attack;
     public GameObject player;
     public GameObject levelMove;
     public GameObject boss;
     Rigidbody2D rb;
-    public Text text;
     public Text pussyModeOn;
     public GameObject pauseMenu;
     public GameObject UI_BossHP;
@@ -36,33 +34,36 @@ public class Bossfight : MonoBehaviour
     public int phase = 1;
     public GameObject moveNextLevel;
     bool bossInvincible = true;
-    float timer;
-    bool timerOn = false;
+    float globalTimer;
     float phaseTimer = 0f;
     float invincibilityTimerBoss = 0f;
     float invincibilityTimerPlayer = 0f;
     static bool playerInvincible = false;
-    float timerBetweenAttacks = 0f; //Dependent on attackIsGoingOn
+    float timerBetweenAttacks = 0f;
     public UIFadeOutEffect fadeOut;
-    //BossAttacks
     static public bool bossfightStarted = false;
     static public bool playerPlayDamage = false;
-    static public bool attackIsGoingOn = false; //When attack is finished, bool will go to false. If false, the timer will activate and depenting on phase will start another attack when the time is right
-    bool bossIsDead = false;    
+    static public bool attackIsGoingOn = false;
+    bool bossIsDead = false;
     int attackNumberDagger = 0;
     int attackNumberFloorIsLava = 0;
     int attackNumberLeech = 0;
     int attackNumberSword = 0;
-    //****************
     public BoxCollider2D bounds;
     public bool pussyModeActive = false;
     SubtitlesManager subtitlesManager;
 
+    public Slider slider;
+    public float speedToFill = 10;
+    private int bossHP = 0;
+    bool consistentDamage = false;
+    private float timer = 0;
+
     private bool BossInvincible
     {
         get { return bossInvincible; }
-        set 
-        { 
+        set
+        {
             bossInvincible = value;
             ChangeSpriteInvincible(value);
         }
@@ -76,6 +77,7 @@ public class Bossfight : MonoBehaviour
         attackNumberSword = 0;
         return 1;
     }
+
     public IEnumerator BossDeath()
     {
         MusicManagerTurnOffMusic();
@@ -95,11 +97,11 @@ public class Bossfight : MonoBehaviour
         yield return new WaitForSeconds(1.78f);
         Destroy(boss);
         DashOrb.SetActive(true);
-        text.text = "Boss Is Dead";
-        bossHealthBar.SetHP(0);
-        bossHealthBar.enabled = false;
-        fadeOut.FadeOut = true; //UI Fade Out effect
+        bossHP = 0;
+        enabled = false;
+        fadeOut.FadeOut = true;
     }
+
     public void PlayerDeath()
     {
         int ded = PlayerPrefs.GetInt("NumberOfDeath", 0);
@@ -113,7 +115,7 @@ public class Bossfight : MonoBehaviour
         playerHealth = FindFirstObjectByType<PlayerHealth>();
         subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
         if (subtitlesManager == null) Debug.LogError("Could Not Find subtitles Manager in Brecus Bossfight");
-        timer = save.TimerLoad(2);
+        globalTimer = save.TimerLoad(2);
         levelMove.SetActive(false);
         bounds.isTrigger = true;
         UI_BossHP.SetActive(false);
@@ -123,98 +125,77 @@ public class Bossfight : MonoBehaviour
         bossfightStarted = false;
         phase = 1;
         phaseTimer = 0;
-        timerOn = false;
+        bossHP = 60;
+        animator.SetBool("isInvincible", true);
     }
+
     private void Update()
     {
         pussyModeOn.gameObject.SetActive(pussyModeActive);
-        if (BossInvincible) text.text = "Boss Is Invincible";
-        else text.text = "Boss Is Vunerable";
-        if (pauseMenu.activeInHierarchy) timerOn = false;
-        else if (bossfightStarted) timerOn = true;
-        //Boss Sprite Flip
         if (player.transform.position.x > 1.5) bossSprite.flipX = true;
         else if (player.transform.position.x < -1.5) bossSprite.flipX = false;
-        //****//
-        #region BossFightMain
+
         if (bossfightStarted)
         {
-            #region Timers
             bounds.isTrigger = false;
-            //ÈASOVAÈ
-            if (timerOn)
-            {
-                timer += Time.deltaTime;
-                save.TimerSave(timer, 2);
-                if (BossInvincible) invincibilityTimerBoss += Time.deltaTime;
-                else invincibilityTimerBoss = 0f;
-                if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;
-                else invincibilityTimerPlayer = 0f;
-                if (phase == 4) phaseTimer += Time.deltaTime;
-                else phaseTimer = 0f;
-                if (!attackIsGoingOn) timerBetweenAttacks += Time.deltaTime;
-                else timerBetweenAttacks = 0f;
-            }
+            globalTimer += Time.deltaTime;
+            save.TimerSave(globalTimer, 2);
+            if (BossInvincible) invincibilityTimerBoss += Time.deltaTime;
+            else invincibilityTimerBoss = 0f;
+            if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;
+            else invincibilityTimerPlayer = 0f;
+            if (phase == 4) phaseTimer += Time.deltaTime;
+            else phaseTimer = 0f;
+            if (!attackIsGoingOn) timerBetweenAttacks += Time.deltaTime;
+            else timerBetweenAttacks = 0f;
 
-            if (invincibilityTimerBoss >= 60)
+            if (invincibilityTimerBoss >= 30)
             {
                 invincibilityTimerBoss = 0;
                 BossInvincible = false;
             }
-            if (invincibilityTimerPlayer > 2) //seconds of invincibility after damage
+            if (invincibilityTimerPlayer > 2)
             {
                 playerInvincible = false;
                 invincibilityTimerPlayer = 0;
             }
-            #endregion
-            #region BossDamage
-            if (phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
             if (!BossInvincible && PlayerScript.bossHitbox)
             {
                 BossInvincible = true;
                 playerInvincible = true;
                 if (playerHealth.PussyMode) playerHealth.PlayerHP = 3;
-                switch (bossHealthBar.GetHP())
+                switch (bossHP)
                 {
                     case 60:
-                        {
-                            bossHealthBar.SetHP(40);
-                            phase = 2;
-                            BossDamage01.Play();
-                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("Tis But A Scratch!", BossDamage01.clip.length);
-                            StartCoroutine(MusicManager(1));
-                            break;
-                        }
+                        bossHP = 40;
+                        slider.value = 40;
+                        phase = 2;
+                        BossDamage01.Play();
+                        if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("Tis But A Scratch!", BossDamage01.clip.length);
+                        StartCoroutine(MusicManager(1));
+                        break;
                     case 40:
-                        {
-                            bossHealthBar.SetHP(20);
-                            phase = 3;
-                            BossDamage02.Play();
-                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("You‘re starting to annoy me, Hunter!", BossDamage02.clip.length);
-                            StartCoroutine(MusicManager(2));
-                            break;
-                        }
+                        bossHP = 20;
+                        slider.value = 20;
+                        phase = 3;
+                        BossDamage02.Play();
+                        if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("You‘re starting to annoy me, Hunter!", BossDamage02.clip.length);
+                        StartCoroutine(MusicManager(2));
+                        break;
                     case 20:
-                        {
-                            bossHealthBar.SetHP(1);
-                            BossDamage03.Play();
-                            if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("I‘m gonna sink you like Americans have sank our bloody delicious tea!", BossDamage03.clip.length);
-                            bossHealthBar.Slider();
-                            bossHealthBar.SetHP(60);
-                            bossHealthBar.LastPhase();
-                            phase = 4;
-                            text.text = "Survive";
-                            StartCoroutine(MusicManager(3));
-                            break;
-                        }
+                        bossHP = 1;
+                        slider.value = 1;
+                        StartCoroutine(MusicManager(3));
+                        BossDamage03.Play();
+                        if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("I‘m gonna sink you like Americans have sank our bloody delicious tea!", BossDamage03.clip.length);                        
+                        bossHP = 60;
+                        StartCoroutine(SliderDrain());
+                        phase = 4;
+                        animator.SetBool("isInvincible", false);                        
+                        break;
                 }
             }
-            else if (bossHealthBar.GetHP() == 0 && phase == 4)
-            {
-                StartCoroutine(BossDeath());
-            }
-            #endregion
-            #region PlayerDamage
+
             if (playerHealth.PlayerHP == 0) PlayerDeath();
             if ((PlayerScript.bossHitbox && BossInvincible) || PlayerScript.bossDamage)
             {
@@ -223,136 +204,127 @@ public class Bossfight : MonoBehaviour
                 PlayerScript.bossHitbox = false;
                 PlayerScript.bossDamage = false;
             }
-            #endregion
             switch (phase)
             {
                 case 1:
+                    if (timerBetweenAttacks > 6 - phase)
                     {
-                        if (timerBetweenAttacks > 6 - phase) //doba èekání na další útok
+                        if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                         {
-                            if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                            {
-                                attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = ResetVariables();
-                            }
-                            else
-                            {
-                                attack.BossAttackDagger();
-                                attackNumberDagger = ResetVariables();
-                            }
+                            attack.BossAttackFloorIsLava();
+                            attackNumberFloorIsLava = ResetVariables();
+                        }
+                        else
+                        {
+                            attack.BossAttackDagger();
+                            attackNumberDagger = ResetVariables();
                         }
                     }
                     break;
                 case 2:
+                    if (timerBetweenAttacks > 6 - phase)
                     {
-                        if (timerBetweenAttacks > 6 - phase)
+                        if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                         {
-                            {
-                                if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                                {
-                                    attack.BossAttackFloorIsLava();
-                                    attackNumberFloorIsLava = ResetVariables();
-                                }
-                                else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
-                                {
-                                    attack.BossAttackDagger();
-                                    attackNumberDagger = ResetVariables();
-                                }
-                                else if (attackNumberLeech < 1)
-                                {
-                                    if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
-                                    else attack.BossAttackLeechRight();
-                                    attackNumberLeech = ResetVariables();
-                                }
-                                else
-                                {
-                                    attack.BossAttackDagger();
-                                    attackNumberDagger = ResetVariables();
-                                }
-                            }
+                            attack.BossAttackFloorIsLava();
+                            attackNumberFloorIsLava = ResetVariables();
                         }
-                        break;
+                        else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
+                        {
+                            attack.BossAttackDagger();
+                            attackNumberDagger = ResetVariables();
+                        }
+                        else if (attackNumberLeech < 1)
+                        {
+                            if (PlayerScript.bossHitboxLeft) attack.BossAttackLeechLeft();
+                            else attack.BossAttackLeechRight();
+                            attackNumberLeech = ResetVariables();
+                        }
+                        else
+                        {
+                            attack.BossAttackDagger();
+                            attackNumberDagger = ResetVariables();
+                        }
                     }
+                    break;
                 case 3:
+                    if (timerBetweenAttacks > 6 - phase)
                     {
-                        if (timerBetweenAttacks > 6 - phase)
+                        if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
                         {
-                            if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                            {
-                                attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = ResetVariables();
-                            }
-                            else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
-                            {
-                                attack.BossAttackDagger();
-                                attackNumberDagger = ResetVariables();
-                            }
-                            else
-                            {
-                                if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
-                                else attack.BossAttackSwordRight();
-                                attackNumberSword = ResetVariables();
-                            }
+                            attack.BossAttackFloorIsLava();
+                            attackNumberFloorIsLava = ResetVariables();
                         }
-                        break;
+                        else if (PlayerScript.bossHitboxUp && attackNumberDagger < 1)
+                        {
+                            attack.BossAttackDagger();
+                            attackNumberDagger = ResetVariables();
+                        }
+                        else
+                        {
+                            if (PlayerScript.bossHitboxLeft) attack.BossAttackSwordLeft();
+                            else attack.BossAttackSwordRight();
+                            attackNumberSword = ResetVariables();
+                        }
                     }
+                    break;
                 case 4:
+                    if (timerBetweenAttacks > 6 - phase)
                     {
-                        if (timerBetweenAttacks > 6 - phase)
+                        if (attackNumberSword < 1 && attackNumberLeech < 1)
                         {
-                            if (attackNumberSword < 1 && attackNumberLeech < 1)
-                            {
-                                if (PlayerScript.bossHitboxRight) attack.BossAttackSwordBoth(false, false, 1f);
-                                else attack.BossAttackSwordBoth(false, true, 1f);
-                                attackNumberSword = ResetVariables();
-                            }
-                            else if (attackNumberLeech < 1)
-                            {
-                                if (bossHealthBar.GetHP() <= 20) attack.BossAttackLeechBoth();
-                                else if (PlayerScript.bossHitboxRight) attack.BossAttackLeechRight();
-                                else attack.BossAttackLeechLeft();
-                                attackNumberLeech = ResetVariables();
-                            }
-                            else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
-                            {
-                                attack.BossAttackFloorIsLava();
-                                attackNumberFloorIsLava = ResetVariables();
-                            }
-                            else
-                            {
-                                attack.BossAttackDagger();
-                                attackNumberDagger = ResetVariables();
-                            }
+                            if (PlayerScript.bossHitboxRight) attack.BossAttackSwordBoth(false, false, 1f);
+                            else attack.BossAttackSwordBoth(false, true, 1f);
+                            attackNumberSword = ResetVariables();
                         }
-                        break;
+                        else if (attackNumberLeech < 1)
+                        {
+                            if (bossHP <= 20) attack.BossAttackLeechBoth();
+                            else if (PlayerScript.bossHitboxRight) attack.BossAttackLeechRight();
+                            else attack.BossAttackLeechLeft();
+                            attackNumberLeech = ResetVariables();
+                        }
+                        else if (PlayerScript.bossHitboxDown && attackNumberFloorIsLava < 1)
+                        {
+                            attack.BossAttackFloorIsLava();
+                            attackNumberFloorIsLava = ResetVariables();
+                        }
+                        else
+                        {
+                            attack.BossAttackDagger();
+                            attackNumberDagger = ResetVariables();
+                        }
                     }
+                    break;
             }
         }
-        #endregion
-
-        #region Start of Bossfight - UI inicialization (once)
-        StartCoroutine(StartBossfight());
     }
 
-    IEnumerator StartBossfight()
-    {       
+    public void StartBossfight() //starts when the camera is moved
+    {
+        StartCoroutine(StartBossfightCoroutine());
+    }
+
+    IEnumerator StartBossfightCoroutine()
+    {
         UI_BossHP.SetActive(true);
         UI_PlayerHP.SetActive(true);
         PussyModeManager();
-        bossHealthBar.Slider();
         playerHealth.StartHPUI();
+        StartCoroutine(SliderFillUp());
         if (PlayerPrefs.HasKey("brecusStart"))
         {
-            if (PlayerPrefs.GetInt("brecusStart") != 0)
+            if (PlayerPrefs.GetInt("brecusStart") != 0) //short intro
             {
-                phase = 1;
+                phase = 1;                
                 bossfightStarted = true;
                 attackIsGoingOn = false;
+                StartCoroutine(MusicManager(0));
             }
         }
-        else //first time hearing fighting boss
+        else
         {
-            MusicManagerTurnOffMusic();
+            MusicManagerTurnOffMusic(); //long intro
             PreBossDialog.Play();
             if (PlayerPrefs.HasKey("Subtitles")) subtitlesManager.Write("So, you finally did it. Well Now its time to see if you really got what it takes to escape this bloodhole of a city.", PreBossDialog.clip.length);
             yield return new WaitForSeconds(PreBossDialog.clip.length + 0.5f);
@@ -362,17 +334,19 @@ public class Bossfight : MonoBehaviour
             attackIsGoingOn = false;
             PlayerPrefs.SetInt("brecusStart", 1);
             PlayerPrefs.Save();
-        }
-        #endregion
+        }        
     }
 
-    //MUSIC
-    IEnumerator MusicManager(int phase) //Phase 0 Starts automatically
-    {        
-        if (phase != 0) //There are 4 phase OST but only 3 Intermezzos starting at phase 2
+    IEnumerator MusicManager(int phase)
+    {
+        MusicManagerTurnOffMusic();
+        if (phase != 0)
         {
-            OSTIntermezzo[phase].Play();
-            yield return new WaitForSeconds(OSTIntermezzo[phase - 1].clip.length); 
+            OSTIntermezzo[phase - 1].Play();
+            while (OSTIntermezzo[phase - 1].isPlaying)
+            {
+                yield return null;
+            }
         }
         OST[phase].Play();
     }
@@ -380,27 +354,19 @@ public class Bossfight : MonoBehaviour
     void MusicManagerTurnOffMusic()
     {
         OSTPhase0.Stop();
-        foreach (AudioSource ost in OST)
-        {
-            ost.Stop();
-        }
-        foreach (AudioSource ost in OSTIntermezzo)
-        {
-            ost.Stop();
-        }
+        foreach (AudioSource ost in OST) ost.Stop();
+        foreach (AudioSource ost in OSTIntermezzo) ost.Stop();
     }
 
     private void PussyModeManager()
     {
-        if (!PlayerPrefs.HasKey("BrecusFirstTime")) //Boss will be set on normal difficulty the first time
+        if (!PlayerPrefs.HasKey("BrecusFirstTime"))
         {
             PlayerPrefs.SetInt("BrecusFirstTime", 1);
             if (PlayerPrefs.HasKey("PussyMode")) PlayerPrefs.SetInt("PussyMode", 0);
             PlayerPrefs.Save();
         }
-
-        if (PlayerPrefs.HasKey("PussyMode") && PlayerPrefs.GetInt("PussyMode") != 0) pussyModeActive = true;
-        else pussyModeActive = false;
+        pussyModeActive = PlayerPrefs.HasKey("PussyMode") && PlayerPrefs.GetInt("PussyMode") != 0;
     }
 
     public void SetPussyMode(bool state)
@@ -410,17 +376,38 @@ public class Bossfight : MonoBehaviour
 
     public void ChangeSpriteInvincible(bool isInvic)
     {
+        if (phase == 4)  return; //ignore  on phase 4
         if (isInvic)
         {
-            //Un-drop Invincibility
             sfxInvicUp.Play();
             animator.SetBool("isInvincible", true);
         }
         else
         {
-            //drop Invincibility
             sfxInvicDown.Play();
             animator.SetBool("isInvincible", false);
         }
+    }
+
+    IEnumerator SliderFillUp(float speed = 0.1f) //normal fill up  speed is 6 seconds
+    {
+        while(slider.value != slider.maxValue)
+        {
+            yield return new WaitForSeconds(speed);
+            slider.value++;
+        }
+    }
+
+    IEnumerator SliderDrain()
+    {
+
+        yield return SliderFillUp(0.016f); //fills in 1 sec
+        slider.value = 60;
+        while (slider.value != 0)
+        {
+            yield return new WaitForSeconds(1f);
+            slider.value--;
+        }
+        StartCoroutine(BossDeath());
     }
 }

@@ -4,6 +4,7 @@ public class CameraBossScript : MonoBehaviour
 {
     public GameObject player;
     public Camera cam;
+    bool once = false;
     private Vector3 position;
     void Update()
     {
@@ -18,8 +19,13 @@ public class CameraBossScript : MonoBehaviour
         {
             cam.orthographicSize = 10;
             position = new Vector2(0, 0);
+            if (!once)
+            {
+                once = true;
+                Bossfight boss = FindAnyObjectByType<Bossfight>();
+                boss.StartBossfight();
+            }
         }
-
         this.transform.position = position;
     }
 }

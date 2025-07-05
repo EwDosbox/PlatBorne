@@ -14,7 +14,7 @@ public class DebugController : MonoBehaviour
     string input;
     public bool ShowConsole
     {
-        get { return showConsole; } //only for reading
+        get { return showConsole; } // read-only
     }
 
     // Commands
@@ -27,101 +27,41 @@ public class DebugController : MonoBehaviour
     public static DebugCommand RESET_PREFS;
     public static DebugCommand<bool> DASH;
 
-    // Scripts
+    // Cached references
     PlayerHealth playerHealth;
     PlayerInputScript playerInputScript;
     Saves save;
 
     // Other
     string feedbackMessage = "";
-    private Coroutine clearFeedbackCoroutine; // Store reference to the coroutine for clearing feedback
+    private Coroutine clearFeedbackCoroutine;
     public List<object> commandListLevel;
     public List<object> commandListBoss;
     public float consoleLevelHeight = 95;
     public float consoleBossHeight = 170;
     public float y;
 
-    public void OnToggleConsole(InputValue value)
-    {
-        showConsole = !showConsole;
-        input = "";
-        PlayerInputScript.CanMove = !PlayerInputScript.CanMove;
-    }
-
     Vector2 scroll;
-
-    private void OnGUI()
-    {
-        if (!showConsole) { return; }
-        y = 0;
-
-        if (showHelp)
-        {
-            if (SceneManager.GetActiveScene().name == "LevelLondon" || SceneManager.GetActiveScene().name == "LevelBirmingham")
-            {
-                GUI.Box(new Rect(0, y, Screen.width, consoleLevelHeight), "");
-                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListLevel.Count);
-                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 80), scroll, viewport);
-                for (int i = 0; i < commandListLevel.Count; i++)
-                {
-                    DebugCommandBase command = commandListLevel[i] as DebugCommandBase;
-                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
-                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 80, 20);
-                    GUI.Label(labelRect, label);
-                }
-                GUI.EndScrollView();
-                {
-                    y += consoleLevelHeight;
-                }
-            }
-            else
-            {
-                GUI.Box(new Rect(0, y, Screen.width, consoleBossHeight), "");
-                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListBoss.Count);
-                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 240), scroll, viewport);
-                for (int i = 0; i < commandListBoss.Count; i++)
-                {
-                    DebugCommandBase command = commandListBoss[i] as DebugCommandBase;
-                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
-                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 240, 20);
-                    GUI.Label(labelRect, label);
-                }
-                GUI.EndScrollView();
-                {
-                    y += consoleBossHeight;
-                }
-            }
-        }
-
-        GUI.Box(new Rect(0, y, Screen.width, 30), "");
-        GUI.backgroundColor = new Color(0, 0, 0, 0);
-        GUI.SetNextControlName("console");
-        input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
-        GUI.FocusControl("console");
-        GUI.Label(new Rect(10f, y + 30f, Screen.width - 20f, 20f), feedbackMessage); // Display feedback message
-    }
 
     private void Awake()
     {
         playerInputScript = FindObjectOfType<PlayerInputScript>();
+        playerHealth = FindObjectOfType<PlayerHealth>();
         save = FindObjectOfType<Saves>();
 
         ROSEBUD = new DebugCommand<bool>("rosebud", "Enables GodMode", "rosebud <true/false>", (x) =>
         {
+            if (playerHealth == null) playerHealth = FindObjectOfType<PlayerHealth>();
+            if (playerHealth != null)
+                playerHealth.GodMode = x;
+
             if (x)
-            {
-                playerHealth = FindObjectOfType<PlayerHealth>();
-                if (playerHealth != null) playerHealth.GodMode = true;
                 PlayerPrefs.SetInt("GodMode", 69);
-            }
             else
-            {
-                playerHealth = FindObjectOfType<PlayerHealth>();
-                if (playerHealth != null) playerHealth.GodMode = false;
                 PlayerPrefs.DeleteKey("GodMode");
-            }
-            CommandCorrectAnswer();
+
             PlayerPrefs.Save();
+            CommandCorrectAnswer();
         });
 
         HELP = new DebugCommand("help", "Shows all commands", "help", () =>
@@ -129,69 +69,68 @@ public class DebugController : MonoBehaviour
             showHelp = true;
         });
 
-        KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss", (x) =>
+        KILL_BOSS = new DebugCommand<string>("kill_boss", "Kills boss", "kill_boss <bossname>", (x) =>
         {
             if (SceneManager.GetActiveScene().buildIndex == 3)
             {
                 Bossfight bossfight = FindObjectOfType<Bossfight>();
-                StartCoroutine(bossfight.BossDeath());
-                CommandCorrectAnswer();
+                if (bossfight != null)
+                {
+                    StartCoroutine(bossfight.BossDeath());
+                    CommandCorrectAnswer();
+                }
+                else feedbackMessage = "Bossfight not found.";
             }
-            if (SceneManager.GetActiveScene().buildIndex == 7)
+            else if (SceneManager.GetActiveScene().buildIndex == 7)
             {
                 Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
-                StartCoroutine(moleBossfight.BossDeath());
-                CommandCorrectAnswer();
+                if (moleBossfight != null)
+                {
+                    StartCoroutine(moleBossfight.BossDeath());
+                    CommandCorrectAnswer();
+                }
+                else feedbackMessage = "Mole bossfight not found.";
             }
+            else feedbackMessage = "No boss fight in this scene.";
         });
 
         PLAYER_HEAL = new DebugCommand("player_heal", "Heals Hunter to full HP", "player_heal", () =>
         {
+            if (playerHealth == null) playerHealth = FindObjectOfType<PlayerHealth>();
             if (playerHealth != null)
             {
                 playerHealth.PlayerHP = 3;
                 CommandCorrectAnswer();
             }
+            else feedbackMessage = "PlayerHealth not found.";
         });
 
         PUSSYMODE = new DebugCommand<bool>("pussymode", "Enables/Disables pussy mode", "pussymode <true/false>", (x) =>
         {
-            if (x)
+            PlayerPrefs.SetInt("PussyMode", x ? 1 : 0);
+            PlayerPrefs.Save();
+
+            if (SceneManager.GetActiveScene().buildIndex == 3)
             {
-                PlayerPrefs.SetInt("PussyMode", 1);
-                PlayerPrefs.Save();
-                if (SceneManager.GetActiveScene().buildIndex == 3)
+                Bossfight bossfight = FindObjectOfType<Bossfight>();
+                if (bossfight != null)
                 {
-                    Bossfight bossfight = FindObjectOfType<Bossfight>();
-                    bossfight.SetPussyMode(true);
+                    bossfight.SetPussyMode(x);
                     CommandCorrectAnswer();
                 }
-                else if (SceneManager.GetActiveScene().buildIndex == 7)
-                {
-                    Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
-                    moleBossfight.SetPussyMode(true);
-                    CommandCorrectAnswer();
-                }
-                else return;               
+                else feedbackMessage = "Bossfight not found.";
             }
-            else
+            else if (SceneManager.GetActiveScene().buildIndex == 7)
             {
-                PlayerPrefs.SetInt("PussyMode", 0);
-                PlayerPrefs.Save();
-                if (SceneManager.GetActiveScene().buildIndex == 3)
+                Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
+                if (moleBossfight != null)
                 {
-                    Bossfight bossfight = FindObjectOfType<Bossfight>();
-                    bossfight.SetPussyMode(false);
+                    moleBossfight.SetPussyMode(x);
                     CommandCorrectAnswer();
                 }
-                else if (SceneManager.GetActiveScene().buildIndex == 7)
-                {
-                    Mole_Bossfight moleBossfight = FindObjectOfType<Mole_Bossfight>();
-                    moleBossfight.SetPussyMode(false);
-                    CommandCorrectAnswer();
-                }
-                else return;
+                else feedbackMessage = "Mole bossfight not found.";
             }
+            else feedbackMessage = "No boss fight in this scene.";
         });
 
         TELEPORT = new DebugCommand<string>("teleport", "Teleports Player", "teleport <london/brecus/birmingham/lunae>", (x) =>
@@ -200,6 +139,7 @@ public class DebugController : MonoBehaviour
             else if (x == "brecus") SceneManager.LoadScene("LevelBoss");
             else if (x == "birmingham") SceneManager.LoadScene("LevelBirmingham");
             else if (x == "lunae") SceneManager.LoadScene("LevelMole");
+            else feedbackMessage = $"Unknown teleport location '{x}'.";
         });
 
         RESET_PREFS = new DebugCommand("reset_prefs", "Resets all PlayerPrefs", "reset_prefs", () =>
@@ -209,20 +149,18 @@ public class DebugController : MonoBehaviour
                 save.NewGameSaveReset();
                 CommandCorrectAnswer();
             }
+            else feedbackMessage = "Save system not found.";
         });
 
         DASH = new DebugCommand<bool>("dash", "Enables/Disables Dash Ability", "dash <true/false>", (x) =>
         {
-            if (x)
+            if (playerInputScript == null) playerInputScript = FindObjectOfType<PlayerInputScript>();
+            if (playerInputScript != null)
             {
-                playerInputScript.AbilityToDash(true);
+                playerInputScript.AbilityToDash(x);
                 CommandCorrectAnswer();
             }
-            else
-            {
-                playerInputScript.AbilityToDash(false);
-                CommandCorrectAnswer();
-            }
+            else feedbackMessage = "PlayerInputScript not found.";
         });
 
         commandListLevel = new List<object>
@@ -246,6 +184,61 @@ public class DebugController : MonoBehaviour
         };
     }
 
+    public void OnToggleConsole(InputValue value)
+    {
+        showConsole = !showConsole;
+        input = "";
+        if (playerInputScript != null)
+            PlayerInputScript.CanMove = !PlayerInputScript.CanMove;
+    }
+
+    private void OnGUI()
+    {
+        if (!showConsole) return;
+        y = 0;
+
+        if (showHelp)
+        {
+            if (SceneManager.GetActiveScene().name == "LevelLondon" || SceneManager.GetActiveScene().name == "LevelBirmingham")
+            {
+                GUI.Box(new Rect(0, y, Screen.width, consoleLevelHeight), "");
+                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListLevel.Count);
+                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 80), scroll, viewport);
+                for (int i = 0; i < commandListLevel.Count; i++)
+                {
+                    DebugCommandBase command = commandListLevel[i] as DebugCommandBase;
+                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
+                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 80, 20);
+                    GUI.Label(labelRect, label);
+                }
+                GUI.EndScrollView();
+                y += consoleLevelHeight;
+            }
+            else
+            {
+                GUI.Box(new Rect(0, y, Screen.width, consoleBossHeight), "");
+                Rect viewport = new Rect(0, 0, Screen.width - 30, 20 * commandListBoss.Count);
+                scroll = GUI.BeginScrollView(new Rect(0, y + 5f, Screen.width, 240), scroll, viewport);
+                for (int i = 0; i < commandListBoss.Count; i++)
+                {
+                    DebugCommandBase command = commandListBoss[i] as DebugCommandBase;
+                    string label = $"{command.CommandFormat} - {command.CommandDescription}";
+                    Rect labelRect = new Rect(5, 20 * i, viewport.width - 240, 20);
+                    GUI.Label(labelRect, label);
+                }
+                GUI.EndScrollView();
+                y += consoleBossHeight;
+            }
+        }
+
+        GUI.Box(new Rect(0, y, Screen.width, 30), "");
+        GUI.backgroundColor = new Color(0, 0, 0, 0);
+        GUI.SetNextControlName("console");
+        input = GUI.TextField(new Rect(10f, y + 5f, Screen.width - 20f, 20f), input);
+        GUI.FocusControl("console");
+        GUI.Label(new Rect(10f, y + 30f, Screen.width - 20f, 20f), feedbackMessage);
+    }
+
     public void OnSubmit(InputValue value)
     {
         if (showConsole)
@@ -259,68 +252,76 @@ public class DebugController : MonoBehaviour
     {
         string[] properties = input.Split(' ');
 
-        if (SceneManager.GetActiveScene().buildIndex == 2 || SceneManager.GetActiveScene().buildIndex == 12) //Check if Level
+        if (properties.Length == 0 || string.IsNullOrWhiteSpace(properties[0]))
+            return;
+
+        string inputCommand = properties[0];
+
+        bool isLevelScene = SceneManager.GetActiveScene().buildIndex == 2 || SceneManager.GetActiveScene().buildIndex == 12;
+        List<object> commandList = isLevelScene ? commandListLevel : commandListBoss;
+
+        foreach (var cmdObj in commandList)
         {
-            for (int i = 0; i < commandListLevel.Count; i++)
+            DebugCommandBase commandBase = cmdObj as DebugCommandBase;
+            if (commandBase == null) continue;
+
+            if (commandBase.CommandID == inputCommand)
             {
-                DebugCommandBase commandBase = commandListLevel[i] as DebugCommandBase;
-                if (input.Contains(commandBase.CommandID))
+                if (cmdObj is DebugCommand cmdNoArg)
                 {
-                    if (commandListLevel[i] as DebugCommand != null)
+                    cmdNoArg.Invoke();
+                    CommandCorrectAnswer();
+                    return;
+                }
+                else if (cmdObj is DebugCommand<string> cmdString)
+                {
+                    if (properties.Length > 1)
                     {
-                        (commandListLevel[i] as DebugCommand).Invoke();
+                        cmdString.Invoke(properties[1]);
+                        CommandCorrectAnswer();
                     }
-                    else if (commandListLevel[i] as DebugCommand<string> != null)
+                    else
                     {
-                        (commandListLevel[i] as DebugCommand<string>).Invoke(properties[1]);
+                        feedbackMessage = $"Command '{inputCommand}' requires an argument.";
                     }
-                    else if (commandListLevel[i] as DebugCommand<bool> != null)
+                    return;
+                }
+                else if (cmdObj is DebugCommand<bool> cmdBool)
+                {
+                    if (properties.Length > 1)
                     {
-                        if (properties[1] == "true") (commandListLevel[i] as DebugCommand<bool>).Invoke(true);
-                        else if (properties[1] == "false") (commandListLevel[i] as DebugCommand<bool>).Invoke(false);
+                        if (bool.TryParse(properties[1], out bool boolArg))
+                        {
+                            cmdBool.Invoke(boolArg);
+                            CommandCorrectAnswer();
+                        }
+                        else feedbackMessage = $"Invalid argument for '{inputCommand}': expected true/false.";
                     }
+                    else
+                    {
+                        feedbackMessage = $"Command '{inputCommand}' requires an argument.";
+                    }
+                    return;
                 }
             }
         }
-        else //For Boss
-        {
-            for (int i = 0; i < commandListBoss.Count; i++)
-            {
-                DebugCommandBase commandBase = commandListBoss[i] as DebugCommandBase;
-                if (input.Contains(commandBase.CommandID))
-                {
-                    if (commandListBoss[i] as DebugCommand != null)
-                    {
-                        (commandListBoss[i] as DebugCommand).Invoke();
-                    }
-                    else if (commandListBoss[i] as DebugCommand<string> != null)
-                    {
-                        (commandListBoss[i] as DebugCommand<string>).Invoke(properties[1]);
-                    }
-                    else if (commandListBoss[i] as DebugCommand<bool> != null)
-                    {
-                        if (properties[1] == "true") (commandListBoss[i] as DebugCommand<bool>).Invoke(true);
-                        else if (properties[1] == "false") (commandListBoss[i] as DebugCommand<bool>).Invoke(false);
-                    }
-                }
-            }
-        }
+
+        feedbackMessage = $"Unknown command: {inputCommand}";
     }
 
     public void CommandCorrectAnswer()
     {
-        feedbackMessage = "Command Done";
         if (clearFeedbackCoroutine != null)
-        {
             StopCoroutine(clearFeedbackCoroutine);
-        }
+
+        feedbackMessage = "Command Done";
         clearFeedbackCoroutine = StartCoroutine(ClearFeedbackMessageAfterDelay());
     }
 
     private IEnumerator ClearFeedbackMessageAfterDelay()
     {
         yield return new WaitForSeconds(2f);
-        feedbackMessage = "";                 
-        clearFeedbackCoroutine = null;        
+        feedbackMessage = "";
+        clearFeedbackCoroutine = null;
     }
 }
