@@ -4,14 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
+using Slider = UnityEngine.UI.Slider;
 
 public class Mole_Bossfight : MonoBehaviour
 {
     [Header("Scipts")]
-    Mole_Health bossHealth;
     PlayerHealth playerHealth;
     Mole_WeakSpot weakSpot;
-    public Mole_UI bossUI;
     Saves save;
     SubtitlesManager subtitlesManager;
     [SerializeField] SpriteRenderer spriteRenderer;
@@ -43,7 +42,8 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] TilemapRenderer platformsTileMapRenderer;
     [SerializeField] GameObject prefabROCK;
     [SerializeField] GameObject prefabShovelRain;
-    [SerializeField] GameObject prefabRockDirt;
+    [SerializeField] GameObject prefabRockDirt;    
+    [SerializeField] GameObject bossSlider;
     [Header("SettingsMain")]
     public float timeToFirstAttack;
     public float bossChargeDelay;
@@ -60,6 +60,10 @@ public class Mole_Bossfight : MonoBehaviour
     private bool bossDeathHasPlayed = false;
     private bool pussyModeActive = false;
     private bool bossWaitingForDamageWeakspot = false;
+    //Health
+    private int bossHP = 100;
+    private bool bossInvincible = true;
+
     public bool BossWaitingForDamageWeakspot
     {
         get {  return bossWaitingForDamageWeakspot; }
@@ -93,12 +97,14 @@ public class Mole_Bossfight : MonoBehaviour
     [SerializeField] GameObject pussyModeGameObject;
     [SerializeField] GameObject UI_Player;
     [SerializeField] GameObject UI_Boss;
+    //UI
+    public CanvasGroup whiteScreen;
+   public Slider hpSlider;
     private void Start()
     {
         //Initialize Components
         weakSpot = GetComponentInChildren<Mole_WeakSpot>();
         playerHealth = FindAnyObjectByType<PlayerHealth>();
-        bossHealth = FindAnyObjectByType<Mole_Health>();
         subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
         save = FindFirstObjectByType<Saves>();
         animator = GetComponent<Animator>();
@@ -111,14 +117,14 @@ public class Mole_Bossfight : MonoBehaviour
         UI_Boss.SetActive(false);
         UI_Player.SetActive(false);
         platforms.SetActive(false);
-        bossHealth.BossHealth = 100;
+        bossHP = 100;
         playerHealth.PlayerHP = 3;
         globalTimer = save.TimerLoad(4);
         MusicManager(MusicEnum.OSTPart0);
+        animator.SetBool("isInvincible", true);
     }
     private void Update()
     {
-        Debug.Log("Boss invic:" + bossHealth.BossInvincible);
         if (bossfightIsRunning)
         {
             #region DelayBetweenAttacks
@@ -176,13 +182,13 @@ public class Mole_Bossfight : MonoBehaviour
 
             #region Health Manager
             if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
-            if (bossHealth.BossHealth <= 0 && !bossDeathHasPlayed)  //One Time Thing
+            if (bossHP <= 0 && !bossDeathHasPlayed)  //One Time Thing
             {
                 bossDeathHasPlayed = true;
                 bossfightIsRunning = false;
                 StartCoroutine(BossDeath());
             }
-            else if (bossHealth.BossHealth < 50 && phase == 1 && !changePhaseHasPlayed)  //One Time Thing
+            else if (bossHP < 50 && phase == 1 && !changePhaseHasPlayed)  //One Time Thing
             {
                 changePhaseHasPlayed = true;
                 StartCoroutine(ChangePhase());
@@ -190,10 +196,11 @@ public class Mole_Bossfight : MonoBehaviour
             #endregion
 
             globalTimer += Time.deltaTime;            
-            if (bossHealth.BossInvincible && phase == 1 && globalTimer - timeBossLastDamage > timeBossInvincible) //first phase Invic timer
+            if (bossInvincible && phase == 1 && globalTimer - timeBossLastDamage > timeBossInvincible) //first phase Invic timer
             {
                 timeBossLastDamage = globalTimer;
-                bossHealth.BossInvincible = false;
+                ChangeSpriteInvincible(false);
+                bossInvincible = false;
             }
             save.TimerSave(globalTimer, 4);
             pussyModeGameObject.SetActive(pussyModeActive);
@@ -203,17 +210,8 @@ public class Mole_Bossfight : MonoBehaviour
     {
         if (!bossfightIsRunning) return; //Do not damage anybody until the boss is finished talking
         if (collision.gameObject.CompareTag("Player") && phase == 1)
-        {            
-            if (!bossHealth.BossInvincible) //Yes it does the check twice because of the SFX
-            {
-                if (Random.value < 0.5f) sfxBossHit01.Play();
-                else sfxBossHit02.Play();
-                bossHealth.BossHit(false);                   
-            }
-            else
-            {
-                playerHealth.PlayerDamage();
-            }
+        {
+            BossHit();
         }
         if (phase == 2)
         {
@@ -319,7 +317,7 @@ public class Mole_Bossfight : MonoBehaviour
     {        
         UI_Boss.SetActive(true);
         UI_Player.SetActive(true);
-        bossUI.BossHPSliderStart();
+        StartCoroutine(SliderFillUp());
         pussyModeGameObject.SetActive(pussyModeActive);
         playerHealth.StartHPUI();
         if (PlayerPrefs.HasKey("moleStart"))
@@ -346,7 +344,8 @@ public class Mole_Bossfight : MonoBehaviour
     public IEnumerator ChangePhase()
     {
         animator.SetBool("isInvincible", false);
-        bossHealth.BossStayInvincible = true;
+        bossInvincible = true;
+        bossInvincible = true;
         playerHealth.PlayerInvincible = true;
         canAttack = false;
         Debug.Log("Attack: ChangePhase");
@@ -390,10 +389,10 @@ public class Mole_Bossfight : MonoBehaviour
             VoiceLinesManager(VoiceLinesEnum.voiceLineDeathNormal);
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
         }
-        bossUI.FadeOutEffect(waitTimeToTransitionToCutscene - waitTime);
+        StartCoroutine(FadeOutCoroutine(waitTimeToTransitionToCutscene - waitTime));
         PlayerPrefs.Save();
         yield return new WaitForSeconds(waitTimeToTransitionToCutscene);
-        bossUI.BossHPSliderDestroy();
+        bossSlider.SetActive(false);
         //Ending Decider
         if (PlayerPrefs.HasKey("BeatenWithAPussyMode_Brecus") || PlayerPrefs.HasKey("BeatenWithAPussyMode_Mole"))
         {
@@ -489,9 +488,9 @@ public class Mole_Bossfight : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 9; i++)
                 {
-                    Vector2 position = new Vector2(-16.50f + (i * 2.375f), 11);
+                    Vector2 position = new Vector2(-14.125f + (i * 4.75f), 11);
                     Instantiate(prefabDrillRain, position, Quaternion.identity);
                 }
             }
@@ -775,7 +774,7 @@ public class Mole_Bossfight : MonoBehaviour
     public void BossHitWeakspot()
     {
         bossWaitingForDamageWeakspot = false;
-        bossHealth.BossHit(true);        
+        BossHit();
         playerHealth.SetInvincibleTimer(3f);
         bossNextAttackIsCharge = false;
         bossCanChargeTimer = true; //Turn on the timer
@@ -827,9 +826,9 @@ public class Mole_Bossfight : MonoBehaviour
         pussyModeActive = state;
     }
 
-    public void ChangeSpriteInvincible(bool isInvic)
+    public void ChangeSpriteInvincible(bool isInvincible)
     {
-        if (isInvic)
+        if (isInvincible)
         {
             //Un-drop Invincibility
             sfxInvicUp.Play();
@@ -841,5 +840,54 @@ public class Mole_Bossfight : MonoBehaviour
             sfxInvicDown.Play();
             animator.SetBool("isInvincible", false);
         }
+    }
+
+    #region Mole Health
+
+    public void BossHit()
+    {
+        if (phase == 2)
+        {
+            bossHP -= 15;            
+        }
+        else if (bossInvincible)  //phase 1
+        {
+            playerHealth.PlayerDamage();
+            return;
+        }
+        else //phase 1
+        {
+            bossHP -= 15;
+            bossInvincible = true;
+            ChangeSpriteInvincible(true);
+        }
+        hpSlider.value = bossHP;
+        if (Random.value < 0.5f) sfxBossHit01.Play();
+        else sfxBossHit02.Play();
+    }
+
+    IEnumerator SliderFillUp(float speed = 0.1f) //normal fill up speed is 6 seconds
+    {
+        while (hpSlider.value != hpSlider.maxValue && bossHP == 100)
+        {
+            yield return new WaitForSeconds(speed);
+            hpSlider.value++;
+        }
+        hpSlider.value = bossHP;
+    }
+    #endregion
+
+    private IEnumerator FadeOutCoroutine(float timeToFadeOut)
+    {
+        float elapsed = 0f;
+        whiteScreen.alpha = 0f;
+
+        while (elapsed < timeToFadeOut)
+        {
+            whiteScreen.alpha = Mathf.Lerp(0f, 1f, elapsed / timeToFadeOut);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        whiteScreen.alpha = 1f;
     }
 }

@@ -164,4 +164,10 @@ public class PlayerScript : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x + x, transform.position.y + y, 1);
     }
+
+    public void MovePlayer(float x, float y, bool resetVelocity)
+    {
+        transform.position = new Vector3(transform.position.x + x, transform.position.y + y, 1);
+        if (resetVelocity) rb.angularVelocity = 0;
+    }
 }

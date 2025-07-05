@@ -1,11 +1,5 @@
-using System;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Composites;
 using UnityEngine.SceneManagement;
 
 public class PlayerInputScript : MonoBehaviour
