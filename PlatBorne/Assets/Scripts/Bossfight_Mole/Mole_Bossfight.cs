@@ -1,15 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 public class Mole_Bossfight : MonoBehaviour
@@ -27,8 +20,10 @@ public class Mole_Bossfight : MonoBehaviour
     [Header("Audio")]
     [SerializeField] AudioSource sfxBossHit01;
     [SerializeField] AudioSource sfxBossHit02;
-    [SerializeField] AudioSource sfxdrillStartUp;
-    [SerializeField] AudioSource sfxdrillCharge;
+    [SerializeField] AudioSource sfxDrillStartUp;
+    [SerializeField] AudioSource sfxDrillCharge;
+    [SerializeField] AudioSource sfxInvicDown;
+    [SerializeField] AudioSource sfxInvicUp;
     [SerializeField] AudioSource vlPreBoss;
     [SerializeField] AudioSource vlSwitchPhase;
     [SerializeField] AudioSource vlBossDeathNormal;
@@ -71,11 +66,13 @@ public class Mole_Bossfight : MonoBehaviour
     }
     private bool bossWaitingForDamageWeakspotOnRight = false;
     //timers
-    float timer = 0;
+    float globalTimer = 0;
     float timerWaitForNextAttack = 0;
     float timerBossCharge = 0;
     float timerAttackSpikes = 0;
     bool playerHasTakenDamageInCharge = false;
+    float timeBossLastDamage = 0;
+    public float timeBossInvincible = 15;
     //boss attacks
     float spikesTimeNext = 0;
     int numberOfDrillAttacks = 1;
@@ -116,11 +113,12 @@ public class Mole_Bossfight : MonoBehaviour
         platforms.SetActive(false);
         bossHealth.BossHealth = 100;
         playerHealth.PlayerHP = 3;
-        timer = save.TimerLoad(4);
+        globalTimer = save.TimerLoad(4);
         MusicManager(MusicEnum.OSTPart0);
     }
     private void Update()
     {
+        Debug.Log("Boss invic:" + bossHealth.BossInvincible);
         if (bossfightIsRunning)
         {
             #region DelayBetweenAttacks
@@ -175,6 +173,7 @@ public class Mole_Bossfight : MonoBehaviour
             }
             #endregion
 
+
             #region Health Manager
             if (playerHealth.PlayerHP == 0) playerHealth.PlayerDeath(2); //Player Death
             if (bossHealth.BossHealth <= 0 && !bossDeathHasPlayed)  //One Time Thing
@@ -190,8 +189,13 @@ public class Mole_Bossfight : MonoBehaviour
             }
             #endregion
 
-            timer += Time.deltaTime;
-            save.TimerSave(timer, 4);
+            globalTimer += Time.deltaTime;            
+            if (bossHealth.BossInvincible && phase == 1 && globalTimer - timeBossLastDamage > timeBossInvincible) //first phase Invic timer
+            {
+                timeBossLastDamage = globalTimer;
+                bossHealth.BossInvincible = false;
+            }
+            save.TimerSave(globalTimer, 4);
             pussyModeGameObject.SetActive(pussyModeActive);
         }
     }
@@ -341,6 +345,7 @@ public class Mole_Bossfight : MonoBehaviour
 
     public IEnumerator ChangePhase()
     {
+        animator.SetBool("isInvincible", false);
         bossHealth.BossStayInvincible = true;
         playerHealth.PlayerInvincible = true;
         canAttack = false;
@@ -604,9 +609,9 @@ public class Mole_Bossfight : MonoBehaviour
         if (playerScript.Position.x > transform.position.x) //player is right away from boss
         {
             animator.SetTrigger("readyChargeRight");
-            sfxdrillStartUp.Play();
-            yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
-            sfxdrillCharge.Play();
+            sfxDrillStartUp.Play();
+            yield return new WaitForSeconds(sfxDrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
+            sfxDrillCharge.Play();
             animator.SetBool("chargingRight", true);            
             rb.velocity = Vector2.right * moleChargeVelocity;
             bossIsCharging = true;
@@ -618,7 +623,7 @@ public class Mole_Bossfight : MonoBehaviour
                 }
                 else yield return null;
             }
-            sfxdrillCharge.Stop();
+            sfxDrillCharge.Stop();
             bossIsCharging = false;
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
             playerHasTakenDamageInCharge = false; //reset
@@ -631,9 +636,9 @@ public class Mole_Bossfight : MonoBehaviour
         else //left
         {
             animator.SetTrigger("readyChargeLeft");
-            sfxdrillStartUp.Play();
-            yield return new WaitForSeconds(sfxdrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
-            sfxdrillCharge.Play();
+            sfxDrillStartUp.Play();
+            yield return new WaitForSeconds(sfxDrillStartUp.clip.length - 0.1f); //Waits for the sfx to finish playing
+            sfxDrillCharge.Play();
             animator.SetBool("chargingLeft", true);            
             rb.velocity = Vector2.left * moleChargeVelocity;
             bossIsCharging = true;
@@ -645,7 +650,7 @@ public class Mole_Bossfight : MonoBehaviour
                 }
                 else yield return null;
             }
-            sfxdrillCharge.Stop();
+            sfxDrillCharge.Stop();
             canAttack = true; //Turns back the attacks (except the charge - only for the first charge of the fight)
             bossIsCharging = false;
             playerHasTakenDamageInCharge = false; //reset
@@ -820,5 +825,21 @@ public class Mole_Bossfight : MonoBehaviour
     public void SetPussyMode(bool state)
     {
         pussyModeActive = state;
+    }
+
+    public void ChangeSpriteInvincible(bool isInvic)
+    {
+        if (isInvic)
+        {
+            //Un-drop Invincibility
+            sfxInvicUp.Play();
+            animator.SetBool("isInvincible", true);            
+        }
+        else
+        {
+            //drop Invincibility
+            sfxInvicDown.Play();
+            animator.SetBool("isInvincible", false);
+        }
     }
 }

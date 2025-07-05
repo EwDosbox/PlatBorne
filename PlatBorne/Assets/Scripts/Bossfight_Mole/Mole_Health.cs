@@ -6,16 +6,15 @@ public class Mole_Health : MonoBehaviour
     //INSPECTOR//
     [Tooltip("MAIN")]
     [SerializeField] private int playerDamage = 10;
-    [SerializeField] private float invincibilityTimer = 5;
     [Tooltip("OBJECTS")]
     PlayerHealth playerHealth;
+    Mole_Bossfight mole;
     //PUBLIC//
     public bool bossDead = false;
     //PRIVATE//
     private bool bossStayInvincible = false;
     private int bossHealth = 100;
     private bool bossInvincible = true;
-    private float timer = 0;
     public int BossHealth
     {
         get { return bossHealth; }
@@ -27,12 +26,19 @@ public class Mole_Health : MonoBehaviour
     public bool BossInvincible
     {
         get { return bossInvincible; }
-        set { bossInvincible = value; }
+        set
+        { 
+            bossInvincible = value;
+            mole.ChangeSpriteInvincible(value);
+        }
     }
     public bool BossStayInvincible //for changing phase
     {
         get { return bossStayInvincible; }
-        set { bossStayInvincible = value; }
+        set 
+        { 
+            bossStayInvincible = value;
+        }
     }
 
     public void BossHit(bool weakspotDamage)
@@ -51,24 +57,11 @@ public class Mole_Health : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!BossStayInvincible && BossInvincible)
-        {
-            timer += Time.deltaTime;
-            if (timer > invincibilityTimer)
-            {
-                bossInvincible = false;
-            }
-        }
-        else timer = 0;
-    }
-
     public void BossDeath()
     {
         Mole_UI ui = new Mole_UI();
         ui.BossHPSliderDestroy();
-        bossInvincible = false;
+        BossInvincible = false;
         bossHealth = 0;
         bossDead = true;
     }
@@ -76,5 +69,6 @@ public class Mole_Health : MonoBehaviour
     private void Awake()
     {
         playerHealth = FindAnyObjectByType<PlayerHealth>();
+        mole = FindAnyObjectByType<Mole_Bossfight>();
     }
 }

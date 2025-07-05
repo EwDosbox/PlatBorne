@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,14 +11,15 @@ public class Bossfight : MonoBehaviour
     [SerializeField] AudioSource BossDamage02;
     [SerializeField] AudioSource BossDamage03;
     [SerializeField] AudioSource BossDeath01;
-    [SerializeField] AudioSource SFXVunerability;
+    [SerializeField] AudioSource sfxInvicDown;
+    [SerializeField] AudioSource sfxInvicUp;
     [SerializeField] SpriteRenderer bossSprite;
     [SerializeField] GameObject DashOrb;
     [SerializeField] AudioSource OSTPhase0;
     [SerializeField] AudioSource[] OST;
     [SerializeField] AudioSource[] OSTIntermezzo;
 
-    public Animator bossAnimation;
+    public Animator animator;
     public BossHealthBar bossHealthBar;
     PlayerHealth playerHealth;
     public BossAttacks attack;
@@ -59,6 +57,17 @@ public class Bossfight : MonoBehaviour
     public BoxCollider2D bounds;
     public bool pussyModeActive = false;
     SubtitlesManager subtitlesManager;
+
+    private bool BossInvincible
+    {
+        get { return bossInvincible; }
+        set 
+        { 
+            bossInvincible = value;
+            ChangeSpriteInvincible(value);
+        }
+    }
+
     private int ResetVariables()
     {
         attackNumberDagger = 0;
@@ -72,7 +81,7 @@ public class Bossfight : MonoBehaviour
         MusicManagerTurnOffMusic();
         bossIsDead = true;
         BossDeath01.Play();
-        bossAnimation.SetBool("Boss Death", true);
+        animator.SetBool("Boss Death", true);
         if (pussyModeActive)
         {
             PlayerPrefs.SetString("BeatenWithAPussyMode_Brecus", "real");
@@ -119,7 +128,7 @@ public class Bossfight : MonoBehaviour
     private void Update()
     {
         pussyModeOn.gameObject.SetActive(pussyModeActive);
-        if (bossInvincible) text.text = "Boss Is Invincible";
+        if (BossInvincible) text.text = "Boss Is Invincible";
         else text.text = "Boss Is Vunerable";
         if (pauseMenu.activeInHierarchy) timerOn = false;
         else if (bossfightStarted) timerOn = true;
@@ -137,7 +146,7 @@ public class Bossfight : MonoBehaviour
             {
                 timer += Time.deltaTime;
                 save.TimerSave(timer, 2);
-                if (bossInvincible) invincibilityTimerBoss += Time.deltaTime;
+                if (BossInvincible) invincibilityTimerBoss += Time.deltaTime;
                 else invincibilityTimerBoss = 0f;
                 if (playerInvincible) invincibilityTimerPlayer += Time.deltaTime;
                 else invincibilityTimerPlayer = 0f;
@@ -150,8 +159,7 @@ public class Bossfight : MonoBehaviour
             if (invincibilityTimerBoss >= 60)
             {
                 invincibilityTimerBoss = 0;
-                SFXVunerability.Play();
-                bossInvincible = false;
+                BossInvincible = false;
             }
             if (invincibilityTimerPlayer > 2) //seconds of invincibility after damage
             {
@@ -161,9 +169,9 @@ public class Bossfight : MonoBehaviour
             #endregion
             #region BossDamage
             if (phase == 4 && bossHealthBar.GetHP() == 0) StartCoroutine(BossDeath());
-            if (!bossInvincible && PlayerScript.bossHitbox)
+            if (!BossInvincible && PlayerScript.bossHitbox)
             {
-                bossInvincible = true;
+                BossInvincible = true;
                 playerInvincible = true;
                 if (playerHealth.PussyMode) playerHealth.PlayerHP = 3;
                 switch (bossHealthBar.GetHP())
@@ -208,7 +216,7 @@ public class Bossfight : MonoBehaviour
             #endregion
             #region PlayerDamage
             if (playerHealth.PlayerHP == 0) PlayerDeath();
-            if ((PlayerScript.bossHitbox && bossInvincible) || PlayerScript.bossDamage)
+            if ((PlayerScript.bossHitbox && BossInvincible) || PlayerScript.bossDamage)
             {
                 playerHealth.PlayerDamage();
                 if (playerHealth.PlayerHP <= 0) PlayerDeath();
@@ -398,5 +406,21 @@ public class Bossfight : MonoBehaviour
     public void SetPussyMode(bool state)
     {
         pussyModeActive = state;
+    }
+
+    public void ChangeSpriteInvincible(bool isInvic)
+    {
+        if (isInvic)
+        {
+            //Un-drop Invincibility
+            sfxInvicUp.Play();
+            animator.SetBool("isInvincible", true);
+        }
+        else
+        {
+            //drop Invincibility
+            sfxInvicDown.Play();
+            animator.SetBool("isInvincible", false);
+        }
     }
 }
