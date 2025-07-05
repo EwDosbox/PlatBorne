@@ -11,11 +11,7 @@ public class PlayerInputScript : MonoBehaviour
     Saves save;
     bool bossMovement = false;
 
-    static public bool CanMove
-    {
-        get;
-        set;
-    }
+    static public bool CanMove { get; set; }
 
     private float jumpHeight;
     [SerializeField] private float maxJumpHeight;
@@ -30,7 +26,9 @@ public class PlayerInputScript : MonoBehaviour
     private bool shouldWalkL = false;
     private bool shouldWalkR = false;
     private bool shouldJump;
+    private bool wantsToJump = false;
     private bool jumpIsPressed;
+    private bool hasJumped;
     public AudioSource jumpSound;
     private bool isPlaying;
     private float time;
@@ -38,10 +36,10 @@ public class PlayerInputScript : MonoBehaviour
     float dashTimeWait = 1;
     float dashTime = 1;
 
-    //Dash
+    // Dash
     [SerializeField] public bool abilityToDash;
     [SerializeField] AudioSource dashSFX;
-    bool groundDashReset = true; //Can Dash once before touching the ground
+    bool groundDashReset = true;
     private Vector2 velocityBeforeDash;
     private bool canDash = false;
     private bool dashing;
@@ -58,12 +56,14 @@ public class PlayerInputScript : MonoBehaviour
         console = FindFirstObjectByType<DebugController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        if (SceneManager.GetActiveScene().name == "LevelBoss" || SceneManager.GetActiveScene().name == "LevelMole") //BossMovement
+
+        if (SceneManager.GetActiveScene().name == "LevelBoss" || SceneManager.GetActiveScene().name == "LevelMole")
         {
             maxJumpHeight *= 1.3f;
             jumpModifier *= 1.3f;
             movementSpeed = movementSpeedBoss;
         }
+
         jumpHeight = minJumpHeight;
         CanMove = true;
         previousPosition = transform.position;
@@ -71,30 +71,39 @@ public class PlayerInputScript : MonoBehaviour
 
     public void AbilityToDash(bool dash)
     {
-        if (dash) abilityToDash = true;
-        else abilityToDash = false;
+        abilityToDash = dash;
     }
+
     private void Update()
     {
         walkSound.enabled = (!isPlayerInAir && isMoving);
+
         if (console.ShowConsole)
         {
             CanMove = false;
             if (!isPlayerInAir) rb.velocity = Vector3.zero;
         }
-        if (previousPosition != transform.position) isMoving = true;
-        else isMoving = false;
+
+        isMoving = previousPosition != transform.position;
         previousPosition = transform.position;
     }
+
     private void FixedUpdate()
     {
         dashTime += Time.deltaTime;
+
         animator.SetBool("isJumpPreparing", jumpIsPressed);
         animator.SetBool("isPlayerInAir", isPlayerInAir);
         animator.SetBool("isHorizontalSpeedZero", rb.velocity.x != 0);
         animator.SetFloat("verticalSpeed", rb.velocity.y);
-        animator.SetFloat("horizontalSpeed",rb.velocity.x);
+        animator.SetFloat("horizontalSpeed", rb.velocity.x);
+
         isPlayerInAir = !Physics2D.IsTouchingLayers(feet, groundLayer);
+        if (!isPlayerInAir)
+        {
+            hasJumped = false; // Reset jump lockout on landing
+        }
+
         if (CanMove)
         {
             if (canDash)
@@ -106,8 +115,7 @@ public class PlayerInputScript : MonoBehaviour
             }
             else if (dashing)
             {
-                if (isPlayerFacingLeft) rb.velocity = new Vector2(-dashVelocity, 0);
-                else rb.velocity = new Vector2(+dashVelocity, 0);
+                rb.velocity = new Vector2(isPlayerFacingLeft ? -dashVelocity : dashVelocity, 0);
                 if ((Time.time - dashStarted) >= dashTimeLength)
                 {
                     dashing = false;
@@ -139,15 +147,18 @@ public class PlayerInputScript : MonoBehaviour
                 {
                     rb.velocity = new Vector2(0, rb.velocity.y);
                 }
+
                 if (shouldJump)
-                {// behaves like a weird stopwatch
+                {
+                    Debug.Log("jump: " + (Time.time - jumpTime));
                     jumpHeight = minJumpHeight + (Time.time - jumpTime) * jumpModifier;
                     if (jumpHeight >= maxJumpHeight) jumpHeight = maxJumpHeight;
-                    rb.velocity = new Vector2(rb.velocity.x, jumpHeight);                   
+                    rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
                     shouldJump = false;
                 }
             }
-            if (isPlaying) //timer for a jump SFX
+
+            if (isPlaying)
             {
                 time += Time.deltaTime;
                 if (time > 0.5f)
@@ -158,66 +169,55 @@ public class PlayerInputScript : MonoBehaviour
             }
         }
     }
-
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!console.ShowConsole)
+        if (console.ShowConsole) return;
+
+        if (context.started && !isPlayerInAir && !hasJumped)
         {
-            if (context.started)
+            jumpTime = Time.time;
+            wantsToJump = true;
+            jumpIsPressed = true;
+        }
+
+        if (context.canceled && !isPlayerInAir && !hasJumped && wantsToJump)
+        {
+            wantsToJump = false;
+            shouldJump = true;
+            jumpIsPressed = false;
+            hasJumped = true;
+            save.PlayerJumped();
+
+            if (!isPlaying)
             {
-                jumpTime = Time.time;//when i pressed
-                jumpIsPressed = true;
-            }
-            if (context.canceled)
-            {
-                shouldJump = true;
-                jumpIsPressed = false;
-                save.PlayerJumped();
-                if (!isPlaying)
-                {
-                    jumpSound.Play();
-                    isPlaying = true;
-                }
+                jumpSound.Play();
+                isPlaying = true;
             }
         }
     }
+
     public void WalkL(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            shouldWalkL = true;
-            shouldWalkR = false;
-        }
-        if (context.canceled)
-        {
-            shouldWalkL = false;
-        }
+        if (context.started) { shouldWalkL = true; shouldWalkR = false; }
+        if (context.canceled) { shouldWalkL = false; }
     }
+
     public void WalkR(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
-            shouldWalkL = false;
-            shouldWalkR = true;
-        }
-        if (context.canceled)
-        {
-            shouldWalkR = false;
-        }
+        if (context.started) { shouldWalkR = true; shouldWalkL = false; }
+        if (context.canceled) { shouldWalkR = false; }
     }
+
     public void Dash(InputAction.CallbackContext context)
     {
-        if (!console.ShowConsole)
+        if (!console.ShowConsole && context.performed)
         {
-            if (context.performed)
-            {                
-                if (abilityToDash && groundDashReset && dashTime > dashTimeWait)
-                {
-                    dashTime = 0;
-                    groundDashReset = false;
-                    dashSFX.Play();
-                    canDash = true;
-                }
+            if (abilityToDash && groundDashReset && dashTime > dashTimeWait)
+            {
+                dashTime = 0;
+                groundDashReset = false;
+                dashSFX.Play();
+                canDash = true;
             }
         }
     }

@@ -99,7 +99,7 @@ public class MainMenu : MonoBehaviour
     }
     private IEnumerator _NewGame()
     {
-        NewGameSaveReset();
+        PlayerPrefsManager.NewGame();
         PlayerPrefs.SetInt("HasASavedGame", 1);
         PlayerPrefs.Save();
         InGame = true;
@@ -111,6 +111,13 @@ public class MainMenu : MonoBehaviour
     {
         src.PlayOneShot(srcOne);
         StartCoroutine(_GameContinue());
+    }
+
+    public void ResetAll()
+    {
+        PlayerPrefsManager.All();
+        src.PlayOneShot(srcOne);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private IEnumerator _GameContinue()
@@ -205,35 +212,6 @@ public class MainMenu : MonoBehaviour
         sfxSlider.value = volume;
         PlayerPrefs.SetFloat("SFXvolume", volume);
     }
-
-    public void NewGameSaveReset()
-    {
-        //MAIN
-        PlayerPrefs.DeleteKey("Level");
-        PlayerPrefs.DeleteKey("GodMode");
-        PlayerPrefs.DeleteKey("PussyMode");
-        //ACT I
-        PlayerPrefs.DeleteKey("NumberOfFalls_London");
-        PlayerPrefs.DeleteKey("NumberOfJumps_Act1");
-        PlayerPrefs.DeleteKey("Timer_London");
-        PlayerPrefs.DeleteKey("Timer_Brecus");
-        PlayerPrefs.DeleteKey("HunterPositionY_London");
-        PlayerPrefs.DeleteKey("HunterPositionX_London");
-        PlayerPrefs.DeleteKey("RNGSaved");
-        PlayerPrefs.DeleteKey("RNGNow");
-        PlayerPrefs.DeleteKey("HasASavedGame");
-        PlayerPrefs.DeleteKey("LondonVoiceLinesJ");
-        PlayerPrefs.DeleteKey("LondonVoiceLinesArray");
-        PlayerPrefs.DeleteKey("Brecus_BeatenWithPussy");
-        //ACT II
-        PlayerPrefs.DeleteKey("Mole_BeatenWithPussy");
-        PlayerPrefs.DeleteKey("HunterPositionX_Birmingham");
-        PlayerPrefs.DeleteKey("HunterPositionY_Birmingham");
-        PlayerPrefs.DeleteKey("NumberOfFalls_Birmingham");
-        PlayerPrefs.DeleteKey("NumberOfJumps_Act2");
-        PlayerPrefs.DeleteKey("Timer_Birmingham");
-        PlayerPrefs.DeleteKey("Timer_Mole");
-    }
     public void London()
     {
         src.PlayOneShot(srcOne);
@@ -242,7 +220,7 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _London()
     {
-        NewGameSaveReset();
+        PlayerPrefsManager.London();
         PlayerPrefs.SetString("Level", "london");
         PlayerPrefs.Save();
         InGame = true;
@@ -259,7 +237,7 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _Brecus()
     {
-        NewGameSaveReset();
+        PlayerPrefsManager.Brecus();
         PlayerPrefs.SetString("Level", "bricus");
         PlayerPrefs.Save();
         InGame = true;
@@ -275,7 +253,7 @@ public class MainMenu : MonoBehaviour
     }
     public IEnumerator _Birmingham()
     {
-        NewGameSaveReset();
+        PlayerPrefsManager.Birmingham();
         PlayerPrefs.SetString("Level", "birmingham");
         PlayerPrefs.Save();
         InGame = true;
@@ -292,7 +270,7 @@ public class MainMenu : MonoBehaviour
 
     public IEnumerator _Mole()
     {
-        NewGameSaveReset();
+        PlayerPrefsManager.Mole();
         PlayerPrefs.SetString("Level", "mole");
         PlayerPrefs.Save();
         InGame = true;
