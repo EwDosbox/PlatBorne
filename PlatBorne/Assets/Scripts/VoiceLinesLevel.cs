@@ -8,18 +8,52 @@ public class VoiceLinesLevel : MonoBehaviour
     public string[] subtitles;
     public bool voiceLinesBig;
     public string[] subtitlesBig;
-    AudioSource[] voiceLines;
+
+    private AudioSource[] voiceLines;
+    private AudioSource[] voiceLinesBigFall;
+
     private int[] randomNumbers;
+    private int[] randomNumbersBig;
+
     private int index = 0;
+    private int indexBig = 0;
+
     private int RNGnow = 0;
     private int RNGsaved = 2;
-    System.Random rng = new System.Random();
-    AudioSource[] voiceLinesBigFall;
-    private int[] randomNumbersBig;
-    int indexBig = 0;
-    SubtitlesManager subtitlesManager;
 
-    void Randomize()
+    private System.Random rng = new System.Random();
+    private SubtitlesManager subtitlesManager;
+
+    private void Start()
+    {
+        voiceLines = GetComponents<AudioSource>()
+                     .OrderBy(v => v.gameObject.name)
+                     .ToArray();
+
+        subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
+        if (subtitlesManager == null) Debug.LogError("SubtitlesManager is not initialized!");
+        if (voiceLines.Length == 0 || subtitles.Length == 0) Debug.LogError("VoiceLines or Subtitles are missing!");
+        if (subtitles.Length != voiceLines.Length) Debug.LogError("Mismatch between subtitles and voiceLines!");
+
+        randomNumbers = Enumerable.Range(0, voiceLines.Length).ToArray();
+        Randomize();
+
+        if (voiceLinesBig)
+        {
+            voiceLinesBigFall = GetComponentsInChildren<AudioSource>(true)
+                                .Where(v => v.gameObject != this.gameObject)
+                                .OrderBy(v => v.gameObject.name)
+                                .ToArray();
+
+            if (voiceLinesBigFall.Length == 0 || subtitlesBig.Length == 0) Debug.LogError("VoiceLinesBigFall or SubtitlesBig are missing!");
+            if (subtitlesBig.Length != voiceLinesBigFall.Length) Debug.LogError("Mismatch between subtitlesBig and voiceLinesBigFall!");
+
+            randomNumbersBig = Enumerable.Range(0, voiceLinesBigFall.Length).ToArray();
+            RandomizeBig();
+        }
+    }
+
+    private void Randomize()
     {
         for (int i = randomNumbers.Length - 1; i > 0; i--)
         {
@@ -30,7 +64,7 @@ public class VoiceLinesLevel : MonoBehaviour
         }
     }
 
-    void RandomizeBig()
+    private void RandomizeBig()
     {
         for (int i = randomNumbersBig.Length - 1; i > 0; i--)
         {
@@ -41,70 +75,59 @@ public class VoiceLinesLevel : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        voiceLines = GetComponents<AudioSource>()
-                     .OrderBy(v => v.gameObject.name)  // Sort by name
-                     .ToArray();
-
-        subtitlesManager = FindAnyObjectByType<SubtitlesManager>();
-        if (subtitlesManager == null) Debug.LogError("subtitlesManager is not initialized!");
-        if (voiceLines.Length == 0) Debug.LogError("VoiceLines or Subtitles are missing!");
-
-        randomNumbers = new int[voiceLines.Length];
-        for (int i = 0; i < voiceLines.Length; i++)
-        {
-            randomNumbers[i] = i;
-        }
-        Randomize();
-
-        if (voiceLinesBig)
-        {
-            voiceLinesBigFall = GetComponentsInChildren<AudioSource>(true)
-                                .Where(v => v.gameObject != this.gameObject)  // Exclude parent
-                                .OrderBy(v => v.gameObject.name)  // Sort by name
-                                .ToArray();
-
-            if (voiceLinesBigFall.Length == 0) Debug.LogError("VoiceLinesBigFall or SubtitlesBig are missing!");
-
-            randomNumbersBig = new int[voiceLinesBigFall.Length];
-            for (int i = 0; i < voiceLinesBigFall.Length; i++)
-            {
-                randomNumbersBig[i] = i;
-            }
-            RandomizeBig();
-        }
-    }
-
     public void PlayVLFallen()
     {
         RNGnow++;
         if (RNGnow == RNGsaved)
         {
-            Debug.Log("PlayFall");
-            RNGsaved = rng.Next(2, 5);
-            RNGnow = 0;            
-            subtitlesManager.Write(subtitles[randomNumbers[index]], voiceLines[randomNumbers[index]].clip.length);
-            voiceLines[randomNumbers[index]].Play();
+            RNGsaved = rng.Next(2, 6); // 2–5 inclusive
+            RNGnow = 0;
+
+            int idx = randomNumbers[index];
+            AudioSource src = voiceLines[idx];
+            AudioClip clip = src.clip;
+
+            if (clip == null)
+            {
+                Debug.LogWarning("Missing audio clip in PlayVLFallen.");
+                return;
+            }
+
+            subtitlesManager.Write(subtitles[idx], clip.length);
+            src.Play();
+
             index++;
             if (index >= voiceLines.Length)
             {
                 index = 0;
+                randomNumbers = Enumerable.Range(0, voiceLines.Length).ToArray();
                 Randomize();
             }
         }
     }
-
 
     public void PlayVLBigFall()
     {
         if (indexBig >= voiceLinesBigFall.Length)
         {
             indexBig = 0;
+            randomNumbersBig = Enumerable.Range(0, voiceLinesBigFall.Length).ToArray();
             RandomizeBig();
         }
-        subtitlesManager.Write(subtitlesBig[randomNumbersBig[indexBig]], voiceLinesBigFall[randomNumbersBig[indexBig]].clip.length);
-        voiceLinesBigFall[randomNumbersBig[indexBig]].Play();
+
+        int idx = randomNumbersBig[indexBig];
+        AudioSource src = voiceLinesBigFall[idx];
+        AudioClip clip = src.clip;
+
+        if (clip == null)
+        {
+            Debug.LogWarning("Missing audio clip in PlayVLBigFall.");
+            return;
+        }
+
+        subtitlesManager.Write(subtitlesBig[idx], clip.length);
+        src.Play();
+
         indexBig++;
     }
 }

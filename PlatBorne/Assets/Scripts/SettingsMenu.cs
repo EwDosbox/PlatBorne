@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
@@ -35,6 +36,10 @@ public class SettingsMenu : MonoBehaviour
         fullscreenToggle.isOn = PlayerPrefs.HasKey("FullScreen");
 
         resolutions = Screen.resolutions;
+        resolutions = Screen.resolutions
+                    .GroupBy(r => new { r.width, r.height }) // Prevent duplicates
+                    .Select(g => g.First())
+                    .ToArray();
 
         if (resolutionDropdown != null)
         {
@@ -45,9 +50,8 @@ public class SettingsMenu : MonoBehaviour
 
             for (int i = 0; i < resolutions.Length; i++)
             {
-                string option = resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRateRatio + "hz";
+                string option = resolutions[i].width + " x " + resolutions[i].height;
                 options.Add(option);
-
                 if (resolutions[i].width == Screen.currentResolution.width && resolutions[i].height == Screen.currentResolution.height)
                 {
                     currentResolutionIndex = i;
@@ -70,7 +74,8 @@ public class SettingsMenu : MonoBehaviour
     {
         src.Play();
         Resolution resolution = resolutions[resolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        if (PlayerPrefs.HasKey("FullScreen")) Screen.SetResolution(resolution.width, resolution.height, true, 60);
+        else Screen.SetResolution(resolution.width, resolution.height, false, 60);
     }
 
     public void SetMusicVolume()
