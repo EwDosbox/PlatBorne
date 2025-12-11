@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerFishingScript : MonoBehaviour
 {
@@ -14,31 +12,24 @@ public class PlayerFishingScript : MonoBehaviour
 
     private float holdTime = 0f;
     //fish Catching Logic
-    private static Collider2D fishCatchArea;
+    private Collider2D fishCatchArea;
     private Collider2D hookCatchArea;
 
     private float startOfCatch;
     private SubtitlesManager subtitlesManager;
     private bool isCatching = false;
-
-    private List<GameObject> fishInventory = new List<GameObject>();
-    private List<Color> fishColors = new List<Color>();
-    private int noOfFishCatched = 0;
-    private GameObject fishInScene;
-    private BetterRandom random = new BetterRandom($"FishInventory at {System.DateTime.Now}");
-    private GameObject goFishParent;
     #endregion
     #region SerializeField
+    [Header("Links")]
+    [SerializeField] private FishManager fishManager;
     [Header("Fish Settings")]
     [SerializeField] private float timeNeededToCatch = 1.5f;
 
     [Header("Fish Prefabs")]
-    [SerializeField] private GameObject fishPrefab;
-    [SerializeField] private GameObject fishRainbowPrefab;
     [SerializeField] private AudioSource[] fishVoiceLine;
     #endregion
     #region Properties
-    private Color nextFishColor => fishColors[noOfFishCatched + 1];
+    public Collider2D FishCatchArea { get => fishCatchArea; set => fishCatchArea = value; }
     public float HoldTime { get => holdTime; set => holdTime = value; }
     public bool ShouldHookMoveLeft { get => shouldHookMoveLeft; set => shouldHookMoveLeft = value; }
     public bool ShouldHookMoveRight { get => shouldHookMoveRight; set => shouldHookMoveRight = value; }
@@ -53,12 +44,6 @@ public class PlayerFishingScript : MonoBehaviour
         Collider2D[] colliders = FindObjectsOfType<Collider2D>();
         hookCatchArea = colliders.FirstOrDefault(collider => collider.name == "HookCatchArea");
         startOfCatch = Time.time;
-        fishInventory = GameObject.FindGameObjectsWithTag("Fish").ToList();
-        goFishParent = GameObject.Find("Inventory");
-
-        RandomizeColors();
-
-        SpawnFish(nextFishColor);
 
         // Random voice line
         if (PlayerPrefs.GetInt("wasFishing") == 1)
@@ -103,28 +88,7 @@ public class PlayerFishingScript : MonoBehaviour
             {
                 float timeElapsed = Time.time - startOfCatch;
                 if (timeElapsed > timeNeededToCatch)
-                {
-                    CatchedFish();
-
-                    switch (noOfFishCatched)
-                    {
-                        case 6:
-                            {
-                                SpawnFish();
-                                break;
-                            }
-                        case 7:
-                            {
-                                SceneManager.LoadScene("Cutscene_Ending Fish");
-                                break;
-                            }
-                        default:
-                            {
-                                SpawnFish(nextFishColor);
-                                break;
-                            }
-                    }
-                }
+                    fishManager.CatchFish();
             }
             else
             {
@@ -138,59 +102,5 @@ public class PlayerFishingScript : MonoBehaviour
     private double Equation(float time)
     {
         return 4 + (1 - 4) / (1 + Mathf.Pow(time / 0.5f, 26));
-    }
-
-    private Vector3 RandomFishLocation()
-    {
-        return new Vector3(Random.Range(-4f, 8.25f), -4.4f, 0);
-    }
-
-    private void SpawnFish(Color color)// spawn colored one
-    {
-        fishPrefab.GetComponent<SpriteRenderer>().color = color;
-        //Add parent goFishParent
-        fishInScene = Instantiate(fishPrefab, RandomFishLocation(), Quaternion.identity);
-        fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
-    }
-    private void SpawnFish()// spawn rainbow one
-    {
-        fishInScene = Instantiate(fishRainbowPrefab, RandomFishLocation(), Quaternion.identity);
-        fishCatchArea = FindObjectsOfType<Collider2D>().FirstOrDefault(collider => collider.name == "FishCatchArea");
-    }
-
-    private void RandomizeColors()
-    {
-        fishColors = new List<Color>();
-        for (int i = 0; i < 8; i++)
-        {
-            fishColors.Add(RandomColor(random));
-        }
-        foreach (GameObject fish in fishInventory)
-        {
-            SpriteRenderer checkSpriteRenderer = fish.GetComponentsInChildren<SpriteRenderer>()
-                .FirstOrDefault(sr => sr.name.Equals("Check"));
-            checkSpriteRenderer.enabled = false;
-            fish.GetComponent<SpriteRenderer>().color = fishColors[fishInventory.IndexOf(fish)];
-        }
-    }
-    private Color RandomColor(BetterRandom random)
-    {
-        return new Color(random.Random(1f), random.Random(1f), random.Random(1f));
-    }
-    public void CatchedFish()
-    {
-        isCatching = false;
-        if (noOfFishCatched < 6)
-        {
-            fishInScene.SetActive(false);
-
-            SpriteRenderer checkSpriteRenderer = fishInventory[noOfFishCatched]
-                .GetComponentsInChildren<SpriteRenderer>()
-                .FirstOrDefault(sr => sr.name.Equals("Check"));
-
-            checkSpriteRenderer.enabled = true;
-
-        }
-        noOfFishCatched++;
     }
 }

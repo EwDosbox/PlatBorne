@@ -361,6 +361,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 4
+  forceMultiplier: 2
+  movementIntervalMin: 1
   movementIntervalMax: 2
 --- !u!61 &2284588137224558187
 BoxCollider2D:
