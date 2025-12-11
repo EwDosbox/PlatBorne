@@ -123,6 +123,21 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &52592540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 288046259}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &127081387 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 1358941115}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &224943728 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 554791759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &247580780
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +553,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &439133367 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 583539518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &470582249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1471,13 +1491,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9432ee742211f947865436a5fb9ed24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fishInventory:
+  - {fileID: 52592540}
+  - {fileID: 439133367}
+  - {fileID: 224943728}
+  - {fileID: 1916638973}
+  - {fileID: 1639544481}
+  - {fileID: 127081387}
+  fishColors: []
   timeNeededToCatch: 1.5
-  fishPrefab: {fileID: 6348202001293769175, guid: a211623b20199e44c93d0b04423011ec, type: 3}
-  fishRainbowPrefab: {fileID: 6348202001293769175, guid: ad10606798120ab4cbbb14464ef54dd5, type: 3}
+  goFishParent: {fileID: 1526555774}
+  hookCatchArea: {fileID: 2142739577}
   fishVoiceLine:
   - {fileID: 863463855}
   - {fileID: 863463854}
   - {fileID: 863463853}
+  fishPrefab: {fileID: 6348202001293769175, guid: a211623b20199e44c93d0b04423011ec, type: 3}
+  fishRainbowPrefab: {fileID: 6348202001293769175, guid: ad10606798120ab4cbbb14464ef54dd5, type: 3}
 --- !u!114 &863463852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2639,7 +2669,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1526555776}
-  - component: {fileID: 1526555775}
   m_Layer: 0
   m_Name: Fish
   m_TagString: Untagged
@@ -2647,18 +2676,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1526555775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1526555774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd6b4c2d213c324fb1181be9e157327, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1526555776
 Transform:
   m_ObjectHideFlags: 0
@@ -2843,6 +2860,11 @@ Transform:
   - {fileID: 247580781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1639544481 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 1755297459}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1729672912
 GameObject:
   m_ObjectHideFlags: 0
@@ -4025,6 +4047,11 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1916638973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6348202001293769175, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
+  m_PrefabInstance: {fileID: 723380031}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1953748299 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4074993794870366668, guid: 487ab50ad138d3346974a0d0cf116d9a, type: 3}
@@ -4746,7 +4773,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4757,7 +4784,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.7, y: 0.2}
+  m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0
 --- !u!1001 &2145721065
 PrefabInstance:
