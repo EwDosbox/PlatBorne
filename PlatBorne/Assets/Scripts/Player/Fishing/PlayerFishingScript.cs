@@ -12,20 +12,18 @@ public class PlayerFishingScript : MonoBehaviour
     //Movement
     private bool shouldHookMoveLeft = false;
     private bool shouldHookMoveRight = false;
-
     private float holdTime = 0f;
     //fish Catching Logic
     private Collider2D fishCatchArea;
-
     private float startOfCatch;
     private SubtitlesManager subtitlesManager;
     private bool isCatching = false;
     #endregion
     #region SerializeField
-    
+
     [Header("Inventories")]
     [SerializeField] private List<GameObject> fishInventory = new List<GameObject>();
-    [SerializeField] private List<Color> fishColors = new List<Color>();
+    [SerializeField] private Color[] fishColors = new Color[6];
     [Header("Fish Settings")]
     [SerializeField] private float timeNeededToCatch = 1.5f;
 
@@ -46,17 +44,17 @@ public class PlayerFishingScript : MonoBehaviour
     private void Awake()
     {
         PlayerPrefs.SetString("Level", "fish");
-        
-        fishColors = RandomColors();
+
+        fishColors = RandomColors(6);
         for (int i = 0; i < fishInventory.Count; i++)
         {
-          fishInventory[i].GetComponent<SpriteRenderer>().color = fishColors[i];  
+            fishInventory[i].GetComponent<SpriteRenderer>().color = fishColors[i];
         }
+        SpawnFish(fishColors[0]);
 
         subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
         hookRB = GetComponent<Rigidbody2D>();
         startOfCatch = Time.time;
-        SpawnFish(fishColors[0]);
 
         // Random voice line
         if (PlayerPrefs.GetInt("wasFishing") == 1)
@@ -109,34 +107,36 @@ public class PlayerFishingScript : MonoBehaviour
                 isCatching = true;
             }
         }
+        else
+        {
+            isCatching = false;
+        }
     }
 
     private void CatchFish()
     {
         noOfFishCatched++;
-        isCatching = false;
-        fishInventory.Find(fish => fish.name == $"Fish {noOfFishCatched}").transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
-
         Destroy(fishInScene);
 
-        if (noOfFishCatched < fishColors.Count)
+        isCatching = false;
+        fishInventory[noOfFishCatched - 1].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
+        if (noOfFishCatched < fishColors.Count())
             SpawnFish(fishColors[noOfFishCatched]);
-        else if (noOfFishCatched == fishColors.Count)
-            SpawnFish();
+        else if (noOfFishCatched == fishColors.Count())
+            SpawnFish(Color.clear, true);
         else
             Debug.Log("Move onto credits");
     }
-    private void SpawnFish(Color color)
+    private void SpawnFish(Color color, bool isRainbow = false)
     {
-        fishInScene = Instantiate(fishPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
-        fishInScene.GetComponent<SpriteRenderer>().color = color;
-
-        fishCatchArea = fishInScene.transform.GetChild(2).GetComponent<Collider2D>();
-    }
-    private void SpawnFish()
-    {//Rainbow fish
-        fishInScene = Instantiate(fishRainbowPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
-
+        if (!isRainbow)
+        {
+            fishInScene = Instantiate(fishPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
+            fishInScene.GetComponent<SpriteRenderer>().color = color;
+        }
+        else
+            fishInScene = Instantiate(fishRainbowPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
         fishCatchArea = fishInScene.transform.GetChild(2).GetComponent<Collider2D>();
     }
     private Vector3 RandomFishLocation()
@@ -147,18 +147,28 @@ public class PlayerFishingScript : MonoBehaviour
     {
         return 4 + (1 - 4) / (1 + Mathf.Pow(time / 0.5f, 26));
     }
-    private List<Color> RandomColors()
+    private Color[] RandomColors(int number)
     {
-        List<Color> colors = new List<Color>();
-        for (int i = 0; i < 6; i++)
+        Color[] colors = new Color[number];
+        for (int i = 0; i < number; i++)
         {
-            colors.Add(RandomColor());
+            Color color;
+            do
+            {
+                color = random.Color(0.2f, 1f);
+            } while (AreSimilar(color, colors));
+            colors[i] = color;
         }
         return colors;
     }
-    private Color RandomColor()
+    private bool AreSimilar(Color a, Color[] colors)
     {
-        // TODO: Add a better random color generator
-        return new Color(random.Random(1f), random.Random(1f), random.Random(1f));
+        foreach (Color color in colors)
+        {
+            float distance = Mathf.Sqrt(Mathf.Pow(a.r - color.r, 2) + Mathf.Pow(a.g - color.g, 2) + Mathf.Pow(a.b - color.b, 2));
+            if (distance < 0.25f)
+                return true;
+        }
+        return false;
     }
 }
