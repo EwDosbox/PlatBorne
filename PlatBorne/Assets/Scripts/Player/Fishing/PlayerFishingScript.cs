@@ -35,7 +35,7 @@ public class PlayerFishingScript : MonoBehaviour
     [SerializeField] private GameObject fishPrefab;
     [SerializeField] private GameObject fishRainbowPrefab;
     #endregion
-    #region Properties
+    #region Public
     public float HoldTime { get => holdTime; set => holdTime = value; }
     public bool ShouldHookMoveLeft { get => shouldHookMoveLeft; set => shouldHookMoveLeft = value; }
     public bool ShouldHookMoveRight { get => shouldHookMoveRight; set => shouldHookMoveRight = value; }
@@ -95,11 +95,9 @@ public class PlayerFishingScript : MonoBehaviour
         // Fish Catching logic
         if (Physics2D.IsTouching(hookCatchArea, fishCatchArea))
         {
-            if (isCatching)
+            if (isCatching && (Time.time - startOfCatch) > timeNeededToCatch)
             {
-                float timeElapsed = Time.time - startOfCatch;
-                if (timeElapsed > timeNeededToCatch)
-                    CatchFish();
+                CatchFish();
             }
             else
             {
@@ -117,14 +115,18 @@ public class PlayerFishingScript : MonoBehaviour
     {
         noOfFishCatched++;
         Destroy(fishInScene);
-
         isCatching = false;
-        fishInventory[noOfFishCatched - 1].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
 
         if (noOfFishCatched < fishColors.Count())
+        {
+            fishInventory[noOfFishCatched - 1].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
             SpawnFish(fishColors[noOfFishCatched]);
+        }
         else if (noOfFishCatched == fishColors.Count())
+        {
+            fishInventory[noOfFishCatched - 1].transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
             SpawnFish(Color.clear, true);
+        }
         else
             Debug.Log("Move onto credits");
     }
