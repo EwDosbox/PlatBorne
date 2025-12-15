@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerFishingScript : MonoBehaviour
 {
@@ -9,15 +10,14 @@ public class PlayerFishingScript : MonoBehaviour
     private int noOfFishCatched = 0;
     private GameObject fishInScene;
     private Rigidbody2D hookRB;
-    //Movement
+    private SubtitlesManager subtitlesManager;
+    // Movement
     private bool shouldHookMoveLeft = false;
     private bool shouldHookMoveRight = false;
     private float holdTime = 0f;
-    //fish Catching Logic
+    // Fish Catching Logic
     private Collider2D fishCatchArea;
-    private float startOfCatch;
-    private SubtitlesManager subtitlesManager;
-    private bool isCatching = false;
+    private float catchProgress = 0f;
     #endregion
     #region SerializeField
 
@@ -26,6 +26,7 @@ public class PlayerFishingScript : MonoBehaviour
     [SerializeField] private Color[] fishColors = new Color[6];
     [Header("Fish Settings")]
     [SerializeField] private float timeNeededToCatch = 1.5f;
+    [SerializeField] private float catchDecay = 0.5f;
 
     [Header("Links")]
     [SerializeField] private GameObject goFishParent;
@@ -54,7 +55,6 @@ public class PlayerFishingScript : MonoBehaviour
 
         subtitlesManager = FindFirstObjectByType<SubtitlesManager>();
         hookRB = GetComponent<Rigidbody2D>();
-        startOfCatch = Time.time;
 
         // Random voice line
         if (PlayerPrefs.GetInt("wasFishing") == 1)
@@ -95,19 +95,17 @@ public class PlayerFishingScript : MonoBehaviour
         // Fish Catching logic
         if (Physics2D.IsTouching(hookCatchArea, fishCatchArea))
         {
-            if (isCatching && (Time.time - startOfCatch) > timeNeededToCatch)
-            {
+            catchProgress += Time.fixedDeltaTime;
+
+            if (catchProgress >= timeNeededToCatch)
                 CatchFish();
-            }
-            else
-            {
-                startOfCatch = Time.time;
-                isCatching = true;
-            }
         }
         else
         {
-            isCatching = false;
+            catchProgress -= Time.fixedDeltaTime * catchDecay;
+
+            if (catchProgress < 0f)
+                catchProgress = 0f;
         }
     }
 
@@ -115,7 +113,7 @@ public class PlayerFishingScript : MonoBehaviour
     {
         noOfFishCatched++;
         Destroy(fishInScene);
-        isCatching = false;
+        catchProgress = 0f;
 
         if (noOfFishCatched < fishColors.Count())
         {
@@ -128,7 +126,9 @@ public class PlayerFishingScript : MonoBehaviour
             SpawnFish(Color.clear, true);
         }
         else
-            Debug.Log("Move onto credits");
+        {
+            SceneManager.LoadScene("Cutscene_Ending Fish");
+        }
     }
     private void SpawnFish(Color color, bool isRainbow = false)
     {
