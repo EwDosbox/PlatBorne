@@ -25,6 +25,10 @@ public class BetterRandom
         Range(min.y, max.y),
         Range(min.z, max.z)
     );
+    public Vector2 Range(Vector2 min, Vector2 max) => new(
+        Range(min.x, max.x),
+        Range(min.y, max.y)
+    );
 
     public int Random(int max) => Range(0, max);
     public float Random(float max) => Range(0f, max);

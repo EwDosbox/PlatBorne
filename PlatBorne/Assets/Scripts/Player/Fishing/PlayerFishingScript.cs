@@ -31,6 +31,8 @@ public class PlayerFishingScript : MonoBehaviour
     [Header("Links")]
     [SerializeField] private GameObject goFishParent;
     [SerializeField] private Collider2D hookCatchArea;
+    [SerializeField] private Collider2D leftWaterCollider;
+    [SerializeField] private Collider2D rightWaterCollider;
     [Header("Fish Prefabs")]
     [SerializeField] private AudioSource[] fishVoiceLine;
     [SerializeField] private GameObject fishPrefab;
@@ -132,14 +134,23 @@ public class PlayerFishingScript : MonoBehaviour
     }
     private void SpawnFish(Color color, bool isRainbow = false)
     {
+        FishAIScript fishAIScript;
         if (!isRainbow)
         {
             fishInScene = Instantiate(fishPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
             fishInScene.GetComponent<SpriteRenderer>().color = color;
+            fishAIScript = fishInScene.GetComponent<FishAIScript>();
+            fishAIScript.Personality = random.RandomEnum<FishPersonality>();
         }
         else
+        {
             fishInScene = Instantiate(fishRainbowPrefab, RandomFishLocation(), Quaternion.identity, goFishParent.transform);
+            fishAIScript = fishInScene.GetComponent<FishAIScript>();
+            fishAIScript.Personality = FishPersonality.Normal;
+        }
         fishCatchArea = fishInScene.transform.GetChild(2).GetComponent<Collider2D>();
+        fishAIScript.LeftWaterCollider = leftWaterCollider;
+        fishAIScript.RightWaterCollider = rightWaterCollider;
     }
     private Vector3 RandomFishLocation()
     {

@@ -4,26 +4,31 @@ using UnityEngine;
 
 public class FishAIScript : MonoBehaviour
 {
+    #region SerializeField
     [Header("Fish AI Settings")]
     [SerializeField] private float maxSpeed = 5f;
     [SerializeField] private float forceMultiplier = 150f;
     [SerializeField] private float movementIntervalMin = 0.5f;
     [SerializeField] private float movementIntervalMax = 1.5f;
-
-    public (Collider2D left, Collider2D right) waterColliders;
+    [SerializeField] private FishPersonality personality = FishPersonality.Normal;
+    [SerializeField] private (Collider2D left, Collider2D right) waterColliders;
+    #endregion
+    #region Private
     private SpriteRenderer sprite;
     private Rigidbody2D fishRB;
     private float nextFishMovementChange;
     private BetterRandom random = new BetterRandom($"FishAIScript at {System.DateTime.Now}");
+    #endregion
+    #region Properties
+    public FishPersonality Personality { get => personality; set => personality = value; }
+    public Collider2D LeftWaterCollider { get => waterColliders.left; set => waterColliders.left = value; }
+    public Collider2D RightWaterCollider { get => waterColliders.right; set => waterColliders.right = value; }
+    #endregion
 
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
         fishRB = GetComponent<Rigidbody2D>();
-        waterColliders = (
-            GameObject.Find("WaterLeftSide").GetComponent<Collider2D>(),
-            GameObject.Find("WaterRightSide").GetComponent<Collider2D>()
-        );
     }
 
     private void FixedUpdate()
@@ -60,11 +65,18 @@ public class FishAIScript : MonoBehaviour
 
     private Vector2 RandomVector()
     {
-        return new Vector2(random.Range(0.5f, 1.5f), random.Range(-0.3f, 0.3f));
+        return random.Range(new Vector2(0.5f, 1.5f), new Vector2(-0.3f, 0.3f));
     }
 
     private float RandomTime()
     {
         return random.Range(movementIntervalMin, movementIntervalMax);
     }
+}
+
+public enum FishPersonality
+{
+    Normal,
+    Jittery,
+    Fast
 }
